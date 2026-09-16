@@ -1,0 +1,18 @@
+# Dependencias do estudo. Depois de instalar, FIXE as versoes exatas
+# (pip freeze) e reporte-as na monografia: os valores de metricas dependem
+# da versao da ferramenta, entao versao diferente muda o numero.
+ 
+openai>=1.0        # cliente OpenAI-compativel usado para os tres provedores
+pyyaml>=6.0        # leitura do config.yaml
+ 
+pytest>=8.0        # validacao funcional (testes de comportamento)
+radon>=6.0         # Complexidade Ciclomatica (CC) e Indice de Manutenibilidade (MI)
+pylint>=3.0        # Pontuacao Pylint
+python-dotenv>=1.0 # carrega o .env no processo, independente de config de IDE/terminal
+ 
+# Pysmell (detector de code smells, de Chen et al.) NAO vem do PyPI.
+# O pacote "pysmell" do PyPI e outro projeto (autocomplete), nao use.
+# Instale a partir do repositorio oficial da ferramenta e FIXE o commit usado.
+# Anote aqui a origem exata assim que definir:
+#   pysmell @ git+https://github.com/<repo>@<commit>
+ 

@@ -1,0 +1,38 @@
+# Configuracao dos tres modelos avaliados, todos por acesso gratuito.
+#
+# ATENCAO: confirme os campos "modelo" e "base_url" na documentacao ATUAL de
+# cada provedor antes de rodar. Os valores abaixo sao pontos de partida
+# plausiveis, nao verdades fixas; o proprio smoke test vai revelar se algum
+# esta errado (erro de modelo inexistente, endpoint invalido, etc.).
+ 
+parametros:
+  # temperature > 0 para preservar a variabilidade entre as 3 execucoes por
+  # instancia; com 0 as execucoes ficariam quase identicas e perderiam sentido.
+  # Valor final a fechar com a Carla.
+  temperature: 0.7
+  max_tokens: 2048
+  # top_p: 1.0
+  # seed: 42   # apenas alguns provedores respeitam seed
+ 
+provedores:
+  - nome: gemini
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    modelo: "gemini-3.1-flash-lite"        # uso geral, equivalente ao antigo "gemini-2.5-flash" (retirado em 26/08/2026)
+    api_key_env: "GEMINI_API_KEY"
+ 
+  - nome: gpt
+    base_url: "https://api.openai.com/v1"
+    modelo: "gpt-5.4-mini"
+    api_key_env: "OPENAI_API_KEY"
+ 
+  - nome: qwen
+    # Atualizado 10/09/2026: DeepSeek trocado por Qwen (via Groq) - deepseek-v4-flash
+    # so tinha grant unico de cadastro, sem tier gratuito perene (erro 402
+    # Insufficient Balance no smoke test). Groq oferece Qwen com tier gratuito.
+    # qwen/qwen3-32b foi descontinuado em 17/06/2026; qwen3.6-27b e o modelo
+    # atual recomendado pela doc da Groq (existe tambem qwen3.8-27b, mais
+    # recente - CONFIRMAR qual usar). Troca de modelo ainda precisa aval
+    # formal da Carla.
+    base_url: "https://api.groq.com/openai/v1"
+    modelo: "qwen/qwen3.6-27b"
+    api_key_env: "GROQ_API_KEY"

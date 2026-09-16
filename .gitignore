@@ -1,0 +1,16 @@
+# Segredos (NUNCA versionar)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+CLAUDE.md
+
+# Saidas do smoke test (descartaveis).
+# ATENCAO: as geracoes REAIS do estudo (resultados/geracoes/) DEVEM ser
+# versionadas, pois sao a evidencia bruta. So o _smoke_test fica de fora.
+resultados/geracoes/_smoke_test/
