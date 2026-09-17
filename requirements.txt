@@ -12,7 +12,9 @@ python-dotenv>=1.0 # carrega o .env no processo, independente de config de IDE/t
  
 # Pysmell (detector de code smells, de Chen et al.) NAO vem do PyPI.
 # O pacote "pysmell" do PyPI e outro projeto (autocomplete), nao use.
-# Instale a partir do repositorio oficial da ferramenta e FIXE o commit usado.
-# Anote aqui a origem exata assim que definir:
-#   pysmell @ git+https://github.com/<repo>@<commit>
+# A ferramenta original e Python 2 e nao tem linha de comando; o porte para
+# Python 3 vive em dados/pysmell/ (ver o README de la). Origem:
+#   https://github.com/chenzhifei731/Pysmell @ 233afebac24c910be89d065ffa661ec72458a62c
+astunparse==1.6.3  # usado pelo porte do Pysmell; NAO troque por ast.unparse
+                   # (muda a metrica NOC das lambdas). Ver dados/pysmell/compat.py
  
