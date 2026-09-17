@@ -14,3 +14,19 @@ CLAUDE.md
 # ATENCAO: as geracoes REAIS do estudo (resultados/geracoes/) DEVEM ser
 # versionadas, pois sao a evidencia bruta. So o _smoke_test fica de fora.
 resultados/geracoes/_smoke_test/
+
+# Artigos em PDF (material de terceiros, com direito autoral).
+# O artigo do Zhang et al. (2024) e da ACM e nao pode ser redistribuido:
+#   https://doi.org/10.1145/3691620.3695290
+artigo/
+
+# Dataset de Zhang et al. (2024): 5,5 MB de codigo de ~51 repositorios de
+# terceiros, a maioria sem licenca explicita. Nao redistribuir; baixar do
+# Zenodo, que e a fonte citavel e permanente:
+#   https://doi.org/10.5281/zenodo.13335000
+# Descompacte em dados/dataset_zhang/ (ver dados/pysmell/README.md).
+dados/dataset_zhang/
+
+# Lixo do Windows/OneDrive
+desktop.ini
+Thumbs.db

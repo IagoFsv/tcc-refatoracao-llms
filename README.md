@@ -18,15 +18,22 @@ favorecer a reprodutibilidade:
 
 | Etapa da metodologia            | Onde no repositorio                    |
 |---------------------------------|----------------------------------------|
-| Selecao das 48 instancias       | `dados/selecao/`                       |
+| Dataset de entrada              | `dados/dataset_zhang/` (baixar, ver abaixo) |
+| Deteccao de smells              | `dados/pysmell/` (Pysmell portado)     |
+| Selecao das 100 instancias      | `dados/selecao/`                       |
 | Unidades adaptadas + testes     | `instancias/` (por smell)              |
-| Prompt                          | `prompts/`                             |
+| Prompts (Role, Few-Shot, CoT)   | `prompts/`                             |
 | Geracao (3 modelos x 3 exec.)   | `geracao/`, saidas em `resultados/geracoes/` |
 | Validacao funcional (pytest)    | `resultados/validacao/`                |
 | Metricas (Radon/Pylint/Pysmell) | `resultados/metricas/`                 |
 | Analise comparativa             | `analise/`                             |
 
 ## Reproducao
+
+O dataset de entrada nao acompanha o repositorio, por ser codigo de
+terceiros. Baixe de <https://doi.org/10.5281/zenodo.13335000> e descompacte
+em `dados/dataset_zhang/`, de forma que exista
+`dados/dataset_zhang/dataset/files/`. Detalhes em `dados/pysmell/README.md`.
 
 ```bash
 pip install -r requirements.txt
