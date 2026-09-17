@@ -1,0 +1,162 @@
+# Catalogo dos quatro smells do estudo.
+#
+# Para cada smell: o nome canonico e a tecnica de refatoracao indicada (que
+# preenchem {smell} e {technique} nos TRES prompts) e o par antes/depois
+# demonstrativo (que preenche o bloco de exemplo, so no few_shot.txt).
+#
+# Os pares sao os Codigos-fonte 1 a 8 da Fundamentacao Teorica, de autoria do
+# proprio Iago: nao vem do dataset de Zhang et al. (2024), o que evita
+# contaminar a amostra do estudo.
+
+LM:
+  nome: "Long Method"
+  tecnica: "Extract Method"
+  exemplo_antes: |-
+    def processar_pedido(pedido):
+        for item in pedido['itens']:
+            if item['quantidade'] <= 0:
+                raise ValueError(f"Quantidade invalida: {item['nome']}")
+            if item['preco'] <= 0:
+                raise ValueError(f"Preco invalido: {item['nome']}")
+        subtotal = 0
+        for item in pedido['itens']:
+            subtotal += item['quantidade'] * item['preco']
+        desconto = 0
+        if pedido['cliente']['tipo'] == 'premium':
+            desconto = subtotal * 0.15
+        elif pedido['cliente']['tipo'] == 'regular':
+            desconto = subtotal * 0.05
+        total = subtotal - desconto
+        resumo = f"Cliente: {pedido['cliente']['nome']}\n"
+        resumo += f"Subtotal: R$ {subtotal:.2f}\n"
+        resumo += f"Desconto: R$ {desconto:.2f}\n"
+        resumo += f"Total: R$ {total:.2f}\n"
+        return resumo
+  exemplo_depois: |-
+    def _validar_itens(itens):
+        for item in itens:
+            if item['quantidade'] <= 0:
+                raise ValueError(f"Quantidade invalida: {item['nome']}")
+            if item['preco'] <= 0:
+                raise ValueError(f"Preco invalido: {item['nome']}")
+
+    def _calcular_subtotal(itens):
+        return sum(item['quantidade'] * item['preco'] for item in itens)
+
+    def _aplicar_desconto(subtotal, tipo_cliente):
+        if tipo_cliente == 'premium':
+            return subtotal * 0.15
+        elif tipo_cliente == 'regular':
+            return subtotal * 0.05
+        return 0
+
+    def _gerar_resumo(cliente, subtotal, desconto):
+        total = subtotal - desconto
+        resumo = f"Cliente: {cliente['nome']}\n"
+        resumo += f"Subtotal: R$ {subtotal:.2f}\n"
+        resumo += f"Desconto: R$ {desconto:.2f}\n"
+        resumo += f"Total: R$ {total:.2f}\n"
+        return resumo
+
+    def processar_pedido(pedido):
+        _validar_itens(pedido['itens'])
+        subtotal = _calcular_subtotal(pedido['itens'])
+        desconto = _aplicar_desconto(subtotal, pedido['cliente']['tipo'])
+        return _gerar_resumo(pedido['cliente'], subtotal, desconto)
+
+LPL:
+  nome: "Long Parameter List"
+  tecnica: "Introduce Parameter Object"
+  exemplo_antes: |-
+    def cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):
+        produto = {
+            'nome': nome,
+            'preco': preco,
+            'quantidade': quantidade,
+            'categoria': categoria,
+            'fornecedor': fornecedor,
+            'desconto': desconto
+        }
+        banco_de_dados.salvar(produto)
+        return produto
+  exemplo_depois: |-
+    from dataclasses import dataclass, asdict
+
+    @dataclass
+    class Produto:
+        nome: str
+        preco: float
+        quantidade: int
+        categoria: str
+        fornecedor: str
+        desconto: float
+
+    def cadastrar_produto(produto: Produto):
+        banco_de_dados.salvar(asdict(produto))
+        return produto
+
+LLF:
+  nome: "Long Lambda Function"
+  tecnica: "Replace Lambda with Named Function"
+  exemplo_antes: |-
+    ordenar = lambda itens, chave, reverso, limite: sorted(
+        [i for i in itens if i[chave] > limite],
+        key=lambda x: x[chave],
+        reverse=reverso
+    )
+  exemplo_depois: |-
+    def ordenar_itens(itens, chave, reverso, limite):
+        itens_filtrados = [i for i in itens if i[chave] > limite]
+        return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)
+
+MNC:
+  nome: "Multiply-Nested Container"
+  tecnica: "Decompose Container"
+  exemplo_antes: |-
+    dados = {
+        'pedidos': [
+            {
+                'cliente': {
+                    'nome': 'Ana',
+                    'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}
+                },
+                'itens': [
+                    {'produto': 'caneta', 'qtd': 2},
+                    {'produto': 'caderno', 'qtd': 1}
+                ]
+            }
+        ]
+    }
+  exemplo_depois: |-
+    from dataclasses import dataclass, field
+    from typing import List
+
+    @dataclass
+    class Endereco:
+        cidade: str
+        cep: str
+
+    @dataclass
+    class Cliente:
+        nome: str
+        endereco: Endereco
+
+    @dataclass
+    class Item:
+        produto: str
+        qtd: int
+
+    @dataclass
+    class Pedido:
+        cliente: Cliente
+        itens: List[Item] = field(default_factory=list)
+
+    dados = [
+        Pedido(
+            cliente=Cliente(
+                nome='Ana',
+                endereco=Endereco(cidade='Fortaleza', cep='60000-000')
+            ),
+            itens=[Item('caneta', 2), Item('caderno', 1)]
+        )
+    ]

@@ -1,0 +1,14 @@
+Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.
+
+Antes de responder, raciocine passo a passo:
+1. Identifique por que o trecho apresenta o code smell indicado.
+2. Explique como a técnica de refatoração indicada se aplica ao trecho.
+3. Aplique a refatoração.
+4. Verifique se o código refatorado preserva o comportamento original.
+
+Após o raciocínio, exiba o código refatorado final em um único bloco de código Python.
+
+Code smell: {smell}
+Técnica de refatoração: {technique}
+Código original:
+{code}
