@@ -38,15 +38,18 @@ NOMES = {
 ARTIGO = {"total": 687, "Repositories": 57, "Code": 630}
 
 
-def _todos_py():
+def todos_py():
+    """Publica porque dados/selecao/selecionar.py reusa (uma so implementacao)."""
     for raiz, _, nomes in os.walk(ARQUIVOS):
         for nome in sorted(nomes):
             if nome.endswith(".py"):
                 yield os.path.join(raiz, nome).replace(os.sep, "/")
 
 
-def _localizar(origem, caminho_planilha, todos):
-    """A planilha usa 'code/x.py' e 'repo/a/b.py'; no disco sao Code/ e Repositories/."""
+def localizar(origem, caminho_planilha, todos):
+    """Publica porque dados/selecao/selecionar.py reusa.
+
+    A planilha usa 'code/x.py' e 'repo/a/b.py'; no disco sao Code/ e Repositories/."""
     prefixo = "/Code/" if origem == "code" else "/Repositories/"
     base = os.path.basename(caminho_planilha)
     candidatos = [p for p in todos if prefixo in p and os.path.basename(p) == base]
@@ -57,7 +60,7 @@ def _localizar(origem, caminho_planilha, todos):
 
 
 def main():
-    todos = list(_todos_py())
+    todos = list(todos_py())
     print("arquivos .py encontrados: %d (artigo: 311)" % len(todos))
 
     esperado, ocorrencias, sem_arquivo = set(), Counter(), []
@@ -65,7 +68,7 @@ def main():
     for linha in linhas:
         if len(linha) < 4 or linha[3] not in NOMES:
             continue
-        caminho = _localizar(linha[0], linha[1], todos)
+        caminho = localizar(linha[0], linha[1], todos)
         if caminho is None:
             sem_arquivo.append(linha[1])
             continue

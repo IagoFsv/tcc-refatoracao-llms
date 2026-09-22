@@ -8,8 +8,8 @@
 parametros:
   # temperature > 0 para preservar a variabilidade entre as 3 execucoes por
   # instancia; com 0 as execucoes ficariam quase identicas e perderiam sentido.
-  # Valor final a fechar com a Carla.
-  temperature: 0.7
+  # Valor FECHADO em 0.5 (decisao do Iago, com aval da Carla em 22/09/2026).
+  temperature: 0.5
   max_tokens: 2048
   # top_p: 1.0
   # seed: 42   # apenas alguns provedores respeitam seed

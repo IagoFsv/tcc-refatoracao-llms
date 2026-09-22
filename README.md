@@ -7,12 +7,13 @@ Lambda Function e Multiply-Nested Container.
 
 ## Modelos avaliados
 
-Tres modelos acessados por API, todos em tier de acesso gratuito, para
-favorecer a reprodutibilidade:
+Modelos acessados por API, em tier de acesso gratuito, para favorecer a
+reprodutibilidade:
 
-- Gemini Flash (tier gratuito do Google)
-- GPT em versao gratuita (API direta da OpenAI, tier gratuito)
-- Qwen (tier gratuito via Groq)
+- Gemini `gemini-3.1-flash-lite` (tier gratuito do Google)
+- Qwen `qwen/qwen3.6-27b` (tier gratuito via Groq)
+
+Um terceiro modelo esta previsto. A temperatura é 0.5 para todos.
 
 ## Como o repositorio se mapeia na metodologia
 
@@ -20,7 +21,7 @@ favorecer a reprodutibilidade:
 |---------------------------------|----------------------------------------|
 | Dataset de entrada              | `dados/dataset_zhang/` (baixar, ver abaixo) |
 | Deteccao de smells              | `dados/pysmell/` (Pysmell portado)     |
-| Selecao das 100 instancias      | `dados/selecao/`                       |
+| Selecao das instancias          | `dados/selecao/`                       |
 | Unidades adaptadas + testes     | `instancias/` (por smell)              |
 | Prompts (Role, Few-Shot, CoT)   | `prompts/`                             |
 | Geracao (3 modelos x 3 exec.)   | `geracao/`, saidas em `resultados/geracoes/` |
@@ -39,7 +40,8 @@ em `dados/dataset_zhang/`, de forma que exista
 pip install -r requirements.txt
 cp .env.example .env     # preencha com suas proprias chaves de API
 python -m geracao.smoke_test --dry-run   # verifica a configuracao
-python -m geracao.smoke_test             # testa as tres APIs
+python -m geracao.smoke_test             # testa as APIs configuradas
+python -m dados.selecao.selecionar        # gera a lista de instancias da fase 1
 ```
 
 As chaves de API nao acompanham o repositorio; cada pessoa usa as suas. Os
