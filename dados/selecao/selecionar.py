@@ -7,7 +7,16 @@ estao em `results of RQ1.xlsx`. Nos 4 smells do estudo, sao 89 ocorrencias em
 83 trechos distintos. Usar as 333 misturaria codigo escrito por humano e
 quebraria a proveniencia que a monografia afirma.
 
-Nao ha sorteio: sem teto de amostra (decisao de 22/09/2026), entram os 83.
+A instancia e a FUNCAO que contem o smell, nao a linha (decisao de
+29/09/2026). Para LM e LPL da no mesmo, porque o Pysmell mede a funcao
+inteira. Para MNC nao: a metrica e da expressao, e uma funcao cheia de JSON
+aninhado dispara varias linhas (o _process_data de GuardianRanks.py tem 8).
+Contar por linha mandaria o mesmo codigo varias vezes ao modelo e contaria
+como observacoes independentes. Agrupando pela funcao envolvente, os 83
+trechos viram 68 instancias (so o MNC muda, de 36 para 21). Codigo de modulo,
+fora de qualquer funcao, agrupa como "<modulo>".
+
+Nao ha sorteio: sem teto de amostra (decisao de 22/09/2026), entram todas.
 A planilha diz QUAIS trechos; o Pysmell portado diz as METRICAS de cada um e
 serve de conferencia: se algum trecho da planilha nao for reproduzido pelo
 porte, o script falha em vez de emitir uma lista pela metade.
@@ -18,9 +27,11 @@ Uso:
 """
 
 import argparse
+import ast
 import csv
 import os
 import sys
+import warnings
 from collections import Counter, defaultdict
 
 RAIZ = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
@@ -37,7 +48,11 @@ SAIDA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instancias_zha
 # os smells aparecem na monografia. Mudar isso renumera todas as instancias.
 ORDEM = ("LM", "LPL", "LLF", "MNC")
 
-CAMPOS = ["id", "smell", "arquivo", "linha", "metricas", "ocorrencias"]
+# linhas e metricas sao listas quando a funcao tem mais de um trecho:
+#   linhas   = "60;61;62"
+#   metricas = "60:LEC=4|61:LEC=3|62:LEC=3"
+CAMPOS = ["id", "smell", "arquivo", "funcao", "linha_funcao", "linhas",
+          "metricas", "ocorrencias"]
 
 
 def trechos_da_planilha(todos):
@@ -75,6 +90,29 @@ def metricas_dos_arquivos(caminhos):
     return medidas
 
 
+def funcao_envolvente(caminho, linha, _cache={}):
+    """Devolve (linha_de_inicio, nome) da funcao mais interna que contem a linha.
+
+    Identifica a funcao pela linha de inicio, nao pelo nome: ha metodos
+    homonimos em classes diferentes do mesmo arquivo (my_image.py tem dois
+    draw_line; cryptocurrency.py e network.py tem dois __init__ cada).
+    Fora de qualquer funcao devolve (0, "<modulo>").
+    """
+    if caminho not in _cache:
+        with open(caminho, encoding="utf-8", errors="replace") as fh:
+            codigo = fh.read()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SyntaxWarning)
+            _cache[caminho] = ast.parse(codigo)
+    melhor = None
+    for no in ast.walk(_cache[caminho]):
+        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if no.lineno <= linha <= no.end_lineno:
+                if melhor is None or no.lineno > melhor.lineno:
+                    melhor = no
+    return (melhor.lineno, melhor.name) if melhor else (0, "<modulo>")
+
+
 def montar():
     """Devolve a lista de instancias, ja com id, ou aborta se o porte divergir."""
     todos = list(validar_porte.todos_py())
@@ -91,23 +129,37 @@ def montar():
             "antes de seguir." % len(faltando)
         )
 
-    por_smell = defaultdict(list)
+    # (smell, caminho, linha_funcao) -> lista de trechos daquela funcao
+    grupos = defaultdict(list)
+    nomes = {}
     for chave in ocorrencias:
-        por_smell[chave[2]].append(chave)
+        caminho, linha, smell = chave
+        inicio, nome = funcao_envolvente(caminho, linha)
+        grupos[(smell, caminho, inicio)].append(chave)
+        nomes[(caminho, inicio)] = nome
 
     instancias = []
     for smell in ORDEM:
-        # Ordena por arquivo e linha para que o id de cada instancia seja
-        # sempre o mesmo, rodando quantas vezes for.
-        for n, chave in enumerate(sorted(por_smell[smell]), start=1):
-            caminho, linha, _ = chave
+        # Ordena pelo arquivo e pela primeira linha detectada, para que o id
+        # seja sempre o mesmo, rodando quantas vezes for. E a mesma chave da
+        # versao por linha, entao LM, LPL e LLF (que nao colapsam) mantem os
+        # ids que ja tinham.
+        chaves = sorted(
+            (k for k in grupos if k[0] == smell),
+            key=lambda k: (k[1], min(linha for _, linha, _ in grupos[k])),
+        )
+        for n, chave in enumerate(chaves, start=1):
+            _, caminho, inicio = chave
+            trechos = sorted(grupos[chave])
             instancias.append({
                 "id": "%s-%02d" % (smell, n),
                 "smell": smell,
                 "arquivo": caminho.split("/files/")[1],
-                "linha": linha,
-                "metricas": medidas[chave],
-                "ocorrencias": ocorrencias[chave],
+                "funcao": nomes[(caminho, inicio)],
+                "linha_funcao": inicio,
+                "linhas": ";".join(str(linha) for _, linha, _ in trechos),
+                "metricas": "|".join("%d:%s" % (t[1], medidas[t]) for t in trechos),
+                "ocorrencias": sum(ocorrencias[t] for t in trechos),
             })
     return instancias
 
@@ -120,15 +172,22 @@ def main(argv=None):
     args = p.parse_args(argv)
 
     instancias = montar()
+    n_trechos = Counter()
+    for i in instancias:
+        n_trechos[i["smell"]] += len(i["linhas"].split(";"))
     contagem = Counter(i["smell"] for i in instancias)
-    print("trechos selecionados: %d" % len(instancias))
+    print("%-5s %8s %11s" % ("smell", "trechos", "instancias"))
     for smell in ORDEM:
-        print("  %-4s %2d" % (smell, contagem[smell]))
-    repetidos = [i for i in instancias if i["ocorrencias"] > 1]
-    print("ocorrencias na planilha: %d (%d trecho(s) com o smell repetido)"
-          % (sum(i["ocorrencias"] for i in instancias), len(repetidos)))
-    for i in repetidos:
-        print("  %s %s:%d (%dx)" % (i["id"], i["arquivo"], i["linha"], i["ocorrencias"]))
+        print("%-5s %8d %11d" % (smell, n_trechos[smell], contagem[smell]))
+    print("%-5s %8d %11d" % ("total", sum(n_trechos.values()), len(instancias)))
+    print("ocorrencias na planilha: %d" % sum(i["ocorrencias"] for i in instancias))
+
+    agrupadas = [i for i in instancias if ";" in i["linhas"]]
+    print()
+    print("instancias com mais de um trecho na mesma funcao: %d" % len(agrupadas))
+    for i in agrupadas:
+        print("  %-6s %s  %s:%d  linhas %s"
+              % (i["id"], i["arquivo"], i["funcao"], i["linha_funcao"], i["linhas"]))
 
     if args.conferir:
         return 0
