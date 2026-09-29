@@ -1,0 +1,58 @@
+{
+  "id": "MNC-01",
+  "arquivos": {
+    "unidade": "MNC_01.py",
+    "testes": "test_MNC_01.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/GuardianRanks.py",
+  "funcao": "GuardianRanks._process_data",
+  "linha_funcao": 56,
+  "linhas": [60, 61, 62, 63, 68, 75, 76, 77],
+  "ocorrencias": 8,
+  "nota_agrupamento": "Na contagem por linha, eram MNC-01 a MNC-08. Pela regra da funcao envolvente (29/09/2026) viram uma instancia so.",
+  "trecho": "metodo _process_data inteiro, linhas 55 a 91 do original (decorador incluso)",
+  "verbatim": true,
+  "metricas": {
+    "original": "60:LEC=4|61:LEC=3|62:LEC=3|63:LEC=4|68:LEC=4|75:LEC=4|76:LEC=4|77:LEC=4",
+    "adaptado": "as mesmas 8 deteccoes, com os mesmos LEC, nas linhas 108 a 125",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 4 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(data)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linha 2: from datetime import datetime",
+    "linhas 7 a 45: root_node, child_nodes, classes Objective, RecordSet e GuardianRank, GUARDIAN_RANKS",
+    "linhas 51 a 91: classe GuardianRanks com _COMPONENTS, _THUMBNAIL_URL e _process_data"
+  ],
+  "removido_do_original": [
+    "linha 1, import discord: so e usado por _format_embed_data, que nao entrou.",
+    "linha 4, from .BungieData import BungieData: import relativo de um pacote que nao existe fora do bot; trocado por uma classe base vazia.",
+    "linha 5, import SharkBot: pacote do bot, nao disponivel; trocado por andaime (ver abaixo).",
+    "linhas 47 a 49, comentario 'The Code in here is terrible. It's the first time I've used GitHub Copilot...': daria pista ao modelo sobre a origem e a qualidade do codigo.",
+    "linhas 93 a 140, _format_embed_data e metodos comentados: fora do trecho, dependem de discord."
+  ],
+  "andaime": [
+    "SharkBot: SimpleNamespace com so o que o codigo toca. Destiny.Definitions.*.get devolve definicoes de um catalogo fixo (_NOS, _REGISTROS); Utils.JSON.dumps e json.dumps.",
+    "Catalogo fixo: dois ranks (Novato, Veterano), um conjunto de registros em cada, tres objetivos, dois deles com {var:...} na descricao para exercitar a extracao de variaveis.",
+    "O catalogo e montado por funcoes auxiliares (_no, _registro) em vez de literais aninhados, para o andaime nao disparar MNC por conta propria. Conferido: o Pysmell so acusa as 8 linhas do trecho.",
+    "BungieData: classe base vazia.",
+    "executar(data): chama GuardianRanks._process_data(data)."
+  ],
+  "comportamento_fixado": [
+    "tipico: dois personagens, escolhe o de dateLastPlayed mais recente mesmo vindo depois no dicionario; dicionario de saida completo conferido campo a campo, inclusive variaveis vindas do perfil e do personagem; JSON impresso igual ao retorno.",
+    "borda: um so personagem, tudo completo; ranks e conjuntos marcados como completos; variaveis combinadas; JSON impresso igual ao retorno.",
+    "invalido: objetivo sem registro na resposta da API levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "O original altera o dicionario de entrada (os |= fundem registros e variaveis do perfil dentro dos do personagem). Os testes nao conferem isso: e efeito colateral acidental, e uma refatoracao que deixe de mutar a entrada nao deveria ser reprovada por isso."
+  ],
+  "validacao_da_adaptacao": {
+    "pysmell_apos_adaptacao": "8 deteccoes MNC, mesmos LEC do original, nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "reverse=True -> False (escolhe o personagem errado): 2 testes falham. progress -> completionValue: teste tipico falha.",
+    "refatoracao_manual": "extracao de auxiliares (_secao, _objetivo, _estado_objetivo) preservando executar: 3 passed e o Pysmell nao detecta mais MNC. Uma primeira versao que deixou um encadeamento de 3 indices foi corretamente acusada como MNC restante."
+  }
+}

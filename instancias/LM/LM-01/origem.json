@@ -1,0 +1,47 @@
+{
+  "id": "LM-01",
+  "arquivos": {
+    "unidade": "LM_01.py",
+    "testes": "test_LM_01.py",
+    "nota": "nome derivado do id (hifen vira underscore) para que os 83 diretorios possam rodar num unico pytest sem colisao de modulo"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/batch_process.py",
+  "linha": 7,
+  "ocorrencias": 1,
+  "trecho": "funcao main, linhas 7 a 126 do arquivo original",
+  "verbatim": true,
+  "metricas": {
+    "original": "MLOC=76",
+    "adaptado": "MLOC=76",
+    "limiar_tuning": "MLOC > 52",
+    "linha_no_adaptado": 11
+  },
+  "ponto_de_entrada": "executar",
+  "dependencias_externas": [],
+  "adaptacoes": [
+    "Copiada a funcao main inteira, sem qualquer alteracao no corpo.",
+    "Mantidos os imports os e pathlib.Path, que o trecho usa.",
+    "Docstring de modulo neutra no topo, so para declarar o contrato do ponto de entrada. Nao menciona o estudo, o smell nem as metricas, para nao dar pista ao modelo.",
+    "Acrescentada executar(), que so chama main(). Serve de nome estavel para os testes, ja que a refatoracao pode dividir ou renomear main.",
+    "Guarda __main__ passou a chamar executar() em vez de main(), para a unidade continuar sendo um script executavel."
+  ],
+  "efeitos_colaterais": {
+    "descricao": "O trecho e interativo (input/print) e chama ffmpeg por os.system. Nada disso foi alterado na unidade.",
+    "tratamento": "Os dubles de input() e os.system() ficam em test_unidade.py, via monkeypatch. Assim o codigo avaliado continua identico ao original."
+  },
+  "comportamento_fixado": [
+    "tipico: converte cada arquivo da pasta de entrada, um comando ffmpeg por arquivo, com -ss e -crf nas posicoes corretas; cria a pasta de saida; nao imprime nada.",
+    "borda: nenhuma flag informada, imprime 'No flags specified', nao chama ffmpeg e nao cria a pasta de saida.",
+    "invalido: parametros de corte nao numericos, imprime 'Invalid crop parameters', aborta antes de converter.",
+    "os tres casos tambem fixam a ordem exata das perguntas feitas ao usuario."
+  ],
+  "validacao_da_adaptacao": {
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=76, igual ao original",
+    "pytest": "3 passed",
+    "mutacao": "remover o -y do comando ffmpeg faz o teste tipico falhar",
+    "refatoracao_manual": "extract method preservando executar passa nos 3 testes e o Pysmell nao detecta mais LM"
+  }
+}

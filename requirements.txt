@@ -17,4 +17,9 @@ python-dotenv>=1.0 # carrega o .env no processo, independente de config de IDE/t
 #   https://github.com/chenzhifei731/Pysmell @ 233afebac24c910be89d065ffa661ec72458a62c
 astunparse==1.6.3  # usado pelo porte do Pysmell; NAO troque por ast.unparse
                    # (muda a metrica NOC das lambdas). Ver dados/pysmell/compat.py
+
+# Dependencias das instancias (instancias/): o que o codigo original usa e e
+# leve o bastante para instalar de verdade. Versao fixada, porque o
+# comportamento que os testes fixam depende dela.
+pandas==3.0.6      # LLF-01 (main-8.py)
  
