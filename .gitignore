@@ -9,6 +9,7 @@ venv/
 .pytest_cache/
 .mypy_cache/
 CLAUDE.md
+briefing_claude_desktop.md
 
 # Saidas do smoke test (descartaveis).
 # ATENCAO: as geracoes REAIS do estudo (resultados/geracoes/) DEVEM ser
