@@ -49,7 +49,6 @@
     "diff_do_trecho": "identico ao original (linhas 83 a 97 contra 11 a 25 da unidade)",
     "pysmell_apos_adaptacao": "1 deteccao LLF, NOC=141, PAR=1, NOO=32, igual ao original; nenhuma no andaime",
     "pytest": "3 passed; pytest instancias: 9 passed",
-    "mutacao": "x[-1] -> x[0]: 2 testes falham. title() -> upper(): 2 testes falham. Tirar a checagem de Unknown na lambda longa: 2 testes falham (troca a cidade no tipico e da IndexError na borda).",
-    "refatoracao_manual": "lambdas trocadas por funcoes nomeadas (_ultima_palavra, _cidade_da_linha) e Series.where, preservando executar: 3 passed e o Pysmell nao detecta mais LLF."
+    "mutacao": "x[-1] -> x[0]: 2 testes falham. title() -> upper(): 2 testes falham. Tirar a checagem de Unknown na lambda longa: 2 testes falham (troca a cidade no tipico e da IndexError na borda)."
   }
 }

@@ -41,7 +41,6 @@
   "validacao_da_adaptacao": {
     "pysmell_apos_adaptacao": "LM detectado, MLOC=76, igual ao original",
     "pytest": "3 passed",
-    "mutacao": "remover o -y do comando ffmpeg faz o teste tipico falhar",
-    "refatoracao_manual": "extract method preservando executar passa nos 3 testes e o Pysmell nao detecta mais LM"
+    "mutacao": "remover o -y do comando ffmpeg faz o teste tipico falhar"
   }
 }

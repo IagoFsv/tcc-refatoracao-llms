@@ -52,7 +52,6 @@
   "validacao_da_adaptacao": {
     "pysmell_apos_adaptacao": "8 deteccoes MNC, mesmos LEC do original, nenhuma no andaime",
     "pytest": "3 passed",
-    "mutacao": "reverse=True -> False (escolhe o personagem errado): 2 testes falham. progress -> completionValue: teste tipico falha.",
-    "refatoracao_manual": "extracao de auxiliares (_secao, _objetivo, _estado_objetivo) preservando executar: 3 passed e o Pysmell nao detecta mais MNC. Uma primeira versao que deixou um encadeamento de 3 indices foi corretamente acusada como MNC restante."
+    "mutacao": "reverse=True -> False (escolhe o personagem errado): 2 testes falham. progress -> completionValue: teste tipico falha."
   }
 }

@@ -57,7 +57,6 @@
     "diff_do_trecho": "identico ao original (linhas 123 a 162 contra 116 a 155 da unidade)",
     "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
     "pytest": "3 passed; pytest instancias: 12 passed",
-    "mutacao": "sem optimizer.zero_grad(): 1 falha. sem optimizer.step(): 1 falha. sem model.train(): 2 falham. dividir a perda por numero de lotes em vez de amostras: 1 falha. correct -= em vez de +=: 2 falham.",
-    "refatoracao_manual": "Introduce Parameter Object (dataclass ContextoTreino com model, device, optimizer e criterion; train(ctx, train_loader)), atualizando a chamada em executar: 3 passed e o Pysmell nao detecta mais LPL."
+    "mutacao": "sem optimizer.zero_grad(): 1 falha. sem optimizer.step(): 1 falha. sem model.train(): 2 falham. dividir a perda por numero de lotes em vez de amostras: 1 falha. correct -= em vez de +=: 2 falham."
   }
 }

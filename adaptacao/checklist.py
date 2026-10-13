@@ -13,14 +13,9 @@ Para cada instancia, confere:
   contrato      executar() existe, a docstring declara o contrato e o
                 origem.json tem os campos obrigatorios.
 
-O item 5 do checklist (refatoracao de conferencia) nao entra na tabela: e
-feita no scratchpad e registrada a mao no origem.json. --refatorado so
-confere o arquivo (3 testes passando e smell removido).
-
 Uso:
     python -m adaptacao.checklist                  # todas as instancias
     python -m adaptacao.checklist LLF-01 MNC-01    # so essas
-    python -m adaptacao.checklist LLF-01 --refatorado caminho.py
     --sem-mutacao    pula a mutacao (mais rapido)
 
 Grava instancias/checklist.csv, uma linha por instancia. Linhas de
@@ -439,29 +434,6 @@ def checar(inst, com_mutacao=True):
     return linha, vivos
 
 
-def conferir_refatorado(inst, caminho):
-    """Item 5: a refatoracao de conferencia passa nos testes e tira o smell?"""
-    _, unidade, teste, _ = _caminhos(inst)
-    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
-        shutil.copy(caminho, Path(tmp, unidade.name))
-        shutil.copy(teste, tmp)
-        r = _pytest(Path(tmp))
-    ultima = (r.stdout.strip().splitlines() or ["(sem saida)"])[-1]
-    deteccoes = detectar_arquivo(str(caminho))
-    restantes = [f"{d['smell']} L{d['linha']} {d['metricas']}"
-                 for d in deteccoes if d["smell"] == inst["smell"]]
-    outros = [f"{d['smell']} L{d['linha']} {d['metricas']}"
-              for d in deteccoes if d["smell"] != inst["smell"]]
-    print(f"{inst['id']} refatoracao de conferencia: {caminho}")
-    print(f"  pytest: {ultima}")
-    print(f"  {inst['smell']} restante: {', '.join(restantes) or 'nenhum'}")
-    if outros:
-        print(f"  outros smells: {', '.join(outros)}")
-    ok = r.returncode == 0 and "3 passed" in ultima and not restantes
-    print(f"  => {'ok' if ok else 'FALHA'}")
-    return ok
-
-
 # ---------------------------------------------------------------- tabela
 
 def _gravar(linhas_novas, ordem):
@@ -486,18 +458,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Checklist automatico da adaptacao das instancias.")
     p.add_argument("ids", nargs="*", help="ids das instancias (padrao: todas as que tem pasta)")
     p.add_argument("--sem-mutacao", action="store_true", help="pula a mutacao")
-    p.add_argument("--refatorado", help="confere uma refatoracao de conferencia (uma instancia)")
     args = p.parse_args(argv)
 
     selecao = _selecao()
     desconhecidos = [i for i in args.ids if i not in selecao]
     if desconhecidos:
         p.error(f"ids fora da selecao: {', '.join(desconhecidos)}")
-
-    if args.refatorado:
-        if len(args.ids) != 1:
-            p.error("--refatorado exige exatamente um id")
-        return 0 if conferir_refatorado(selecao[args.ids[0]], args.refatorado) else 1
 
     ids = args.ids or [i for i, inst in selecao.items() if _caminhos(inst)[0].exists()]
     linhas = []
