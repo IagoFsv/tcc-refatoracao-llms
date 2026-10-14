@@ -1,0 +1,63 @@
+{
+  "id": "LLF-06",
+  "arquivos": {
+    "unidade": "LLF_06.py",
+    "testes": "test_LLF_06.py"
+  },
+  "smell": "LLF",
+  "smell_nome": "Long Lambda Function",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/argos_ai_adventure.py",
+  "funcao": "get_config_section_key_dict_dict_list",
+  "classe": "Config (linha 1255 do original)",
+  "linha_funcao": 1457,
+  "linhas": [
+    1458
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo get_config_section_key_dict_dict_list inteiro, linhas 1457 a 1458 do original",
+  "verbatim": true,
+  "amostra": "Uma das 10 instancias (LLF-02 a 11) que sao metodos da mesma classe Config (linha 1255 de argos_ai_adventure.py), em dois padroes: 4 setters que serializam listas aninhadas com ','.join(map(lambda ...)) e 6 getters que desfazem com split(','). Pela regra da funcao, cada metodo e uma instancia; registrado como limitacao.",
+  "metricas": {
+    "original": "1458:NOC=76;PAR=1;NOO=20",
+    "adaptado": "13:NOC=76;PAR=1;NOO=20",
+    "limiar_tuning": "NOC >= 73 e (PAR >= 4 ou NOO >= 15)"
+  },
+  "ponto_de_entrada": "executar(texto)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linha 1255: class Config(object):",
+    "linhas 1256 e 1257: __init__",
+    "linhas 1457 a 1458: get_config_section_key_dict_dict_list"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho.",
+  "removido_do_original": [
+    "linhas 1 a 3, docstring do modulo: cita o nome do jogo e nao e usada pelo trecho.",
+    "linhas 5 a 13, imports argparse, sys, pathlib, time, random, math, json e importlib: nao usados pelo trecho.",
+    "demais metodos da classe Config (load_config, save_config, persist_config, os outros get_config_* e set_config_*): fora do trecho. Levar a classe inteira poria no andaime as outras 9 deteccoes de LLF da classe, que sao instancias proprias.",
+    "demais classes (GameData, Node, World, Player, Logger etc.), o bloco __main__ e main(): fora do trecho; GameData ainda le game_data.json do disco ao importar o modulo."
+  ],
+  "andaime": [
+    "__init__ do original, sem alteracao.",
+    "executar(texto): cria Config, grava texto na secao 'mundo', chave 'regioes', chama o metodo e passa o resultado por _materializar.",
+    "_materializar(valor): o metodo devolve iteradores map aninhados, preguicosos; o andaime os converte em listas para o teste comparar. Texto fica como texto e o que nao e iteravel (numero, bool) fica como esta.",
+    "Conferido: o Pysmell so acusa o metodo; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: o texto so e separado por virgula no primeiro nivel; cada item volta embrulhado em tres listas de um elemento ('espada' vira [[['espada']]]). A estrutura gravada pelos setters nao e recuperada.",
+    "borda: texto vazio da [[[['']]]]; espacos sao mantidos; virgula sobrando gera item vazio.",
+    "invalido: valor gravado que nao e texto (numero) levanta AttributeError (split)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Tipo do retorno: o original devolve iteradores map aninhados; como executar converte tudo em listas, devolver listas, tuplas ou geradores tambem passa.",
+    "Momento do erro: no original, um erro dentro das lambdas internas so aparece quando o resultado e percorrido; executar percorre tudo, entao o teste nao distingue erro na chamada de erro no consumo.",
+    "Secao ou chave inexistente (KeyError): executar sempre grava a chave antes de ler."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6 (so biblioteca padrao)",
+    "diff_do_trecho": "identico ao original (linhas 1457 a 1458 contra 12 a 13 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LLF, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 96 passed",
+    "mutacao": "adaptacao/checklist.py: 1/1 (apaga o return) mutantes mortos. O trecho e uma linha (mais o log, nos setters), entao ha poucos pontos de mutacao."
+  }
+}

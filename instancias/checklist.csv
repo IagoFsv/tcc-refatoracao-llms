@@ -20,4 +20,14 @@ LPL-17,LPL,sim,ok,ok,ok,ok,5/5,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; p
 LPL-18,LPL,sim,ok,ok,ok,ok,13/13,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
 LPL-19,LPL,sim,ok,ok,ok,ok,12/12,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
 LLF-01,LLF,sim,ok,ok,ok,ok,14/14,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-02,LLF,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-03,LLF,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-04,LLF,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-05,LLF,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-06,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-07,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-08,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-09,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-10,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+LLF-11,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
 MNC-01,MNC,sim,ok,ok,ok,ok,27/27,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1

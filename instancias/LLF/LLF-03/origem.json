@@ -1,0 +1,66 @@
+{
+  "id": "LLF-03",
+  "arquivos": {
+    "unidade": "LLF_03.py",
+    "testes": "test_LLF_03.py"
+  },
+  "smell": "LLF",
+  "smell_nome": "Long Lambda Function",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/argos_ai_adventure.py",
+  "funcao": "set_config_dict_dict_dict_dict",
+  "classe": "Config (linha 1255 do original)",
+  "linha_funcao": 1389,
+  "linhas": [
+    1390
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo set_config_dict_dict_dict_dict inteiro, linhas 1389 a 1391 do original",
+  "verbatim": true,
+  "copia_de": {
+    "instancia": "LLF-02",
+    "detalhe": "O corpo do metodo e identico ao de set_config_dict_dict_dict_list (LLF-02); muda so o nome do metodo. Pela regra estrutural (nao deduplicar texto), ficam duas instancias; unidade e testes iguais, salvo o nome do metodo e do modulo importado. Registrar como limitacao."
+  },
+  "amostra": "Uma das 10 instancias (LLF-02 a 11) que sao metodos da mesma classe Config (linha 1255 de argos_ai_adventure.py), em dois padroes: 4 setters que serializam listas aninhadas com ','.join(map(lambda ...)) e 6 getters que desfazem com split(','). Pela regra da funcao, cada metodo e uma instancia; registrado como limitacao.",
+  "metricas": {
+    "original": "1390:NOC=73;PAR=1;NOO=20",
+    "adaptado": "16:NOC=73;PAR=1;NOO=20",
+    "limiar_tuning": "NOC >= 73 e (PAR >= 4 ou NOO >= 15)"
+  },
+  "ponto_de_entrada": "executar(valor)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linha 1255: class Config(object):",
+    "linhas 1256 e 1257: __init__ (a unidade acrescenta uma linha, ver andaime)",
+    "linhas 1389 a 1391: set_config_dict_dict_dict_dict"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho.",
+  "removido_do_original": [
+    "linhas 1 a 3, docstring do modulo: cita o nome do jogo e nao e usada pelo trecho.",
+    "linhas 5 a 13, imports argparse, sys, pathlib, time, random, math, json e importlib: nao usados pelo trecho.",
+    "demais metodos da classe Config (load_config, save_config, persist_config, os outros get_config_* e set_config_*): fora do trecho. Levar a classe inteira poria no andaime as outras 9 deteccoes de LLF da classe, que sao instancias proprias.",
+    "demais classes (GameData, Node, World, Player, Logger etc.), o bloco __main__ e main(): fora do trecho; GameData ainda le game_data.json do disco ao importar o modulo."
+  ],
+  "andaime": [
+    "__init__ do original (self.config = {}) acrescido de self.logger = logging.getLogger(__name__), com import logging. No original, self.logger nunca e atribuido em lugar nenhum do arquivo e logging nem e importado: o metodo daria AttributeError logo depois de gravar. logging.Logger, da biblioteca padrao, tem o info que o trecho chama.",
+    "executar(valor): cria Config, cria a secao 'mundo' vazia, chama o metodo com a chave 'regioes' e devolve o texto gravado. No original config comeca vazio, e quem o preencheria e load_config, que usa configparser, que o arquivo nao importa.",
+    "Conferido: o Pysmell so acusa o metodo; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: quatro niveis de listas de texto viram uma lista plana separada por virgula ('a,b,c,d,e,f'); a estrutura se perde. O log registra 'Config: ' seguido do dicionario inteiro.",
+    "borda: texto no ultimo nivel e separado letra por letra ('xy' vira 'x,y'), nivel vazio deixa virgula sobrando ('x,y,,,'), entrada vazia grava '', tuplas sao aceitas.",
+    "invalido: item que nao e texto no ultimo nivel levanta TypeError (do join)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Nome e nivel exato do logger: o teste fixa a mensagem, capturada com nivel INFO ou acima.",
+    "Estado da configuracao quando a gravacao falha: no original o join termina antes da atribuicao, entao nada e gravado, mas o teste so confere a excecao.",
+    "Iterador de uso unico (gerador) como entrada: o teste usa listas e tuplas."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6 (so biblioteca padrao)",
+    "diff_do_trecho": "identico ao original (linhas 1389 a 1391 contra 15 a 17 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LLF, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 96 passed",
+    "mutacao": "adaptacao/checklist.py: 3/3 (apaga a gravacao, apaga o log, troca + por - no log) mutantes mortos. O trecho e uma linha (mais o log, nos setters), entao ha poucos pontos de mutacao."
+  }
+}
