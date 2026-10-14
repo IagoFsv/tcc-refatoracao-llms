@@ -1,0 +1,71 @@
+{
+  "id": "LPL-15",
+  "arquivos": {
+    "unidade": "LPL_15.py",
+    "testes": "test_LPL_15.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/cryptocurrency.py",
+  "funcao": "__init__",
+  "classe": "Block",
+  "linha_funcao": 140,
+  "linhas": [
+    140
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo __init__ de Block inteiro, linhas 140 a 145 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-16"
+  ],
+  "metricas": {
+    "original": "140:PAR=7",
+    "adaptado": "26:PAR=7",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(campos)",
+  "dependencias_externas": [
+    "nenhuma: o trecho e o andaime so usam hashlib, da biblioteca padrao; rsa e p2pnetwork ficaram de fora porque o trecho nao os toca"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 2: import hashlib",
+    "linha 139: class Block(object):",
+    "linhas 140 a 145: __init__",
+    "linhas 163 a 175: propriedade hash e metodo repr_json de Block (andaime, ver abaixo)"
+  ],
+  "comentarios_internos": "Nao ha comentarios dentro do trecho.",
+  "removido_do_original": [
+    "linhas 1 e 3 a 7, imports de unittest, time, json, rsa, random e p2pnetwork: nao usados pelo trecho nem pelo andaime.",
+    "linhas 9 a 136, classe BlockChain: fora do trecho; depende de rede (p2pnetwork) e de rsa.",
+    "linhas 210 a 271, classe ComplexEncoder, testes unittest do autor e o bloco __main__: fora do trecho.",
+    "linhas 147 a 161, mine_block, proof_of_work e valid_proof de Block: fora do trecho; nao sao necessarios para observar o que __init__ guarda.",
+    "linhas 178 a 207, classe Transaction: fora do trecho; o __init__ dela (PAR=7) dispararia LPL no andaime. No lugar, uma transacao minima de apoio."
+  ],
+  "andaime": [
+    "Propriedade hash e metodo repr_json de Block, copiados do original sem alterar: sao os metodos publicos da classe que leem o que __init__ guarda. Assim os testes observam index, timestamp, transacoes, previous_hash e proof sem fixar nomes de atributo.",
+    "_Transacao: transacao minima com descricao, hash (sha256 da descricao) e repr_json, so com o que Block usa das transacoes.",
+    "executar(campos): recebe um dicionario com index, timestamp, transacoes (descricoes), previous_hash e, opcionalmente, proof; monta as transacoes de apoio e o bloco (sem proof quando ele nao vem, para valer o padrao) e devolve block.repr_json().",
+    "Conferido: o Pysmell so acusa o __init__ do trecho (PAR=7); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: bloco 1 com duas transacoes, previous_hash e proof 42; repr_json com o hash sha256 de index, timestamp, hashes das transacoes, previous_hash e proof.",
+    "borda: bloco inicial (index 0, sem transacoes, previous_hash None) sem proof; proof fica None, o padrao.",
+    "invalido: o trecho nao valida nada; dados de tipo errado (index texto, timestamp negativo, previous_hash inteiro) sao aceitos e aparecem como vieram."
+  ],
+  "nao_fixado_de_proposito": [
+    "Aceitar argumentos extras (*args, **kwargs): o unico chamador e executar, que a refatoracao pode ajustar; tirar *args e **kwargs nao reprova.",
+    "Nomes dos atributos: os testes observam pelo repr_json e pelo hash."
+  ],
+  "observacoes": [
+    "O PAR=7 conta *args e **kwargs (cada um e um pedaco sem '=' na assinatura). Sem eles, sao 5 parametros sem padrao (self, index, timestamp, transactions, previous_hash), ainda no limiar."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 140 a 145 contra 26 a 31 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=7, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 57 passed",
+    "mutacao": "adaptacao/checklist.py: 5/5 mutantes mortos"
+  }
+}

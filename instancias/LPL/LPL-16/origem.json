@@ -1,0 +1,71 @@
+{
+  "id": "LPL-16",
+  "arquivos": {
+    "unidade": "LPL_16.py",
+    "testes": "test_LPL_16.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/cryptocurrency.py",
+  "funcao": "__init__",
+  "classe": "Transaction",
+  "linha_funcao": 179,
+  "linhas": [
+    179
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo __init__ de Transaction inteiro, linhas 179 a 185 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-15"
+  ],
+  "metricas": {
+    "original": "179:PAR=7",
+    "adaptado": "12:PAR=7",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(campos)",
+  "dependencias_externas": [
+    "nenhuma: o trecho e o andaime so usam hashlib, da biblioteca padrao; rsa e p2pnetwork ficaram de fora porque o trecho nao os toca"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 2: import hashlib",
+    "linha 178: class Transaction(object):",
+    "linhas 179 a 185: __init__",
+    "linhas 196 a 207: propriedade hash e metodo repr_json de Transaction (andaime, ver abaixo)"
+  ],
+  "comentarios_internos": "Nao ha comentarios dentro do trecho.",
+  "removido_do_original": [
+    "linhas 1 e 3 a 7, imports de unittest, time, json, rsa, random e p2pnetwork: nao usados pelo trecho nem pelo andaime.",
+    "linhas 9 a 136, classe BlockChain: fora do trecho; depende de rede (p2pnetwork) e de rsa.",
+    "linhas 210 a 271, classe ComplexEncoder, testes unittest do autor e o bloco __main__: fora do trecho.",
+    "linhas 139 a 175, classe Block: fora do trecho.",
+    "linhas 187 a 194, sign e is_valid de Transaction: fora do trecho; dependem de rsa."
+  ],
+  "andaime": [
+    "Propriedade hash e metodo repr_json de Transaction, copiados do original sem alterar: sao os metodos publicos da classe que leem o que __init__ guarda. Assim os testes observam sender, receiver, amount e timestamp sem fixar nomes de atributo.",
+    "executar(campos): recebe um dicionario com sender, receiver, amount e timestamp, monta a transacao e devolve transaction.repr_json().",
+    "Conferido: o Pysmell so acusa o __init__ do trecho (PAR=7); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: Alice para Bob, 100, com timestamp; repr_json com o hash sha256 de sender, receiver, amount e timestamp.",
+    "borda: valor zero para a propria remetente.",
+    "invalido: o trecho nao valida nada; remetente None, valor negativo e timestamp em texto sao aceitos e aparecem como vieram."
+  ],
+  "nao_fixado_de_proposito": [
+    "public_key e signature iniciados com None: so sao usados por sign e is_valid, que dependem de rsa e ficaram fora; nada no andaime os le.",
+    "Aceitar argumentos extras (*args, **kwargs): o unico chamador e executar, que a refatoracao pode ajustar.",
+    "Nomes dos atributos: os testes observam pelo repr_json e pelo hash."
+  ],
+  "observacoes": [
+    "O PAR=7 conta *args e **kwargs. Sem eles, sao 5 parametros sem padrao (self, sender, receiver, amount, timestamp), ainda no limiar."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 179 a 185 contra 12 a 18 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=7, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 57 passed",
+    "mutacao": "adaptacao/checklist.py: 4/6 mutantes mortos. Vivos: apagar public_key = None e signature = None (linhas 184 e 185), atributos que so sign e is_valid usam; nao fixados de proposito."
+  }
+}

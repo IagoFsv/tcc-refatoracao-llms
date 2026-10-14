@@ -1,0 +1,69 @@
+{
+  "id": "LPL-18",
+  "arquivos": {
+    "unidade": "LPL_18.py",
+    "testes": "test_LPL_18.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/network.py",
+  "funcao": "__init__",
+  "classe": "DQNAgent",
+  "linha_funcao": 105,
+  "linhas": [
+    105
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo __init__ de DQNAgent inteiro, linhas 105 a 122 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-17"
+  ],
+  "metricas": {
+    "original": "105:PAR=9",
+    "adaptado": "51:PAR=9",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(configuracao)",
+  "dependencias_externas": [
+    "torch: nao aparece no trecho; a classe DQN do mesmo arquivo, que o trecho constroi e usa torch, virou stub (criterio 4b)."
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 3: import random",
+    "linhas 85 a 100: classe ReplayMemory (andaime)",
+    "linha 104: class DQNAgent:",
+    "linhas 105 a 122: __init__"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: comentarios curtos do autor ('define the hyperparameters', 'create the replay memory' etc.). Nao citam estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 e 2, imports de torch e numpy: nao usados pelo trecho nem pelo andaime.",
+    "linhas 6 a 81, classe DQN: trocada por um stub. O __init__ real (PAR=5) dispararia LPL no andaime, e o resto da classe depende de tensores reais.",
+    "linhas 84 e 103, comentarios de cabecalho das classes: fora do trecho.",
+    "linhas 124 a 138, demais metodos de DQNAgent (update, get_action, push): fora do trecho."
+  ],
+  "andaime": [
+    "ReplayMemory copiada do original sem alterar (linhas 85 a 100): o trecho a constroi com capacity=1000.",
+    "DQN minima: __init__(self, *dimensoes) recebe as 4 dimensoes na mesma ordem da original (input_size, n_actions, hidden_size, gamma), guarda-as e cria um conjunto de pesos proprio; state_dict devolve uma copia dos pesos e load_state_dict substitui os pesos, como na original. Levanta RuntimeError para tamanho negativo, como a original faria ao criar a camada linear. *dimensoes conta como um parametro so no PAR.",
+    "executar(configuracao): recebe um dicionario com os 8 hiperparametros, monta o agente e devolve um resumo: hiperparametros guardados, capacidade e tamanho da memoria, dimensoes das duas redes, se sao objetos distintos e se a rede alvo tem os pesos da principal.",
+    "Conferido: o Pysmell so acusa o __init__ do trecho (PAR=9); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: 4 entradas, 2 acoes, oculta 24, gamma 0.95, lote 32, epsilon 1.0 ate 0.01 com decaimento 0.995; os 8 valores guardados, memoria de capacidade 1000 vazia, duas redes distintas com as mesmas dimensoes e a alvo sincronizada com a principal.",
+    "borda: tamanhos 1, lote 1, epsilon ja igual ao minimo e decaimento 1.0.",
+    "invalido: camada oculta negativa levanta RuntimeError (vem da rede)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Mensagem do RuntimeError: vem do stub; o teste so fixa o tipo."
+  ],
+  "observacoes": [
+    "Os 8 hiperparametros, memory, dqn e target_dqn sao fixados pelo nome porque sao atributos publicos que os outros metodos da classe original usam (update, get_action, push)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 105 a 122 contra 51 a 68 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=9, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 63 passed",
+    "mutacao": "adaptacao/checklist.py: 13/13 mutantes mortos"
+  }
+}

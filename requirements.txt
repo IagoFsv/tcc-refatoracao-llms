@@ -23,4 +23,7 @@ astunparse==1.6.3  # usado pelo porte do Pysmell; NAO troque por ast.unparse
 # comportamento que os testes fixam depende dela.
 pandas==3.0.6      # LLF-01 (main-8.py)
 tqdm==4.70.1       # LPL-01 (CNN.py); o torch do LPL-01 e stub, nao entra aqui
+numpy==2.5.3       # LPL-09 a 11 (my_image.py); antes so vinha junto com o pandas
+scikit-image==0.26.0  # LPL-09 a 11 (my_image.py): skimage.draw.line e disk
+scipy==1.18.1      # LPL-12 (interp1d); antes so vinha junto com o scikit-image
  

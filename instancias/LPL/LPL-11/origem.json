@@ -1,0 +1,73 @@
+{
+  "id": "LPL-11",
+  "arquivos": {
+    "unidade": "LPL_11.py",
+    "testes": "test_LPL_11.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/my_image.py",
+  "funcao": "draw_circle",
+  "classe": "RGB_Image",
+  "linha_funcao": 356,
+  "linhas": [
+    356
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo draw_circle de RGB_Image inteiro, docstring incluida, linhas 356 a 368 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-09",
+    "LPL-10"
+  ],
+  "metricas": {
+    "original": "356:PAR=6",
+    "adaptado": "34:PAR=6",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(tamanho, disco, cor=None)",
+  "dependencias_externas": [
+    "scikit-image==0.26.0 (instalado de verdade, fixado no requirements.txt; criterio 4a)",
+    "numpy==2.5.3 (instalado de verdade, fixado no requirements.txt)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 10 e 11: import skimage, import numpy as np",
+    "linhas 54 a 65: class Image, docstring e __init__",
+    "linhas 262 a 265: class RGB_Image(Image) e docstring",
+    "linhas 356 a 368: draw_circle"
+  ],
+  "comentarios_internos": "So a docstring do metodo, mantida pela regra 1. Nao cita estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 8, comentario de cabecalho com autor, data e proposito; a linha 8 diz que boa parte do codigo foi feita com o GitHub Copilot: fora do trecho, revela a origem do codigo.",
+    "linhas 12 a 14, imports de matplotlib, scipy.ndimage e os: nao usados pelo trecho.",
+    "linhas 17 a 51, plot_image, new_image_from_array e new_image_from_file: fora do trecho.",
+    "linha 390 em diante, classe ImageCollection: fora do trecho.",
+    "demais metodos de Image (linhas 67 a 260): fora do trecho.",
+    "demais metodos de RGB_Image (linhas 267 a 354 e 370 a 388): fora do trecho."
+  ],
+  "andaime": [
+    "Classes Image (cabecalho, docstring e __init__) e RGB_Image (cabecalho e docstring) copiadas do original sem alterar; o trecho so usa self.image.",
+    "executar(tamanho, disco, cor=None): cria uma imagem RGB branca (uint8, 255) com o tamanho dado, chama draw_circle com (x, y, raio), passando a cor so se ela for dada, e devolve o array da imagem que o metodo retorna.",
+    "Conferido: o Pysmell so acusa o metodo do trecho, com a mesma metrica do original; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: imagem 7x7, centro x=4, y=2, raio 2, cor azul; pinta o quadrado 3x3 das linhas 1 a 3 e colunas 3 a 5 (o disco do skimage.draw.disk com raio 2). Centro assimetrico, para a ordem x/y fazer diferenca.",
+    "borda: imagem 4x5, centro x=1, y=0, raio 2, sem cor; o disco e recortado na borda (linhas 0 e 1, colunas 0 a 2) e pintado de preto, a cor padrao.",
+    "invalido: cor com dois canais levanta ValueError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Se o desenho e feito na propria imagem ou numa copia: o teste confere a imagem devolvida pelo metodo.",
+    "Raio negativo: o skimage.draw.disk nao levanta erro (devolve o centro), entao nao serve de caso invalido."
+  ],
+  "observacoes": [
+    "PAR inflado pelo Pysmell: a assinatura e separada por virgula, e color=(0, 0, 0) soma 2 pedacos sem '='. Sao 4 parametros sem padrao (self, x, y, radius), abaixo do limiar de 5; o Pysmell diz 6. Decisao do Iago (14/10/2026): manter e registrar como limitacao. Efeito: trocar (0, 0, 0) por uma constante remove o smell sem mexer na lista de parametros."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1, numpy 2.5.3, scikit-image 0.26.0",
+    "diff_do_trecho": "identico ao original (linhas 356 a 368 de my_image.py contra 34 a 46 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=6, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 42 passed",
+    "mutacao": "adaptacao/checklist.py: 6/6 mutantes mortos"
+  }
+}

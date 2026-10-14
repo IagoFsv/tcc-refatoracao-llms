@@ -1,0 +1,65 @@
+{
+  "id": "LPL-19",
+  "arquivos": {
+    "unidade": "LPL_19.py",
+    "testes": "test_LPL_19.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/tensorflow_usages.py",
+  "funcao": "create_convolutional_layer",
+  "linha_funcao": 16,
+  "linhas": [
+    16
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao create_convolutional_layer inteira, linhas 16 a 26 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "16:PAR=6",
+    "adaptado": "92:PAR=6",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(camada)",
+  "dependencias_externas": [
+    "tensorflow: stub local dentro da unidade (criterio 4b). O trecho usa a API do TensorFlow 1 (tf.nn.conv2d com filter=, tf.nn.max_pool com value=; tf.truncated_normal nas funcoes auxiliares), que nao existe no TensorFlow 2, e o TensorFlow 1 nao instala no Python 3.14. No TensorFlow 1 essas chamadas nao calculam: montam um grafo de operacoes, que so roda depois numa sessao. O stub registra esse grafo (operacao, escopo de nome, entradas e argumentos), que e o comportamento real do trecho; nao inventa resultado numerico."
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 8 a 13: create_weights e create_biases (andaime, ver abaixo)",
+    "linhas 16 a 26: create_convolutional_layer"
+  ],
+  "comentarios_internos": "Nao ha comentarios dentro do trecho.",
+  "removido_do_original": [
+    "linhas 1 a 4, comentarios de cabecalho (um deles em chines, 'reconhecimento facial com TensorFlow'): fora do trecho.",
+    "linha 5, import tensorflow as tf: trocado pelo stub, exposto no mesmo nome tf.",
+    "linhas 29 a 85, create_flatten_layer, create_fc_layer, create_model, train_neural_network e o codigo de modulo: fora do trecho; dependem de sessao, MNIST e variaveis globais que o arquivo nao define."
+  ],
+  "andaime": [
+    "create_weights e create_biases copiadas do original sem alterar: o trecho as chama.",
+    "Stub de tensorflow em Python puro, so com o que o trecho e as duas auxiliares tocam: Variable, truncated_normal (mean=0.0, stddev=1.0), constant (dtype=None, shape=None), name_scope e nn.conv2d, nn.max_pool, nn.relu, com os nomes de parametro do TensorFlow 1. Cada operacao devolve um no que registra a operacao, o escopo de nome atual, as entradas e os argumentos; a soma de dois nos vira um no 'add'.",
+    "conv2d levanta ValueError se o filtro nao tiver 4 dimensoes, regra documentada do TensorFlow 1 (o filtro e um tensor 4-D [altura, largura, canais de entrada, canais de saida]; a inferencia de formato falha com 'Shape must be rank 4'). E a unica validacao imitada.",
+    "executar(camada): recebe um dicionario com o formato da entrada e os 5 argumentos restantes, cria um no de entrada, chama a funcao do trecho e devolve a descricao do no final.",
+    "Os parametros com valor padrao nos stubs nao contam no PAR, e nenhuma funcao do stub passa de 4; o Pysmell so acusa a funcao do trecho (PAR=6)."
+  ],
+  "comportamento_fixado": [
+    "tipico: primeira camada para imagens 28x28 com 1 canal, 32 filtros 5x5x1x32, pooling 2x2 (ksize [1, 2, 2, 1]), nome layer_conv1; grafo relu(max_pool(conv2d(entrada, pesos) + vies)) com strides 1 na convolucao, padding SAME, pesos em normal truncada com desvio 0.05 e vies constante 0.05, tudo no escopo layer_conv1.",
+    "borda: um filtro 1x1x3x1 e pooling de tamanho 1 (sem reducao).",
+    "invalido: filtro com 2 dimensoes ([5, 5]) levanta ValueError na convolucao."
+  ],
+  "nao_fixado_de_proposito": [
+    "Validacao do ksize do max_pool e do formato da entrada: o stub nao imita; so a regra do filtro foi imitada.",
+    "Mensagem do ValueError: vem do stub; o teste so fixa o tipo."
+  ],
+  "observacoes": [
+    "num_input_channels nao e usado pelo trecho; tirar esse parametro e permitido.",
+    "O create_model do proprio arquivo original chama esta funcao com filter_shape=[5, 5] e pool_shape=[2, 2]; no TensorFlow 1 real isso falharia na convolucao. O caso invalido usa esse mesmo formato."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 16 a 26 contra 92 a 102 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=6, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 66 passed",
+    "mutacao": "adaptacao/checklist.py: 12/12 mutantes mortos"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "id": "LPL-06",
+  "arquivos": {
+    "unidade": "LPL_06.py",
+    "testes": "test_LPL_06.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/maindb.py",
+  "funcao": "add_server",
+  "linha_funcao": 15,
+  "linhas": [
+    15
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao add_server inteira, linhas 15 a 23 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-07",
+    "LPL-08"
+  ],
+  "metricas": {
+    "original": "15:PAR=5",
+    "adaptado": "32:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(cadastrados, servidor)",
+  "dependencias_externas": [
+    "nenhuma: sqlite3 e da biblioteca padrao"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 8: import sqlite3",
+    "linhas 15 a 23: add_server"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1 (trecho verbatim): as linhas 16 e 17 dizem que a funcao e redundante e foi substituida por outras do pacote original. Nao citam estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 5, comentarios de cabecalho sobre o uso do arquivo: fora do trecho.",
+    "linha 9, from .dbinitalization import init_db: modulo do pacote original, ausente do dataset; o andaime cria a tabela no lugar dele.",
+    "linhas 83 e 84, comentario de copyright que cita 'GitHub Copilot': fora do trecho, revela a origem do codigo.",
+    "linhas 25 a 31, remove_server: fora do trecho.",
+    "linhas 33 a 39, update_server: fora do trecho.",
+    "linhas 11 a 13, 41 a 49 e 51 a 81, initdb, list_servers, add_key, remove_key e list_keys: fora do trecho."
+  ],
+  "andaime": [
+    "sqlite3 de verdade (biblioteca padrao). O banco e o arquivo frSSH.db da pasta atual, mesmo nome do trecho; os testes trocam a pasta atual por uma temporaria (monkeypatch.chdir).",
+    "_preparar_banco(cadastrados): cria a tabela servers (ip, port, username, password, keyid) se nao existir e grava os servidores ja cadastrados. Colunas sem tipo declarado, porque o esquema original (dbinitalization.py) nao esta no dataset; assim o SQLite guarda os valores como recebidos.",
+    "_linhas(): le a tabela inteira na ordem de insercao (rowid).",
+    "executar(cadastrados, servidor): prepara o banco, desempacota servidor (tupla de 5) na chamada da funcao do trecho e devolve as linhas da tabela.",
+    "Conferido: o Pysmell so acusa a funcao do trecho (PAR=5); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: um servidor cadastrado, grava um novo (keyid None); a tabela fica com os dois, na ordem, e imprime 'Server added.'.",
+    "borda: grava de novo um servidor ja cadastrado; vira uma segunda linha igual (a tabela nao tem restricao de unicidade) e imprime a mensagem.",
+    "invalido: porta em lista levanta sqlite3.ProgrammingError; nada impresso e a tabela continua so com o cadastrado."
+  ],
+  "nao_fixado_de_proposito": [
+    "Conexao que fica aberta quando o INSERT falha: efeito colateral acidental, nao observavel pelo chamador."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 15 a 23 de maindb.py contra 32 a 40 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 33 passed",
+    "mutacao": "adaptacao/checklist.py: 5/6 mutantes mortos. Vivo: apagar conn.close() (linha 22 do original), sem efeito observavel, porque o commit ja foi feito."
+  }
+}

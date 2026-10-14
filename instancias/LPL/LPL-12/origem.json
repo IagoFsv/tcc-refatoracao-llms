@@ -1,0 +1,61 @@
+{
+  "id": "LPL-12",
+  "arquivos": {
+    "unidade": "LPL_12.py",
+    "testes": "test_LPL_12.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/pandas_dataframe_interpolation_via_scipy_interpolate.py",
+  "funcao": "interpolate_df_at_fixed_x_intervals",
+  "linha_funcao": 222,
+  "linhas": [
+    222
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao interpolate_df_at_fixed_x_intervals inteira, linhas 222 a 263 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "222:PAR=5",
+    "adaptado": "13:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(dados1, dados2, intervalo)",
+  "dependencias_externas": [
+    "pandas==3.0.6, numpy==2.5.3 e scipy==1.18.1 (instalados de verdade, fixados no requirements.txt; criterio 4a)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 129 a 131: import numpy as np, import pandas as pd, from scipy.interpolate import interp1d",
+    "linhas 222 a 263: interpolate_df_at_fixed_x_intervals"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1 (trecho verbatim): explicacoes do autor, um link para a doc do numpy, uma nota TODO/NB sugerindo calcular y_diff antes e um bloco comentado. Nao citam estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 128, docstring do modulo: cabecalho do repositorio do autor, instrucoes de pylint e uma conversa com o GitHub Copilot, com trechos de codigo; revela a origem do codigo.",
+    "linhas 129 a 221 fora dos imports, interpolate_df e codigo de modulo que monta df1, df2 e imprime resultados; inclui o comentario da linha 217 ('By me, with CoPilot's assistance'): fora do trecho.",
+    "linhas 265 a 535, codigo de modulo que chama a funcao e imprime, e as variantes interpolate_df_at_fixed_x_intervals_no_extrapolation e interpolate_df_at_fixed_x_intervals_numpy: fora do trecho."
+  ],
+  "andaime": [
+    "executar(dados1, dados2, intervalo): recebe dois DataFrames com a coluna de x primeiro e a de y depois, separa as quatro series (com os nomes das colunas, que o trecho usa nos nomes de saida) e chama a funcao do trecho.",
+    "Conferido: o Pysmell so acusa a funcao do trecho (PAR=5); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: dados do proprio autor (x1 de 1 a 5, y1 = 2x) contra tres pontos de y2 com inclinacoes diferentes, intervalo 1.0; colunas x1_new, y1_new, y2_new e y_diff, com interpolacao linear dentro da faixa e extrapolacao pelo segmento da ponta fora dela.",
+    "borda: intervalo 10, maior que a faixa de x; como o fim do arange e x_max + intervalo, sai um segundo ponto, x = 11, alem do maior x, extrapolado.",
+    "invalido: intervalo zero levanta ValueError ('Maximum allowed size exceeded'), porque x_min e x_max sao escalares do numpy; com numeros Python puros o numpy levantaria ZeroDivisionError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Tipos das colunas (int ou float): o teste compara valores e nomes, com check_dtype=False.",
+    "RuntimeWarning de divisao por zero que acompanha o caso invalido."
+  ],
+  "observacoes": [
+    "O Pysmell portado acusa LPL tambem nas linhas 285 e 329 do original (variantes da mesma funcao, PAR=5), mas a planilha de Zhang et al. so lista a linha 222. A selecao segue a planilha."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1, pandas 3.0.6, numpy 2.5.3, scipy 1.18.1",
+    "diff_do_trecho": "identico ao original (linhas 222 a 263 contra 13 a 54 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 45 passed",
+    "mutacao": "adaptacao/checklist.py: 15/16 mutantes mortos. Vivo: apagar x_new = pd.Series(x_new) (linha 236 do original), equivalente: o DataFrame sai igual a partir do array do numpy."
+  }
+}

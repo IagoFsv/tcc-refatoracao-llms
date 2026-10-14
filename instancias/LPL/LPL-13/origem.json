@@ -1,0 +1,56 @@
+{
+  "id": "LPL-13",
+  "arquivos": {
+    "unidade": "LPL_13.py",
+    "testes": "test_LPL_13.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/tools.py",
+  "funcao": "bilinear_interpolation",
+  "linha_funcao": 68,
+  "linhas": [
+    68
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao bilinear_interpolation inteira, docstring incluida, linhas 68 a 112 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "68:PAR=10",
+    "adaptado": "9:PAR=10",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(ponto, cantos, valores)",
+  "dependencias_externas": [
+    "nenhuma: o trecho so faz aritmetica"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 68 a 112: bilinear_interpolation"
+  ],
+  "comentarios_internos": "So a docstring, mantida pela regra 1 (trecho verbatim). Ela diz 'Made with a lot of help from GitHub Copilot.', o que revela a origem do codigo, e traz um exemplo de doctest que importa de rocketpy.tools (o pytest nao roda doctest por padrao). Mesmo criterio do LPL-01: registrar como limitacao.",
+  "removido_do_original": [
+    "linhas 1 a 8, imports de importlib, re, bisect, pytz, cftime e packaging: nao usados pelo trecho.",
+    "linhas 16 a 66, classe cached_property e funcao tuple_handler: fora do trecho.",
+    "linhas 115 a 391, find_two_closest_integers, time_num_to_date_string, geopotential_to_height_asl, geopotential_to_height_agl, find_closest, import_optional_dependency e check_requirement_version: fora do trecho."
+  ],
+  "andaime": [
+    "executar(ponto, cantos, valores): recebe tres tuplas, (x, y), (x1, x2, y1, y2) e (z11, z12, z21, z22), desempacota e chama a funcao do trecho.",
+    "Conferido: o Pysmell so acusa a funcao do trecho (PAR=10); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: ponto (1.5, 3) no retangulo x de 1 a 3, y de 2 a 6, com os quatro valores diferentes; devolve 1.8125. Ponto e valores assimetricos e retangulo fora da origem, para que trocar coordenadas, valores ou sinais mude o resultado.",
+    "borda: ponto em cima de um canto devolve o valor daquele canto: (x2, y2) da z22 e (x2, y1) da z21.",
+    "invalido: retangulo sem largura (x1 == x2) levanta ZeroDivisionError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Ponto fora do retangulo: a formula extrapola sem erro; nao e um uso que a docstring preve."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 68 a 112 contra 9 a 53 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=10, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 48 passed",
+    "mutacao": "adaptacao/checklist.py: 24/24 mutantes mortos (numa primeira versao, com o retangulo na origem, 5 trocas de sinal sobreviviam; o retangulo foi deslocado)"
+  }
+}

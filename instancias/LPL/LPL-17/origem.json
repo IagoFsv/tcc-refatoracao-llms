@@ -1,0 +1,67 @@
+{
+  "id": "LPL-17",
+  "arquivos": {
+    "unidade": "LPL_17.py",
+    "testes": "test_LPL_17.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/network.py",
+  "funcao": "__init__",
+  "classe": "DQN",
+  "linha_funcao": 8,
+  "linhas": [
+    8
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo __init__ de DQN inteiro, linhas 8 a 21 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-18"
+  ],
+  "metricas": {
+    "original": "8:PAR=5",
+    "adaptado": "73:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(dimensoes)",
+  "dependencias_externas": [
+    "torch: stub local dentro da unidade (criterio 4b, mesmo do LPL-01 e LPL-05). Conferido na fonte do PyTorch (github.com/pytorch/pytorch): Linear cria weight com formato (out_features, in_features) e bias com (out_features,) (torch/nn/modules/linear.py); Sequential registra as camadas posicionais com as chaves '0', '1', '2' (torch/nn/modules/container.py). Tamanho negativo levanta RuntimeError ('Trying to create tensor with negative dimension'), conforme discuss.pytorch.org/t/109007."
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 7: class DQN:",
+    "linhas 8 a 21: __init__"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: comentarios curtos do autor ('define the neural network', 'define the optimizer' etc.). Nao citam estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 3, imports de torch, numpy e random: torch trocado pelo stub; numpy e random nao usados pelo trecho.",
+    "linha 6, comentario de cabecalho da classe: fora do trecho.",
+    "linhas 23 a 81, demais metodos de DQN (state_dict, forward, load_state_dict, update, get_action): fora do trecho; dependem de tensores reais.",
+    "linhas 84 a 138, classes ReplayMemory e DQNAgent: fora do trecho."
+  ],
+  "andaime": [
+    "Stub de torch em Python puro, so com o que o trecho toca: nn.Sequential, nn.Linear, nn.ReLU, nn.MSELoss e optim.Adam, com os mesmos parametros e valores padrao da versao real (Linear: bias=True; ReLU: inplace=False; Adam: lr=0.001; MSELoss: reduction='mean').",
+    "Linear cria pesos e vies com os formatos da versao real e levanta RuntimeError para tamanho negativo; Sequential guarda as camadas em ordem e devolve os parametros delas em parameters(); Adam guarda os parametros recebidos e recusa lista vazia, como a versao real.",
+    "executar(dimensoes): recebe um dicionario com input_size, n_actions, hidden_size e gamma, monta a rede e devolve um resumo: camadas em ordem, otimizador (formatos dos parametros, taxa e se sao os parametros da propria rede), perda, gamma e n_actions.",
+    "Os parametros com valor padrao nos stubs nao contam no PAR; o Pysmell so acusa o __init__ do trecho (PAR=5)."
+  ],
+  "comportamento_fixado": [
+    "tipico: 4 entradas, 2 acoes, camada oculta 16, gamma 0.99; Linear(4, 16), ReLU, Linear(16, 2), Adam sobre os 4 parametros da rede com taxa 0.001, MSELoss media.",
+    "borda: todos os tamanhos 1 e gamma 0.",
+    "invalido: camada oculta negativa levanta RuntimeError (vem da Linear)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Mensagem do RuntimeError: vem do stub; o teste so fixa o tipo."
+  ],
+  "observacoes": [
+    "model, optimizer, loss_fn, gamma e n_actions sao fixados pelo nome porque sao atributos publicos que os outros metodos da classe original usam (forward, state_dict, update, get_action)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 8 a 21 contra 73 a 86 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 63 passed",
+    "mutacao": "adaptacao/checklist.py: 5/5 mutantes mortos"
+  }
+}

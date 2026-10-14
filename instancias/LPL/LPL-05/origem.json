@@ -1,0 +1,71 @@
+{
+  "id": "LPL-05",
+  "arquivos": {
+    "unidade": "LPL_05.py",
+    "testes": "test_LPL_05.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/main-5.py",
+  "funcao": "__init__",
+  "classe": "BasicLSTM",
+  "linha_funcao": 11,
+  "linhas": [
+    11
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo __init__ de BasicLSTM inteiro, linhas 11 a 28 do original",
+  "verbatim": true,
+  "recuo": "tabs, como no original; a linha da classe tambem usa tab no corpo, para o bloco nao misturar tab e espaco",
+  "metricas": {
+    "original": "11:PAR=5",
+    "adaptado": "60:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(dimensoes)",
+  "dependencias_externas": [
+    "torch: stub local dentro da unidade, mesmo criterio do LPL-01 (aprovado pelo Iago no piloto)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 10: class BasicLSTM(nn.Module):",
+    "linhas 11 a 28: __init__"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1 (trecho verbatim). Incluem dois comentarios que revelam a origem do codigo ('# github copilot suggestion' na linha 12 e 'this one wasn't suggested by copilot' na linha 27) e linhas comentadas (19, 21 e 22). Mesmo criterio do LPL-01: registrar como limitacao.",
+  "removido_do_original": [
+    "linhas 1 a 4, imports de numpy, matplotlib, torch e torch.nn: numpy e matplotlib nao sao usados pelo trecho; torch.nn trocado pelo stub (ver andaime).",
+    "linha 6, device: so usado em fwd, fora do trecho.",
+    "linha 8, comentario '# EOS char => #': fora do trecho.",
+    "linhas 30 a 47, metodo fwd: fora do trecho; depende de tensores reais (zeros, view, LSTM numerico).",
+    "linhas 50 a 216, get_names_from_file, alphas, name_to_vector_repr, main e a chamada main(): fora do trecho; dependem de names.txt em disco, torch real e treino."
+  ],
+  "andaime": [
+    "Stub de torch.nn em Python puro, so com o que o trecho toca: Module, LSTM, Linear e ReLU, expostos no namespace nn.",
+    "Module registra cada subcamada atribuida como atributo, pelo nome, e levanta AttributeError se a subcamada for atribuida antes de Module.__init__, como o torch real. Assim o super().__init__ do trecho tem efeito observavel.",
+    "LSTM, Linear e ReLU guardam a configuracao recebida, com a mesma ordem de parametros e os mesmos valores padrao do torch real (LSTM: input_size, hidden_size, num_layers=1, bias=True, batch_first=False; Linear: in_features, out_features, bias=True; ReLU: inplace=False), para que chamadas posicionais ou nomeadas deem a mesma configuracao.",
+    "LSTM valida como o torch real (RNNBase.__init__, conferido em github.com/pytorch/pytorch, torch/nn/modules/rnn.py): TypeError se hidden_size nao for int, ValueError se hidden_size <= 0, ValueError se num_layers <= 0.",
+    "Os parametros com valor padrao nos stubs nao contam no PAR do Pysmell, entao o andaime nao dispara LPL.",
+    "executar(dimensoes): recebe um dicionario com num_classes, input_size, hidden_size e num_layers, monta BasicLSTM e devolve (hiperparametros guardados no modelo, configuracao de cada subcamada registrada).",
+    "Conferido: o Pysmell so acusa __init__ (PAR=5); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: 27 classes, entrada 27, oculto 64, 2 camadas; o modelo guarda as 4 dimensoes e registra lstm (27, 64, 2 camadas, bias, batch_first), fc_1 (64 -> 32), fc_2 (32 -> 27) e relu.",
+    "borda: todas as dimensoes iguais a 1, as menores validas; fc_1 continua com 32 saidas fixas.",
+    "invalido: tamanho oculto zero levanta ValueError (vem da LSTM)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Ordem de registro das subcamadas: muda a ordem das chaves do state_dict, mas nao o conteudo nem a carga dele.",
+    "Mensagem do ValueError: vem do stub, nao do trecho; o teste so fixa o tipo.",
+    "Identidade dos objetos de camada: o teste confere a configuracao, nao a classe concreta."
+  ],
+  "observacoes": [
+    "Os nomes das subcamadas (lstm, fc_1, fc_2, relu) e os 4 hiperparametros sao fixados porque sao atributos publicos do modelo: as subcamadas viram as chaves do state_dict, que o main() original salva em disco (torch.save(ltsm.state_dict(), ...), linha 199), e fwd usa num_layers e hidden_size."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 11 a 28 de main-5.py contra 60 a 77 da unidade), tabs incluidos",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 24 passed",
+    "mutacao": "adaptacao/checklist.py: 12/12 mutantes mortos"
+  }
+}

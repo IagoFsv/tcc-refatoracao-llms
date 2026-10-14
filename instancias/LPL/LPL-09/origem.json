@@ -1,0 +1,68 @@
+{
+  "id": "LPL-09",
+  "arquivos": {
+    "unidade": "LPL_09.py",
+    "testes": "test_LPL_09.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/my_image.py",
+  "funcao": "draw_line",
+  "classe": "Image",
+  "linha_funcao": 195,
+  "linhas": [
+    195
+  ],
+  "ocorrencias": 1,
+  "trecho": "metodo draw_line de Image inteiro, docstring incluida, linhas 195 a 207 do original",
+  "verbatim": true,
+  "mesmo_arquivo_que": [
+    "LPL-10",
+    "LPL-11"
+  ],
+  "metricas": {
+    "original": "195:PAR=5",
+    "adaptado": "27:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(tamanho, segmento)",
+  "dependencias_externas": [
+    "scikit-image==0.26.0 (instalado de verdade, fixado no requirements.txt; criterio 4a)",
+    "numpy==2.5.3 (instalado de verdade, fixado no requirements.txt)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 10 e 11: import skimage, import numpy as np",
+    "linhas 54 a 65: class Image, docstring e __init__",
+    "linhas 195 a 207: draw_line"
+  ],
+  "comentarios_internos": "So a docstring do metodo, mantida pela regra 1. Nao cita estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 8, comentario de cabecalho com autor, data e proposito; a linha 8 diz que boa parte do codigo foi feita com o GitHub Copilot: fora do trecho, revela a origem do codigo.",
+    "linhas 12 a 14, imports de matplotlib, scipy.ndimage e os: nao usados pelo trecho.",
+    "linhas 17 a 51, plot_image, new_image_from_array e new_image_from_file: fora do trecho.",
+    "linha 390 em diante, classe ImageCollection: fora do trecho.",
+    "demais metodos de Image (linhas 67 a 193 e 209 a 260): fora do trecho.",
+    "linhas 262 a 388, classe RGB_Image: fora do trecho."
+  ],
+  "andaime": [
+    "Classe Image reduzida ao cabecalho, a docstring e ao __init__ do original, copiados sem alterar (o trecho so usa self.image).",
+    "executar(tamanho, segmento): cria uma imagem de zeros (float) com o tamanho dado, chama draw_line com (y0, x0, y1, x1) e devolve o array da imagem que o metodo retorna.",
+    "Conferido: o Pysmell so acusa o metodo do trecho, com a mesma metrica do original; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: imagem 3x5, segmento (0, 0) a (2, 4); marca com 1 os pixels (0,0), (1,1), (1,2), (2,3), (2,4), os do skimage.draw.line.",
+    "borda: segmento de um ponto so, (2, 3) a (2, 3); marca so esse pixel.",
+    "invalido: ponto fora da imagem 5x5 (coluna 9) levanta IndexError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Se o desenho e feito na propria imagem ou numa copia: o teste confere a imagem devolvida pelo metodo, nao o array passado ao construtor."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1, numpy 2.5.3, scikit-image 0.26.0",
+    "diff_do_trecho": "identico ao original (linhas 195 a 207 de my_image.py contra 27 a 39 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 42 passed",
+    "mutacao": "adaptacao/checklist.py: 4/4 mutantes mortos"
+  }
+}

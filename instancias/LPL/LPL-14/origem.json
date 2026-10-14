@@ -1,0 +1,60 @@
+{
+  "id": "LPL-14",
+  "arquivos": {
+    "unidade": "LPL_14.py",
+    "testes": "test_LPL_14.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/2-BouncingBall.py",
+  "funcao": "simulate_bouncing_ball",
+  "linha_funcao": 7,
+  "linhas": [
+    7
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao simulate_bouncing_ball inteira, docstring incluida, linhas 7 a 33 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "7:PAR=6",
+    "adaptado": "9:PAR=6",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(estado, tempo, fisica=None)",
+  "dependencias_externas": [
+    "nenhuma: o trecho so faz aritmetica com listas"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 7 a 33: simulate_bouncing_ball"
+  ],
+  "comentarios_internos": "So a docstring, mantida pela regra 1, com o marcador '>>>' do autor no comeco. Nao cita estudo nem a origem do codigo.",
+  "removido_do_original": [
+    "linhas 1 a 3, docstring do modulo: fora do trecho.",
+    "linha 5, import de matplotlib: so usado no codigo de modulo, fora do trecho.",
+    "linhas 35 a 53, codigo de modulo que define os valores iniciais, chama a funcao e plota: fora do trecho."
+  ],
+  "andaime": [
+    "executar(estado, tempo, fisica=None): recebe (x0, y0, vx0, vy0) e (passos, dt) e, se fisica for dada, (restituicao, gravidade); sem fisica, chama a funcao sem esses dois argumentos, para valerem os padroes. Parametro com padrao nao conta no PAR.",
+    "Conferido: o Pysmell so acusa a funcao do trecho (PAR=6); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: bola descendo de y=0.3 com vy=-2, restituicao 0.5, g=10, 3 passos de 0.1; x avanca 0.1 por passo; y fica em [0.3, -0.1, 0, 0.3]: no passo 1 o y guardado fica negativo (peculiaridade abaixo), no passo 2 a bola quica e no passo 3 sobe.",
+    "borda: bola parada no chao, com os valores padrao (restituicao 0.2, g 9.83); y = [0, 0, 0, 0.03932], valor que depende dos dois padroes. Zero passos devolve so a posicao inicial.",
+    "invalido: numero de passos nao inteiro (2.5) levanta TypeError (range)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Tipo do retorno (tupla de duas listas): os testes so desempacotam xs e ys. A anotacao '-> list' do original nao bate com o retorno, e corrigir isso nao reprova.",
+    "Variavel de laco i nao usada."
+  ],
+  "observacoes": [
+    "Peculiaridade do original fixada como e: quando a bola nao passa do chao, y recebe vy * dt duas vezes no mesmo passo (linhas 26 e 31), e o y guardado pode ficar negativo. Uma refatoracao que tire a soma duplicada muda as posicoes e reprova."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, pytest 9.1.1",
+    "diff_do_trecho": "identico ao original (linhas 7 a 33 contra 9 a 35 da unidade)",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=6, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 51 passed",
+    "mutacao": "adaptacao/checklist.py: 31/31 mutantes mortos"
+  }
+}
