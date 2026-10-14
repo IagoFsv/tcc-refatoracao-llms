@@ -12,9 +12,16 @@ A instancia e a FUNCAO que contem o smell, nao a linha (decisao de
 inteira. Para MNC nao: a metrica e da expressao, e uma funcao cheia de JSON
 aninhado dispara varias linhas (o _process_data de GuardianRanks.py tem 8).
 Contar por linha mandaria o mesmo codigo varias vezes ao modelo e contaria
-como observacoes independentes. Agrupando pela funcao envolvente, os 83
-trechos viram 68 instancias (so o MNC muda, de 36 para 21). Codigo de modulo,
-fora de qualquer funcao, agrupa como "<modulo>".
+como observacoes independentes. Codigo de modulo, fora de qualquer funcao,
+agrupa como "<modulo>".
+
+A funcao envolvente e a MAIS EXTERNA (funcao de modulo ou metodo de classe),
+nao a mais interna (decisao de 01/10/2026). Funcao aninhada nao sai sozinha
+sem mudar o recuo, o que quebra o trecho verbatim, e a funcao que a contem ja
+a leva junto: contar as duas mandaria o mesmo arquivo duas vezes. So acontece
+no LPL de first_pygame.py (heapify dentro de simulate_heapsort; partition e
+quicksort dentro de simulate_quicksort). Agrupando assim, os 83 trechos viram
+65 instancias: MNC de 36 para 21, LPL de 22 para 19.
 
 Nao ha sorteio: sem teto de amostra (decisao de 22/09/2026), entram todas.
 A planilha diz QUAIS trechos; o Pysmell portado diz as METRICAS de cada um e
@@ -91,7 +98,9 @@ def metricas_dos_arquivos(caminhos):
 
 
 def funcao_envolvente(caminho, linha, _cache={}):
-    """Devolve (linha_de_inicio, nome) da funcao mais interna que contem a linha.
+    """Devolve (linha_de_inicio, nome) da funcao mais externa que contem a linha.
+
+    Funcao aninhada conta como parte da funcao que a contem (ver o cabecalho).
 
     Identifica a funcao pela linha de inicio, nao pelo nome: ha metodos
     homonimos em classes diferentes do mesmo arquivo (my_image.py tem dois
@@ -108,7 +117,7 @@ def funcao_envolvente(caminho, linha, _cache={}):
     for no in ast.walk(_cache[caminho]):
         if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef)):
             if no.lineno <= linha <= no.end_lineno:
-                if melhor is None or no.lineno > melhor.lineno:
+                if melhor is None or no.lineno < melhor.lineno:
                     melhor = no
     return (melhor.lineno, melhor.name) if melhor else (0, "<modulo>")
 
@@ -142,8 +151,8 @@ def montar():
     for smell in ORDEM:
         # Ordena pelo arquivo e pela primeira linha detectada, para que o id
         # seja sempre o mesmo, rodando quantas vezes for. E a mesma chave da
-        # versao por linha, entao LM, LPL e LLF (que nao colapsam) mantem os
-        # ids que ja tinham.
+        # versao por linha, entao LM e LLF (que nao colapsam) mantem os ids
+        # que ja tinham; no LPL, os ids a partir do 04 andam (01/10/2026).
         chaves = sorted(
             (k for k in grupos if k[0] == smell),
             key=lambda k: (k[1], min(linha for _, linha, _ in grupos[k])),

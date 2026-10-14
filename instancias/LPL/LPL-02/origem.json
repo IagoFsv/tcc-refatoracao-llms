@@ -1,0 +1,68 @@
+{
+  "id": "LPL-02",
+  "arquivos": {
+    "unidade": "LPL_02.py",
+    "testes": "test_LPL_02.py"
+  },
+  "smell": "LPL",
+  "smell_nome": "Long Parameter List",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/HybridQNN.py",
+  "funcao": "train",
+  "linha_funcao": 123,
+  "linhas": [
+    123
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao train inteira, linhas 123 a 162 do original",
+  "verbatim": true,
+  "copia_de": {
+    "instancia": "LPL-01",
+    "detalhe": "O trecho (linhas 123 a 162) e identico, caractere por caractere, ao train de Code/CNN.py (LPL-01). Imports (linhas 1 a 15), comentario da linha 121 e conjunto de definicoes do arquivo tambem sao iguais; os arquivos so diferem fora do trecho (arquitetura da rede, dataset CIFAR100, epochs, seed). Pela regra estrutural (nao deduplicar texto), ficam duas instancias com a mesma unidade e os mesmos testes. Decisao do Iago em 01/10/2026; registrar como limitacao."
+  },
+  "metricas": {
+    "original": "123:PAR=5",
+    "adaptado": "116:PAR=5",
+    "limiar_tuning": "PAR >= 5"
+  },
+  "ponto_de_entrada": "executar(lotes)",
+  "dependencias_externas": [
+    "tqdm==4.70.1 (instalado de verdade, fixado no requirements.txt)",
+    "torch: stub local dentro da unidade (aprovado pelo Iago no piloto)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 6: from tqdm import tqdm",
+    "linhas 123 a 162: train"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1 (trecho verbatim). Inclui a docstring 'basic train function generate by github-copilot', que revela a origem do codigo, e a linha comentada 159. Decisao do Iago em 29/09/2026: manter e registrar como limitacao, porque tirar quebraria o verbatim.",
+  "removido_do_original": [
+    "linhas 1 a 3 e 7, imports de torch, torch.nn, torch.optim e DataLoader: trocados pelo stub (ver andaime).",
+    "linhas 4, 5 e 8 a 15, imports de torchvision, Quanv2d, matplotlib, os, qiskit, random, itertools, numpy e typing: nao usados pelo trecho.",
+    "linha 121, comentario '# Define the training function': fora do trecho.",
+    "classes MyQuanv2d e HybridQNN, funcoes test, Confusion_Matrix, plot_confusion_matrix, Train_Hybrid_QNN e o bloco __main__: fora do trecho; dependem de torch real, qiskit, CIFAR100 e disco."
+  ],
+  "andaime": [
+    "Stub de torch em Python puro, so com o que o trecho toca: _Tensor (to, argmax, view_as, eq, sum, item), _Modelo (train, chamada), _Perda (item, backward), _Otimizador (zero_grad, step) e DataLoader (iteracao, len, dataset).",
+    "Namespaces torch, nn e optim com device, Module, modules e Optimizer: as anotacoes da assinatura de train sao avaliadas na definicao da funcao, entao os nomes precisam existir.",
+    "O stub faz um treino de verdade, em miniatura: o modelo e um vies por classe somado ao score da amostra; a perda e a media de quanto o maior score passa o da classe certa; backward acumula o gradiente do vies, zero_grad zera, step aplica com taxa 0.5. Assim o resultado depende de zero_grad, backward e step serem chamados certo em cada lote, e os testes conferem o efeito do treino em vez da ordem das chamadas.",
+    "executar(lotes): monta o modelo, o otimizador e o loader do stub, chama train e devolve (perda, acuracia, vies final, modelo em modo de treino).",
+    "Conferido: o Pysmell so acusa train (PAR=5); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: dois lotes com acertos e erros; perda 0.28125, acuracia 50.0, vies final [0.25, -0.25, 0], modelo em modo de treino. O acerto da 1a amostra do lote 2 depende do passo do lote 1; o vies final depende do gradiente ser zerado entre os lotes. Fixa tambem a peculiaridade do original: soma as perdas medias dos lotes e divide pelo numero de amostras.",
+    "borda: um lote so, tudo certo; perda 0, acuracia 100.0, vies inalterado, modelo em modo de treino.",
+    "invalido: dataset vazio levanta ZeroDivisionError (linha 160 do original)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Descricao da barra de progresso do tqdm (stderr): cosmetica e misturada com tempo decorrido.",
+    ".to(device): no stub nao tem efeito observavel.",
+    "Identidade do modelo devolvido: o teste confere o estado final (vies, modo de treino), nao se e o mesmo objeto."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6, tqdm 4.70.1",
+    "diff_do_trecho": "identico ao original (linhas 123 a 162 de HybridQNN.py contra 116 a 155 da unidade); a unidade e byte a byte igual a LPL_01.py",
+    "pysmell_apos_adaptacao": "1 deteccao LPL, PAR=5, igual ao original; nenhuma no andaime",
+    "pytest": "3 passed; pytest instancias: 15 passed",
+    "mutacao": "adaptacao/checklist.py: 25/31 mutantes mortos, mesmo placar e mesmos vivos do LPL-01 (stub ignora keepdim; descricao do tqdm nao fixada de proposito)"
+  }
+}
