@@ -1,0 +1,63 @@
+{
+  "id": "MNC-12",
+  "arquivos": {
+    "unidade": "MNC_12.py",
+    "testes": "test_MNC_12.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/GetWeather-main/main.py",
+  "funcao": "<modulo>",
+  "linha_funcao": 0,
+  "linhas": [
+    40
+  ],
+  "ocorrencias": 1,
+  "trecho_linhas": [
+    25,
+    41
+  ],
+  "trecho": "bloco if __name__ == '__main__' inteiro, linhas 25 a 41 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "40:LEC=3",
+    "adaptado": "52:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(cidade)",
+  "dependencias_externas": [
+    "requests==2.34.2 (instalado de verdade, fixado no requirements.txt); o teste intercepta requests.get com monkeypatch, sem rede"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 5 e 8: import requests, import argparse",
+    "linhas 11 a 22: call_api, sem os dois comentarios com valores antigos (ver removido)",
+    "linhas 25 a 41: bloco __main__"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: os tres comentarios do bloco ('check if city is passed as argument' etc.).",
+  "removido_do_original": [
+    "linhas 1, 2, 4 e 7, comentarios de cabecalho e de import: fora do trecho.",
+    "linhas 17 e 19 de call_api, comentarios com uma chave de API e uma URL antigas: codigo morto em comentario, fora do trecho."
+  ],
+  "andaime": [
+    "Decisao do Iago (14/10/2026): o trecho e codigo de modulo sob a guarda __main__. executar(cidade) roda o proprio arquivo com runpy.run_path(__file__, run_name='__main__'), com sys.argv = [arquivo, cidade], e restaura sys.argv. Importar a unidade nao executa o trecho. Uma refatoracao que mova o bloco para uma funcao chamada sob a mesma guarda continua passando.",
+    "call_api do original, lendo o config.ini da pasta atual (o teste cria numa pasta temporaria).",
+    "Conferido: o Pysmell so acusa a linha 40 do trecho; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: URL montada com base_url, chave e cidade do config.ini; imprime a descricao do clima.",
+    "borda: cidade com espacos entra na URL sem codificar; com varias condicoes, so a primeira e impressa.",
+    "invalido: resposta com cod diferente de 200 imprime 'Invalid city name' e sai com codigo 1 (SystemExit)."
+  ],
+  "nao_fixado_de_proposito": [
+    "Mensagem 'Please provide city name': inalcancavel, porque o argparse exige a cidade.",
+    "Saida de erro do argparse sem cidade: nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 25 a 41 contra 37 a 53 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 14/17 mutantes mortos; vivos: L31:8 apaga Expr | L32:13 1->2 | L32:8 apaga Expr"
+  }
+}

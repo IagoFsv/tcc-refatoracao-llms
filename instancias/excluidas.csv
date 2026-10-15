@@ -1,0 +1,2 @@
+id,smell,arquivo,funcao,linhas,motivo,decisao
+MNC-15,MNC,Repositories/WeatherApp-CLI-main/WeatherApp/main.py,<modulo>,49;50,"O arquivo inteiro e um script de modulo, sem funcao e sem guarda __main__: importar a unidade ja executa input() e requests.get, entao o teste nao consegue importar executar() sem disparar o trecho. Isolar o script exigiria coloca-lo dentro de uma funcao, mudando o recuo, o que quebra a regra 1 (trecho verbatim); mesmo criterio aplicado a funcao aninhada.","Iago, 14/10/2026"

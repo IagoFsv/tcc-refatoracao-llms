@@ -1,0 +1,60 @@
+{
+  "id": "MNC-10",
+  "arquivos": {
+    "unidade": "MNC_10.py",
+    "testes": "test_MNC_10.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/AiShell-master/tasks.py",
+  "funcao": "rename_project",
+  "linha_funcao": 59,
+  "linhas": [
+    70
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao rename_project inteira, linhas 58 a 73 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "70:LEC=3",
+    "adaptado": "37:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(project_name)",
+  "dependencias_externas": [
+    "toml==0.10.2 (instalado de verdade, fixado no requirements.txt)",
+    "invoke==3.0.3 (instalado de verdade, fixado no requirements.txt)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 2, 4 e 5: import shutil, import toml, from invoke import Context, task",
+    "linhas 9 e 10: get_pep8_compliant_name",
+    "linhas 58 a 73: rename_project, com o decorador @task"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: os tres comentarios do metodo ('Get the current project path' etc.).",
+  "removido_do_original": [
+    "linha 1, '# type: ignore', e import de UnexpectedExit: nao usados pelo trecho.",
+    "demais tarefas do invoke: fora do trecho."
+  ],
+  "andaime": [
+    "get_project_path: o trecho chama a funcao, mas a do original e o trecho do MNC-09 e tem o smell (data['tool']['poetry']['name']). No andaime ela foi escrita com o mesmo comportamento sem a cadeia de tres indices, para o Pysmell nao acusar nada fora do trecho (mesmo recurso do MNC-01). Registrar: a unidade mostra ao modelo uma versao dessa funcao sem o smell.",
+    "executar(project_name): chama rename_project(Context(), project_name) (a tarefa do invoke exige um Context como primeiro argumento).",
+    "Conferido: o Pysmell so acusa a linha 70; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: a pasta meu_app vira novo_app com o conteudo; no pyproject.toml, name passa a 'novo-app' e o resto continua igual.",
+    "borda: nome sem hifen vira nome com varios hifens; a pasta usa sublinhados.",
+    "invalido: pyproject.toml sem [tool.poetry] levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Texto exato do pyproject.toml regravado: o toml.dump reordena secoes e reformata listas; o teste compara o conteudo lido.",
+    "Pasta do pacote ausente (erro do shutil.move): nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 58 a 73 contra 25 a 40 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 5/5 mutantes mortos"
+  }
+}

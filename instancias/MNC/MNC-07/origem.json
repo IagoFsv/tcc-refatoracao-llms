@@ -1,0 +1,61 @@
+{
+  "id": "MNC-07",
+  "arquivos": {
+    "unidade": "MNC_07.py",
+    "testes": "test_MNC_07.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/lineemup.py",
+  "funcao": "heuristic_1",
+  "linha_funcao": 46,
+  "linhas": [
+    72
+  ],
+  "ocorrencias": 1,
+  "nota_deteccoes": "O Pysmell portado acusa a linha 72 duas vezes (LEC=3 nas duas cadeias convs[0][i][...] e convs[1][i][...]); a planilha de Zhang conta uma ocorrencia. O checklist compara com o original rodado no mesmo porte, que tambem da duas. E um trecho so, uma instancia.",
+  "trecho": "funcao heuristic_1 inteira, linhas 46 a 73 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "72:LEC=3",
+    "adaptado": "75:LEC=3|75:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(linhas, s, jogador)",
+  "dependencias_externas": [
+    "numpy==2.5.3 e scipy==1.18.1 (convolve2d), instalados de verdade, ja fixados no requirements.txt. O original tenta cupy (GPU) antes; a unidade usa so o caminho de CPU."
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 46 a 73: heuristic_1 (metodo de Agent)",
+    "linhas 335 a 342 e 401 a 408: construct_winstates e convolve_winstates da classe Game"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1, inclusive '# this feels like code golf and github copilot had a child, and it's ugly' (linha 71), que revela origem e qualidade do codigo. Mesmo tratamento da docstring do LPL-01; registrar como limitacao.",
+  "removido_do_original": [
+    "linha 1, comentario com a origem do codigo-base (stackabuse): fora do trecho.",
+    "linhas 6 a 14, tentativa de importar cupy com prints: trocada pelos imports de numpy e scipy.",
+    "demais metodos de Agent (busca minimax, heuristic_2 etc.) e de Game, random_blocs, run_experiments, main: fora do trecho."
+  ],
+  "andaime": [
+    "Game: __init__ adaptado de __init__, initialize_game e place_blocs do original (matrizes X, O e B, bloqueios), sem jogador da vez nem tempo; construct_winstates e convolve_winstates copiados.",
+    "Agent: so __init__ com self.p.",
+    "executar(linhas, s, jogador): monta o tabuleiro a partir de uma string por linha ('X', 'O', '*' bloqueio) e devolve Agent(jogador).heuristic_1(game).",
+    "Conferido: o Pysmell so acusa a linha 72; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: pontuacao 20 para X e -20 para O num tabuleiro 4x4 com s=3; 12 com s=4; 24 com pecas em coluna. Valores obtidos rodando o codigo original.",
+    "borda: tabuleiro vazio da 0; vitoria da +inf e -inf; bloqueio e adversario na mesma janela cortam a sequencia (-48, -16, 28, -28).",
+    "invalido: jogador inexistente levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Tipo numerico do retorno (numpy.int64 ou int): a comparacao e por igualdade.",
+    "s maior que o tabuleiro (ValueError do convolve2d): erro da biblioteca, nao do trecho."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 46 a 73 contra 49 a 76 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 30/31 mutantes mortos; vivos: L68:33 0->1"
+  }
+}

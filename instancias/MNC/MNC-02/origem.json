@@ -1,0 +1,66 @@
+{
+  "id": "MNC-02",
+  "arquivos": {
+    "unidade": "MNC_02.py",
+    "testes": "test_MNC_02.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/bot.py",
+  "funcao": "weather",
+  "linha_funcao": 1146,
+  "linhas": [
+    1155,
+    1156
+  ],
+  "ocorrencias": 2,
+  "trecho": "funcao weather inteira, linhas 1136 a 1174 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "1155:LEC=3|1156:LEC=3",
+    "adaptado": "96:LEC=3|97:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(local)",
+  "dependencias_externas": [
+    "requests==2.34.2 (instalado de verdade, fixado no requirements.txt); o teste intercepta requests.get com monkeypatch, sem rede",
+    "discord e discord_slash: stub local (criterio 4b), conferido contra a fonte de discord.py 1.7.3 (Embed: construtor por palavras-chave, set_thumbnail(*, url), add_field(*, name, value, inline=True) convertendo name e value com str, set_footer(*, text, icon_url)) e de discord-py-slash-command 3.0.3 (slash() devolve um objeto com func e invoke assincrono que faz await func(*args); create_option devolve dict com name, description, type, required e choices)."
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 28: import requests",
+    "linhas 1136 a 1174: weather, com o decorador @slash.slash"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: '# Request:', o comentario sobre ler o token de ./tokens/weather.txt e '# Message'.",
+  "removido_do_original": [
+    "linhas 1 a 13, comentarios de apresentacao do bot e changelog: fora do trecho; citam o nome do bot.",
+    "linhas 14 a 27 e 29 a 36, imports de discord, random, asyncio, os, cpuinfo, github, pprint, bs4, logging, pytz, discord_slash, statcord etc.: nao usados pelo trecho ou trocados pelo stub.",
+    "linhas 38 a 47, criacao do cliente, do SlashCommand e do statcord: dependem de token e rede; slash vem do stub.",
+    "demais comandos e eventos do bot: fora do trecho."
+  ],
+  "andaime": [
+    "Embed e namespace discord: so o que o trecho toca; guarda titulo, cor, miniatura, campos (como tuplas) e rodape para o teste ler.",
+    "SlashCommand e ComandoSlash: slash(...) devolve um objeto com func e invoke assincrono, como o BaseCommandObject da biblioteca; create_option devolve o mesmo dict da biblioteca.",
+    "Contexto: author com name e avatar_url (discord.py 1.x) e send assincrono que guarda o cartao enviado.",
+    "executar(local): cria o contexto, roda asyncio.run(weather.invoke(ctx, local)) e devolve os cartoes enviados.",
+    "O token continua sendo lido de ./tokens/weather.txt; o teste cria o arquivo numa pasta temporaria (monkeypatch.chdir).",
+    "Conferido: o Pysmell so acusa as linhas 1155 e 1156 do trecho; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: URL pedida com cidade e token; um cartao com titulo 'Weather in London, GB', cor 0x3f3f3f, miniatura do icone, seis campos na ordem (temperatura em Celsius arredondada, tempo, vento, umidade, pressao, nuvens) e rodape com o nome e o avatar de quem pediu.",
+    "borda: temperatura negativa (263.0 K vira -10°C, arredondada).",
+    "invalido: resposta de erro da API (sem main) levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Nome, descricao e opcoes do comando no decorador: so servem para registrar o comando no servidor de chat; o stub nao os confere.",
+    "Token com quebra de linha no fim: o original nao tira (entraria na URL); o teste grava o token sem quebra.",
+    "Arredondamento de .5 (round do Python arredonda para o par): nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 1136 a 1174 contra 77 a 115 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 34/36 mutantes mortos; vivos: L1142:29 3->4 | L1143:26 True->False"
+  }
+}

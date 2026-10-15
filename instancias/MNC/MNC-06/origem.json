@@ -1,0 +1,59 @@
+{
+  "id": "MNC-06",
+  "arquivos": {
+    "unidade": "MNC_06.py",
+    "testes": "test_MNC_06.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/getQuestion.py",
+  "funcao": "add_question",
+  "linha_funcao": 15,
+  "linhas": [
+    24
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao add_question inteira, linhas 15 a 33 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "24:LEC=3",
+    "adaptado": "20:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(data)",
+  "dependencias_externas": [
+    "sqlite3 (biblioteca padrao, de verdade); o banco Trivia.sqlite e criado numa pasta temporaria (monkeypatch.chdir)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 3 e 5: import json, import sqlite3",
+    "linhas 15 a 33: add_question"
+  ],
+  "comentarios_internos": "Mantido, pela regra 1: '# add and id for each question'.",
+  "removido_do_original": [
+    "linha 1, comentario 'created using github copilot': revelaria a origem do codigo.",
+    "linha 4, import requests, e get_question (linhas 8 a 13): busca as perguntas na internet; fora do trecho.",
+    "main e o bloco __main__ (linhas 36 a 44): fora do trecho."
+  ],
+  "andaime": [
+    "executar(data): chama add_question(data) e devolve as linhas da tabela questions (id, question, questionData) em ordem de id.",
+    "Conferido: o Pysmell so acusa a linha 24; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: duas perguntas gravadas na ordem, sem type e difficulty; o resto vira JSON em questionData.",
+    "borda: &quot; vira aspas e &#039; vira duas aspas simples na pergunta (defeito do original, fixado como e); aspas na resposta ficam escapadas no JSON; banco existente recebe as novas linhas depois das antigas; lista vazia nao grava nada.",
+    "invalido: pergunta sem type levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "O original remove type, difficulty e question dos dicionarios recebidos: efeito colateral nao fixado.",
+    "Transacao quando o erro acontece no meio do laco (o original nao faz commit nem fecha a conexao): nao fixado.",
+    "Fechar a conexao: mutante que apaga conn.close() sobrevive, sem efeito observavel."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 15 a 33 contra 11 a 29 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 15/16 mutantes mortos; vivos: L33:4 apaga Expr"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "MNC-03",
+  "arquivos": {
+    "unidade": "MNC_03.py",
+    "testes": "test_MNC_03.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/build_summarizer.py",
+  "funcao": "summarize",
+  "linha_funcao": 12,
+  "linhas": [
+    25
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao summarize inteira, linhas 12 a 25 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "25:LEC=3",
+    "adaptado": "48:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(texto, escolhas)",
+  "dependencias_externas": [
+    "openai: stub local (criterio 4b). Completion.create foi removido na openai 1.0 e o pipeline usa a openai 3.4.0; o stub imita a interface anterior, conferida na fonte da openai-python 0.28.1 (Completion.create e classmethod com argumentos nomeados; api_key e atributo do modulo; a resposta e indexavel por ['choices'][0]['text'])."
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 12 a 25: summarize"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho; a docstring da funcao foi mantida.",
+  "removido_do_original": [
+    "linhas 1 a 6, shebang e cabecalho do arquivo: fora do trecho.",
+    "linha 7, import openai: trocado pelo stub.",
+    "linha 9, import click, a funcao main (linhas 28 a 32) e o bloco __main__: linha de comando fora do trecho.",
+    "linha 11, comentario acima da funcao ('write a function that...'): fora do trecho; tem cara de pedido a um assistente de codigo."
+  ],
+  "andaime": [
+    "Completion: create (classmethod) registra a chave em uso (openai.api_key) e os parametros nomeados de cada pedido e devolve um dict com as escolhas preparadas, montado por funcao auxiliar para nao formar container aninhado literal.",
+    "openai: namespace com api_key e Completion.",
+    "executar(texto, escolhas): prepara as escolhas, chama summarize e devolve (resumo, pedidos).",
+    "Conferido: o Pysmell so acusa a linha 25; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: chave lida de OPENAI_API_KEY; pedido com modelo text-davinci-002 e os parametros do original; devolve a primeira escolha sem espacos e quebras de linha nas pontas.",
+    "borda: tab nas pontas e preservado (strip(' \\n')); sem OPENAI_API_KEY a chave e None; prompt vazio e enviado.",
+    "invalido: resposta sem escolhas levanta IndexError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Avisos e erros de rede da biblioteca real: fora do stub."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 12 a 25 contra 35 a 48 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 9/9 mutantes mortos"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "MNC-11",
+  "arquivos": {
+    "unidade": "MNC_11.py",
+    "testes": "test_MNC_11.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/AiShell-master/tasks.py",
+  "funcao": "release",
+  "linha_funcao": 77,
+  "linhas": [
+    87
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao release inteira, linhas 76 a 107 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "87:LEC=3",
+    "adaptado": "45:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(version, falhar_publicacao=False)",
+  "dependencias_externas": [
+    "toml==0.10.2 (instalado de verdade, fixado no requirements.txt)",
+    "invoke==3.0.3 (instalado de verdade, fixado no requirements.txt)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 4 a 6: imports de toml, invoke e UnexpectedExit",
+    "linhas 76 a 107: release, com o decorador @task"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: '# load pyproject', '# change version to today datetime', '# build & publish', '# recover to original'.",
+  "removido_do_original": [
+    "linhas 1 e 2, '# type: ignore' e import shutil: nao usados pelo trecho.",
+    "get_pep8_compliant_name, get_project_path e as demais tarefas: fora do trecho."
+  ],
+  "andaime": [
+    "ContextoDeBuild: subclasse de invoke.Context cujo run nao executa comando; registra comando, argumentos e a versao gravada no pyproject.toml naquele momento e, se pedido, levanta UnexpectedExit com codigo 1, como faria um build ou publicacao que falhou. Assim o teste confere o efeito sem rodar poetry.",
+    "executar(version, falhar_publicacao=False): chama release(ContextoDeBuild(), version) e devolve os comandos registrados.",
+    "Conferido: o Pysmell so acusa a linha 87; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: um comando (o texto exato de poetry build e publish, com pty=True), rodado com a versao nova gravada; no fim o pyproject.toml volta ao texto original.",
+    "borda: falha na publicacao repassa UnexpectedExit e o pyproject.toml tambem volta ao texto original.",
+    "invalido: pyproject.toml sem [tool.poetry] levanta KeyError e o arquivo nao e alterado."
+  ],
+  "nao_fixado_de_proposito": [
+    "Formatacao do pyproject.toml durante o build (feita pelo toml.dump): o teste so le a versao gravada.",
+    "pyproject_string = '' inicial: codigo morto; o mutante que o apaga sobrevive."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 76 a 107 contra 34 a 65 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 10/11 mutantes mortos; vivos: L82:4 apaga Assign"
+  }
+}

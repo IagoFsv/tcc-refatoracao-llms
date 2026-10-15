@@ -1,0 +1,52 @@
+{
+  "id": "MNC-05",
+  "arquivos": {
+    "unidade": "MNC_05.py",
+    "testes": "test_MNC_05.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/composegenerator.py",
+  "funcao": "convertContainersToServices",
+  "linha_funcao": 82,
+  "linhas": [
+    86
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao convertContainersToServices inteira, linhas 82 a 88 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "86:LEC=3",
+    "adaptado": "12:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(app)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linhas 82 a 88: convertContainersToServices"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho.",
+  "removido_do_original": [
+    "linhas 1 a 81 e 89 a 123: demais funcoes, permissions e comentarios do arquivo (inclusive o que atribui a autoria das funcoes a um assistente de codigo): fora do trecho."
+  ],
+  "andaime": [
+    "executar(app): chama convertContainersToServices(app) e devolve o resultado.",
+    "Conferido: o Pysmell so acusa a linha 86; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: dois conteineres viram services indexados pelo nome, sem a chave name; containers some; demais chaves do app ficam.",
+    "borda: nome repetido fica com o ultimo conteiner; lista vazia da services vazio.",
+    "invalido: conteiner sem name levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "O original altera o app e os conteineres recebidos (del). O teste so confere o valor devolvido, para nao reprovar refatoracao que trabalhe sobre copia."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 82 a 88 contra 8 a 14 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 3/3 mutantes mortos"
+  }
+}

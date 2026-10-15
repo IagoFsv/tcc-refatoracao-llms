@@ -30,4 +30,23 @@ LLF-08,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; p
 LLF-09,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
 LLF-10,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
 LLF-11,LLF,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
-MNC-01,MNC,sim,ok,ok,ok,ok,27/27,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1
+MNC-01,MNC,sim,ok,ok,ok,ok,27/27,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-02,MNC,sim,ok,ok,ok,ok,34/36,ok,ok,L1142:29 3->4 | L1143:26 True->False,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-03,MNC,sim,ok,ok,ok,ok,9/9,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-04,MNC,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-05,MNC,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-06,MNC,sim,ok,ok,ok,ok,15/16,ok,ok,L33:4 apaga Expr,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-07,MNC,sim,ok,ok,ok,ok,30/31,ok,ok,L68:33 0->1,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-08,MNC,sim,ok,ok,ok,ok,10/10,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-09,MNC,sim,ok,ok,ok,ok,3/3,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-10,MNC,sim,ok,ok,ok,ok,5/5,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-11,MNC,sim,ok,ok,ok,ok,10/11,ok,ok,L82:4 apaga Assign,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-12,MNC,sim,ok,ok,ok,ok,14/17,ok,ok,L31:8 apaga Expr | L32:13 1->2 | L32:8 apaga Expr,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-13,MNC,sim,ok,ok,ok,ok,14/14,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-14,MNC,sim,ok,ok,ok,ok,9/9,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-16,MNC,sim,ok,ok,ok,ok,76/76,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-17,MNC,sim,ok,ok,ok,ok,7/7,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-18,MNC,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-19,MNC,sim,ok,ok,ok,ok,1/1,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-20,MNC,sim,ok,ok,ok,ok,8/8,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3
+MNC-21,MNC,sim,ok,ok,ok,ok,35/35,ok,ok,,,2026-10-14,Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3

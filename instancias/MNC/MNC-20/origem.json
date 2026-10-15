@@ -1,0 +1,55 @@
+{
+  "id": "MNC-20",
+  "arquivos": {
+    "unidade": "MNC_20.py",
+    "testes": "test_MNC_20.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/argos_ai_adventure.py",
+  "funcao": "render_scene",
+  "linha_funcao": 1012,
+  "linhas": [
+    1023,
+    1028
+  ],
+  "ocorrencias": 2,
+  "trecho": "funcao render_scene inteira, linhas 1012 a 1030 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "1023:LEC=3|1028:LEC=3",
+    "adaptado": "49:LEC=3|54:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(descricoes)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linhas 539 e 540: get_description de Location",
+    "linhas 1012 a 1030: render_scene"
+  ],
+  "comentarios_internos": "Mantido, pela regra 1: '# Print out the world map'.",
+  "removido_do_original": [
+    "todo o resto do arquivo: fora do trecho; GameData le game_data.json do disco ao importar o modulo."
+  ],
+  "andaime": [
+    "Location minima: descricao e get_description (copiado).",
+    "World montado a partir das descricoes (descricoes[x][y][z]); o tamanho de cada eixo vem do primeiro elemento.",
+    "get_location: o trecho chama o metodo, mas o do original e o trecho do MNC-19 e tem o smell (self.world_map[x][y][z]). No andaime foi escrito com o mesmo comportamento sem a cadeia de tres indices, para o Pysmell nao acusar nada fora do trecho (mesmo recurso do MNC-10). Registrar.",
+    "executar(descricoes): render_scene(World(descricoes)).",
+    "Conferido: o Pysmell so acusa as linhas 1023 e 1028; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: 100 linhas em branco (limpar a tela), uma linha por (x, y) com as descricoes de z coladas, linha em branco no fim.",
+    "borda: descricoes vazias nao imprimem nada na linha; mapa de uma casa.",
+    "invalido: mapa irregular (fileira mais curta que a primeira) levanta IndexError."
+  ],
+  "nao_fixado_de_proposito": [],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 1012 a 1030 contra 38 a 56 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 8/8 mutantes mortos"
+  }
+}

@@ -18,7 +18,7 @@
   "metricas": {
     "original": "60:LEC=4|61:LEC=3|62:LEC=3|63:LEC=4|68:LEC=4|75:LEC=4|76:LEC=4|77:LEC=4",
     "adaptado": "as mesmas 8 deteccoes, com os mesmos LEC, nas linhas 108 a 125",
-    "limiar_tuning": "LEC >= 3, ou DNC >= 4 e NCT >= 2"
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
   },
   "ponto_de_entrada": "executar(data)",
   "dependencias_externas": [],

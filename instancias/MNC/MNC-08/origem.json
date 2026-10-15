@@ -1,0 +1,56 @@
+{
+  "id": "MNC-08",
+  "arquivos": {
+    "unidade": "MNC_08.py",
+    "testes": "test_MNC_08.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/questionAnswerCli.py",
+  "funcao": "submit_question",
+  "linha_funcao": 12,
+  "linhas": [
+    17
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao submit_question inteira, linhas 12 a 26 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "17:LEC=3",
+    "adaptado": "40:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(texto, escolhas)",
+  "dependencias_externas": [
+    "openai: stub local (criterio 4b). Completion.create foi removido na openai 1.0 e o pipeline usa a openai 3.4.0; o stub imita a interface anterior, conferida na fonte da openai-python 0.28.1 (Completion.create e classmethod com argumentos nomeados; api_key e atributo do modulo; a resposta e indexavel por ['choices'][0]['text'])."
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 12 a 26: submit_question"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho; a docstring da funcao foi mantida.",
+  "removido_do_original": [
+    "linhas 1 a 6, shebang e cabecalho do arquivo: fora do trecho.",
+    "linha 8, import openai: trocado pelo stub.",
+    "linha 9, import click, o comentario da linha 29, a funcao main e o bloco __main__: linha de comando fora do trecho; o comentario tem cara de pedido a um assistente de codigo."
+  ],
+  "andaime": [
+    "Igual ao do MNC-03: Completion.create registra chave e parametros e devolve as escolhas preparadas; executar(texto, escolhas) devolve (resposta, pedidos).",
+    "Conferido: o Pysmell so acusa a linha 17; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: chave lida de OPENAI_API_KEY; pedido com modelo text-davinci-003, temperatura 0 e os demais parametros do original; devolve a primeira escolha sem espacos e quebras de linha nas pontas.",
+    "borda: tab nas pontas e preservado; sem OPENAI_API_KEY a chave e None; prompt vazio e enviado.",
+    "invalido: resposta sem escolhas levanta IndexError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Avisos e erros de rede da biblioteca real: fora do stub."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 12 a 26 contra 35 a 49 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 10/10 mutantes mortos"
+  }
+}

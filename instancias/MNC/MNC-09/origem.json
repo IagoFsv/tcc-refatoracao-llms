@@ -1,0 +1,57 @@
+{
+  "id": "MNC-09",
+  "arquivos": {
+    "unidade": "MNC_09.py",
+    "testes": "test_MNC_09.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/AiShell-master/tasks.py",
+  "funcao": "get_project_path",
+  "linha_funcao": 13,
+  "linhas": [
+    16
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao get_project_path inteira, linhas 13 a 17 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "16:LEC=3",
+    "adaptado": "17:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar()",
+  "dependencias_externas": [
+    "toml==0.10.2 (instalado de verdade, fixado no requirements.txt)"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 4: import toml",
+    "linhas 9 e 10: get_pep8_compliant_name",
+    "linhas 13 a 17: get_project_path"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho.",
+  "removido_do_original": [
+    "linha 1, '# type: ignore', e imports de shutil e invoke: nao usados pelo trecho.",
+    "tarefas do invoke (test, format_code, check, rename_project, release etc.): fora do trecho."
+  ],
+  "andaime": [
+    "executar(): devolve get_project_path(), lendo o pyproject.toml da pasta atual (o teste cria numa pasta temporaria).",
+    "Conferido: o Pysmell so acusa a linha 16; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: name 'ai-shell' vira 'ai_shell'.",
+    "borda: varios hifens e sublinhado misturados; nome sem hifen; outra secao com name nao interfere.",
+    "invalido: pyproject.toml sem [tool.poetry] levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "pyproject.toml ausente (FileNotFoundError): nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 13 a 17 contra 14 a 18 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 3/3 mutantes mortos"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "MNC-21",
+  "arquivos": {
+    "unidade": "MNC_21.py",
+    "testes": "test_MNC_21.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/ipython-copilot-completer-main/copilot_completer/completer.py",
+  "funcao": "get_suggestion",
+  "linha_funcao": 100,
+  "linhas": [
+    164
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao get_suggestion inteira, linhas 100 a 166 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "164:LEC=3",
+    "adaptado": "85:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(prompt, stops, suffix=\"\")",
+  "dependencias_externas": [
+    "requests==2.34.2 (instalado de verdade, fixado no requirements.txt); o teste intercepta requests.post com monkeypatch, sem rede"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 1, 3, 5 e 7: from __future__ import annotations, import json, from contextlib import suppress, import requests",
+    "linhas 100 a 166: get_suggestion"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: TODO, comentarios do payload e da leitura do fluxo. A docstring 'Get a suggestion from GitHub Copilot', os cabecalhos e a URL citam o Copilot porque o codigo e um cliente dessa API; registrar como limitacao (o modelo ve o nome do servico).",
+  "removido_do_original": [
+    "linhas 8 a 17, imports de IPython e de settings: nao usados pelo trecho (settings so serve ao get_copilot_token original).",
+    "get_copilot_suggestion, copilot_completer, memoize_with_expiry e o get_copilot_token original: fora do trecho; o original busca o token na API do GitHub."
+  ],
+  "andaime": [
+    "get_copilot_token(): stub que devolve um token fixo. O nome e exigido pelo trecho. Decisao do Iago (14/10/2026): manter o nome; se o checklist acusasse a palavra, seria excecao registrada. Na pratica o checklist nao acusa, porque a busca de pistas exige comeco de palavra e o nome comeca em 'get_'. O original devolve o token guardado em cache (memoize_with_expiry devolve so o valor).",
+    "executar(prompt, stops, suffix=''): devolve get_suggestion(prompt, stops, suffix).",
+    "Conferido: o Pysmell so acusa a linha 164; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: pedido com URL, cabecalhos (Bearer com o token), corpo JSON (temperatura 0 para prompt curto) e stream=True; devolve os pedacos juntados, ignorando linha vazia e '[DONE]'.",
+    "borda: com suffix, as paradas extras entram como um item so (uma lista dentro de stops; defeito do original, fixado como e); temperatura 0, 0.2, 0.4 e 0.8 conforme o numero de linhas, nos limites; fluxo vazio devolve ''.",
+    "invalido: pedaco JSON sem choices levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "O original altera a lista stops recebida quando ha suffix (+=): efeito colateral nao fixado.",
+    "Texto exato do corpo JSON (ordem das chaves): o teste compara o JSON lido."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 100 a 166 contra 21 a 87 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 35/35 mutantes mortos"
+  }
+}

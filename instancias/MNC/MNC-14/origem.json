@@ -1,0 +1,60 @@
+{
+  "id": "MNC-14",
+  "arquivos": {
+    "unidade": "MNC_14.py",
+    "testes": "test_MNC_14.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/Natsar-main/modules/tele.py",
+  "funcao": "get_tg_files",
+  "linha_funcao": 85,
+  "linhas": [
+    92,
+    98
+  ],
+  "ocorrencias": 2,
+  "trecho": "funcao get_tg_files inteira, linhas 85 a 109 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "92:LEC=4|98:LEC=3",
+    "adaptado": "34:LEC=4|40:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(token)",
+  "dependencias_externas": [
+    "requests==2.34.2 (instalado de verdade, fixado no requirements.txt); o teste intercepta requests.get com monkeypatch, sem rede"
+  ],
+  "copiado_verbatim_do_original": [
+    "linha 4: import requests",
+    "linhas 17 a 21 e 45 a 54: classe TelegramBot com __init__ e remove_file_duplicates, com seus comentarios",
+    "linhas 85 a 109: get_tg_files"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: os comentarios do metodo (inclusive o repetido 'for each update, get the file id if it exists').",
+  "removido_do_original": [
+    "linhas 1 e 3, shebang e comentario de import: fora do trecho.",
+    "linhas 5 a 14, imports de os, pathlib, dotenv, telethon e datetime e a leitura do .env: nao usados pelo trecho.",
+    "extract_profile_data, remove_duplicates, send_request e a classe TelegramUser: fora do trecho."
+  ],
+  "andaime": [
+    "TelegramBot so com __init__ e remove_file_duplicates, copiados do original.",
+    "executar(token): devolve TelegramBot(token).get_tg_files().",
+    "Conferido: o Pysmell so acusa as linhas 92 e 98; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: primeiro os documentos de mensagens respondidas, depois os documentos diretos, sem repetir id; um getFile por id, na ordem; devolve os file_path.",
+    "borda: sem documentos (resposta sem documento, mensagem editada) devolve lista vazia e so faz o getUpdates.",
+    "invalido: getFile sem result (id invalido) levanta KeyError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Status HTTP: o original nao confere; nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 85 a 109 contra 27 a 51 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 9/9 mutantes mortos"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "MNC-19",
+  "arquivos": {
+    "unidade": "MNC_19.py",
+    "testes": "test_MNC_19.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/argos_ai_adventure.py",
+  "funcao": "get_location",
+  "linha_funcao": 814,
+  "linhas": [
+    815
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao get_location inteira, linhas 814 a 815 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "815:LEC=3",
+    "adaptado": "27:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(x, y, z)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linhas 811 e 812: generate_world_map de World",
+    "linhas 814 e 815: get_location"
+  ],
+  "comentarios_internos": "Nenhum comentario no trecho.",
+  "removido_do_original": [
+    "todo o resto do arquivo, inclusive o restante de World (jogador, monstros, zumbi): fora do trecho; GameData le game_data.json do disco ao importar o modulo."
+  ],
+  "andaime": [
+    "Location minima: so as coordenadas.",
+    "World minimo: tamanho por parametro (no original e fixo em 10 x 10 x 10) e generate_world_map copiado.",
+    "executar(x, y, z): mapa 2 x 3 x 4; devolve as coordenadas da casa achada.",
+    "Conferido: o Pysmell so acusa a linha 815; nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: devolve a casa da posicao pedida.",
+    "borda: origem; indices negativos contam do fim.",
+    "invalido: posicao fora do mapa levanta IndexError."
+  ],
+  "nao_fixado_de_proposito": [],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 814 a 815 contra 26 a 27 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 1/1 mutantes mortos"
+  }
+}

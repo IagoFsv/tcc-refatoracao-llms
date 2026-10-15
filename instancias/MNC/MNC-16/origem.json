@@ -1,0 +1,59 @@
+{
+  "id": "MNC-16",
+  "arquivos": {
+    "unidade": "MNC_16.py",
+    "testes": "test_MNC_16.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/WeatherForecast-master/weatherforecast.py",
+  "funcao": "parseJSONforCITY",
+  "linha_funcao": 79,
+  "linhas": [
+    94,
+    95,
+    97,
+    100,
+    108
+  ],
+  "ocorrencias": 9,
+  "trecho": "funcao parseJSONforCITY inteira, linhas 79 a 114 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "94:LEC=4|95:LEC=5|97:LEC=4|100:LEC=5|108:LEC=3",
+    "adaptado": "25:LEC=4|26:LEC=4|26:LEC=4|26:LEC=5|28:LEC=4|31:LEC=4|31:LEC=4|31:LEC=5|39:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(response, cidade, opcao)",
+  "dependencias_externas": [],
+  "copiado_verbatim_do_original": [
+    "linha 17: option = '-c'",
+    "linhas 79 a 114: parseJSONforCITY"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: docstring, a string de comentario no meio do laco, '#convert to centrigrade...' e '#print other conditions...'. Espacos no fim da linha 100 tambem mantidos.",
+  "removido_do_original": [
+    "linhas 1 a 8, cabecalho com nome e curso do autor: fora do trecho.",
+    "linha 9, import requests, sys: nao usados pelo trecho.",
+    "help_message, validateInput, checkValidCity, checkCLIOptions, processCLIOptions e o script de modulo (linhas 118 a 134, com uma chave de API): fora do trecho; leem sys.argv e chamam a API."
+  ],
+  "andaime": [
+    "option = '-c' como variavel de modulo, como no original; executar(response, cidade, opcao) troca option (global) e chama parseJSONforCITY. No original quem troca option e checkCLIOptions, a partir de sys.argv.",
+    "Conferido: o Pysmell acusa as mesmas 9 deteccoes do original (linhas 94, 95 tres vezes, 97, 100 tres vezes, 108); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: -f imprime a previsao agrupada por dia (data quando o dia muda, uma linha por horario), temperatura com uma casa e °C.",
+    "borda: -C imprime o clima atual em °F e mph, com arredondamento de uma casa; -F imprime previsao em °F.",
+    "invalido: opcao desconhecida no modo de clima atual levanta KeyError depois de imprimir o cabecalho."
+  ],
+  "nao_fixado_de_proposito": [
+    "Opcao -h: tratada antes pelo programa original, nao chega aqui."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 79 a 114 contra 10 a 45 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 76/76 mutantes mortos"
+  }
+}

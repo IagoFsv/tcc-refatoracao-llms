@@ -1,0 +1,61 @@
+{
+  "id": "MNC-13",
+  "arquivos": {
+    "unidade": "MNC_13.py",
+    "testes": "test_MNC_13.py"
+  },
+  "smell": "MNC",
+  "smell_nome": "Multiply-Nested Container",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/Natsar-main/modules/tele.py",
+  "funcao": "send_request",
+  "linha_funcao": 57,
+  "linhas": [
+    75
+  ],
+  "ocorrencias": 2,
+  "trecho": "funcao send_request inteira, linhas 57 a 84 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "75:LEC=3",
+    "adaptado": "48:LEC=3|48:LEC=3",
+    "limiar_tuning": "LEC >= 3, ou DNC >= 3 e NCT >= 2"
+  },
+  "ponto_de_entrada": "executar(token, endpoint)",
+  "dependencias_externas": [
+    "requests==2.34.2 (instalado de verdade, fixado no requirements.txt); o teste intercepta requests.get com monkeypatch, sem rede"
+  ],
+  "copiado_verbatim_do_original": [
+    "linhas 4 e 9: import requests, import datetime",
+    "linhas 17 a 21 e 33 a 43: classe TelegramBot com __init__ e remove_duplicates, com seus comentarios",
+    "linhas 57 a 84: send_request"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1: os comentarios do metodo.",
+  "removido_do_original": [
+    "linhas 1 e 3, shebang e comentario de import: fora do trecho.",
+    "linhas 5 a 8 e 11 a 14, imports de os, pathlib, dotenv e telethon e a leitura do .env: nao usados pelo trecho; telethon precisa de rede e credenciais.",
+    "extract_profile_data, remove_file_duplicates, get_tg_files e a classe TelegramUser: fora do trecho."
+  ],
+  "andaime": [
+    "TelegramBot so com __init__ e remove_duplicates, copiados do original.",
+    "executar(token, endpoint): devolve TelegramBot(token).send_request(endpoint).",
+    "O users.log e gravado na pasta atual; o teste roda numa pasta temporaria e fixa o relogio trocando datetime.datetime por uma subclasse com now() fixo.",
+    "Conferido: o Pysmell so acusa a linha 75 (duas deteccoes, como no original); nada no andaime."
+  ],
+  "comportamento_fixado": [
+    "tipico: getUpdates devolve (id, username) sem repetir, pulando mensagens sem username ou sem message; acrescenta uma linha por usuario no users.log com data, token, id e username (o id vem antes: as variaveis do laco estao trocadas no original, fixado como e).",
+    "borda: getMe devolve (username, first_name, id); outro endpoint devolve None; users.log existente recebe as linhas no fim; URL de cada pedido.",
+    "invalido: status diferente de 200 levanta Exception('Error: <texto da resposta>'); getMe sem username tambem."
+  ],
+  "nao_fixado_de_proposito": [
+    "Formato da mensagem da excecao alem do texto: o teste confere a mensagem, nao a classe exata (Exception).",
+    "Lista vazia em getUpdates: cria users.log vazio; nao exercitado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "diff_do_trecho": "identico ao original (linhas 57 a 84 contra 30 a 57 da unidade)",
+    "pysmell_apos_adaptacao": "mesmas deteccoes MNC do original dentro do trecho; nenhuma no andaime",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py: 14/14 mutantes mortos"
+  }
+}
