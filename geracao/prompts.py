@@ -10,8 +10,10 @@ Todas as tecnicas viram UMA unica mensagem de papel "user", sem mensagem de
 "system". Isso e deliberado: se a persona do Role fosse para o "system" e as
 outras duas nao tivessem essa mensagem, a estrutura da conversa passaria a
 variar junto com o texto, e a tecnica de prompt deixaria de ser o unico fator
-manipulado. Sem "system" tambem nao existe contexto oculto injetado, que foi
-exatamente a critica da banca a interface de chat.
+manipulado. Sem "system" no pedido, cada modelo recebe o SYSTEM padrao do seu
+Modelfile (decisao do Iago, 21/10/2026): o texto e fixo por modelo, igual nas
+tres tecnicas, conhecido e registrado a cada rodada (cliente.ambiente), o que
+o separa do contexto oculto da interface de chat criticado pela banca.
 """
 
 import functools

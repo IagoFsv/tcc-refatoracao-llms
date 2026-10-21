@@ -1,38 +1,52 @@
-# Configuracao dos tres modelos avaliados, todos por acesso gratuito.
+# Configuracao dos modelos avaliados, todos locais, via Ollama.
 #
-# ATENCAO: confirme os campos "modelo" e "base_url" na documentacao ATUAL de
-# cada provedor antes de rodar. Os valores abaixo sao pontos de partida
-# plausiveis, nao verdades fixas; o proprio smoke test vai revelar se algum
-# esta errado (erro de modelo inexistente, endpoint invalido, etc.).
- 
+# Tags e digests conferidos na biblioteca do Ollama e no Ollama instalado
+# (GET /api/tags) em 21/10/2026. O cliente aborta a rodada se o digest
+# instalado for diferente do daqui: um "ollama pull" trocaria o modelo sem
+# aviso. Mesma quantizacao (Q4_K_M) nos tres, para nao variar junto com o
+# modelo.
+
+ollama:
+  base_url: "http://localhost:11434"
+
+# Vai em "options" do POST /api/chat, igual para todos os modelos e tecnicas.
+# Tudo explicito: o que nao e enviado cai no padrao do Ollama (temperature
+# 0.8, top_k 40, top_p 0.9), pensado para conversa e sujeito a mudar entre
+# versoes. Decisoes do Iago (21/10/2026).
 parametros:
-  # temperature > 0 para preservar a variabilidade entre as 3 execucoes por
-  # instancia; com 0 as execucoes ficariam quase identicas e perderiam sentido.
-  # Valor FECHADO em 0.5 (decisao do Iago, com aval da Carla em 22/09/2026).
+  # > 0 de proposito: mantem a variabilidade entre as 3 execucoes de cada
+  # instancia. Valor FECHADO em 0.5 (aval da Carla em 22/09/2026).
   temperature: 0.5
-  max_tokens: 2048
-  # top_p: 1.0
-  # seed: 42   # apenas alguns provedores respeitam seed
- 
-provedores:
-  - nome: gemini
-    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
-    modelo: "gemini-3.1-flash-lite"        # uso geral, equivalente ao antigo "gemini-2.5-flash" (retirado em 26/08/2026)
-    api_key_env: "GEMINI_API_KEY"
- 
-  - nome: gpt
-    base_url: "https://api.openai.com/v1"
-    modelo: "gpt-5.4-mini"
-    api_key_env: "OPENAI_API_KEY"
- 
+  # Janela do Llama 3 (8.192), a menor dos tres. num_predict = metade, entao
+  # prompt + saida nunca passa da janela se o prompt tiver ate 4.096 tokens.
+  num_ctx: 8192
+  num_predict: 4096
+  # Valores que desligam cada amostrador no llama.cpp: so a temperatura age.
+  top_k: 0
+  top_p: 1.0
+  min_p: 0.0
+  repeat_penalty: 1.0
+
+# Uma seed por execucao (1, 2 e 3), igual para todos os modelos e tecnicas.
+# Mesma seed com a mesma temperatura daria execucoes identicas.
+seeds: [42, 43, 44]
+
+# Campos de topo do POST /api/chat. Com false, prompt maior que o num_ctx da
+# erro em vez de ser cortado em silencio (truncate) e a geracao nao descarta
+# o inicio do contexto ao chegar no limite (shift).
+requisicao:
+  truncate: false
+  shift: false
+
+modelos:
   - nome: qwen
-    # Atualizado 10/09/2026: DeepSeek trocado por Qwen (via Groq) - deepseek-v4-flash
-    # so tinha grant unico de cadastro, sem tier gratuito perene (erro 402
-    # Insufficient Balance no smoke test). Groq oferece Qwen com tier gratuito.
-    # qwen/qwen3-32b foi descontinuado em 17/06/2026; qwen3.6-27b e o modelo
-    # atual recomendado pela doc da Groq (existe tambem qwen3.8-27b, mais
-    # recente - CONFIRMAR qual usar). Troca de modelo ainda precisa aval
-    # formal da Carla.
-    base_url: "https://api.groq.com/openai/v1"
-    modelo: "qwen/qwen3.6-27b"
-    api_key_env: "GROQ_API_KEY"
+    tag: "qwen2.5-coder:7b-instruct-q4_K_M"
+    digest: "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364"
+
+  - nome: deepseek
+    tag: "deepseek-coder:6.7b-instruct-q4_K_M"
+    digest: "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5"
+
+  - nome: llama3
+    tag: "llama3:8b-instruct-q4_K_M"
+    digest: "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86"
