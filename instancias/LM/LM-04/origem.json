@@ -1,0 +1,59 @@
+{
+  "id": "LM-04",
+  "arquivos": {
+    "unidade": "LM_04.py",
+    "testes": "test_LM_04.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/text_adventure.py",
+  "funcao": "play_room",
+  "linha_funcao": 302,
+  "linhas": [
+    302
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao play_room inteira, linhas 302 a 401 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "302:MLOC=54",
+    "adaptado": "113:MLOC=54",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar(sala, mensagem_anterior=\"\", primeira_sala=False)",
+  "dependencias_externas": [],
+  "comentarios_internos": "Mantidos, pela regra 1.",
+  "removido_do_original": [
+    "linhas 1 a 65, cabecalho: autor, data, gabarito do jogo e a frase 'Program written with A LOT OF HELP from Github CoPilot'.",
+    "os.system('') no import (so habilita cores ANSI no console do Windows): efeito colateral sem papel no comportamento testado.",
+    "comentarios 'by github copilot' acima das funcoes de tela (fora do trecho).",
+    "salas que os testes nao usam, show_introduction, player_dies, player_wins, play_again e o laco principal do modulo."
+  ],
+  "andaime": [
+    "Constantes de indice, new_line, closet_action e piano_action copiadas do original.",
+    "move_cursor, clear_screen, clear_to_end_of_screen, clear_to_end_of_line, colorize, show_error e get_room_data copiadas do original.",
+    "room_data com duas salas do original (basement_dark e upstairs_unlocked), mesmos textos, montada com a funcao _action e uma variavel por sala em vez do literal aninhado do original, que dispararia MNC no andaime. Uma _room com 5 parametros foi tentada e disparou LPL; descartada.",
+    "executar(sala, mensagem_anterior, primeira_sala): devolve play_room(...).",
+    "Conferido: o Pysmell so acusa o LM do trecho."
+  ],
+  "efeitos_colaterais": {
+    "descricao": "O trecho imprime com codigos ANSI, le com input(), pausa com time.sleep() e sai com exit() se a sala nao existe.",
+    "tratamento": "O teste troca input() e time.sleep() por dubles via monkeypatch e espera SystemExit; o trecho nao foi alterado."
+  },
+  "comportamento_fixado": [
+    "tipico: primeira sala, opcao 4: texto exato impresso (cores e cursor), pausa de 0.5 s, uma pergunta, devolve ['basement_light', 'The lights are now on.'].",
+    "borda: sala sem descricao e com mensagem anterior (pausa de 1 s); 'h' mostra a dica, 9 e 'x' sao recusados, a opcao 2 so mostra a mensagem e 'q' devolve ['player_quits', ''].",
+    "invalido: sala inexistente imprime o erro e levanta SystemExit, sem perguntar nada."
+  ],
+  "nao_fixado_de_proposito": [
+    "Qual das quatro frases de abertura e sorteada nas salas seguintes a primeira: o teste aceita qualquer uma, sem prender como o sorteio e feito (random.randrange no original)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 302 a 401 contra 113 a 212 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=54, igual ao original; nada no andaime"
+  }
+}

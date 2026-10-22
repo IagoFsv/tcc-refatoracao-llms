@@ -1,0 +1,50 @@
+{
+  "id": "LM-03",
+  "arquivos": {
+    "unidade": "LM_03.py",
+    "testes": "test_LM_03.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Code/pyMX.py",
+  "funcao": "get_layout_size",
+  "linha_funcao": 54,
+  "linhas": [
+    54
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao get_layout_size inteira, linhas 54 a 109 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "54:MLOC=54",
+    "adaptado": "10:MLOC=54",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar(elementos)",
+  "dependencias_externas": [],
+  "comentarios_internos": "O trecho nao tem comentarios.",
+  "removido_do_original": [
+    "linhas 50 a 53, comentarios acima da funcao (fora do trecho): citam o GitHub Copilot e um erro de sugestao; revelam a origem do codigo.",
+    "demais funcoes e imports (lxml, drawio_*, pandas etc.): nao usados pelo trecho."
+  ],
+  "andaime": [
+    "import math, usado pelo trecho.",
+    "executar(elementos): devolve get_layout_size(elementos)."
+  ],
+  "comportamento_fixado": [
+    "tipico: cada inteiro de 1 a 91 contra a faixa da tabela (21 faixas).",
+    "borda: zero e negativo dao (1, 1); viradas de faixa (6, 12, 13, 18, 35, 36, 91); acima de 91, calculo pela proporcao aurea (92, 100, 1000).",
+    "invalido: 12.5 nao casa com nenhum ramo e levanta ValueError com a mensagem do original."
+  ],
+  "nao_fixado_de_proposito": [
+    "Tipo do erro para texto ou None (TypeError da comparacao): so o caso fracionario foi fixado."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 54 a 109 contra 10 a 65 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=54, igual ao original; nada no andaime"
+  }
+}

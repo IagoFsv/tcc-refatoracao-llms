@@ -1,0 +1,53 @@
+{
+  "id": "LM-05",
+  "arquivos": {
+    "unidade": "LM_05.py",
+    "testes": "test_LM_05.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/WindCatcher-main/modules/decoder.py",
+  "funcao": "parse_weather_to_json",
+  "linha_funcao": 25,
+  "linhas": [
+    25
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao parse_weather_to_json inteira, linhas 25 a 103 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "25:MLOC=56",
+    "adaptado": "10:MLOC=56",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar(html_atual, html_previsao)",
+  "dependencias_externas": [
+    "beautifulsoup4==4.15.0 (instalado de verdade, fixado no requirements.txt; criterio 4a): o teste monta o HTML, sem rede"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1.",
+  "removido_do_original": [
+    "get_soup e o import de requests: o original baixa a pagina; aqui o HTML vem do teste.",
+    "linha 113, comentario '# @AmarnathCJD' (identifica o autor)."
+  ],
+  "andaime": [
+    "from bs4 import BeautifulSoup, usado nas anotacoes do trecho.",
+    "remove_special_chars copiada do original (fica depois do trecho, como no original).",
+    "executar(html_atual, html_previsao): faz o BeautifulSoup das duas paginas com html.parser e devolve parse_weather_to_json."
+  ],
+  "comportamento_fixado": [
+    "tipico: dicionario completo de current, day, night e forecast para paginas com a estrutura de classes procurada; detalhe com um so div e ignorado; '\\\\n' literal e removido.",
+    "borda: 'Tonight' vai para a noite e 'Today' para o dia; a previsao pega os paineis do ultimo cartao de meio periodo (defeito do original, fixado como e); pagina de previsao vazia da lista vazia.",
+    "invalido: pagina sem current-weather-card levanta AttributeError."
+  ],
+  "nao_fixado_de_proposito": [
+    "Ordem das chaves dos dicionarios: a comparacao e por igualdade de dict."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 25 a 103 contra 10 a 88 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=56, igual ao original; nada no andaime"
+  }
+}

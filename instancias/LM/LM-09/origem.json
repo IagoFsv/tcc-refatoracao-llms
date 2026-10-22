@@ -1,0 +1,55 @@
+{
+  "id": "LM-09",
+  "arquivos": {
+    "unidade": "LM_09.py",
+    "testes": "test_LM_09.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/banking.py",
+  "funcao": "main",
+  "linha_funcao": 46,
+  "linhas": [
+    46
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao main inteira, linhas 46 a 142 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "46:MLOC=84",
+    "adaptado": "50:MLOC=84",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar()",
+  "dependencias_externas": [
+    "sqlite3 (biblioteca padrao), de verdade; o banco card.s3db e criado na pasta temporaria do teste"
+  ],
+  "comentarios_internos": "Mantidos, pela regra 1.",
+  "removido_do_original": [
+    "linhas 1 e 2, comentarios '# Write your code here' e '# Create a simple banking system' (enunciado de exercicio)."
+  ],
+  "andaime": [
+    "classe Bank e check_luhn copiadas do original, com os comentarios.",
+    "executar(): chama main(); guarda __main__ chama executar()."
+  ],
+  "efeitos_colaterais": {
+    "descricao": "O trecho le com input() sem texto, grava em card.s3db na pasta atual e sai com exit().",
+    "tratamento": "O teste usa pasta temporaria (monkeypatch.chdir), troca input() por duble e random.randint (usado pela Bank do andaime) por uma sequencia fixa, e espera SystemExit."
+  },
+  "comportamento_fixado": [
+    "tipico: cria conta, entra, saldo 0, deposita 100, saldo 100, sai da conta e do programa: texto exato dos menus e o registro final no banco.",
+    "borda: duas contas; transferencia para cartao com Luhn errado, para cartao inexistente, acima do saldo e certa; encerramento da conta; login de conta encerrada e PIN errado recusados; estado final do banco.",
+    "invalido: opcao do menu nao numerica levanta ValueError, sem gravar conta."
+  ],
+  "nao_fixado_de_proposito": [
+    "A conexao SQLite nunca e fechada pelo original; o teste nao fixa isso."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 46 a 142 contra 50 a 146 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=84, igual ao original; nada no andaime"
+  }
+}

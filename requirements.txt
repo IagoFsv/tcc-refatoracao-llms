@@ -28,3 +28,5 @@ scipy==1.18.1      # LPL-12 (interp1d); antes so vinha junto com o scikit-image
 requests==2.34.2   # MNC-02, 12 a 14, 21: o teste intercepta get/post com monkeypatch, sem rede
 toml==0.10.2       # MNC-09 a 11 (AiShell tasks.py)
 invoke==3.0.3      # MNC-10 e 11 (AiShell tasks.py): @task e Context
+beautifulsoup4==4.15.0  # LM-05 (WindCatcher decoder.py): o teste monta o HTML, sem rede
+termcolor==3.3.0   # LM-06 (WindCatcher weather.py): colored()

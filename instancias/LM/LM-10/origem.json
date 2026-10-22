@@ -1,0 +1,50 @@
+{
+  "id": "LM-10",
+  "arquivos": {
+    "unidade": "LM_10.py",
+    "testes": "test_LM_10.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/fitness-calculator.py",
+  "funcao": "calc",
+  "linha_funcao": 32,
+  "linhas": [
+    32
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao calc inteira, linhas 32 a 111 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "32:MLOC=71",
+    "adaptado": "22:MLOC=71",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar()",
+  "dependencias_externas": [],
+  "comentarios_internos": "O trecho nao tem comentarios.",
+  "removido_do_original": [
+    "linhas 1 a 16, cabecalho com o enunciado e as formulas.",
+    "linhas 113 e 114, chamada calc() e print no nivel do modulo: rodariam no import."
+  ],
+  "andaime": [
+    "againcalc copiada do original (o trecho a chama, e ela chama o trecho de volta).",
+    "executar(): chama calc(); guarda __main__ chama executar()."
+  ],
+  "comportamento_fixado": [
+    "tipico: opcao 7 com 70 kg, 175 cm, 30 anos, atividade 2: perguntas na ordem e as 6 linhas de resultado, depois 'n'.",
+    "borda: 'y' reinicia o menu e percorre as opcoes 1, 2, 4, 5 e 6 ate a opcao 9 (numero invalido): perguntas e saida exatas.",
+    "invalido: a pergunta de atividade sugere 1.2, mas a resposta e lida com int(); '1.2' levanta ValueError. Defeito do original, fixado como e."
+  ],
+  "nao_fixado_de_proposito": [
+    "Resposta invalida em againcalc (fora do trecho)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 32 a 111 contra 22 a 101 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=71, igual ao original; nada no andaime"
+  }
+}

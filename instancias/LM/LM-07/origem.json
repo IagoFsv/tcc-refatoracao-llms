@@ -1,0 +1,54 @@
+{
+  "id": "LM-07",
+  "arquivos": {
+    "unidade": "LM_07.py",
+    "testes": "test_LM_07.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/advanced_password_generator.py",
+  "funcao": "main",
+  "linha_funcao": 17,
+  "linhas": [
+    17
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao main inteira, linhas 17 a 194 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "17:MLOC=137",
+    "adaptado": "12:MLOC=137",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar()",
+  "dependencias_externas": [],
+  "comentarios_internos": "Mantidos, pela regra 1. Espacos no fim das linhas do original tambem mantidos.",
+  "removido_do_original": [
+    "linhas 1 a 10, cabecalho: 'This code is part of the tests that I have been doing with Github Copilot.' e o enunciado dado ao Copilot."
+  ],
+  "andaime": [
+    "imports random, string, sys e os, usados pelo trecho.",
+    "executar(): chama main(); guarda __main__ chama executar()."
+  ],
+  "efeitos_colaterais": {
+    "descricao": "O trecho e interativo (input/print), grava passwords.txt e termina com sys.exit().",
+    "tratamento": "O teste troca input() por duble, usa pasta temporaria e espera SystemExit."
+  },
+  "comportamento_fixado": [
+    "tipico: tamanho 3, todas as opcoes 'y', sem arquivo: ordem das 9 perguntas, 15 senhas em 5 grupos (pontuacao, maiusculas, minusculas, digitos, pontuacao), cada uma com 3 caracteres do alfabeto do grupo, e o texto em volta.",
+    "borda: tamanho e resposta invalidos repetem a pergunta; caminho inexistente e recusado; com arquivo, pergunta de novo com input() sem texto e grava passwords.txt com as senhas impressas.",
+    "invalido: 'n' para maiusculas deixa a variavel sem valor e a geracao levanta NameError (UnboundLocalError no original) depois de todas as perguntas, sem imprimir senha. Defeito do original, fixado como e."
+  ],
+  "nao_fixado_de_proposito": [
+    "Os caracteres sorteados: so quantidade, tamanho e alfabeto de cada senha, para nao prender como o sorteio e feito.",
+    "O ramo 'y' de gerar mais senhas (chama main() de novo, recursivo)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 17 a 194 contra 12 a 189 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=137, igual ao original; nada no andaime"
+  }
+}

@@ -49,7 +49,8 @@ DATASET = RAIZ / "dados" / "dataset_zhang" / "dataset" / "files"
 INSTANCIAS = RAIZ / "instancias"
 TABELA = INSTANCIAS / "checklist.csv"
 
-PACOTES = ("pytest", "pandas", "tqdm", "numpy", "scikit-image", "scipy", "requests", "toml", "invoke")
+PACOTES = ("pytest", "pandas", "tqdm", "numpy", "scikit-image", "scipy", "requests", "toml", "invoke",
+           "beautifulsoup4", "termcolor")
 TIMEOUT_MUTANTE = 30  # segundos; mutante que estoura o tempo conta como morto
 PREFIXOS_TESTE = ("test_tipico_", "test_borda_", "test_invalido_")
 CONTRATO = ("Ponto de entrada publico: executar(", "Nao altere o nome nem a assinatura")

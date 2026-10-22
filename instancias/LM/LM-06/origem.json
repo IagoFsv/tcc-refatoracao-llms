@@ -1,0 +1,57 @@
+{
+  "id": "LM-06",
+  "arquivos": {
+    "unidade": "LM_06.py",
+    "testes": "test_LM_06.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/WindCatcher-main/modules/weather.py",
+  "funcao": "fmt_cli_resp",
+  "linha_funcao": 105,
+  "linhas": [
+    105
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao fmt_cli_resp inteira, linhas 105 a 216 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "105:MLOC=76",
+    "adaptado": "16:MLOC=76",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar(dados, cidade, codigo_pais)",
+  "dependencias_externas": [
+    "termcolor==3.3.0 (instalado de verdade, fixado no requirements.txt; criterio 4a)"
+  ],
+  "comentarios_internos": "O trecho nao tem comentarios.",
+  "removido_do_original": [
+    "get_weather_data, get_city_name, format_weather_link e os imports de requests, .decoder e .errors: nao usados pelo trecho.",
+    "linha 219, comentario '# @AmarnathCJD' (identifica o autor)."
+  ],
+  "andaime": [
+    "get_current_date copiada do original.",
+    "executar(dados, cidade, codigo_pais): chama fmt_cli_resp com start_time = datetime.now(), para o ponto de entrada ter 3 parametros e o tempo decorrido sair perto de zero."
+  ],
+  "efeitos_colaterais": {
+    "descricao": "O trecho so imprime. A cor depende do ambiente (FORCE_COLOR, NO_COLOR, terminal), e o termcolor guarda essa decisao em cache.",
+    "tratamento": "A fixture do teste fixa o ambiente e limpa o cache de termcolor.can_colorize."
+  },
+  "comportamento_fixado": [
+    "tipico: com cor forcada, todas as linhas exatas, com os codigos do termcolor; a data de hoje e calculada pelo teste com o mesmo formato.",
+    "borda: sem cor, dicionario vazio com 6 previsoes vazias: tudo vira N/A e o indice 0 da previsao nunca e impresso.",
+    "invalido: com 3 previsoes, imprime os dias 1 e 2 e levanta IndexError no terceiro.",
+    "Defeito do original, fixado como e: o vento perde o primeiro caractere ([1:]), entao 'N 10 km/h' sai ' 10 km/h'."
+  ],
+  "nao_fixado_de_proposito": [
+    "Valor do tempo decorrido no rodape: so o formato (numero com casas decimais)."
+  ],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 105 a 216 contra 16 a 127 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=76, igual ao original; nada no andaime"
+  }
+}

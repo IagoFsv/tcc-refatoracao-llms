@@ -1,0 +1,47 @@
+{
+  "id": "LM-11",
+  "arquivos": {
+    "unidade": "LM_11.py",
+    "testes": "test_LM_11.py"
+  },
+  "smell": "LM",
+  "smell_nome": "Long Method",
+  "fonte": "Zhang et al. (2024), results of RQ1.xlsx",
+  "arquivo": "Repositories/hangmanCopilot.py",
+  "funcao": "print_hangman",
+  "linha_funcao": 17,
+  "linhas": [
+    17
+  ],
+  "ocorrencias": 1,
+  "trecho": "funcao print_hangman inteira, linhas 17 a 80 do original",
+  "verbatim": true,
+  "metricas": {
+    "original": "17:MLOC=63",
+    "adaptado": "8:MLOC=63",
+    "limiar_tuning": "MLOC > 52"
+  },
+  "ponto_de_entrada": "executar(erros)",
+  "dependencias_externas": [],
+  "comentarios_internos": "O trecho nao tem comentarios.",
+  "removido_do_original": [
+    "linhas 1 a 3, comentarios com o link do video e 'make a hangman game with a copilot'.",
+    "variaveis do jogo e o laco principal do modulo (linhas 9 a 15 e 82 a 142): rodariam no import."
+  ],
+  "andaime": [
+    "executar(erros): chama print_hangman(erros)."
+  ],
+  "comportamento_fixado": [
+    "tipico: 3 erros, as 8 linhas exatas.",
+    "borda: os 7 desenhos, de 0 a 6 erros.",
+    "invalido: 7, -1 e '3' nao imprimem nada e nao levantam erro."
+  ],
+  "nao_fixado_de_proposito": [],
+  "validacao_da_adaptacao": {
+    "ambiente": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutacao": "adaptacao/checklist.py (placar em instancias/checklist.csv)",
+    "diff_do_trecho": "identico ao original (linhas 17 a 80 contra 8 a 71 da unidade)",
+    "pysmell_apos_adaptacao": "LM detectado, MLOC=63, igual ao original; nada no andaime"
+  }
+}
