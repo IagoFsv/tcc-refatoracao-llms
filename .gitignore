@@ -31,3 +31,9 @@ dados/dataset_zhang/
 # Lixo do Windows/OneDrive
 desktop.ini
 Thumbs.db
+
+# Piloto da geracao (descartavel: so mede tempo e testa o pipeline) e restos
+# de uma rodada interrompida (trava e escrita pela metade).
+resultados/geracoes/_piloto/
+resultados/geracoes/**/_rodando.lock
+resultados/geracoes/**/*.tmp

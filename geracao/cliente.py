@@ -14,6 +14,7 @@ exata que o gerou.
 
 import datetime
 import json
+import os
 import time
 from pathlib import Path
 
@@ -116,19 +117,22 @@ def chamar_modelo(cfg, modelo, mensagens, seed):
 
 
 def registrar(dir_saida, identificador, cfg, modelo, amb, corpo,
-              resposta_bruta, texto, latencia, gpu=None):
+              resposta_bruta, texto, latencia, gpu=None, extra=None):
     """Grava um JSON com todos os metadados da chamada, de forma completa.
 
     Guarda: tag e digest, versao do Ollama, endpoint, corpo enviado (prompt
     completo, options com seed, truncate/shift), timestamp UTC, latencia,
     done_reason, contagem de tokens, uso da GPU, texto e a resposta bruta
-    inteira. Nunca sobrescreve: se o arquivo ja existe, levanta
-    FileExistsError.
+    inteira, mais os campos de `extra` (instancia, tecnica, seed, commit...).
+    Nunca sobrescreve: se o arquivo ja existe, levanta FileExistsError.
+    Escreve primeiro num .tmp e so entao renomeia, para uma interrupcao no
+    meio da escrita nao deixar um JSON pela metade com o nome final.
     """
     Path(dir_saida).mkdir(parents=True, exist_ok=True)
     registro = {
         "identificador": identificador,
-        "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        **(extra or {}),
+        "timestamp_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "modelo": modelo["nome"],
         "tag": modelo["tag"],
         "digest": amb["digest"],
@@ -144,8 +148,12 @@ def registrar(dir_saida, identificador, cfg, modelo, amb, corpo,
         "resposta_bruta": resposta_bruta,
     }
     destino = Path(dir_saida) / f"{identificador}.json"
-    with open(destino, "x", encoding="utf-8") as f:
+    if destino.exists():
+        raise FileExistsError(destino)
+    tmp = destino.with_name(destino.name + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(registro, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, destino)
     return destino
 
 

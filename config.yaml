@@ -8,6 +8,10 @@
 
 ollama:
   base_url: "http://localhost:11434"
+  # Versao em que tudo foi conferido. O loop de geracao (geracao/gerar.py)
+  # aborta se o Ollama instalado for outro: o app do Windows se atualiza
+  # sozinho, e uma versao nova pode mudar padroes e o llama.cpp por baixo.
+  versao: "0.33.2"
 
 # Vai em "options" do POST /api/chat, igual para todos os modelos e tecnicas.
 # Tudo explicito: o que nao e enviado cai no padrao do Ollama (temperature
