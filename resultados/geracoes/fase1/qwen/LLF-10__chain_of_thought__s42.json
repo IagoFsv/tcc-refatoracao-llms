@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-10__chain_of_thought__s42",
+  "instancia": "LLF-10",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:12:57.563018+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(bool, z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_bool(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 15.066,
+  "done_reason": "stop",
+  "prompt_eval_count": 494,
+  "eval_count": 546,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Análise do Code Smell\n\nO code smell identificado é o **Long Lambda Function**. Na função `get_config_section_key_dict_dict_dict_bool`, há um `map` aninhado com lambdas que são muito longos e complexos. Isso dificulta a leitura e manutenção do código.\n\n### Técnica de Refatoração\n\nA técnica de refatoração indicada é **Replace Lambda with Named Function**. Isso envolve substituir as lambdas por funções nomeadas, tornando o código mais legível e fácil de entender.\n\n### Aplicando a Refatoração\n\nVamos refatorar o código, criando funções nomeadas para cada nível de mapeamento.\n\n### Código Refatorado\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return self._map_nested_strings(self.config[section][key])\n\n    def _map_nested_strings(self, value):\n        return map(self._map_strings, value.split(\",\"))\n\n    def _map_strings(self, value):\n        return map(self._map_lists, value.split(\",\"))\n\n    def _map_lists(self, value):\n        return map(self._map_bools, value.split(\",\"))\n\n    def _map_bools(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_bool(\"mundo\", \"regioes\"))\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original. A função `get_config_section_key_dict_dict_dict_bool` agora usa funções nomeadas (`_map_nested_strings`, `_map_strings`, `_map_lists`, `_map_bools`) para mapear os valores, tornando o código mais legível e fácil de entender.\n\nO ponto de entrada público `executar` continua chamando a função `get_config_section_key_dict_dict_dict_bool` da mesma forma, e o resultado é o mesmo que antes.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:12:55.4827601Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Análise do Code Smell\n\nO code smell identificado é o **Long Lambda Function**. Na função `get_config_section_key_dict_dict_dict_bool`, há um `map` aninhado com lambdas que são muito longos e complexos. Isso dificulta a leitura e manutenção do código.\n\n### Técnica de Refatoração\n\nA técnica de refatoração indicada é **Replace Lambda with Named Function**. Isso envolve substituir as lambdas por funções nomeadas, tornando o código mais legível e fácil de entender.\n\n### Aplicando a Refatoração\n\nVamos refatorar o código, criando funções nomeadas para cada nível de mapeamento.\n\n### Código Refatorado\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return self._map_nested_strings(self.config[section][key])\n\n    def _map_nested_strings(self, value):\n        return map(self._map_strings, value.split(\",\"))\n\n    def _map_strings(self, value):\n        return map(self._map_lists, value.split(\",\"))\n\n    def _map_lists(self, value):\n        return map(self._map_bools, value.split(\",\"))\n\n    def _map_bools(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_bool(\"mundo\", \"regioes\"))\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original. A função `get_config_section_key_dict_dict_dict_bool` agora usa funções nomeadas (`_map_nested_strings`, `_map_strings`, `_map_lists`, `_map_bools`) para mapear os valores, tornando o código mais legível e fácil de entender.\n\nO ponto de entrada público `executar` continua chamando a função `get_config_section_key_dict_dict_dict_bool` da mesma forma, e o resultado é o mesmo que antes."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 13005416900,
+    "load_duration": 5526300,
+    "prompt_eval_count": 494,
+    "prompt_eval_duration": 189903000,
+    "eval_count": 546,
+    "eval_duration": 12754189000
+  }
+}

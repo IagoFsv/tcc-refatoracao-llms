@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-08__chain_of_thought__s43",
+  "instancia": "LPL-08",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:20:25.380290+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Cadastro de servidores SSH num banco SQLite.\n\nPonto de entrada publico: executar(cadastrados, servidor). Nao altere o nome\nnem a assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nO banco e o arquivo frSSH.db da pasta atual. executar cria a tabela de\nservidores, grava os servidores ja cadastrados, atualiza um servidor e devolve as\nlinhas da tabela, na ordem de insercao.\n\"\"\"\n\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef update_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", (ip, port, username, password, keyid, ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    ip, port, username, password, keyid = servidor\n    update_server(ip, port, username, password, keyid)\n    return _linhas()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 22.489,
+  "done_reason": "stop",
+  "prompt_eval_count": 640,
+  "eval_count": 848,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Parameter List\" ocorre em duas funções: `executar` e `update_server`. Ambas recebem muitos parâmetros individuais.\n\n2. **Explique a Técnica de Refatoração**:\n   - A técnica de refatoração \"Introduce Parameter Object\" envolve criar uma classe ou estrutura de dados (como um dicionário ou um objeto) para agrupar os parâmetros relacionados. Isso reduz o número de parâmetros individuais em uma única estrutura.\n\n3. **Aplicar a Refatoração**:\n   - Criaremos uma classe chamada `Servidor` para agrupar os parâmetros do servidor.\n   - Refatoraremos as funções `executar` e `update_server` para aceitar uma instância de `Servidor` em vez de múltiplos parâmetros.\n\n4. **Verificar o Comportamento Original**:\n   - Garantiremos que o comportamento original do código seja preservado, incluindo a criação do banco de dados, a inserção de servidores, a atualização de servidores e a recuperação de linhas da tabela.\n\n### Código Refatorado\n\n```python\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\nclass Servidor:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    for servidor in cadastrados:\n        conn.execute(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", \n                      (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\ndef update_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", \n              (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid, servidor.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de Servidor. servidor: Servidor.\"\"\"\n    _preparar_banco(cadastrados)\n    update_server(servidor)\n    return _linhas()\n```\n\n### Explicação dos Mudanças\n\n1. **Classe `Servidor`**:\n   - A classe `Servidor` agrupa os parâmetros relacionados a um servidor em um único objeto.\n\n2. **Refatoração das Funções**:\n   - A função `_preparar_banco` agora aceita uma lista de `Servidor` e insere cada um no banco de dados.\n   - A função `update_server` agora aceita uma instância de `Servidor` e atualiza o servidor correspondente no banco de dados.\n   - A função `executar` agora aceita uma lista de `Servidor` e uma instância de `Servidor` para atualizar.\n\n3. **Preservação do Comportamento Original**:\n   - O comportamento original do código é preservado, incluindo a criação do banco de dados, a inserção de servidores, a atualização de servidores e a recuperação de linhas da tabela.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:20:23.3035239Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Parameter List\" ocorre em duas funções: `executar` e `update_server`. Ambas recebem muitos parâmetros individuais.\n\n2. **Explique a Técnica de Refatoração**:\n   - A técnica de refatoração \"Introduce Parameter Object\" envolve criar uma classe ou estrutura de dados (como um dicionário ou um objeto) para agrupar os parâmetros relacionados. Isso reduz o número de parâmetros individuais em uma única estrutura.\n\n3. **Aplicar a Refatoração**:\n   - Criaremos uma classe chamada `Servidor` para agrupar os parâmetros do servidor.\n   - Refatoraremos as funções `executar` e `update_server` para aceitar uma instância de `Servidor` em vez de múltiplos parâmetros.\n\n4. **Verificar o Comportamento Original**:\n   - Garantiremos que o comportamento original do código seja preservado, incluindo a criação do banco de dados, a inserção de servidores, a atualização de servidores e a recuperação de linhas da tabela.\n\n### Código Refatorado\n\n```python\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\nclass Servidor:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    for servidor in cadastrados:\n        conn.execute(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", \n                      (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\ndef update_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", \n              (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid, servidor.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de Servidor. servidor: Servidor.\"\"\"\n    _preparar_banco(cadastrados)\n    update_server(servidor)\n    return _linhas()\n```\n\n### Explicação dos Mudanças\n\n1. **Classe `Servidor`**:\n   - A classe `Servidor` agrupa os parâmetros relacionados a um servidor em um único objeto.\n\n2. **Refatoração das Funções**:\n   - A função `_preparar_banco` agora aceita uma lista de `Servidor` e insere cada um no banco de dados.\n   - A função `update_server` agora aceita uma instância de `Servidor` e atualiza o servidor correspondente no banco de dados.\n   - A função `executar` agora aceita uma lista de `Servidor` e uma instância de `Servidor` para atualizar.\n\n3. **Preservação do Comportamento Original**:\n   - O comportamento original do código é preservado, incluindo a criação do banco de dados, a inserção de servidores, a atualização de servidores e a recuperação de linhas da tabela."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20431583600,
+    "load_duration": 5063500,
+    "prompt_eval_count": 640,
+    "prompt_eval_duration": 470554000,
+    "eval_count": 848,
+    "eval_duration": 19909099000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-15__chain_of_thought__s42",
+  "instancia": "LPL-15",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:47:36.119754+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Bloco de uma cadeia de blocos: dados, hash e representacao em dicionario.\n\nPonto de entrada publico: executar(campos). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass Block(object):\n    def __init__(self, index, timestamp, transactions, previous_hash, proof=None, *args, **kwargs):\n        self.index = index\n        self.timestamp = timestamp\n        self.transactions = transactions\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    transacoes = [_Transacao(descricao) for descricao in campos[\"transacoes\"]]\n    if \"proof\" in campos:\n        bloco = Block(campos[\"index\"], campos[\"timestamp\"], transacoes,\n                      campos[\"previous_hash\"], campos[\"proof\"])\n    else:\n        bloco = Block(campos[\"index\"], campos[\"timestamp\"], transacoes,\n                      campos[\"previous_hash\"])\n    return bloco.repr_json()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 23.561,
+  "done_reason": "stop",
+  "prompt_eval_count": 696,
+  "eval_count": 901,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificação do code smell**: O `code smell` identificado é o **Long Parameter List** (Lista de Parâmetros Longa). O método `executar` recebe muitos parâmetros, o que dificulta a leitura e o uso do método.\n\n2. **Técnica de refatoração**: A técnica de refatoração indicada é **Introduce Parameter Object** (Introduzir Objeto de Parâmetro). Isso envolve criar uma nova classe para agrupar os parâmetros, tornando o método `executar` mais simples e fácil de usar.\n\n3. **Aplicação da refatoração**: Vamos criar uma nova classe chamada `BlockFields` para agrupar os parâmetros necessários para criar um bloco. Em seguida, modificaremos o método `executar` para aceitar apenas um objeto desse tipo.\n\n4. **Verificação do comportamento original**: Após a refatoração, o código deve produzir o mesmo resultado que o original.\n\n### Código Refatorado\n\n```python\nimport hashlib\n\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass BlockFields:\n    \"\"\"Classe para agrupar os campos necessários para criar um bloco.\"\"\"\n    def __init__(self, index, timestamp, transacoes, previous_hash, proof=None):\n        self.index = index\n        self.timestamp = timestamp\n        self.transacoes = transacoes\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n\nclass Block(object):\n    def __init__(self, fields):\n        self.index = fields.index\n        self.timestamp = fields.timestamp\n        self.transactions = [_Transacao(descricao) for descricao in fields.transacoes]\n        self.previous_hash = fields.previous_hash\n        self.proof = fields.proof if fields.proof is not None else None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(fields):\n    \"\"\"campos: index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    bloco = Block(fields)\n    return bloco.repr_json()\n```\n\n### Explicação da Refatoração\n\n1. **Criação de `BlockFields`**: A nova classe `BlockFields` agrupa todos os parâmetros necessários para criar um bloco em um único objeto. Isso simplifica a chamada ao método `executar`.\n\n2. **Modificação de `executar`**: O método `executar` agora aceita apenas um objeto `BlockFields`, tornando a chamada mais clara e concisa.\n\n3. **Modificação de `Block`**: O construtor de `Block` agora aceita um objeto `BlockFields` e cria as transações a partir dos descrevimentos fornecidos no objeto.\n\n4. **Métodos `hash` e `repr_json` de `Block`**: Estes métodos permanecem inalterados, pois já funcionavam corretamente com a lista de parâmetros original.\n\n### Verificação do Comportamento Original\n\nO código refatorado deve produzir o mesmo resultado que o original. Para verificar isso, você pode comparar os resultados de chamadas ao método `executar` antes e depois da refatoração.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:47:34.0604509Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificação do code smell**: O `code smell` identificado é o **Long Parameter List** (Lista de Parâmetros Longa). O método `executar` recebe muitos parâmetros, o que dificulta a leitura e o uso do método.\n\n2. **Técnica de refatoração**: A técnica de refatoração indicada é **Introduce Parameter Object** (Introduzir Objeto de Parâmetro). Isso envolve criar uma nova classe para agrupar os parâmetros, tornando o método `executar` mais simples e fácil de usar.\n\n3. **Aplicação da refatoração**: Vamos criar uma nova classe chamada `BlockFields` para agrupar os parâmetros necessários para criar um bloco. Em seguida, modificaremos o método `executar` para aceitar apenas um objeto desse tipo.\n\n4. **Verificação do comportamento original**: Após a refatoração, o código deve produzir o mesmo resultado que o original.\n\n### Código Refatorado\n\n```python\nimport hashlib\n\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass BlockFields:\n    \"\"\"Classe para agrupar os campos necessários para criar um bloco.\"\"\"\n    def __init__(self, index, timestamp, transacoes, previous_hash, proof=None):\n        self.index = index\n        self.timestamp = timestamp\n        self.transacoes = transacoes\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n\nclass Block(object):\n    def __init__(self, fields):\n        self.index = fields.index\n        self.timestamp = fields.timestamp\n        self.transactions = [_Transacao(descricao) for descricao in fields.transacoes]\n        self.previous_hash = fields.previous_hash\n        self.proof = fields.proof if fields.proof is not None else None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(fields):\n    \"\"\"campos: index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    bloco = Block(fields)\n    return bloco.repr_json()\n```\n\n### Explicação da Refatoração\n\n1. **Criação de `BlockFields`**: A nova classe `BlockFields` agrupa todos os parâmetros necessários para criar um bloco em um único objeto. Isso simplifica a chamada ao método `executar`.\n\n2. **Modificação de `executar`**: O método `executar` agora aceita apenas um objeto `BlockFields`, tornando a chamada mais clara e concisa.\n\n3. **Modificação de `Block`**: O construtor de `Block` agora aceita um objeto `BlockFields` e cria as transações a partir dos descrevimentos fornecidos no objeto.\n\n4. **Métodos `hash` e `repr_json` de `Block`**: Estes métodos permanecem inalterados, pois já funcionavam corretamente com a lista de parâmetros original.\n\n### Verificação do Comportamento Original\n\nO código refatorado deve produzir o mesmo resultado que o original. Para verificar isso, você pode comparar os resultados de chamadas ao método `executar` antes e depois da refatoração."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21497574800,
+    "load_duration": 4943200,
+    "prompt_eval_count": 696,
+    "prompt_eval_duration": 530094000,
+    "eval_count": 901,
+    "eval_duration": 20919627000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-12__role__s42",
+  "instancia": "MNC-12",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:23:48.037207+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Programa de linha de comando que mostra o clima de uma cidade.\n\nPonto de entrada publico: executar(cidade). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport runpy\nimport sys\n\nimport requests\nimport argparse\n\n\ndef call_api(city):\n    # fetch the key from a config file\n    import configparser\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    api_key = config['openweathermap']['api_key']\n    base_url = config['openweathermap']['base_url']\n    complete_url = base_url + \"appid=\" + api_key + \"&q=\" + city\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada publico desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    # check if city is passed as argument\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n\n    response = call_api(args.city)\n    # check if valid city name is passed\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    # get the weather from the response\n    weather = response['weather'][0]['description']\n    print(weather)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 29.362,
+  "done_reason": "stop",
+  "prompt_eval_count": 798,
+  "eval_count": 548,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\n\"\"\"Programa de linha de comando que mostra o clima de uma cidade.\n\nPonto de entrada publico: executar(cidade). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport runpy\nimport sys\nimport requests\nimport argparse\nimport configparser\n\n\ndef read_config():\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    return config\n\n\ndef call_api(city, config):\n    api_key = config['openweathermap']['api_key']\n    base_url = config['openweathermap']['base_url']\n    complete_url = f\"{base_url}appid={api_key}&q={city}\"\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada publico desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\n\ndef parse_arguments():\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    return parser.parse_args()\n\n\ndef validate_city(response):\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n\n\ndef get_weather(response):\n    return response['weather'][0]['description']\n\n\nif __name__ == '__main__':\n    config = read_config()\n    args = parse_arguments()\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n    response = call_api(args.city, config)\n    validate_city(response)\n    weather = get_weather(response)\n    print(weather)\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:23:45.9712282Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Programa de linha de comando que mostra o clima de uma cidade.\n\nPonto de entrada publico: executar(cidade). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport runpy\nimport sys\nimport requests\nimport argparse\nimport configparser\n\n\ndef read_config():\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    return config\n\n\ndef call_api(city, config):\n    api_key = config['openweathermap']['api_key']\n    base_url = config['openweathermap']['base_url']\n    complete_url = f\"{base_url}appid={api_key}&q={city}\"\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada publico desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\n\ndef parse_arguments():\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    return parser.parse_args()\n\n\ndef validate_city(response):\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n\n\ndef get_weather(response):\n    return response['weather'][0]['description']\n\n\nif __name__ == '__main__':\n    config = read_config()\n    args = parse_arguments()\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n    response = call_api(args.city, config)\n    validate_city(response)\n    weather = get_weather(response)\n    print(weather)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 27306661600,
+    "load_duration": 5892400,
+    "prompt_eval_count": 798,
+    "prompt_eval_duration": 1765949000,
+    "eval_count": 548,
+    "eval_duration": 25228657000
+  }
+}

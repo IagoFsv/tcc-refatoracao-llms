@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-06__chain_of_thought__s42",
+  "instancia": "MNC-06",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:11:26.052376+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Gravacao de perguntas de um jogo de perguntas e respostas num banco local.\n\nPonto de entrada publico: executar(data). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 35.656,
+  "done_reason": "stop",
+  "prompt_eval_count": 832,
+  "eval_count": 679,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell identificado no código original é o \"Multiply-Nested Container\", o que ocorre quando há muito uso de estruturas de contêiner aninhadas. Isso pode tornar o código difícil de entender e manter. \n\nA técnica de refatoração \"Decompose Container\" se aplica a este código, pois permite que o código seja dividido em partes menores e mais fáceis de entender e manter. Neste caso, a refatoração pode ser aplicada ao remover a criação da tabela 'questions' e do cursor do banco de dados do método 'executar'. \n\nRefatoração:\n\n```python\nimport json\nimport sqlite3\n\ndef create_questions_table():\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    return conn\n\ndef add_question(data, conn):\n    c = conn.cursor()\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\",  \"\\\"\\\"\").replace(\"&quot;\",  \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\",  \"\\\"\\\"\").replace(\"&quot;\",  \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n    conn.commit()\n\ndef executar(data):\n    conn = create_questions_table()\n    add_question(data, conn)\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```\n\nNeste código refatorado, a criação da tabela 'questions' e do cursor do banco de dados foram movidas para um método separado 'create_questions_table()'. Além disso, o método 'add_question()' agora recebe o objeto de conexão como um parâmetro, permitindo que ele seja chamado em outros lugares com a mesma conexão. Isso preserva o comportamento original do código, mantendo a conexão aberta apenas enquanto necessário e fechando-a apenas no final.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:11:23.9957522Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell identificado no código original é o \"Multiply-Nested Container\", o que ocorre quando há muito uso de estruturas de contêiner aninhadas. Isso pode tornar o código difícil de entender e manter. \n\nA técnica de refatoração \"Decompose Container\" se aplica a este código, pois permite que o código seja dividido em partes menores e mais fáceis de entender e manter. Neste caso, a refatoração pode ser aplicada ao remover a criação da tabela 'questions' e do cursor do banco de dados do método 'executar'. \n\nRefatoração:\n\n```python\nimport json\nimport sqlite3\n\ndef create_questions_table():\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    return conn\n\ndef add_question(data, conn):\n    c = conn.cursor()\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\",  \"\\\"\\\"\").replace(\"&quot;\",  \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\",  \"\\\"\\\"\").replace(\"&quot;\",  \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n    conn.commit()\n\ndef executar(data):\n    conn = create_questions_table()\n    add_question(data, conn)\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```\n\nNeste código refatorado, a criação da tabela 'questions' e do cursor do banco de dados foram movidas para um método separado 'create_questions_table()'. Além disso, o método 'add_question()' agora recebe o objeto de conexão como um parâmetro, permitindo que ele seja chamado em outros lugares com a mesma conexão. Isso preserva o comportamento original do código, mantendo a conexão aberta apenas enquanto necessário e fechando-a apenas no final.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 33584308900,
+    "load_duration": 5732400,
+    "prompt_eval_count": 832,
+    "prompt_eval_duration": 1302814000,
+    "eval_count": 679,
+    "eval_duration": 31947948000
+  }
+}

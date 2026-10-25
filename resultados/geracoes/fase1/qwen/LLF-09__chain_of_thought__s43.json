@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-09__chain_of_thought__s43",
+  "instancia": "LLF-09",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:52:34.441598+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(float, z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_float(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 19.323,
+  "done_reason": "stop",
+  "prompt_eval_count": 494,
+  "eval_count": 722,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Lambda Function\" ocorre porque a função `get_config_section_key_dict_dict_dict_float` contém uma lambda muito longa e complexa. Isso dificulta a leitura e manutenção do código.\n\n2. **Explique como a Técnica de Refatoração Aplica-se**:\n   - A técnica de refatoração \"Replace Lambda with Named Function\" sugere criar uma nova função nomeada para substituir a lambda. Isso torna o código mais legível e facilita a manutenção.\n\n3. **Aplicar a Refatoração**:\n   - Vamos criar uma nova função chamada `parse_config_value` que encapsula a lógica da lambda. A função `get_config_section_key_dict_dict_dict_float` será modificada para chamar essa nova função.\n\n4. **Verificar se o Código Refatorado Preserva o Comportamento Original**:\n   - O código refatorado deve ter o mesmo comportamento que o código original, mas com uma estrutura interna mais clara e fácil de entender.\n\n### Código Refatorado\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return parse_config_value(self.config[section][key])\n\ndef parse_config_value(value):\n    \"\"\"Parses a nested string of values into a nested list of floats.\"\"\"\n    return map(lambda x: map(lambda y: map(lambda z: map(float, z.split(\",\")), y.split(\",\")), x.split(\",\")), value.split(\",\"))\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_float(\"mundo\", \"regioes\"))\n```\n\n### Explicação do Código Refatorado\n\n- **Função `parse_config_value`**:\n  - Esta nova função é responsável por realizar a lógica de parsing da string aninhada em uma lista de floats.\n  - A lambda complexa foi movida para dentro desta função, tornando-a mais legível.\n\n- **Função `get_config_section_key_dict_dict_dict_float`**:\n  - Agora, esta função simplesmente chama `parse_config_value` para obter o resultado desejado.\n\n- **Função `_materializar` e `executar`**:\n  - Estas funções permanecem inalteradas, pois não estão diretamente relacionadas à lógica complexa que foi refatorada.\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o mesmo comportamento que o código original. A função `executar` ainda lê o texto gravado na configuração, como listas, e retorna o resultado. A estrutura interna do código foi simplificada e a legibilidade foi melhorada.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:52:32.3580767Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Lambda Function\" ocorre porque a função `get_config_section_key_dict_dict_dict_float` contém uma lambda muito longa e complexa. Isso dificulta a leitura e manutenção do código.\n\n2. **Explique como a Técnica de Refatoração Aplica-se**:\n   - A técnica de refatoração \"Replace Lambda with Named Function\" sugere criar uma nova função nomeada para substituir a lambda. Isso torna o código mais legível e facilita a manutenção.\n\n3. **Aplicar a Refatoração**:\n   - Vamos criar uma nova função chamada `parse_config_value` que encapsula a lógica da lambda. A função `get_config_section_key_dict_dict_dict_float` será modificada para chamar essa nova função.\n\n4. **Verificar se o Código Refatorado Preserva o Comportamento Original**:\n   - O código refatorado deve ter o mesmo comportamento que o código original, mas com uma estrutura interna mais clara e fácil de entender.\n\n### Código Refatorado\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return parse_config_value(self.config[section][key])\n\ndef parse_config_value(value):\n    \"\"\"Parses a nested string of values into a nested list of floats.\"\"\"\n    return map(lambda x: map(lambda y: map(lambda z: map(float, z.split(\",\")), y.split(\",\")), x.split(\",\")), value.split(\",\"))\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_float(\"mundo\", \"regioes\"))\n```\n\n### Explicação do Código Refatorado\n\n- **Função `parse_config_value`**:\n  - Esta nova função é responsável por realizar a lógica de parsing da string aninhada em uma lista de floats.\n  - A lambda complexa foi movida para dentro desta função, tornando-a mais legível.\n\n- **Função `get_config_section_key_dict_dict_dict_float`**:\n  - Agora, esta função simplesmente chama `parse_config_value` para obter o resultado desejado.\n\n- **Função `_materializar` e `executar`**:\n  - Estas funções permanecem inalteradas, pois não estão diretamente relacionadas à lógica complexa que foi refatorada.\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o mesmo comportamento que o código original. A função `executar` ainda lê o texto gravado na configuração, como listas, e retorna o resultado. A estrutura interna do código foi simplificada e a legibilidade foi melhorada."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17277267400,
+    "load_duration": 4772400,
+    "prompt_eval_count": 494,
+    "prompt_eval_duration": 191296000,
+    "eval_count": 722,
+    "eval_duration": 17023018000
+  }
+}

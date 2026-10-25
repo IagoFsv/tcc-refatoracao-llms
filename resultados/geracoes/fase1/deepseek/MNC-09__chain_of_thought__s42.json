@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-09__chain_of_thought__s42",
+  "instancia": "MNC-09",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:18:39.927378+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: nome do pacote a partir do pyproject.toml.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 21.884,
+  "done_reason": "stop",
+  "prompt_eval_count": 580,
+  "eval_count": 424,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "Code smell: Multiply-Nested Container\nRefatoração: Decompose Container\n\nA técnica de refatoração Decompose Container se aplica ao código original porque ele tem um nível aninhado de funções. Essas funções são chamadas várias vezes dentro da função executar(), o que pode ser um sinal de que o código pode ser refatorado para reduzir a complexidade.\n\nAplicando a refatoração:\n\n```python\nimport toml\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\ndef read_pyproject_toml():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\ndef get_project_data(data):\n    return data['tool']['poetry']['name']\n\ndef get_project_path():\n    data = read_pyproject_toml()\n    project_name = get_project_data(data)\n    return get_pep8_compliant_name(project_name)\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n```\n\nVerificando se o código refatorado preserva o comportamento original:\n\nO código refatorado deve manter o mesmo comportamento que o código original. A única mudança é a refatoração da estrutura interna do código para melhorar a legibilidade e a manutenibilidade do código.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:18:37.8523127Z",
+    "message": {
+      "role": "assistant",
+      "content": "Code smell: Multiply-Nested Container\nRefatoração: Decompose Container\n\nA técnica de refatoração Decompose Container se aplica ao código original porque ele tem um nível aninhado de funções. Essas funções são chamadas várias vezes dentro da função executar(), o que pode ser um sinal de que o código pode ser refatorado para reduzir a complexidade.\n\nAplicando a refatoração:\n\n```python\nimport toml\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\ndef read_pyproject_toml():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\ndef get_project_data(data):\n    return data['tool']['poetry']['name']\n\ndef get_project_path():\n    data = read_pyproject_toml()\n    project_name = get_project_data(data)\n    return get_pep8_compliant_name(project_name)\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n```\n\nVerificando se o código refatorado preserva o comportamento original:\n\nO código refatorado deve manter o mesmo comportamento que o código original. A única mudança é a refatoração da estrutura interna do código para melhorar a legibilidade e a manutenibilidade do código.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19834071900,
+    "load_duration": 1836000,
+    "prompt_eval_count": 580,
+    "prompt_eval_duration": 1013956000,
+    "eval_count": 424,
+    "eval_duration": 18635918000
+  }
+}

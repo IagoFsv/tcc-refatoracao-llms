@@ -1,0 +1,65 @@
+{
+  "identificador": "LM-11__role__s43",
+  "instancia": "LM-11",
+  "smell": "LM",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:08:48.418292+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Method\nTécnica de refatoração: Extract Method\nCódigo original:\n\"\"\"Desenho da forca do jogo da forca, conforme o numero de erros.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 6.936,
+  "done_reason": "stop",
+  "prompt_eval_count": 622,
+  "eval_count": 183,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\ndef print_hangman_head():\n    print('_________')\n    print('|       |')\n    print('|       O')\n    print('|')\n\ndef print_hangman_body():\n    print('|       |')\n    print('|      /|\\\\')\n    print('|')\n\ndef print_hangman_legs():\n    print('|      / \\\\')\n    print('|')\n\ndef print_hangman(guessCount):\n    print('_________')\n    print('|       |')\n    if guessCount >= 1:\n        print_hangman_head()\n    if guessCount >= 2:\n        print_hangman_body()\n    if guessCount >= 3:\n        print_hangman_legs()\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:08:46.3472271Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\ndef print_hangman_head():\n    print('_________')\n    print('|       |')\n    print('|       O')\n    print('|')\n\ndef print_hangman_body():\n    print('|       |')\n    print('|      /|\\\\')\n    print('|')\n\ndef print_hangman_legs():\n    print('|      / \\\\')\n    print('|')\n\ndef print_hangman(guessCount):\n    print('_________')\n    print('|       |')\n    if guessCount >= 1:\n        print_hangman_head()\n    if guessCount >= 2:\n        print_hangman_body()\n    if guessCount >= 3:\n        print_hangman_legs()\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 4876727500,
+    "load_duration": 5541900,
+    "prompt_eval_count": 622,
+    "prompt_eval_duration": 517895999,
+    "eval_count": 183,
+    "eval_duration": 4273817000
+  }
+}

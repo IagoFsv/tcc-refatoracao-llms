@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-11__chain_of_thought__s42",
+  "instancia": "LLF-11",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:51:05.251652+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(lambda w: w.split(\",\"), z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 16.78,
+  "done_reason": "stop",
+  "prompt_eval_count": 483,
+  "eval_count": 596,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O code smell é a função lambda muito longa (`get_config_section_key_dict_dict_dict_list`) que é difícil de entender e manter. Isso é um indício de que a função está tentando fazer muitas coisas ao mesmo tempo e pode ser dividida em funções menores e mais fáceis de entender.\n2. A técnica de refatoração indicada é a substituição da lambda function por uma função nomeada. Isso permite que a função seja escrita de forma mais legível e fácil de entender, e também facilita a manutenção e a depuração.\n3. Aplique a refatoração:\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section(self, section):\n        return self.config.get(section, {})\n\n    def get_config_key_dict(self, section, key):\n        return dict(map(lambda x: map(lambda y: y.split(\",\"), x.split(\",\")), self.get_config_section(section)[key].split(\",\")))\n\n    def get_config_key_dict_dict(self, section, key):\n        return dict(map(lambda x: dict(map(lambda y: y.split(\",\"), x.split(\",\"))), self.get_config_key_dict(section, key).split(\",\")))\n\n    def get_config_key_dict_dict_dict(self, section, key):\n        return dict(map(lambda x: dict(map(lambda y: dict(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), self.get_config_key_dict_dict(section, key).split(\",\")))\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return list(map(lambda x: list(map(lambda y: list(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), self.get_config_section_key_dict_dict_dict(section, key).split(\",\")))\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n```python\ndef executar(texto):\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n**Código refatorado final**\n```python\nclass Config(object):\n    # ...\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        config_key_dict_dict = self.get_config_section_key_dict_dict(section, key)\n        return list(map(lambda x: list(map(lambda y: list(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), config_key_dict_dict))\n\n    # ...\n\ndef executar(texto):\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:51:03.1977466Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O code smell é a função lambda muito longa (`get_config_section_key_dict_dict_dict_list`) que é difícil de entender e manter. Isso é um indício de que a função está tentando fazer muitas coisas ao mesmo tempo e pode ser dividida em funções menores e mais fáceis de entender.\n2. A técnica de refatoração indicada é a substituição da lambda function por uma função nomeada. Isso permite que a função seja escrita de forma mais legível e fácil de entender, e também facilita a manutenção e a depuração.\n3. Aplique a refatoração:\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section(self, section):\n        return self.config.get(section, {})\n\n    def get_config_key_dict(self, section, key):\n        return dict(map(lambda x: map(lambda y: y.split(\",\"), x.split(\",\")), self.get_config_section(section)[key].split(\",\")))\n\n    def get_config_key_dict_dict(self, section, key):\n        return dict(map(lambda x: dict(map(lambda y: y.split(\",\"), x.split(\",\"))), self.get_config_key_dict(section, key).split(\",\")))\n\n    def get_config_key_dict_dict_dict(self, section, key):\n        return dict(map(lambda x: dict(map(lambda y: dict(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), self.get_config_key_dict_dict(section, key).split(\",\")))\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return list(map(lambda x: list(map(lambda y: list(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), self.get_config_section_key_dict_dict_dict(section, key).split(\",\")))\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n```python\ndef executar(texto):\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n**Código refatorado final**\n```python\nclass Config(object):\n    # ...\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        config_key_dict_dict = self.get_config_section_key_dict_dict(section, key)\n        return list(map(lambda x: list(map(lambda y: list(map(lambda z: z.split(\",\"), y.split(\",\"))), x.split(\",\"))), config_key_dict_dict))\n\n    # ...\n\ndef executar(texto):\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14717047600,
+    "load_duration": 5611000,
+    "prompt_eval_count": 483,
+    "prompt_eval_duration": 208764000,
+    "eval_count": 596,
+    "eval_duration": 14420329000
+  }
+}

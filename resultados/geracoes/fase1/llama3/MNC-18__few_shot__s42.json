@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-18__few_shot__s42",
+  "instancia": "MNC-18",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:41:20.350743+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: geracao do terreno da posicao atual.\n\nPonto de entrada publico: executar(x, y, z). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa; o terreno so existe depois de gerado.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n        self.terrain = None\n\n    def generate_terrain(self):\n        self.terrain = \"grass\"\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n\ndef generate_terrain(self):\n    self.world_map[self.x][self.y][self.z].generate_terrain()\n\n\ndef executar(x, y, z):\n    \"\"\"Gera o terreno na posicao (x, y, z) de um mapa 2 x 3 x 4 e devolve as\n    posicoes que tem terreno. Ponto de entrada publico desta unidade.\"\"\"\n    mundo = World(2, 3, 4)\n    mundo.x, mundo.y, mundo.z = x, y, z\n    generate_terrain(mundo)\n    return [casa.location for plano in mundo.world_map for fileira in plano for casa in fileira\n            if casa.terrain is not None]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 8.134,
+  "done_reason": "stop",
+  "prompt_eval_count": 807,
+  "eval_count": 231,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass Location:\n    x: int\n    y: int\n    z: int\n    terrain: str = None\n\n@dataclass\nclass World:\n    tamanho_x: int\n    tamanho_y: int\n    tamanho_z: int\n\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.tamanho_x = tamanho_x\n        self.tamanho_y = tamanho_y\n        self.tamanho_z = tamanho_z\n        self.world_map = [[Location(x, y, z) for z in range(tamanho_z)] for y in range(tamanho_y) for x in range(tamanho_x)]\n\n    def generate_terrain(self, x, y, z):\n        self.world_map[x][y][z].terrain = \"grass\"\n\ndef executar(x, y, z):\n    mundo = World(2, 3, 4)\n    mundo.generate_terrain(x, y, z)\n    return [(x, y, z)] if mundo.world_map[x][y][z].terrain is not None else []\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:41:18.281369Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass Location:\n    x: int\n    y: int\n    z: int\n    terrain: str = None\n\n@dataclass\nclass World:\n    tamanho_x: int\n    tamanho_y: int\n    tamanho_z: int\n\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.tamanho_x = tamanho_x\n        self.tamanho_y = tamanho_y\n        self.tamanho_z = tamanho_z\n        self.world_map = [[Location(x, y, z) for z in range(tamanho_z)] for y in range(tamanho_y) for x in range(tamanho_x)]\n\n    def generate_terrain(self, x, y, z):\n        self.world_map[x][y][z].terrain = \"grass\"\n\ndef executar(x, y, z):\n    mundo = World(2, 3, 4)\n    mundo.generate_terrain(x, y, z)\n    return [(x, y, z)] if mundo.world_map[x][y][z].terrain is not None else []\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6075230200,
+    "load_duration": 4898000,
+    "prompt_eval_count": 807,
+    "prompt_eval_duration": 398555000,
+    "eval_count": 231,
+    "eval_duration": 5586442000
+  }
+}

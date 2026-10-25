@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-11__chain_of_thought__s43",
+  "instancia": "LLF-11",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T12:11:54.704542+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(lambda w: w.split(\",\"), z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 33.108,
+  "done_reason": "stop",
+  "prompt_eval_count": 705,
+  "eval_count": 661,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell \"Long Lambda Function\" refere-se a um lambda function que tem muitas linhas de código. O objetivo da refatoração \"Replace Lambda with Named Function\" é substituir esse lambda function por uma função nomeada com o mesmo comportamento, mas com uma estrutura mais legível.\n\nNeste caso, o lambda function está sendo usado para mapear uma série de strings em outro tipo de dados. Podemos refatorar isso criando uma função nomeada para isso, que terá um nome descritivo e será mais fácil de ler e entender.\n\nAqui está o código refatorado:\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self.map_values(self.config[section][key])\n\n    def map_values(self, value):\n        return self.split_and_map(value, \",\")\n\n    def split_and_map(self, value, split_char):\n        return list(map(lambda x: self.split_and_map(x, split_char), value.split(split_char)))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas  (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [ _materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n\nNeste refatorado, `get_config_section_key_dict_dict_dict_list` criou uma função chamada `map_values` que divide o valor e o mapeia. `map_values` chama `split_and_map` para fazer essa tarefa, que é um pouco mais grande do que um lambda function originalmente.\n\nEmbora o código refatorado não tenha a mesma quantidade de linhas, ele tem uma estrutura mais fácil de entender e ler, tornando o código mais legível e menos propenso a erros.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T12:11:52.6436563Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell \"Long Lambda Function\" refere-se a um lambda function que tem muitas linhas de código. O objetivo da refatoração \"Replace Lambda with Named Function\" é substituir esse lambda function por uma função nomeada com o mesmo comportamento, mas com uma estrutura mais legível.\n\nNeste caso, o lambda function está sendo usado para mapear uma série de strings em outro tipo de dados. Podemos refatorar isso criando uma função nomeada para isso, que terá um nome descritivo e será mais fácil de ler e entender.\n\nAqui está o código refatorado:\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self.map_values(self.config[section][key])\n\n    def map_values(self, value):\n        return self.split_and_map(value, \",\")\n\n    def split_and_map(self, value, split_char):\n        return list(map(lambda x: self.split_and_map(x, split_char), value.split(split_char)))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas  (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [ _materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n\nNeste refatorado, `get_config_section_key_dict_dict_dict_list` criou uma função chamada `map_values` que divide o valor e o mapeia. `map_values` chama `split_and_map` para fazer essa tarefa, que é um pouco mais grande do que um lambda function originalmente.\n\nEmbora o código refatorado não tenha a mesma quantidade de linhas, ele tem uma estrutura mais fácil de entender e ler, tornando o código mais legível e menos propenso a erros.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 31065904000,
+    "load_duration": 4451300,
+    "prompt_eval_count": 705,
+    "prompt_eval_duration": 753503000,
+    "eval_count": 661,
+    "eval_duration": 30041057000
+  }
+}

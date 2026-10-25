@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-10__role__s43",
+  "instancia": "MNC-10",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:44:42.121219+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: renomear o projeto.\n\nPonto de entrada publico: executar(project_name). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.375,
+  "done_reason": "stop",
+  "prompt_eval_count": 532,
+  "eval_count": 334,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport shutil\nimport toml\nfrom invoke import Context, task\n\ndef get_pep8_compliant_name(name: str) -> str:\n    return name.replace('-', '_')\n\ndef get_project_path() -> str:\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\ndef update_project_name_in_toml(new_name: str):\n    \"\"\"Atualiza o nome do projeto em pyproject.toml.\"\"\"\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = new_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    new_project_name = get_pep8_compliant_name(project_name)\n\n    # Rename the directory\n    shutil.move(current_project_path, new_project_name)\n\n    # Update the project name in pyproject.toml\n    update_project_name_in_toml(new_project_name)\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:44:40.0568672Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport shutil\nimport toml\nfrom invoke import Context, task\n\ndef get_pep8_compliant_name(name: str) -> str:\n    return name.replace('-', '_')\n\ndef get_project_path() -> str:\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\ndef update_project_name_in_toml(new_name: str):\n    \"\"\"Atualiza o nome do projeto em pyproject.toml.\"\"\"\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = new_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    new_project_name = get_pep8_compliant_name(project_name)\n\n    # Rename the directory\n    shutil.move(current_project_path, new_project_name)\n\n    # Update the project name in pyproject.toml\n    update_project_name_in_toml(new_project_name)\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8298638900,
+    "load_duration": 5140300,
+    "prompt_eval_count": 532,
+    "prompt_eval_duration": 336629000,
+    "eval_count": 334,
+    "eval_duration": 7900246000
+  }
+}

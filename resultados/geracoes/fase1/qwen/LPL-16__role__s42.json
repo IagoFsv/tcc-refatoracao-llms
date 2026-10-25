@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-16__role__s42",
+  "instancia": "LPL-16",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:47:49.613903+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Transacao entre duas partes: dados, hash e representacao em dicionario.\n\nPonto de entrada publico: executar(campos). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(campos[\"sender\"], campos[\"receiver\"], campos[\"amount\"],\n                            campos[\"timestamp\"])\n    return transacao.repr_json()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 7.321,
+  "done_reason": "stop",
+  "prompt_eval_count": 456,
+  "eval_count": 208,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport hashlib\n\nclass TransactionData:\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\ndef executar(campos):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao_data = TransactionData(campos[\"sender\"], campos[\"receiver\"], campos[\"amount\"], campos[\"timestamp\"])\n    return transacao_data.repr_json()\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:47:47.565785Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport hashlib\n\nclass TransactionData:\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\ndef executar(campos):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao_data = TransactionData(campos[\"sender\"], campos[\"receiver\"], campos[\"amount\"], campos[\"timestamp\"])\n    return transacao_data.repr_json()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 5245320600,
+    "load_duration": 5217900,
+    "prompt_eval_count": 456,
+    "prompt_eval_duration": 374346000,
+    "eval_count": 208,
+    "eval_duration": 4801498000
+  }
+}

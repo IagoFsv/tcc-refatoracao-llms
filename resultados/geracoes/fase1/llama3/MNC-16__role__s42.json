@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-16__role__s42",
+  "instancia": "MNC-16",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:39:15.998899+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        \"\"\"check for date field\n           if the day is same, print the content in the same line\n           if the day is different, print the content in the next line\n        \"\"\"\n        day = \"\"\n        for i in range(0, len(response['list'])):\n            if day == response['list'][i]['dt_txt'][0:10]:\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n            else:\n                day = response['list'][i]['dt_txt'][0:10]\n                print(\"-------------------------------------------------------\")\n                print(\"Date: \" + day)\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])             \n\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        #convert to centrigrade and set precision 1\n        print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n        print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n        print(\"Weather: \" + response['weather'][0]['main'])\n        #print other conditions including feels like,humidity, temp_min, temp_max\n        print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n        print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n        print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n        print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 14.228,
+  "done_reason": "stop",
+  "prompt_eval_count": 874,
+  "eval_count": 461,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parse_json_for_city(response, cidade):\n    \"\"\"Prints the weather forecast for the given city.\"\"\"\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option in ['-f', '-F']:\n        print(\"5-day Forecast for \" + cidade)\n        for item in response['list']:\n            date = item['dt_txt'][0:10]\n            print(f\"Date: {date}\")\n            print(f\"Time: {item['dt_txt'][11:16]} Temperature: {item['main']['temp']} {met[option][0]} Weather: {item['weather'][0]['main']}\")\n            print(\"-------------------------------------------------------\")\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + cidade)\n        print(f\"Temperature: {response['main']['temp']} {met[option][0]}\")\n        print(f\"Wind Speed: {response['wind']['speed']} {met[option][1]}\")\n        print(f\"Weather: {response['weather'][0]['main']}\")\n        print(f\"Feels Like: {response['main']['feels_like']} {met[option][0]}\")\n        print(f\"Humidity: {response['main']['humidity']}%\")\n        print(f\"Minimum Temperature: {response['main']['temp_min']} {met[option][0]}\")\n        print(f\"Maximum Temperature: {response['main']['temp_max']} {met[option][0]}\")\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parse_json_for_city(response, cidade)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:39:13.9557249Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parse_json_for_city(response, cidade):\n    \"\"\"Prints the weather forecast for the given city.\"\"\"\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option in ['-f', '-F']:\n        print(\"5-day Forecast for \" + cidade)\n        for item in response['list']:\n            date = item['dt_txt'][0:10]\n            print(f\"Date: {date}\")\n            print(f\"Time: {item['dt_txt'][11:16]} Temperature: {item['main']['temp']} {met[option][0]} Weather: {item['weather'][0]['main']}\")\n            print(\"-------------------------------------------------------\")\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + cidade)\n        print(f\"Temperature: {response['main']['temp']} {met[option][0]}\")\n        print(f\"Wind Speed: {response['wind']['speed']} {met[option][1]}\")\n        print(f\"Weather: {response['weather'][0]['main']}\")\n        print(f\"Feels Like: {response['main']['feels_like']} {met[option][0]}\")\n        print(f\"Humidity: {response['main']['humidity']}%\")\n        print(f\"Minimum Temperature: {response['main']['temp_min']} {met[option][0]}\")\n        print(f\"Maximum Temperature: {response['main']['temp_max']} {met[option][0]}\")\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parse_json_for_city(response, cidade)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 12182336400,
+    "load_duration": 4047300,
+    "prompt_eval_count": 874,
+    "prompt_eval_duration": 786483000,
+    "eval_count": 461,
+    "eval_duration": 11315273000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-14__few_shot__s42",
+  "instancia": "MNC-14",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:38:30.382706+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens: arquivos recebidos.\n\nPonto de entrada publico: executar(token). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport requests\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        # create an empty list\n        new_files = []\n        # loop through the list\n        for i in files:\n            # if the user is not in the new list, append it\n            if i not in new_files:\n                new_files.append(i)\n        # return the new list\n        return new_files\n\n    def get_tg_files(self):\n            # get the telegram bot updates\n            response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))\n            # for each update, get the file id if it exists\n            files = []\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['reply_to_message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # for each update, get the file id if it exists\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # call the remove_file_duplicates function to remove duplicate ids\n            files = self.remove_file_duplicates(files)\n            # for each file id, send a request to the telegram bot api to get the file path and store it in a list\n            file_paths = []\n            for i in files:\n                response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, i))\n                file_paths.append(response.json()['result']['file_path'])\n            # return the file paths\n            return file_paths\n\n\ndef executar(token):\n    \"\"\"Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).get_tg_files()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 9.218,
+  "done_reason": "stop",
+  "prompt_eval_count": 876,
+  "eval_count": 272,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nfrom typing import List\n\nclass TelegramBot:\n    def __init__(self, token: str):\n        self.token = token\n\n    def _get_file_ids(self, response: dict) -> List[str]:\n        file_ids = []\n        for update in response['result']:\n            try:\n                file_ids.append(update['message']['reply_to_message']['document']['file_id'])\n            except KeyError:\n                pass\n            try:\n                file_ids.append(update['message']['document']['file_id'])\n            except KeyError:\n                pass\n        return file_ids\n\n    def _get_file_paths(self, file_ids: List[str]) -> List[str]:\n        file_paths = []\n        for file_id in file_ids:\n            response = requests.get(f'https://api.telegram.org/bot{self.token}/getFile?file_id={file_id}')\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\n    def get_tg_files(self) -> List[str]:\n        response = requests.get(f'https://api.telegram.org/bot{self.token}/getUpdates')\n        file_ids = self._get_file_ids(response.json())\n        file_ids = list(set(file_ids))\n        return self._get_file_paths(file_ids)\n\ndef executar(token: str) -> List[str]:\n    return TelegramBot(token).get_tg_files()\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:38:28.3135276Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nfrom typing import List\n\nclass TelegramBot:\n    def __init__(self, token: str):\n        self.token = token\n\n    def _get_file_ids(self, response: dict) -> List[str]:\n        file_ids = []\n        for update in response['result']:\n            try:\n                file_ids.append(update['message']['reply_to_message']['document']['file_id'])\n            except KeyError:\n                pass\n            try:\n                file_ids.append(update['message']['document']['file_id'])\n            except KeyError:\n                pass\n        return file_ids\n\n    def _get_file_paths(self, file_ids: List[str]) -> List[str]:\n        file_paths = []\n        for file_id in file_ids:\n            response = requests.get(f'https://api.telegram.org/bot{self.token}/getFile?file_id={file_id}')\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\n    def get_tg_files(self) -> List[str]:\n        response = requests.get(f'https://api.telegram.org/bot{self.token}/getUpdates')\n        file_ids = self._get_file_ids(response.json())\n        file_ids = list(set(file_ids))\n        return self._get_file_paths(file_ids)\n\ndef executar(token: str) -> List[str]:\n    return TelegramBot(token).get_tg_files()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7162178500,
+    "load_duration": 4951500,
+    "prompt_eval_count": 876,
+    "prompt_eval_duration": 450360000,
+    "eval_count": 272,
+    "eval_duration": 6623422000
+  }
+}

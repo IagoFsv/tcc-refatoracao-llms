@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-04__role__s42",
+  "instancia": "MNC-04",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:28:14.429441+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Permissoes de servicos usadas na geracao de arquivos de composicao de conteineres.\n\nPonto de entrada publico: executar(nome). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions[nome]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 11.335,
+  "done_reason": "stop",
+  "prompt_eval_count": 473,
+  "eval_count": 358,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\npermissions = {\n    \"lnd\": LndPermissions(),\n    \"bitcoind\": BitcoindPermissions()\n}\n\nclass Permissions:\n    def __init__(self, name):\n        self.name = name\n\n    def get(self):\n        return getattr(self, self.name)\n\nclass LndPermissions(Permissions):\n    def __init__(self):\n        super().__init__(\"lnd\")\n\n    def lnd(self):\n        return {\n            \"env\": {\n                \"LND_IP\": \"${LND_IP}\",\n                \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n                \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n                \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n            },\n            \"volumes\": [\n                '${LND_DATA_DIR}:/lnd:ro'\n            ]\n        }\n\nclass BitcoindPermissions(Permissions):\n    def __init__(self):\n        super().__init__(\"bitcoind\")\n\n    def bitcoind(self):\n        return {\n            \"env\": {\n                \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n                \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n                \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n                \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n                \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n                \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n                \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n            }\n        }\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions.get().get(nome)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:28:12.3664392Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\npermissions = {\n    \"lnd\": LndPermissions(),\n    \"bitcoind\": BitcoindPermissions()\n}\n\nclass Permissions:\n    def __init__(self, name):\n        self.name = name\n\n    def get(self):\n        return getattr(self, self.name)\n\nclass LndPermissions(Permissions):\n    def __init__(self):\n        super().__init__(\"lnd\")\n\n    def lnd(self):\n        return {\n            \"env\": {\n                \"LND_IP\": \"${LND_IP}\",\n                \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n                \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n                \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n            },\n            \"volumes\": [\n                '${LND_DATA_DIR}:/lnd:ro'\n            ]\n        }\n\nclass BitcoindPermissions(Permissions):\n    def __init__(self):\n        super().__init__(\"bitcoind\")\n\n    def bitcoind(self):\n        return {\n            \"env\": {\n                \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n                \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n                \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n                \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n                \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n                \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n                \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n            }\n        }\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions.get().get(nome)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 9273818500,
+    "load_duration": 5666700,
+    "prompt_eval_count": 473,
+    "prompt_eval_duration": 449778000,
+    "eval_count": 358,
+    "eval_duration": 8729545000
+  }
+}

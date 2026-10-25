@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-01__few_shot__s42",
+  "instancia": "LLF-01",
+  "smell": "LLF",
+  "tecnica": "few_shot",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:04:54.664808+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\nordenar = lambda itens, chave, reverso, limite: sorted(\n    [i for i in itens if i[chave] > limite],\n    key=lambda x: x[chave],\n    reverse=reverso\n)\nCódigo refatorado:\ndef ordenar_itens(itens, chave, reverso, limite):\n    itens_filtrados = [i for i in itens if i[chave] > limite]\n    return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Coluna de cidade a partir da descricao de transacoes bancarias.\n\nPonto de entrada publico: executar(descricoes, cidades). Nao altere o nome nem\na assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport pandas as pd\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = [city.lower() for city in city_list]\n    # split the description column and get the last word\n    df['City'] = df['Description'].str.lower().str.split().apply(lambda x: x[-1])\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(lambda x: x if x in city_list else 'Unknown')\n    # TODO: this check for city looks like its only checking second last word (see: Abu Dhabi)\n    # check the last 2 words in the descirption if the city columns is unknown. Compare the 2 words to the city list for a match. If there is a match, add the city name to the city column\n    # df['City'] = df['City'].apply(lambda x: x if x != 'Unknown' else df['Description'].str.lower().str.split().apply(lambda x: x[-2]) if df['Description'].str.lower().str.split().apply(lambda x: x[-2]) in city_list else 'Unknown')\n    df['City'] = df.apply(lambda x: x['Description'].split()[-2].lower() if x['City'] == 'Unknown' and x['Description'].split()[-2].lower() in city_list else x['City'], axis=1)\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef executar(descricoes, cidades):\n    \"\"\"Classifica as descricoes. Ponto de entrada publico desta unidade.\"\"\"\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 8.438,
+  "done_reason": "stop",
+  "prompt_eval_count": 769,
+  "eval_count": 243,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport pandas as pd\n\ndef update_city_column(df, city_list):\n    city_list = [city.lower() for city in city_list]\n    df['City'] = df['Description'].str.lower().str.split().apply(get_last_word)\n    df['City'] = df['City'].apply(check_city, args=(city_list,))\n    df['City'] = df.apply(check_second_last_word, args=(city_list,), axis=1)\n    df['City'] = df['City'].str.title()\n    return df\n\ndef get_last_word(x):\n    return x[-1]\n\ndef check_city(x, city_list):\n    return x if x in city_list else 'Unknown'\n\ndef check_second_last_word(x, city_list):\n    if x['City'] == 'Unknown':\n        second_last_word = x['Description'].split()[-2].lower()\n        return second_last_word if second_last_word in city_list else 'Unknown'\n    return x['City']\n\ndef executar(descricoes, cidades):\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:04:52.6000228Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport pandas as pd\n\ndef update_city_column(df, city_list):\n    city_list = [city.lower() for city in city_list]\n    df['City'] = df['Description'].str.lower().str.split().apply(get_last_word)\n    df['City'] = df['City'].apply(check_city, args=(city_list,))\n    df['City'] = df.apply(check_second_last_word, args=(city_list,), axis=1)\n    df['City'] = df['City'].str.title()\n    return df\n\ndef get_last_word(x):\n    return x[-1]\n\ndef check_city(x, city_list):\n    return x if x in city_list else 'Unknown'\n\ndef check_second_last_word(x, city_list):\n    if x['City'] == 'Unknown':\n        second_last_word = x['Description'].split()[-2].lower()\n        return second_last_word if second_last_word in city_list else 'Unknown'\n    return x['City']\n\ndef executar(descricoes, cidades):\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6381664300,
+    "load_duration": 4541800,
+    "prompt_eval_count": 769,
+    "prompt_eval_duration": 632875000,
+    "eval_count": 243,
+    "eval_duration": 5701657000
+  }
+}

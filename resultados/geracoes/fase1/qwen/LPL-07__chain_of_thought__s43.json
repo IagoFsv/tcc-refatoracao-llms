@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-07__chain_of_thought__s43",
+  "instancia": "LPL-07",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:19:23.160059+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Cadastro de servidores SSH num banco SQLite.\n\nPonto de entrada publico: executar(cadastrados, servidor). Nao altere o nome\nnem a assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nO banco e o arquivo frSSH.db da pasta atual. executar cria a tabela de\nservidores, grava os servidores ja cadastrados, remove um servidor e devolve as\nlinhas da tabela, na ordem de insercao.\n\"\"\"\n\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef remove_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    ip, port, username, password, keyid = servidor\n    remove_server(ip, port, username, password, keyid)\n    return _linhas()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 21.644,
+  "done_reason": "stop",
+  "prompt_eval_count": 617,
+  "eval_count": 813,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Parameter List\" ocorre em várias funções do código. As funções `remove_server` e `executar` têm parâmetros de entrada longos e desorganizados.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Introduce Parameter Object\" sugere criar um objeto para agrupar os parâmetros longos. Isso tornará o código mais legível e fácil de manter.\n\n3. **Aplicar a Refatoração**:\n   - Criaremos uma classe `Servidor` para agrupar os atributos `ip`, `port`, `username`, `password`, e `keyid`.\n   - Modificaremos as funções `remove_server` e `executar` para aceitar um objeto `Servidor` em vez de vários parâmetros.\n\n4. **Verificar o Comportamento Original**:\n   - O comportamento original do código deve ser preservado, ou seja, a funcionalidade de cadastrar servidores, remover servidores e listar servidores deve permanecer inalterada.\n\n### Código Refatorado\n\n```python\nimport sqlite3\n\nclass Servidor:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef remove_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (servidor.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    remove_server(servidor)\n    return _linhas()\n```\n\n### Explicação das Mudanças\n\n1. **Classe `Servidor`**:\n   - A classe `Servidor` é criada para agrupar os atributos `ip`, `port`, `username`, `password`, e `keyid`.\n\n2. **Função `remove_server`**:\n   - A função `remove_server` agora aceita um objeto `Servidor` em vez de vários parâmetros.\n   - O acesso aos atributos do objeto `Servidor` é feito usando `servidor.ip`, `servidor.port`, etc.\n\n3. **Função `executar`**:\n   - A função `executar` agora cria um objeto `Servidor` a partir do parâmetro `servidor` e passa apenas o objeto para a função `remove_server`.\n\n### Verificação do Comportamento Original\n\n- O comportamento original do código é preservado:\n  - A tabela de servidores é criada e populada corretamente.\n  - Servidores são removidos corretamente.\n  - A lista de servidores é retornada corretamente.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:19:21.0970337Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Long Parameter List\" ocorre em várias funções do código. As funções `remove_server` e `executar` têm parâmetros de entrada longos e desorganizados.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Introduce Parameter Object\" sugere criar um objeto para agrupar os parâmetros longos. Isso tornará o código mais legível e fácil de manter.\n\n3. **Aplicar a Refatoração**:\n   - Criaremos uma classe `Servidor` para agrupar os atributos `ip`, `port`, `username`, `password`, e `keyid`.\n   - Modificaremos as funções `remove_server` e `executar` para aceitar um objeto `Servidor` em vez de vários parâmetros.\n\n4. **Verificar o Comportamento Original**:\n   - O comportamento original do código deve ser preservado, ou seja, a funcionalidade de cadastrar servidores, remover servidores e listar servidores deve permanecer inalterada.\n\n### Código Refatorado\n\n```python\nimport sqlite3\n\nclass Servidor:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef remove_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (servidor.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    remove_server(servidor)\n    return _linhas()\n```\n\n### Explicação das Mudanças\n\n1. **Classe `Servidor`**:\n   - A classe `Servidor` é criada para agrupar os atributos `ip`, `port`, `username`, `password`, e `keyid`.\n\n2. **Função `remove_server`**:\n   - A função `remove_server` agora aceita um objeto `Servidor` em vez de vários parâmetros.\n   - O acesso aos atributos do objeto `Servidor` é feito usando `servidor.ip`, `servidor.port`, etc.\n\n3. **Função `executar`**:\n   - A função `executar` agora cria um objeto `Servidor` a partir do parâmetro `servidor` e passa apenas o objeto para a função `remove_server`.\n\n### Verificação do Comportamento Original\n\n- O comportamento original do código é preservado:\n  - A tabela de servidores é criada e populada corretamente.\n  - Servidores são removidos corretamente.\n  - A lista de servidores é retornada corretamente."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19589843100,
+    "load_duration": 5759500,
+    "prompt_eval_count": 617,
+    "prompt_eval_duration": 467909000,
+    "eval_count": 813,
+    "eval_duration": 19073289000
+  }
+}

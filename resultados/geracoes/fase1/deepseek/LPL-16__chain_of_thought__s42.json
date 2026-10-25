@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-16__chain_of_thought__s42",
+  "instancia": "LPL-16",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T08:45:54.455162+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Transacao entre duas partes: dados, hash e representacao em dicionario.\n\nPonto de entrada publico: executar(campos). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(campos[\"sender\"], campos[\"receiver\"], campos[\"amount\"],\n                            campos[\"timestamp\"])\n    return transacao.repr_json()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 33.207,
+  "done_reason": "stop",
+  "prompt_eval_count": 712,
+  "eval_count": 644,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell identificado no código original é a Long Parameter List, pois a classe Transaction tem muitos parâmetros (sender, receiver, amount, timestamp, *args, **kwargs). Isso torna o código difícil de ler e manter.\n\nA técnica de refatoração a ser aplicada é o Introduce Parameter Object. Essa técnica é utilizada para reduzir a quantidade de parâmetros em uma função ou método, movendo alguns desses parâmetros para uma nova classe.\n\nNesse caso, podemos criar uma classe chamada \"TransactionFields\" que representará os campos da transação e passar essa nova classe como parâmetro para a função \"executar\". Isso reduzirá o número de parâmetros na classe Transaction e também tornará o código mais legível.\n\nAqui está o código refatorado:\n\n```python\nimport hashlib\n\nclass TransactionFields(object):\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\nclass Transaction(object):\n    def __init__(self, fields: TransactionFields):\n        self.fields = fields\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.fields.sender) + str(self.fields.receiver) + str(self.fields.amount) + str(self.fields.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.fields.sender,\n            \"receiver\": self.fields.receiver,\n            \"amount\": self.fields.amount,\n            \"timestamp\": self.fields.timestamp,\n            \"hash\": self.hash\n        }\n\ndef executar(campos: TransactionFields):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(campos)\n    return transacao.repr_json()\n```\n\nNesse código, a classe TransactionFields agora representa os campos da transação, enquanto a classe Transaction agora recebe um objeto desses campos. A função executar também agora recebe um objeto desses campos. Isso reduz o número de parâmetros na classe Transaction e também torna o código mais legível.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T08:45:52.400105Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell identificado no código original é a Long Parameter List, pois a classe Transaction tem muitos parâmetros (sender, receiver, amount, timestamp, *args, **kwargs). Isso torna o código difícil de ler e manter.\n\nA técnica de refatoração a ser aplicada é o Introduce Parameter Object. Essa técnica é utilizada para reduzir a quantidade de parâmetros em uma função ou método, movendo alguns desses parâmetros para uma nova classe.\n\nNesse caso, podemos criar uma classe chamada \"TransactionFields\" que representará os campos da transação e passar essa nova classe como parâmetro para a função \"executar\". Isso reduzirá o número de parâmetros na classe Transaction e também tornará o código mais legível.\n\nAqui está o código refatorado:\n\n```python\nimport hashlib\n\nclass TransactionFields(object):\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\nclass Transaction(object):\n    def __init__(self, fields: TransactionFields):\n        self.fields = fields\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.fields.sender) + str(self.fields.receiver) + str(self.fields.amount) + str(self.fields.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.fields.sender,\n            \"receiver\": self.fields.receiver,\n            \"amount\": self.fields.amount,\n            \"timestamp\": self.fields.timestamp,\n            \"hash\": self.hash\n        }\n\ndef executar(campos: TransactionFields):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(campos)\n    return transacao.repr_json()\n```\n\nNesse código, a classe TransactionFields agora representa os campos da transação, enquanto a classe Transaction agora recebe um objeto desses campos. A função executar também agora recebe um objeto desses campos. Isso reduz o número de parâmetros na classe Transaction e também torna o código mais legível.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 31150165600,
+    "load_duration": 5066300,
+    "prompt_eval_count": 712,
+    "prompt_eval_duration": 1395385000,
+    "eval_count": 644,
+    "eval_duration": 29564023000
+  }
+}

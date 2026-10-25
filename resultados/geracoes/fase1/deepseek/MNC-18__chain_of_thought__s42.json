@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-18__chain_of_thought__s42",
+  "instancia": "MNC-18",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:35:20.957573+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: geracao do terreno da posicao atual.\n\nPonto de entrada publico: executar(x, y, z). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa; o terreno so existe depois de gerado.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n        self.terrain = None\n\n    def generate_terrain(self):\n        self.terrain = \"grass\"\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n\ndef generate_terrain(self):\n    self.world_map[self.x][self.y][self.z].generate_terrain()\n\n\ndef executar(x, y, z):\n    \"\"\"Gera o terreno na posicao (x, y, z) de um mapa 2 x 3 x 4 e devolve as\n    posicoes que tem terreno. Ponto de entrada publico desta unidade.\"\"\"\n    mundo = World(2, 3, 4)\n    mundo.x, mundo.y, mundo.z = x, y, z\n    generate_terrain(mundo)\n    return [casa.location for plano in mundo.world_map for fileira in plano for casa in fileira\n            if casa.terrain is not None]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 34.43,
+  "done_reason": "stop",
+  "prompt_eval_count": 875,
+  "eval_count": 650,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell identificado no código original é o Multiply-Nested Container, que ocorre quando há múltiplas estruturas aninhadas de mesmo tipo. Isso pode se tornar difícil de ler e manter.\n\nA técnica de refatoração Decompose Container é aplicável nesse caso, pois ela consiste em separar uma classe complexa que tem múltiplas responsabilidades em duas ou mais classes menores, cada uma delas com uma única responsabilidade.\n\nAplicando a refatoração, podemos criar três classes: World, Location e Terrain. A classe World será responsável por gerar o mapa mundo e manter as localizações. A classe Location será responsável por armazenar as coordenadas de uma localização no mundo e manter o terreno correspondente. A classe Terrain será responsável por armazenar o tipo de terreno.\n\nSegue abaixo o código refatorado:\n\n```python\nclass Terrain:\n    def __init__(self):\n        self.terrain = None\n\n    def generate_terrain(self):\n        self.terrain = \"grass\"\n\n\nclass Location:\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n        self.terrain = Terrain()\n\n    def generate_terrain(self):\n        self.terrain.generate_terrain()\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.size_x = size_x\n        self.size_y = size_y\n        self.size_z = size_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        return [[[Location(x, y, z) for z in range(self.size_z)] for y in range(self.size_y)] for x in range(self.size_x)]\n\n\ndef execute(x, y, z):\n    world = World(2, 3, 4)\n    location = world.world_map[x][y][z]\n    location.generate_terrain()\n    return [location.location for location in world.world_map[x][y] if location.terrain.terrain is not None]\n```\n\nEsse código refatorado preserva o comportamento original do código. Ele gera o terreno na posição (x, y, z) de um mapa 2x3x4 e devolve as posições que tem terreno.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:35:18.9107575Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell identificado no código original é o Multiply-Nested Container, que ocorre quando há múltiplas estruturas aninhadas de mesmo tipo. Isso pode se tornar difícil de ler e manter.\n\nA técnica de refatoração Decompose Container é aplicável nesse caso, pois ela consiste em separar uma classe complexa que tem múltiplas responsabilidades em duas ou mais classes menores, cada uma delas com uma única responsabilidade.\n\nAplicando a refatoração, podemos criar três classes: World, Location e Terrain. A classe World será responsável por gerar o mapa mundo e manter as localizações. A classe Location será responsável por armazenar as coordenadas de uma localização no mundo e manter o terreno correspondente. A classe Terrain será responsável por armazenar o tipo de terreno.\n\nSegue abaixo o código refatorado:\n\n```python\nclass Terrain:\n    def __init__(self):\n        self.terrain = None\n\n    def generate_terrain(self):\n        self.terrain = \"grass\"\n\n\nclass Location:\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n        self.terrain = Terrain()\n\n    def generate_terrain(self):\n        self.terrain.generate_terrain()\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.size_x = size_x\n        self.size_y = size_y\n        self.size_z = size_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        return [[[Location(x, y, z) for z in range(self.size_z)] for y in range(self.size_y)] for x in range(self.size_x)]\n\n\ndef execute(x, y, z):\n    world = World(2, 3, 4)\n    location = world.world_map[x][y][z]\n    location.generate_terrain()\n    return [location.location for location in world.world_map[x][y] if location.terrain.terrain is not None]\n```\n\nEsse código refatorado preserva o comportamento original do código. Ele gera o terreno na posição (x, y, z) de um mapa 2x3x4 e devolve as posições que tem terreno.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 32359785000,
+    "load_duration": 5668000,
+    "prompt_eval_count": 875,
+    "prompt_eval_duration": 1423775000,
+    "eval_count": 650,
+    "eval_duration": 30543761000
+  }
+}

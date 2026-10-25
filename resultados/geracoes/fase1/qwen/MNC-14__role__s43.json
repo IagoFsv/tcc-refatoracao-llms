@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-14__role__s43",
+  "instancia": "MNC-14",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:49:10.807517+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens: arquivos recebidos.\n\nPonto de entrada publico: executar(token). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport requests\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        # create an empty list\n        new_files = []\n        # loop through the list\n        for i in files:\n            # if the user is not in the new list, append it\n            if i not in new_files:\n                new_files.append(i)\n        # return the new list\n        return new_files\n\n    def get_tg_files(self):\n            # get the telegram bot updates\n            response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))\n            # for each update, get the file id if it exists\n            files = []\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['reply_to_message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # for each update, get the file id if it exists\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # call the remove_file_duplicates function to remove duplicate ids\n            files = self.remove_file_duplicates(files)\n            # for each file id, send a request to the telegram bot api to get the file path and store it in a list\n            file_paths = []\n            for i in files:\n                response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, i))\n                file_paths.append(response.json()['result']['file_path'])\n            # return the file paths\n            return file_paths\n\n\ndef executar(token):\n    \"\"\"Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).get_tg_files()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 12.4,
+  "done_reason": "stop",
+  "prompt_eval_count": 638,
+  "eval_count": 410,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport requests\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        # create an empty set to store unique file ids\n        unique_files = set()\n        for file in files:\n            unique_files.add(file)\n        # return the list of unique file ids\n        return list(unique_files)\n\n    def get_file_ids(self, updates):\n        # initialize an empty list to store file ids\n        file_ids = []\n        for update in updates:\n            try:\n                file_ids.append(update['message']['reply_to_message']['document']['file_id'])\n            except KeyError:\n                pass\n            try:\n                file_ids.append(update['message']['document']['file_id'])\n            except KeyError:\n                pass\n        return file_ids\n\n    def get_file_paths(self, file_ids):\n        # initialize an empty list to store file paths\n        file_paths = []\n        for file_id in file_ids:\n            response = requests.get(f'https://api.telegram.org/bot{self.token}/getFile?file_id={file_id}')\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\n    def get_tg_files(self):\n        # get the telegram bot updates\n        response = requests.get(f'https://api.telegram.org/bot{self.token}/getUpdates')\n        updates = response.json()['result']\n        # get unique file ids\n        file_ids = self.get_file_ids(updates)\n        # remove duplicate file ids\n        file_ids = self.remove_file_duplicates(file_ids)\n        # get file paths\n        file_paths = self.get_file_paths(file_ids)\n        # return the file paths\n        return file_paths\n\n\ndef executar(token):\n    \"\"\"Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).get_tg_files()\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:49:08.7338139Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport requests\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        # create an empty set to store unique file ids\n        unique_files = set()\n        for file in files:\n            unique_files.add(file)\n        # return the list of unique file ids\n        return list(unique_files)\n\n    def get_file_ids(self, updates):\n        # initialize an empty list to store file ids\n        file_ids = []\n        for update in updates:\n            try:\n                file_ids.append(update['message']['reply_to_message']['document']['file_id'])\n            except KeyError:\n                pass\n            try:\n                file_ids.append(update['message']['document']['file_id'])\n            except KeyError:\n                pass\n        return file_ids\n\n    def get_file_paths(self, file_ids):\n        # initialize an empty list to store file paths\n        file_paths = []\n        for file_id in file_ids:\n            response = requests.get(f'https://api.telegram.org/bot{self.token}/getFile?file_id={file_id}')\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\n    def get_tg_files(self):\n        # get the telegram bot updates\n        response = requests.get(f'https://api.telegram.org/bot{self.token}/getUpdates')\n        updates = response.json()['result']\n        # get unique file ids\n        file_ids = self.get_file_ids(updates)\n        # remove duplicate file ids\n        file_ids = self.remove_file_duplicates(file_ids)\n        # get file paths\n        file_paths = self.get_file_paths(file_ids)\n        # return the file paths\n        return file_paths\n\n\ndef executar(token):\n    \"\"\"Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).get_tg_files()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10337259000,
+    "load_duration": 5731900,
+    "prompt_eval_count": 638,
+    "prompt_eval_duration": 532482999,
+    "eval_count": 410,
+    "eval_duration": 9747775000
+  }
+}

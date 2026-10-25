@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-10__role__s42",
+  "instancia": "MNC-10",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:34:13.564978+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: renomear o projeto.\n\nPonto de entrada publico: executar(project_name). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 9.72,
+  "done_reason": "stop",
+  "prompt_eval_count": 515,
+  "eval_count": 298,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\n\"\"\"Tarefas de manutencao de um projeto Python: renomear o projeto.\n\nPonto de entrada publico: executar(project_name). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport shutil\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return get_pep8_compliant_name(toml.load(file)['tool']['poetry']['name'])\n\n\n@task\ndef rename_project(context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n    with open('pyproject.toml', 'r+', encoding='utf-8') as file:\n        data = toml.load(file)\n        data['tool']['poetry']['name'] = project_name\n        file.seek(0)\n        toml.dump(data, file)\n        file.truncate()\n\n\ndef executar(project_name):\n    rename_project(Context(), project_name)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:34:11.5124548Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Tarefas de manutencao de um projeto Python: renomear o projeto.\n\nPonto de entrada publico: executar(project_name). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport shutil\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return get_pep8_compliant_name(toml.load(file)['tool']['poetry']['name'])\n\n\n@task\ndef rename_project(context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n    with open('pyproject.toml', 'r+', encoding='utf-8') as file:\n        data = toml.load(file)\n        data['tool']['poetry']['name'] = project_name\n        file.seek(0)\n        toml.dump(data, file)\n        file.truncate()\n\n\ndef executar(project_name):\n    rename_project(Context(), project_name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7664629700,
+    "load_duration": 6271100,
+    "prompt_eval_count": 515,
+    "prompt_eval_duration": 352137000,
+    "eval_count": 298,
+    "eval_duration": 7225380000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-02__chain_of_thought__s42",
+  "instancia": "LLF-02",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:43:44.515330+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Gravacao de valores aninhados na configuracao do jogo, como texto.\n\nPonto de entrada publico: executar(valor). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_list(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 12.321,
+  "done_reason": "stop",
+  "prompt_eval_count": 441,
+  "eval_count": 411,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O code smell é a função lambda aninhada (`lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x))`) que é longa e difícil de ler. Isso dificulta a compreensão do que a função está fazendo e pode ser fonte de erros.\n2. A técnica de refatoração indicada é a Replace Lambda with Named Function, que sugere criar uma função nomeada para substituir a função lambda aninhada.\n3. Aplique a refatoração: criaremos uma função nomeada `format_value` que fará o mesmo que a função lambda aninhada.\n4. Verifique se o código refatorado preserva o comportamento original: sim, a função `executar` deve continuar funcionando da mesma maneira.\n\n**Código refatorado**\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = \",\".join(map(self.format_value, value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def format_value(self, value):\n        return \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), value))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_list(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\nO código refatorado mantém o mesmo comportamento original, mas agora a função `format_value` é mais fácil de ler e entender.",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:43:42.4355211Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O code smell é a função lambda aninhada (`lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x))`) que é longa e difícil de ler. Isso dificulta a compreensão do que a função está fazendo e pode ser fonte de erros.\n2. A técnica de refatoração indicada é a Replace Lambda with Named Function, que sugere criar uma função nomeada para substituir a função lambda aninhada.\n3. Aplique a refatoração: criaremos uma função nomeada `format_value` que fará o mesmo que a função lambda aninhada.\n4. Verifique se o código refatorado preserva o comportamento original: sim, a função `executar` deve continuar funcionando da mesma maneira.\n\n**Código refatorado**\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = \",\".join(map(self.format_value, value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def format_value(self, value):\n        return \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), value))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_list(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\nO código refatorado mantém o mesmo comportamento original, mas agora a função `format_value` é mais fácil de ler e entender."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10263545300,
+    "load_duration": 5713200,
+    "prompt_eval_count": 441,
+    "prompt_eval_duration": 346807000,
+    "eval_count": 411,
+    "eval_duration": 9863242000
+  }
+}

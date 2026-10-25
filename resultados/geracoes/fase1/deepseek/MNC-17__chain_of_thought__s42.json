@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-17__chain_of_thought__s42",
+  "instancia": "MNC-17",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T09:33:34.286851+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Clima atual de uma cidade, impresso no terminal.\n\nPonto de entrada publico: executar(weather). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\ndef print_weather(weather):\n    if weather != None:\n        print(\"The weather in \" + weather[\"name\"] + \" is \" + weather[\"weather\"][0][\"description\"])\n    else:\n        print(\"Error: Could not get weather\")\n\n\ndef executar(weather):\n    \"\"\"Imprime o clima recebido da API. Ponto de entrada publico desta unidade.\"\"\"\n    print_weather(weather)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 24.601,
+  "done_reason": "stop",
+  "prompt_eval_count": 507,
+  "eval_count": 491,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "Code smell: Multiply-Nested Container\n\nA Multiply-Nested Container é um code smell que indica que um objeto contém um grande número de campos aninhados. Isso torna o objeto complexo e difícil de entender e manipular.\n\nNeste caso, a variável 'weather' é um objeto contendo vários campos aninhados.\n\nTécnica de refatoração: Decompose Container\n\nA Decompose Container é uma técnica de refatoração que visa desacoplar um objeto complexo contendo vários campos aninhados em objetos menores contendo um campo cada.\n\nAplicando a refatoração:\n\n```python\n\"\"\"Clima atual de uma cidade, impresso no terminal.\n\nPonto de entrada publico: executar(weather). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\ndef print_weather(city_name, weather_description):\n    if city_name and weather_description:\n        print(\"The weather in \" + city_name + \" is \" + weather_description)\n    else:\n        print(\"Error: Could not get weather\")\n\n\ndef executar(weather):\n    \"\"\"Imprime o clima recebido da API. Ponto de entrada publico desta unidade.\"\"\"\n    city_name = weather[\"name\"] if weather else None\n    weather_description = weather[\"weather\"][0][\"description\"] if weather else None\n    print_weather(city_name, weather_description)\n```\n\nNeste código refatorado, a função 'executar' separou os valores de 'city_name' e 'weather_description' para evitar acessar um objeto nulo caso 'weather' seja nulo. Isso preserva o comportamento original do código, pois ainda permite a impressão do clima atual de uma cidade no terminal.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T09:33:32.2355202Z",
+    "message": {
+      "role": "assistant",
+      "content": "Code smell: Multiply-Nested Container\n\nA Multiply-Nested Container é um code smell que indica que um objeto contém um grande número de campos aninhados. Isso torna o objeto complexo e difícil de entender e manipular.\n\nNeste caso, a variável 'weather' é um objeto contendo vários campos aninhados.\n\nTécnica de refatoração: Decompose Container\n\nA Decompose Container é uma técnica de refatoração que visa desacoplar um objeto complexo contendo vários campos aninhados em objetos menores contendo um campo cada.\n\nAplicando a refatoração:\n\n```python\n\"\"\"Clima atual de uma cidade, impresso no terminal.\n\nPonto de entrada publico: executar(weather). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\ndef print_weather(city_name, weather_description):\n    if city_name and weather_description:\n        print(\"The weather in \" + city_name + \" is \" + weather_description)\n    else:\n        print(\"Error: Could not get weather\")\n\n\ndef executar(weather):\n    \"\"\"Imprime o clima recebido da API. Ponto de entrada publico desta unidade.\"\"\"\n    city_name = weather[\"name\"] if weather else None\n    weather_description = weather[\"weather\"][0][\"description\"] if weather else None\n    print_weather(city_name, weather_description)\n```\n\nNeste código refatorado, a função 'executar' separou os valores de 'city_name' e 'weather_description' para evitar acessar um objeto nulo caso 'weather' seja nulo. Isso preserva o comportamento original do código, pois ainda permite a impressão do clima atual de uma cidade no terminal.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22559934200,
+    "load_duration": 5135100,
+    "prompt_eval_count": 507,
+    "prompt_eval_duration": 857707000,
+    "eval_count": 491,
+    "eval_duration": 21533170000
+  }
+}

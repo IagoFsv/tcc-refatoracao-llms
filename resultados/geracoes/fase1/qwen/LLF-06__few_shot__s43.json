@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-06__few_shot__s43",
+  "instancia": "LLF-06",
+  "smell": "LLF",
+  "tecnica": "few_shot",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:49:38.411332+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\nordenar = lambda itens, chave, reverso, limite: sorted(\n    [i for i in itens if i[chave] > limite],\n    key=lambda x: x[chave],\n    reverse=reverso\n)\nCódigo refatorado:\ndef ordenar_itens(itens, chave, reverso, limite):\n    itens_filtrados = [i for i in itens if i[chave] > limite]\n    return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_list(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: z.split(\",\"), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_list(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 8.445,
+  "done_reason": "stop",
+  "prompt_eval_count": 561,
+  "eval_count": 261,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_list(self, section, key):\n        def split_and_map(item, delimiter):\n            return map(lambda z: z.split(\",\"), item.split(delimiter))\n\n        texto = self.config[section][key]\n        itens_aninhados = split_and_map(texto, \",\")\n        itens_aninhados = split_and_map(itens_aninhados, \",\")\n        itens_aninhados = split_and_map(itens_aninhados, \",\")\n        return itens_aninhados\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_list(\"mundo\", \"regioes\"))\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:49:36.3390508Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_list(self, section, key):\n        def split_and_map(item, delimiter):\n            return map(lambda z: z.split(\",\"), item.split(delimiter))\n\n        texto = self.config[section][key]\n        itens_aninhados = split_and_map(texto, \",\")\n        itens_aninhados = split_and_map(itens_aninhados, \",\")\n        itens_aninhados = split_and_map(itens_aninhados, \",\")\n        return itens_aninhados\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_list(\"mundo\", \"regioes\"))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6372330400,
+    "load_duration": 5826700,
+    "prompt_eval_count": 561,
+    "prompt_eval_duration": 271437000,
+    "eval_count": 261,
+    "eval_duration": 6046783000
+  }
+}

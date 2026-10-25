@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-12__chain_of_thought__s43",
+  "instancia": "MNC-12",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:47:46.857196+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Programa de linha de comando que mostra o clima de uma cidade.\n\nPonto de entrada publico: executar(cidade). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport runpy\nimport sys\n\nimport requests\nimport argparse\n\n\ndef call_api(city):\n    # fetch the key from a config file\n    import configparser\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    api_key = config['openweathermap']['api_key']\n    base_url = config['openweathermap']['base_url']\n    complete_url = base_url + \"appid=\" + api_key + \"&q=\" + city\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada publico desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    # check if city is passed as argument\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n\n    response = call_api(args.city)\n    # check if valid city name is passed\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    # get the weather from the response\n    weather = response['weather'][0]['description']\n    print(weather)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 23.54,
+  "done_reason": "stop",
+  "prompt_eval_count": 603,
+  "eval_count": 887,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Multiply-Nested Container\" ocorre porque o código contém várias camadas de aninhamento, especialmente nas funções `call_api` e `executar`. Isso dificulta a leitura e manutenção do código.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Decompose Container\" sugere que devemos descompor a função `call_api` em partes menores, cada uma responsável por uma única tarefa. Isso ajudará a reduzir a complexidade e a facilitar a leitura.\n\n3. **Aplicação da Refatoração**:\n   - Vamos descompor a função `call_api` em partes menores, cada uma responsável por uma única tarefa: ler a configuração, construir a URL, fazer a requisição e analisar a resposta.\n\n4. **Verificação do Comportamento Original**:\n   - A refatoração deve preservar o comportamento original do código, ou seja, ele deve ainda chamar a API do OpenWeatherMap, processar a resposta e imprimir a descrição do clima.\n\n### Código Refatorado\n\n```python\nimport runpy\nimport sys\nimport requests\nimport argparse\nimport configparser\n\ndef read_config():\n    # Lê a configuração do arquivo config.ini\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    return config['openweathermap']['api_key'], config['openweathermap']['base_url']\n\ndef build_url(api_key, city):\n    # Constrói a URL completa para a requisição à API\n    base_url = read_config()[1]\n    return f\"{base_url}appid={api_key}&q={city}\"\n\ndef fetch_weather(api_key, city):\n    # Faz a requisição à API\n    url = build_url(api_key, city)\n    response_from_api = requests.get(url)\n    return response_from_api.json()\n\ndef handle_response(response):\n    # Analisa a resposta da API\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    weather = response['weather'][0]['description']\n    return weather\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada público desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    \n    # Verifica se a cidade foi fornecida como argumento\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n    \n    api_key, base_url = read_config()\n    response = fetch_weather(api_key, args.city)\n    weather = handle_response(response)\n    print(weather)\n```\n\n### Explicação das Mudanças\n\n1. **Função `read_config`**: Lê a configuração do arquivo `config.ini` e retorna a chave da API e a URL base.\n2. **Função `build_url`**: Constrói a URL completa para a requisição à API usando as informações lidas da configuração.\n3. **Função `fetch_weather`**: Faz a requisição à API usando a URL construída e retorna a resposta.\n4. **Função `handle_response`**: Analisa a resposta da API, verifica se a cidade é válida e retorna a descrição do clima.\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original, chamando a API do OpenWeatherMap, processando a resposta e imprimindo a descrição do clima. A estrutura do código foi simplificada e a complexidade foi reduzida, tornando-o mais fácil de ler e manter.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:47:44.788049Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Multiply-Nested Container\" ocorre porque o código contém várias camadas de aninhamento, especialmente nas funções `call_api` e `executar`. Isso dificulta a leitura e manutenção do código.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Decompose Container\" sugere que devemos descompor a função `call_api` em partes menores, cada uma responsável por uma única tarefa. Isso ajudará a reduzir a complexidade e a facilitar a leitura.\n\n3. **Aplicação da Refatoração**:\n   - Vamos descompor a função `call_api` em partes menores, cada uma responsável por uma única tarefa: ler a configuração, construir a URL, fazer a requisição e analisar a resposta.\n\n4. **Verificação do Comportamento Original**:\n   - A refatoração deve preservar o comportamento original do código, ou seja, ele deve ainda chamar a API do OpenWeatherMap, processar a resposta e imprimir a descrição do clima.\n\n### Código Refatorado\n\n```python\nimport runpy\nimport sys\nimport requests\nimport argparse\nimport configparser\n\ndef read_config():\n    # Lê a configuração do arquivo config.ini\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    return config['openweathermap']['api_key'], config['openweathermap']['base_url']\n\ndef build_url(api_key, city):\n    # Constrói a URL completa para a requisição à API\n    base_url = read_config()[1]\n    return f\"{base_url}appid={api_key}&q={city}\"\n\ndef fetch_weather(api_key, city):\n    # Faz a requisição à API\n    url = build_url(api_key, city)\n    response_from_api = requests.get(url)\n    return response_from_api.json()\n\ndef handle_response(response):\n    # Analisa a resposta da API\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    weather = response['weather'][0]['description']\n    return weather\n\ndef executar(cidade):\n    \"\"\"Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada público desta unidade.\"\"\"\n    argv_anterior = sys.argv\n    sys.argv = [__file__, cidade]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = argv_anterior\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    \n    # Verifica se a cidade foi fornecida como argumento\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n    \n    api_key, base_url = read_config()\n    response = fetch_weather(api_key, args.city)\n    weather = handle_response(response)\n    print(weather)\n```\n\n### Explicação das Mudanças\n\n1. **Função `read_config`**: Lê a configuração do arquivo `config.ini` e retorna a chave da API e a URL base.\n2. **Função `build_url`**: Constrói a URL completa para a requisição à API usando as informações lidas da configuração.\n3. **Função `fetch_weather`**: Faz a requisição à API usando a URL construída e retorna a resposta.\n4. **Função `handle_response`**: Analisa a resposta da API, verifica se a cidade é válida e retorna a descrição do clima.\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original, chamando a API do OpenWeatherMap, processando a resposta e imprimindo a descrição do clima. A estrutura do código foi simplificada e a complexidade foi reduzida, tornando-o mais fácil de ler e manter."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21480408500,
+    "load_duration": 6240100,
+    "prompt_eval_count": 603,
+    "prompt_eval_duration": 468543000,
+    "eval_count": 887,
+    "eval_duration": 20968836000
+  }
+}

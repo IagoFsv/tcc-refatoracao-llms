@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-19__role__s43",
+  "instancia": "MNC-19",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:53:22.169625+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: consulta de uma posicao.\n\nPonto de entrada publico: executar(x, y, z). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 9.098,
+  "done_reason": "stop",
+  "prompt_eval_count": 483,
+  "eval_count": 277,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        world_map = []\n        for x in range(self.world_map_size_x):\n            layer = []\n            for y in range(self.world_map_size_y):\n                row = [Location(x, y, z) for z in range(self.world_map_size_z)]\n                layer.append(row)\n            world_map.append(layer)\n        return world_map\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:53:20.1069184Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        world_map = []\n        for x in range(self.world_map_size_x):\n            layer = []\n            for y in range(self.world_map_size_y):\n                row = [Location(x, y, z) for z in range(self.world_map_size_z)]\n                layer.append(row)\n            world_map.append(layer)\n        return world_map\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7038070700,
+    "load_duration": 6578300,
+    "prompt_eval_count": 483,
+    "prompt_eval_duration": 414673000,
+    "eval_count": 277,
+    "eval_duration": 6566058000
+  }
+}

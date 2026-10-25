@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-09__chain_of_thought__s43",
+  "instancia": "MNC-09",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:44:25.528168+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: nome do pacote a partir do pyproject.toml.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 17.602,
+  "done_reason": "stop",
+  "prompt_eval_count": 413,
+  "eval_count": 646,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Multiply-Nested Container\" ocorre porque a função `get_project_path` possui uma estrutura de controle muito aninhada. Especificamente, a leitura do `pyproject.toml` e o processamento do nome do projeto estão dentro de um bloco `with` que é desnecessariamente aninhado.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Decompose Container\" sugere que devemos dividir uma função grande em várias funções menores, cada uma responsável por uma única tarefa. Neste caso, podemos criar uma função separada para ler o `pyproject.toml` e outra para processar o nome do projeto.\n\n3. **Aplicar a Refatoração**:\n   - Vamos criar duas novas funções: `read_pyproject_toml` para ler o arquivo e `process_project_name` para processar o nome do projeto. A função `get_project_path` será simplificada para chamar essas duas novas funções.\n\n4. **Verificar o Comportamento Original**:\n   - Certificaremos de que o comportamento original do código seja preservado, ou seja, que a função `executar` ainda retorne o nome do pacote conforme especificado.\n\n### Código Refatorado\n\n```python\nimport toml\n\ndef read_pyproject_toml() -> dict:\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n    return data\n\ndef process_project_name(data: dict) -> str:\n    project_name = data['tool']['poetry']['name']\n    return project_name.replace('-', '_')\n\ndef get_project_path() -> str:\n    data = read_pyproject_toml()\n    project_name = process_project_name(data)\n    return project_name\n\ndef executar() -> str:\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n```\n\n### Explicação do Código Refatorado\n\n- **`read_pyproject_toml`**: Esta função lê o arquivo `pyproject.toml` e retorna os dados em formato de dicionário.\n- **`process_project_name`**: Esta função recebe os dados do `pyproject.toml` e processa o nome do projeto, substituindo hífens por sublinhados.\n- **`get_project_path`**: Esta função chama as duas funções auxiliares para obter o nome do pacote em conformidade com PEP 8.\n- **`executar`**: Mantém a assinatura original, chamando `get_project_path` para retornar o nome do pacote.\n\nCom essas alterações, o código se torna mais modular e fácil de manter, removendo o code smell \"Multiply-Nested Container\".",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:44:23.4616859Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio\n\n1. **Identificar o Code Smell**:\n   - O code smell \"Multiply-Nested Container\" ocorre porque a função `get_project_path` possui uma estrutura de controle muito aninhada. Especificamente, a leitura do `pyproject.toml` e o processamento do nome do projeto estão dentro de um bloco `with` que é desnecessariamente aninhado.\n\n2. **Aplicar a Técnica de Refatoração**:\n   - A técnica de refatoração \"Decompose Container\" sugere que devemos dividir uma função grande em várias funções menores, cada uma responsável por uma única tarefa. Neste caso, podemos criar uma função separada para ler o `pyproject.toml` e outra para processar o nome do projeto.\n\n3. **Aplicar a Refatoração**:\n   - Vamos criar duas novas funções: `read_pyproject_toml` para ler o arquivo e `process_project_name` para processar o nome do projeto. A função `get_project_path` será simplificada para chamar essas duas novas funções.\n\n4. **Verificar o Comportamento Original**:\n   - Certificaremos de que o comportamento original do código seja preservado, ou seja, que a função `executar` ainda retorne o nome do pacote conforme especificado.\n\n### Código Refatorado\n\n```python\nimport toml\n\ndef read_pyproject_toml() -> dict:\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n    return data\n\ndef process_project_name(data: dict) -> str:\n    project_name = data['tool']['poetry']['name']\n    return project_name.replace('-', '_')\n\ndef get_project_path() -> str:\n    data = read_pyproject_toml()\n    project_name = process_project_name(data)\n    return project_name\n\ndef executar() -> str:\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n```\n\n### Explicação do Código Refatorado\n\n- **`read_pyproject_toml`**: Esta função lê o arquivo `pyproject.toml` e retorna os dados em formato de dicionário.\n- **`process_project_name`**: Esta função recebe os dados do `pyproject.toml` e processa o nome do projeto, substituindo hífens por sublinhados.\n- **`get_project_path`**: Esta função chama as duas funções auxiliares para obter o nome do pacote em conformidade com PEP 8.\n- **`executar`**: Mantém a assinatura original, chamando `get_project_path` para retornar o nome do pacote.\n\nCom essas alterações, o código se torna mais modular e fácil de manter, removendo o code smell \"Multiply-Nested Container\"."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15541937600,
+    "load_duration": 5089300,
+    "prompt_eval_count": 413,
+    "prompt_eval_duration": 298370000,
+    "eval_count": 646,
+    "eval_duration": 15202513000
+  }
+}

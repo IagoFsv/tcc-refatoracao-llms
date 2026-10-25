@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-10__role__s42",
+  "instancia": "LPL-10",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:41:41.789548+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Desenho de um segmento colorido numa imagem RGB.\n\nPonto de entrada publico: executar(tamanho, segmento, cor=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\nA imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor\npadrao do desenho.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_line(self, y0, x0, y1, x1, color=(0, 0, 0)):\n        \"\"\"\n        Draw a line on the image.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        @param color: color of the line\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = color\n        return self\n\n\ndef executar(tamanho, segmento, cor=None):\n    \"\"\"tamanho: (linhas, colunas). segmento: (y0, x0, y1, x1). cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segmento\n    if cor is None:\n        resultado = imagem.draw_line(y0, x0, y1, x1)\n    else:\n        resultado = imagem.draw_line(y0, x0, y1, x1, cor)\n    return resultado.image\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 11.679,
+  "done_reason": "stop",
+  "prompt_eval_count": 631,
+  "eval_count": 393,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport skimage\nimport numpy as np\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_line(self, line, color=(0, 0, 0)):\n        \"\"\"\n        Draw a line on the image.\n\n        @param line: tuple of (y0, x0, y1, x1) coordinates of the line\n        @param color: color of the line\n        @return: image with line drawn on it\n        \"\"\"\n        self.image[line] = color\n        return self\n\n\nclass DrawLineParameters:\n    def __init__(self, y0, x0, y1, x1, color=(0, 0, 0)):\n        self.y0 = y0\n        self.x0 = x0\n        self.y1 = y1\n        self.x1 = x1\n        self.color = color\n\n\ndef executar(tamanho, segmento_params, cor=None):\n    \"\"\"tamanho: (linhas, colunas). segmento_params: DrawLineParameters. cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    if cor is None:\n        resultado = imagem.draw_line((segmento_params.y0, segmento_params.x0, segmento_params.y1, segmento_params.x1))\n    else:\n        segmento_params.color = cor\n        resultado = imagem.draw_line((segmento_params.y0, segmento_params.x0, segmento_params.y1, segmento_params.x1))\n    return resultado.image\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:41:39.720651Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport skimage\nimport numpy as np\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_line(self, line, color=(0, 0, 0)):\n        \"\"\"\n        Draw a line on the image.\n\n        @param line: tuple of (y0, x0, y1, x1) coordinates of the line\n        @param color: color of the line\n        @return: image with line drawn on it\n        \"\"\"\n        self.image[line] = color\n        return self\n\n\nclass DrawLineParameters:\n    def __init__(self, y0, x0, y1, x1, color=(0, 0, 0)):\n        self.y0 = y0\n        self.x0 = x0\n        self.y1 = y1\n        self.x1 = x1\n        self.color = color\n\n\ndef executar(tamanho, segmento_params, cor=None):\n    \"\"\"tamanho: (linhas, colunas). segmento_params: DrawLineParameters. cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    if cor is None:\n        resultado = imagem.draw_line((segmento_params.y0, segmento_params.x0, segmento_params.y1, segmento_params.x1))\n    else:\n        segmento_params.color = cor\n        resultado = imagem.draw_line((segmento_params.y0, segmento_params.x0, segmento_params.y1, segmento_params.x1))\n    return resultado.image\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 9624054700,
+    "load_duration": 1666200,
+    "prompt_eval_count": 631,
+    "prompt_eval_duration": 526227999,
+    "eval_count": 393,
+    "eval_duration": 9047019000
+  }
+}

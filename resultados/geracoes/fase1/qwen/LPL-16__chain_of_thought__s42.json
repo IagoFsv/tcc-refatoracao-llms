@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-16__chain_of_thought__s42",
+  "instancia": "LPL-16",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:48:27.035656+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Transacao entre duas partes: dados, hash e representacao em dicionario.\n\nPonto de entrada publico: executar(campos). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(campos[\"sender\"], campos[\"receiver\"], campos[\"amount\"],\n                            campos[\"timestamp\"])\n    return transacao.repr_json()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 16.721,
+  "done_reason": "stop",
+  "prompt_eval_count": 504,
+  "eval_count": 613,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Análise do Code Smell\n\nO code smell identificado é o **Long Parameter List**. Na função `executar`, o parâmetro `campos` contém uma lista de argumentos longa e complexa. Isso dificulta a leitura e o entendimento do código, além de potencialmente levar a erros devido à falta de validação dos argumentos.\n\n### Técnica de Refatoração\n\nA técnica de refatoração indicada é **Introduce Parameter Object**. Essa técnica envolve criar um objeto específico para agrupar os parâmetros de entrada, tornando o código mais legível e fácil de manter.\n\n### Implementação da Refatoração\n\n1. **Criação de um Classe para Agrupar os Parâmetros**:\n   - Criaremos uma classe chamada `TransactionFields` que conterá todos os campos necessários para criar uma transação.\n\n2. **Modificação da Função `executar`**:\n   - A função `executar` agora receberá um objeto do tipo `TransactionFields` em vez de um dicionário.\n\n3. **Modificação da Classe `Transaction`**:\n   - A classe `Transaction` será modificada para aceitar um objeto do tipo `TransactionFields` no seu construtor.\n\n### Código Refatorado\n\n```python\nimport hashlib\n\n\nclass TransactionFields:\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\nclass Transaction(object):\n    def __init__(self, fields):\n        self.sender = fields.sender\n        self.receiver = fields.receiver\n        self.amount = fields.amount\n        self.timestamp = fields.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef executar(fields: TransactionFields):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(fields)\n    return transacao.repr_json()\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original. A função `executar` agora aceita um objeto `TransactionFields` em vez de um dicionário, e a classe `Transaction` aceita um objeto `TransactionFields` no seu construtor. O método `repr_json` ainda retorna a representação da transação em formato JSON.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:48:24.9463605Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Análise do Code Smell\n\nO code smell identificado é o **Long Parameter List**. Na função `executar`, o parâmetro `campos` contém uma lista de argumentos longa e complexa. Isso dificulta a leitura e o entendimento do código, além de potencialmente levar a erros devido à falta de validação dos argumentos.\n\n### Técnica de Refatoração\n\nA técnica de refatoração indicada é **Introduce Parameter Object**. Essa técnica envolve criar um objeto específico para agrupar os parâmetros de entrada, tornando o código mais legível e fácil de manter.\n\n### Implementação da Refatoração\n\n1. **Criação de um Classe para Agrupar os Parâmetros**:\n   - Criaremos uma classe chamada `TransactionFields` que conterá todos os campos necessários para criar uma transação.\n\n2. **Modificação da Função `executar`**:\n   - A função `executar` agora receberá um objeto do tipo `TransactionFields` em vez de um dicionário.\n\n3. **Modificação da Classe `Transaction`**:\n   - A classe `Transaction` será modificada para aceitar um objeto do tipo `TransactionFields` no seu construtor.\n\n### Código Refatorado\n\n```python\nimport hashlib\n\n\nclass TransactionFields:\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\nclass Transaction(object):\n    def __init__(self, fields):\n        self.sender = fields.sender\n        self.receiver = fields.receiver\n        self.amount = fields.amount\n        self.timestamp = fields.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef executar(fields: TransactionFields):\n    \"\"\"campos: sender, receiver, amount e timestamp. Devolve a representacao\n    da transacao em dicionario.\"\"\"\n    transacao = Transaction(fields)\n    return transacao.repr_json()\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original. A função `executar` agora aceita um objeto `TransactionFields` em vez de um dicionário, e a classe `Transaction` aceita um objeto `TransactionFields` no seu construtor. O método `repr_json` ainda retorna a representação da transação em formato JSON."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14661687400,
+    "load_duration": 6323500,
+    "prompt_eval_count": 504,
+    "prompt_eval_duration": 372094000,
+    "eval_count": 613,
+    "eval_duration": 14241866000
+  }
+}

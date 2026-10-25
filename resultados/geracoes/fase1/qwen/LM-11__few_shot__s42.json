@@ -1,0 +1,65 @@
+{
+  "identificador": "LM-11__few_shot__s42",
+  "instancia": "LM-11",
+  "smell": "LM",
+  "tecnica": "few_shot",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:29:09.709448+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Method\nTécnica de refatoração: Extract Method\nCódigo original:\ndef processar_pedido(pedido):\n    for item in pedido['itens']:\n        if item['quantidade'] <= 0:\n            raise ValueError(f\"Quantidade invalida: {item['nome']}\")\n        if item['preco'] <= 0:\n            raise ValueError(f\"Preco invalido: {item['nome']}\")\n    subtotal = 0\n    for item in pedido['itens']:\n        subtotal += item['quantidade'] * item['preco']\n    desconto = 0\n    if pedido['cliente']['tipo'] == 'premium':\n        desconto = subtotal * 0.15\n    elif pedido['cliente']['tipo'] == 'regular':\n        desconto = subtotal * 0.05\n    total = subtotal - desconto\n    resumo = f\"Cliente: {pedido['cliente']['nome']}\\n\"\n    resumo += f\"Subtotal: R$ {subtotal:.2f}\\n\"\n    resumo += f\"Desconto: R$ {desconto:.2f}\\n\"\n    resumo += f\"Total: R$ {total:.2f}\\n\"\n    return resumo\nCódigo refatorado:\ndef _validar_itens(itens):\n    for item in itens:\n        if item['quantidade'] <= 0:\n            raise ValueError(f\"Quantidade invalida: {item['nome']}\")\n        if item['preco'] <= 0:\n            raise ValueError(f\"Preco invalido: {item['nome']}\")\n\ndef _calcular_subtotal(itens):\n    return sum(item['quantidade'] * item['preco'] for item in itens)\n\ndef _aplicar_desconto(subtotal, tipo_cliente):\n    if tipo_cliente == 'premium':\n        return subtotal * 0.15\n    elif tipo_cliente == 'regular':\n        return subtotal * 0.05\n    return 0\n\ndef _gerar_resumo(cliente, subtotal, desconto):\n    total = subtotal - desconto\n    resumo = f\"Cliente: {cliente['nome']}\\n\"\n    resumo += f\"Subtotal: R$ {subtotal:.2f}\\n\"\n    resumo += f\"Desconto: R$ {desconto:.2f}\\n\"\n    resumo += f\"Total: R$ {total:.2f}\\n\"\n    return resumo\n\ndef processar_pedido(pedido):\n    _validar_itens(pedido['itens'])\n    subtotal = _calcular_subtotal(pedido['itens'])\n    desconto = _aplicar_desconto(subtotal, pedido['cliente']['tipo'])\n    return _gerar_resumo(pedido['cliente'], subtotal, desconto)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Method\nTécnica de refatoração: Extract Method\nCódigo original:\n\"\"\"Desenho da forca do jogo da forca, conforme o numero de erros.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 6.183,
+  "done_reason": "stop",
+  "prompt_eval_count": 1197,
+  "eval_count": 136,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\ndef print_hangman(guessCount):\n    stages = [\n        '_________',\n        '_________|       |',\n        '_________|       O',\n        '_________|      /|',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\'\n    ]\n    print(stages[guessCount])\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:29:07.622793Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\ndef print_hangman(guessCount):\n    stages = [\n        '_________',\n        '_________|       |',\n        '_________|       O',\n        '_________|      /|',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\',\n        '_________|      /|\\\\'\n    ]\n    print(stages[guessCount])\n\ndef executar(erros):\n    \"\"\"Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade.\"\"\"\n    return print_hangman(erros)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 4139042000,
+    "load_duration": 4509000,
+    "prompt_eval_count": 1197,
+    "prompt_eval_duration": 961773000,
+    "eval_count": 136,
+    "eval_duration": 3127497000
+  }
+}

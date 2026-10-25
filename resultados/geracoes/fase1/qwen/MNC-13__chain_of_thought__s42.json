@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-13__chain_of_thought__s42",
+  "instancia": "MNC-13",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T07:07:54.639469+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens.\n\nPonto de entrada publico: executar(token, endpoint). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport requests\nimport datetime\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    # function to remove duplicates from a list\n    def remove_duplicates(self, users):\n        # create an empty list\n        new_users = []\n        # loop through the list\n        for i in users:\n            # if the user is not in the new list, append it\n            if i not in new_users:\n                new_users.append(i)\n        # return the new list\n        return new_users\n\n    def send_request(self, endpoint):\n        # send a request to the telegram bot api\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))\n        # if the response is not 200, raise an exception\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        if endpoint == 'getMe':\n            # Try to return the bot username, first name, username, and id\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                    response.json()['result']['id']\n            except KeyError:\n                raise Exception('Error: {}'.format(response.text))\n        elif endpoint == 'getUpdates':\n            # append the user id and username to a list\n            users = []\n            for i in response.json()['result']:\n                try:\n                    users.append((i['message']['from']['id'], i['message']['from']['username']))\n                except KeyError:\n                    pass\n            # call a function to remove duplicates\n            users = self.remove_duplicates(users)\n            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n            with open('users.log', 'a') as f:\n                for username, user_id in users:\n                    f.write(f'{now}, {self.token}, {username}, {user_id}\\n')\n            return users\n\n\ndef executar(token, endpoint):\n    \"\"\"Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).send_request(endpoint)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 21.914,
+  "done_reason": "stop",
+  "prompt_eval_count": 740,
+  "eval_count": 829,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio passo a passo:\n\n1. **Identificação do code smell:**\n   - O code smell `Multiply-Nested Container` ocorre na função `send_request` dentro do método `TelegramBot`. A função possui múltiplas estruturas aninhadas, especialmente na parte que processa a resposta da API.\n\n2. **Explicação da técnica de refatoração:**\n   - A técnica `Decompose Container` envolve descompor estruturas complexas em partes menores e mais gerenciáveis. Isso ajuda a simplificar o código e a torná-lo mais legível.\n\n3. **Aplicação da refatoração:**\n   - Vamos descompor a função `send_request` em várias funções menores, cada uma responsável por uma parte específica do processo.\n\n4. **Verificação do comportamento original:**\n   - Após a refatoração, verificaremos se o comportamento original do código é mantido.\n\n### Código refatorado:\n\n```python\nimport requests\nimport datetime\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    # function to remove duplicates from a list\n    def remove_duplicates(self, users):\n        # create an empty list\n        new_users = []\n        # loop through the list\n        for i in users:\n            # if the user is not in the new list, append it\n            if i not in new_users:\n                new_users.append(i)\n        # return the new list\n        return new_users\n\n    def process_updates_response(self, response):\n        users = []\n        for i in response.json()['result']:\n            try:\n                users.append((i['message']['from']['id'], i['message']['from']['username']))\n            except KeyError:\n                pass\n        return users\n\n    def log_users(self, users):\n        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n        with open('users.log', 'a') as f:\n            for username, user_id in users:\n                f.write(f'{now}, {self.token}, {username}, {user_id}\\n')\n\n    def send_request(self, endpoint):\n        # send a request to the telegram bot api\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))\n        # if the response is not 200, raise an exception\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        if endpoint == 'getMe':\n            # Try to return the bot username, first name, username, and id\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                    response.json()['result']['id']\n            except KeyError:\n                raise Exception('Error: {}'.format(response.text))\n        elif endpoint == 'getUpdates':\n            users = self.process_updates_response(response)\n            users = self.remove_duplicates(users)\n            self.log_users(users)\n            return users\n\n\ndef executar(token, endpoint):\n    \"\"\"Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).send_request(endpoint)\n```\n\n### Verificação do comportamento original:\n- A função `send_request` ainda envia uma solicitação à API do Telegram e retorna os dados conforme necessário.\n- A função `process_updates_response` extrai os usuários da resposta da API.\n- A função `log_users` registra os usuários em um arquivo de log.\n- A função `remove_duplicates` remove duplicatas dos usuários.\n- A função `executar` ainda é o ponto de entrada público, chamando o método `send_request` da classe `TelegramBot`.\n\nO comportamento original do código foi mantido, e o código foi simplificado e melhor organizado.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T07:07:52.5796425Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio passo a passo:\n\n1. **Identificação do code smell:**\n   - O code smell `Multiply-Nested Container` ocorre na função `send_request` dentro do método `TelegramBot`. A função possui múltiplas estruturas aninhadas, especialmente na parte que processa a resposta da API.\n\n2. **Explicação da técnica de refatoração:**\n   - A técnica `Decompose Container` envolve descompor estruturas complexas em partes menores e mais gerenciáveis. Isso ajuda a simplificar o código e a torná-lo mais legível.\n\n3. **Aplicação da refatoração:**\n   - Vamos descompor a função `send_request` em várias funções menores, cada uma responsável por uma parte específica do processo.\n\n4. **Verificação do comportamento original:**\n   - Após a refatoração, verificaremos se o comportamento original do código é mantido.\n\n### Código refatorado:\n\n```python\nimport requests\nimport datetime\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    # function to remove duplicates from a list\n    def remove_duplicates(self, users):\n        # create an empty list\n        new_users = []\n        # loop through the list\n        for i in users:\n            # if the user is not in the new list, append it\n            if i not in new_users:\n                new_users.append(i)\n        # return the new list\n        return new_users\n\n    def process_updates_response(self, response):\n        users = []\n        for i in response.json()['result']:\n            try:\n                users.append((i['message']['from']['id'], i['message']['from']['username']))\n            except KeyError:\n                pass\n        return users\n\n    def log_users(self, users):\n        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n        with open('users.log', 'a') as f:\n            for username, user_id in users:\n                f.write(f'{now}, {self.token}, {username}, {user_id}\\n')\n\n    def send_request(self, endpoint):\n        # send a request to the telegram bot api\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))\n        # if the response is not 200, raise an exception\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        if endpoint == 'getMe':\n            # Try to return the bot username, first name, username, and id\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                    response.json()['result']['id']\n            except KeyError:\n                raise Exception('Error: {}'.format(response.text))\n        elif endpoint == 'getUpdates':\n            users = self.process_updates_response(response)\n            users = self.remove_duplicates(users)\n            self.log_users(users)\n            return users\n\n\ndef executar(token, endpoint):\n    \"\"\"Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).send_request(endpoint)\n```\n\n### Verificação do comportamento original:\n- A função `send_request` ainda envia uma solicitação à API do Telegram e retorna os dados conforme necessário.\n- A função `process_updates_response` extrai os usuários da resposta da API.\n- A função `log_users` registra os usuários em um arquivo de log.\n- A função `remove_duplicates` remove duplicatas dos usuários.\n- A função `executar` ainda é o ponto de entrada público, chamando o método `send_request` da classe `TelegramBot`.\n\nO comportamento original do código foi mantido, e o código foi simplificado e melhor organizado."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19855988300,
+    "load_duration": 5789200,
+    "prompt_eval_count": 740,
+    "prompt_eval_duration": 557209000,
+    "eval_count": 829,
+    "eval_duration": 19244259000
+  }
+}

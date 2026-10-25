@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-20__role__s42",
+  "instancia": "MNC-20",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:42:54.480569+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: desenho da cena no terminal.\n\nPonto de entrada publico: executar(descricoes). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, com a descricao que aparece na cena.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Mapa montado a partir das descricoes: descricoes[x][y][z].\n\n    O tamanho em cada eixo vem do primeiro elemento; se as fileiras tiverem\n    tamanhos diferentes, o mapa fica irregular.\n    \"\"\"\n\n    def __init__(self, descricoes):\n        self.world_map = [[[Location(texto) for texto in fileira] for fileira in plano] for plano in descricoes]\n        primeiro_plano = descricoes[0]\n        self.world_map_size_x = len(descricoes)\n        self.world_map_size_y = len(primeiro_plano)\n        self.world_map_size_z = len(primeiro_plano[0])\n\n    def get_location(self, x, y, z):\n        plano = self.world_map[x]\n        return plano[y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    \"\"\"Desenha a cena do mapa descrito. Ponto de entrada publico desta unidade.\"\"\"\n    render_scene(World(descricoes))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.358,
+  "done_reason": "stop",
+  "prompt_eval_count": 653,
+  "eval_count": 314,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nclass Location:\n    \"\"\"Uma casa do mapa, com a descricao que aparece na cena.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Mapa montado a partir das descricoes: descricoes[x][y][z].\n\n    O tamanho em cada eixo vem do primeiro elemento; se as fileiras tiverem\n    tamanhos diferentes, o mapa fica irregular.\n    \"\"\"\n\n    def __init__(self, descricoes):\n        self.world_map = descricoes\n        self.world_map_size_x = len(self.world_map)\n        self.world_map_size_y = len(self.world_map[0])\n        self.world_map_size_z = len(self.world_map[0][0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(world.get_location(x, y, z).get_description(), end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    \"\"\"Desenha a cena do mapa descrito. Ponto de entrada publico desta unidade.\"\"\"\n    render_scene(World(descricoes))\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:42:52.4015026Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nclass Location:\n    \"\"\"Uma casa do mapa, com a descricao que aparece na cena.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Mapa montado a partir das descricoes: descricoes[x][y][z].\n\n    O tamanho em cada eixo vem do primeiro elemento; se as fileiras tiverem\n    tamanhos diferentes, o mapa fica irregular.\n    \"\"\"\n\n    def __init__(self, descricoes):\n        self.world_map = descricoes\n        self.world_map_size_x = len(self.world_map)\n        self.world_map_size_y = len(self.world_map[0])\n        self.world_map_size_z = len(self.world_map[0][0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(world.get_location(x, y, z).get_description(), end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    \"\"\"Desenha a cena do mapa descrito. Ponto de entrada publico desta unidade.\"\"\"\n    render_scene(World(descricoes))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8313085200,
+    "load_duration": 5575900,
+    "prompt_eval_count": 653,
+    "prompt_eval_duration": 619500000,
+    "eval_count": 314,
+    "eval_duration": 7617868000
+  }
+}

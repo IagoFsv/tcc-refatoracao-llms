@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-04__role__s42",
+  "instancia": "LLF-04",
+  "smell": "LLF",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:07:11.106582+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Gravacao de valores aninhados na configuracao do jogo, como texto.\n\nPonto de entrada publico: executar(valor). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(map(str, z)), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 6.94,
+  "done_reason": "stop",
+  "prompt_eval_count": 414,
+  "eval_count": 205,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport logging\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def join_values(self, value):\n        return \",\".join(map(str, value))\n\n    def join_lists(self, value):\n        return \",\".join(map(self.join_values, value))\n\n    def join_keys(self, value):\n        return \",\".join(map(self.join_lists, value))\n\n    def join_sections(self, value):\n        return \",\".join(map(self.join_keys, value))\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = self.join_sections(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:07:09.0327187Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport logging\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def join_values(self, value):\n        return \",\".join(map(str, value))\n\n    def join_lists(self, value):\n        return \",\".join(map(self.join_values, value))\n\n    def join_keys(self, value):\n        return \",\".join(map(self.join_lists, value))\n\n    def join_sections(self, value):\n        return \",\".join(map(self.join_keys, value))\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = self.join_sections(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 4894451700,
+    "load_duration": 5521000,
+    "prompt_eval_count": 414,
+    "prompt_eval_duration": 165749000,
+    "eval_count": 205,
+    "eval_duration": 4672810000
+  }
+}

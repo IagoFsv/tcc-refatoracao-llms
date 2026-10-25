@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-18__few_shot__s42",
+  "instancia": "LPL-18",
+  "smell": "LPL",
+  "tecnica": "few_shot",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:22:36.804834+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):\n    produto = {\n        'nome': nome,\n        'preco': preco,\n        'quantidade': quantidade,\n        'categoria': categoria,\n        'fornecedor': fornecedor,\n        'desconto': desconto\n    }\n    banco_de_dados.salvar(produto)\n    return produto\nCódigo refatorado:\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Produto:\n    nome: str\n    preco: float\n    quantidade: int\n    categoria: str\n    fornecedor: str\n    desconto: float\n\ndef cadastrar_produto(produto: Produto):\n    banco_de_dados.salvar(asdict(produto))\n    return produto\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Agente de aprendizado por reforco com memoria de experiencias.\n\nPonto de entrada publico: executar(configuracao). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nA rede Q e uma versao minima: guarda as dimensoes recebidas e um conjunto\nde pesos proprio, que pode ser copiado de outra rede; recusa tamanho\nnegativo, como a versao real.\n\"\"\"\n\nimport random\n\n\nclass DQN:\n    \"\"\"Rede minima: dimensoes recebidas e pesos copiaveis.\"\"\"\n\n    def __init__(self, *dimensoes):\n        input_size, n_actions, hidden_size, gamma = dimensoes\n        if min(input_size, n_actions, hidden_size) < 0:\n            raise RuntimeError(\"Trying to create tensor with negative dimension\")\n        self.dimensoes = dimensoes\n        self.pesos = {\"pesos\": object()}\n\n    def state_dict(self):\n        return dict(self.pesos)\n\n    def load_state_dict(self, state_dict):\n        self.pesos = dict(state_dict)\n\n\nclass ReplayMemory:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.memory = []\n\n    def push(self, *args):\n        self.memory.append(args)\n        if len(self.memory) > self.capacity:\n            del self.memory[0]\n\n    def sample(self, batch_size):\n        # debug\n        return zip(*random.sample(self.memory, batch_size))\n    \n    def len(self):\n        return len(self.memory)\n\n\nclass DQNAgent:\n    def __init__(self, input_size, n_actions, hidden_size, gamma, batch_size, epsilon, epsilon_min, epsilon_decay):\n        # define the hyperparameters\n        self.input_size = input_size\n        self.n_actions = n_actions\n        self.hidden_size = hidden_size\n        self.gamma = gamma\n        self.batch_size = batch_size\n        self.epsilon = epsilon\n        self.epsilon_min = epsilon_min\n        self.epsilon_decay = epsilon_decay\n        # create the replay memory\n        self.memory = ReplayMemory(capacity=1000)\n        # create the DQN\n        self.dqn = DQN(input_size, n_actions, hidden_size, gamma)\n        # create the target DQN\n        self.target_dqn = DQN(input_size, n_actions, hidden_size, gamma)\n        # initialize the target DQN\n        self.target_dqn.load_state_dict(self.dqn.state_dict())\n\n\ndef _resumo(agente):\n    \"\"\"Hiperparametros guardados, memoria, as duas redes e a sincronia entre elas.\"\"\"\n    nomes = (\"input_size\", \"n_actions\", \"hidden_size\", \"gamma\",\n             \"batch_size\", \"epsilon\", \"epsilon_min\", \"epsilon_decay\")\n    return {\n        \"hiperparametros\": {nome: getattr(agente, nome) for nome in nomes},\n        \"memoria\": (agente.memory.capacity, agente.memory.len()),\n        \"redes\": (agente.dqn.dimensoes, agente.target_dqn.dimensoes),\n        \"redes_distintas\": agente.dqn is not agente.target_dqn,\n        \"alvo_sincronizado\": agente.target_dqn.state_dict()[\"pesos\"] is agente.dqn.state_dict()[\"pesos\"],\n    }\n\n\ndef executar(configuracao):\n    \"\"\"configuracao: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min e epsilon_decay.\"\"\"\n    c = configuracao\n    agente = DQNAgent(c[\"input_size\"], c[\"n_actions\"], c[\"hidden_size\"], c[\"gamma\"],\n                      c[\"batch_size\"], c[\"epsilon\"], c[\"epsilon_min\"], c[\"epsilon_decay\"])\n    return _resumo(agente)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 9.49,
+  "done_reason": "stop",
+  "prompt_eval_count": 1146,
+  "eval_count": 258,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "Code smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef executar(configuracao):\n    \"\"\"configuracao: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min e epsilon_decay.\"\"\"\n    c = configuracao\n    agente = DQNAgent(c[\"input_size\"], c[\"n_actions\"], c[\"hidden_size\"], c[\"gamma\"],\n                      c[\"batch_size\"], c[\"epsilon\"], c[\"epsilon_min\"], c[\"epsilon_decay\"])\n    return _resumo(agente)\n\nCódigo refatorado:\nfrom dataclasses import dataclass\n\n@dataclass\nclass Configuracao:\n    input_size: int\n    n_actions: int\n    hidden_size: int\n    gamma: float\n    batch_size: int\n    epsilon: float\n    epsilon_min: float\n    epsilon_decay: float\n\ndef executar(configuracao: Configuracao):\n    agente = DQNAgent(configuracao.input_size, configuracao.n_actions, configuracao.hidden_size, configuracao.gamma,\n                      configuracao.batch_size, configuracao.epsilon, configuracao.epsilon_min, configuracao.epsilon_decay)\n    return _resumo(agente)",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:22:34.7603044Z",
+    "message": {
+      "role": "assistant",
+      "content": "Code smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef executar(configuracao):\n    \"\"\"configuracao: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min e epsilon_decay.\"\"\"\n    c = configuracao\n    agente = DQNAgent(c[\"input_size\"], c[\"n_actions\"], c[\"hidden_size\"], c[\"gamma\"],\n                      c[\"batch_size\"], c[\"epsilon\"], c[\"epsilon_min\"], c[\"epsilon_decay\"])\n    return _resumo(agente)\n\nCódigo refatorado:\nfrom dataclasses import dataclass\n\n@dataclass\nclass Configuracao:\n    input_size: int\n    n_actions: int\n    hidden_size: int\n    gamma: float\n    batch_size: int\n    epsilon: float\n    epsilon_min: float\n    epsilon_decay: float\n\ndef executar(configuracao: Configuracao):\n    agente = DQNAgent(configuracao.input_size, configuracao.n_actions, configuracao.hidden_size, configuracao.gamma,\n                      configuracao.batch_size, configuracao.epsilon, configuracao.epsilon_min, configuracao.epsilon_decay)\n    return _resumo(agente)"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7415300100,
+    "load_duration": 5567900,
+    "prompt_eval_count": 1146,
+    "prompt_eval_duration": 1010497000,
+    "eval_count": 258,
+    "eval_duration": 6319459000
+  }
+}

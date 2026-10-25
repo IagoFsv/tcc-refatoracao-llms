@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-05__chain_of_thought__s42",
+  "instancia": "LLF-05",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T06:08:37.065395+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Gravacao de valores aninhados na configuracao do jogo, como texto.\n\nPonto de entrada publico: executar(valor). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict_float(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(map(str, z)), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_float(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 14.726,
+  "done_reason": "stop",
+  "prompt_eval_count": 462,
+  "eval_count": 543,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Análise do Code Smell\n\nO code smell identificado é o **Long Lambda Function**. Este code smell ocorre porque a função lambda é muito longa e complexa, dificultando a leitura e manutenção do código.\n\n### Raciocínio para Refatoração\n\nPara resolver o code smell, vamos **Replace Lambda with Named Function**. Isso significa que vamos substituir a função lambda por uma função nomeada, que terá um nome mais descritivo e facilitará a leitura do código.\n\n### Aplicação da Refatoração\n\n1. **Identificando a Função Lambda**: A função lambda complexa está dentro da função `set_config_dict_dict_dict_dict_float` do método `Config`.\n2. **Criando uma Função Nomeada**: Vamos criar uma função nomeada que encapsule a lógica da função lambda.\n3. **Substituindo a Lambda pela Função Nomeada**: Substituiremos a função lambda dentro da função `set_config_dict_dict_dict_dict_float` pela nossa nova função nomeada.\n\n### Código Refatorado\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def serialize_value(self, value):\n        return \",\".join(map(str, value))\n\n    def serialize_layer(self, layer):\n        return \",\".join(map(self.serialize_value, layer))\n\n    def serialize_section(self, section):\n        return \",\".join(map(self.serialize_layer, section))\n\n    def serialize_config(self, config):\n        return \",\".join(map(self.serialize_section, config))\n\n    def set_config_dict_dict_dict_dict_float(self, section, key, value):\n        self.config[section][key] = self.serialize_config(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_float(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original. Ele ainda grava os valores aninhados na configuração do jogo e devolve o texto gravado. A diferença é que a lógica complexa foi encapsulada em funções nomeadas, tornando o código mais legível e fácil de manter.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T06:08:35.0224858Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Análise do Code Smell\n\nO code smell identificado é o **Long Lambda Function**. Este code smell ocorre porque a função lambda é muito longa e complexa, dificultando a leitura e manutenção do código.\n\n### Raciocínio para Refatoração\n\nPara resolver o code smell, vamos **Replace Lambda with Named Function**. Isso significa que vamos substituir a função lambda por uma função nomeada, que terá um nome mais descritivo e facilitará a leitura do código.\n\n### Aplicação da Refatoração\n\n1. **Identificando a Função Lambda**: A função lambda complexa está dentro da função `set_config_dict_dict_dict_dict_float` do método `Config`.\n2. **Criando uma Função Nomeada**: Vamos criar uma função nomeada que encapsule a lógica da função lambda.\n3. **Substituindo a Lambda pela Função Nomeada**: Substituiremos a função lambda dentro da função `set_config_dict_dict_dict_dict_float` pela nossa nova função nomeada.\n\n### Código Refatorado\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def serialize_value(self, value):\n        return \",\".join(map(str, value))\n\n    def serialize_layer(self, layer):\n        return \",\".join(map(self.serialize_value, layer))\n\n    def serialize_section(self, section):\n        return \",\".join(map(self.serialize_layer, section))\n\n    def serialize_config(self, config):\n        return \",\".join(map(self.serialize_section, config))\n\n    def set_config_dict_dict_dict_dict_float(self, section, key, value):\n        self.config[section][key] = self.serialize_config(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_float(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\n### Verificação do Comportamento Original\n\nO código refatorado mantém o comportamento original do código original. Ele ainda grava os valores aninhados na configuração do jogo e devolve o texto gravado. A diferença é que a lógica complexa foi encapsulada em funções nomeadas, tornando o código mais legível e fácil de manter."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 12685118900,
+    "load_duration": 5491900,
+    "prompt_eval_count": 462,
+    "prompt_eval_duration": 166683000,
+    "eval_count": 543,
+    "eval_duration": 12461353000
+  }
+}

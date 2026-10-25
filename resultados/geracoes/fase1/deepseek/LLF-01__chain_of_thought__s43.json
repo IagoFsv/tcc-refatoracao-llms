@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-01__chain_of_thought__s43",
+  "instancia": "LLF-01",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T11:58:08.272887+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Coluna de cidade a partir da descricao de transacoes bancarias.\n\nPonto de entrada publico: executar(descricoes, cidades). Nao altere o nome nem\na assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport pandas as pd\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = [city.lower() for city in city_list]\n    # split the description column and get the last word\n    df['City'] = df['Description'].str.lower().str.split().apply(lambda x: x[-1])\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(lambda x: x if x in city_list else 'Unknown')\n    # TODO: this check for city looks like its only checking second last word (see: Abu Dhabi)\n    # check the last 2 words in the descirption if the city columns is unknown. Compare the 2 words to the city list for a match. If there is a match, add the city name to the city column\n    # df['City'] = df['City'].apply(lambda x: x if x != 'Unknown' else df['Description'].str.lower().str.split().apply(lambda x: x[-2]) if df['Description'].str.lower().str.split().apply(lambda x: x[-2]) in city_list else 'Unknown')\n    df['City'] = df.apply(lambda x: x['Description'].split()[-2].lower() if x['City'] == 'Unknown' and x['Description'].split()[-2].lower() in city_list else x['City'], axis=1)\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef executar(descricoes, cidades):\n    \"\"\"Classifica as descricoes. Ponto de entrada publico desta unidade.\"\"\"\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 40.487,
+  "done_reason": "stop",
+  "prompt_eval_count": 894,
+  "eval_count": 756,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell \"Long Lambda Function\" neste código é indicado porque a função lambda utilizada para extrair a última palavra da descrição da transação é muito grande. Isso torna o código difícil de ler e manter.\n\nA técnica de refatoração \"Replace Lambda with Named Function\" é aplicável porque a função lambda é usada para extrair a última palavra da descrição da transação. Podemos criar uma função com um nome e aplicá-la diretamente no DataFrame, em vez de usar uma função lambda.\n\nAqui está o código refatorado:\n\n```python\nimport pandas as pd\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = [city.lower() for city in city_list]\n    # split the description column and get the last word\n    df['City'] = df['Description'].str.lower().str.split().apply(get_last_word)\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(lambda x: x if x in city_list else 'Unknown')\n    # check the last 2 words in the descirption if the city columns is unknown. Compare the 2 words to the city list for a match. If there is a match, add the city name to the city column\n    df['City'] = df.apply(check_unknown_city, axis=1)\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef get_last_word(description):\n    \"\"\"Return the last word from the description\"\"\"\n    return description[-1]\n\n\ndef check_unknown_city(row):\n    \"\"\"Check if the city column is unknown and replace it with the last 2 words from the description if they are in the city list\"\"\"\n    if row['City'] == 'Unknown':\n        description_words = row['Description'].split()\n        last_word = description_words[-2].lower()\n        if last_word in city_list:\n            return last_word\n    return row['City']\n\n\ndef executar(descricoes, cidades):\n    \"\"\"Classifica as descricoes. Ponto de entrada publico desta unidade.\"\"\"\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n```\n\nEste código refatorado preserva o comportamento original, pois a lógica do código não foi modificada. Ele ainda extrai a última palavra da descrição da transação e verifica se ela está na lista de cidades. Se a palavra não estiver na lista de cidades, ele adiciona a palavra \"Unknown\". Por fim, ele converte a primeira letra da cidade para maiúscula.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T11:58:06.225813Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell \"Long Lambda Function\" neste código é indicado porque a função lambda utilizada para extrair a última palavra da descrição da transação é muito grande. Isso torna o código difícil de ler e manter.\n\nA técnica de refatoração \"Replace Lambda with Named Function\" é aplicável porque a função lambda é usada para extrair a última palavra da descrição da transação. Podemos criar uma função com um nome e aplicá-la diretamente no DataFrame, em vez de usar uma função lambda.\n\nAqui está o código refatorado:\n\n```python\nimport pandas as pd\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = [city.lower() for city in city_list]\n    # split the description column and get the last word\n    df['City'] = df['Description'].str.lower().str.split().apply(get_last_word)\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(lambda x: x if x in city_list else 'Unknown')\n    # check the last 2 words in the descirption if the city columns is unknown. Compare the 2 words to the city list for a match. If there is a match, add the city name to the city column\n    df['City'] = df.apply(check_unknown_city, axis=1)\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef get_last_word(description):\n    \"\"\"Return the last word from the description\"\"\"\n    return description[-1]\n\n\ndef check_unknown_city(row):\n    \"\"\"Check if the city column is unknown and replace it with the last 2 words from the description if they are in the city list\"\"\"\n    if row['City'] == 'Unknown':\n        description_words = row['Description'].split()\n        last_word = description_words[-2].lower()\n        if last_word in city_list:\n            return last_word\n    return row['City']\n\n\ndef executar(descricoes, cidades):\n    \"\"\"Classifica as descricoes. Ponto de entrada publico desta unidade.\"\"\"\n    df = pd.DataFrame({\"Description\": descricoes})\n    df = update_city_column(df, cidades)\n    return df[\"City\"].tolist()\n```\n\nEste código refatorado preserva o comportamento original, pois a lógica do código não foi modificada. Ele ainda extrai a última palavra da descrição da transação e verifica se ela está na lista de cidades. Se a palavra não estiver na lista de cidades, ele adiciona a palavra \"Unknown\". Por fim, ele converte a primeira letra da cidade para maiúscula.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 38416004400,
+    "load_duration": 4895500,
+    "prompt_eval_count": 894,
+    "prompt_eval_duration": 1965195000,
+    "eval_count": 756,
+    "eval_duration": 36178195000
+  }
+}

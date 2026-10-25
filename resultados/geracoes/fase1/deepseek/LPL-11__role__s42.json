@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-11__role__s42",
+  "instancia": "LPL-11",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T08:35:05.317828+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Desenho de um disco colorido numa imagem RGB.\n\nPonto de entrada publico: executar(tamanho, disco, cor=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\nA imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor\npadrao do desenho. O disco e recortado na borda da imagem.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, x, y, radius, color=(0, 0, 0)):\n        \"\"\"\n        Draw a circle on the image.\n\n        @param x: x coordinate of the center\n        @param y: y coordinate of the center\n        @param radius: radius of the circle\n        @param color: color of the circle\n        @return: image with circle drawn on it\n        \"\"\"\n        circle = skimage.draw.disk((y, x), radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\ndef executar(tamanho, disco, cor=None):\n    \"\"\"tamanho: (linhas, colunas). disco: (x, y, raio). cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    x, y, raio = disco\n    if cor is None:\n        resultado = imagem.draw_circle(x, y, raio)\n    else:\n        resultado = imagem.draw_circle(x, y, raio, cor)\n    return resultado.image\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 35.486,
+  "done_reason": "stop",
+  "prompt_eval_count": 801,
+  "eval_count": 674,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "\"\"\"Desenho de um disco colorido numa imagem RGB.\n\nPonto de entrada publico: executar(tamanho, disco, cor=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\nA imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor\npadrao do desenho. O disco e recortado na borda da imagem.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        \n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, circle_params):\n        \"\"\"\n        Draw a circle on the image.\n\n        \n        @param circle_params: parameters for the circle: x, y, radius, color\n        @return: image with circle drawn on it\n        \"\"\"\n        x, y, radius, color = circle_params.x, circle_params.y, circle_params.radius, circle_params.color\n        circle = skimage.draw.disk((y, x), radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\nclass CircleParams:\n    \"\"\"\n    Class to represent the parameters of a circle.\n    \"\"\"\n\n    def __init__(self, x, y, radius, color=(0, 0, 0)):\n        \"\"\"\n        Create a CircleParams object.\n\n        \n        @param x: x coordinate of the center\n        @param y: y coordinate of the center\n        @param radius: radius of the circle\n        @param color: color of the circle\n        \"\"\"\n        self.x = x\n        self.y = y\n        self.radius = radius\n        self.color = color\n\n\ndef executar(tamanho, disco, cor=None):\n    \"\"\"tamanho: (linhas, colunas). disco: (x, y, raio). cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    x, y, raio = disco\n    if cor is None:\n        cor = (0, 0, 0)\n    circle_params = CircleParams(x, y, raio, cor)\n    resultado = imagem.draw_circle(circle_params)\n    return resultado.image\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-23T08:35:03.2344963Z",
+    "message": {
+      "role": "assistant",
+      "content": "\"\"\"Desenho de um disco colorido numa imagem RGB.\n\nPonto de entrada publico: executar(tamanho, disco, cor=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\nA imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor\npadrao do desenho. O disco e recortado na borda da imagem.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        \n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, circle_params):\n        \"\"\"\n        Draw a circle on the image.\n\n        \n        @param circle_params: parameters for the circle: x, y, radius, color\n        @return: image with circle drawn on it\n        \"\"\"\n        x, y, radius, color = circle_params.x, circle_params.y, circle_params.radius, circle_params.color\n        circle = skimage.draw.disk((y, x), radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\nclass CircleParams:\n    \"\"\"\n    Class to represent the parameters of a circle.\n    \"\"\"\n\n    def __init__(self, x, y, radius, color=(0, 0, 0)):\n        \"\"\"\n        Create a CircleParams object.\n\n        \n        @param x: x coordinate of the center\n        @param y: y coordinate of the center\n        @param radius: radius of the circle\n        @param color: color of the circle\n        \"\"\"\n        self.x = x\n        self.y = y\n        self.radius = radius\n        self.color = color\n\n\ndef executar(tamanho, disco, cor=None):\n    \"\"\"tamanho: (linhas, colunas). disco: (x, y, raio). cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    x, y, raio = disco\n    if cor is None:\n        cor = (0, 0, 0)\n    circle_params = CircleParams(x, y, raio, cor)\n    resultado = imagem.draw_circle(circle_params)\n    return resultado.image\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 33444207800,
+    "load_duration": 5283100,
+    "prompt_eval_count": 801,
+    "prompt_eval_duration": 1759118000,
+    "eval_count": 674,
+    "eval_duration": 31443336000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-10__chain_of_thought__s42",
+  "instancia": "MNC-10",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 1,
+  "seed": 42,
+  "commit": "dbf974c8107b6bb036d2daeb6846da782d4d90f3",
+  "sessao": "20261023T030347",
+  "timestamp_utc": "2026-10-23T10:34:53.572608+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: renomear o projeto.\n\nPonto de entrada publico: executar(project_name). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 18.256,
+  "done_reason": "stop",
+  "prompt_eval_count": 564,
+  "eval_count": 647,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O code smell \"Multiply-Nested Container\" se refere à presença de containers aninhados (funções ou classes dentro de outras) que podem tornar o código difícil de entender e manter. No trecho fornecido, o problema está na função `rename_project` que contém dois blocos de código que podem ser considerados containers aninhados: o primeiro bloco é responsável por renomear o diretório e o segundo bloco é responsável por atualizar o arquivo `pyproject.toml`.\n2. A técnica de refatoração indicada é a Decompose Container, que consiste em separar os containers aninhados em funções ou classes independentes. Isso ajudará a tornar o código mais fácil de entender e manter.\n3. Aplique a refatoração:\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    rename_directory(_context, project_name)\n    update_pyproject_file(_context, project_name)\n\ndef rename_directory(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\ndef update_pyproject_file(_context: Context, project_name: str):\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n```\n4. Verifique se o código refatorado preserva o comportamento original:\nO código refatorado mantém a mesma lógica e comportamento do código original. A função `rename_project` agora chama duas funções independentes: `rename_directory` e `update_pyproject_file`, o que torna o código mais fácil de entender e manter.\n\n**Código refatorado final**\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    rename_directory(_context, project_name)\n    update_pyproject_file(_context, project_name)\n\ndef rename_directory(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\ndef update_pyproject_file(_context: Context, project_name: str):\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-23T10:34:51.4954786Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O code smell \"Multiply-Nested Container\" se refere à presença de containers aninhados (funções ou classes dentro de outras) que podem tornar o código difícil de entender e manter. No trecho fornecido, o problema está na função `rename_project` que contém dois blocos de código que podem ser considerados containers aninhados: o primeiro bloco é responsável por renomear o diretório e o segundo bloco é responsável por atualizar o arquivo `pyproject.toml`.\n2. A técnica de refatoração indicada é a Decompose Container, que consiste em separar os containers aninhados em funções ou classes independentes. Isso ajudará a tornar o código mais fácil de entender e manter.\n3. Aplique a refatoração:\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    rename_directory(_context, project_name)\n    update_pyproject_file(_context, project_name)\n\ndef rename_directory(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\ndef update_pyproject_file(_context: Context, project_name: str):\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n```\n4. Verifique se o código refatorado preserva o comportamento original:\nO código refatorado mantém a mesma lógica e comportamento do código original. A função `rename_project` agora chama duas funções independentes: `rename_directory` e `update_pyproject_file`, o que torna o código mais fácil de entender e manter.\n\n**Código refatorado final**\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    rename_directory(_context, project_name)\n    update_pyproject_file(_context, project_name)\n\ndef rename_directory(_context: Context, project_name: str):\n    current_project_path = get_project_path()\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\ndef update_pyproject_file(_context: Context, project_name: str):\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\ndef executar(project_name):\n    \"\"\"Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade.\"\"\"\n    rename_project(Context(), project_name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 16183040800,
+    "load_duration": 5023500,
+    "prompt_eval_count": 564,
+    "prompt_eval_duration": 345885000,
+    "eval_count": 647,
+    "eval_duration": 15739667000
+  }
+}
