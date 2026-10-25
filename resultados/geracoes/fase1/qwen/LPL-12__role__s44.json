@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-12__role__s44",
+  "instancia": "LPL-12",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T08:45:05.437993+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Interpolacao de duas series (x, y) num mesmo conjunto de x igualmente espacados.\n\nPonto de entrada publico: executar(dados1, dados2, intervalo). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\nimport numpy as np\nimport pandas as pd\nfrom scipy.interpolate import interp1d\n\n\ndef interpolate_df_at_fixed_x_intervals(x1, y1, x2, y2, x_interval):\n    \"\"\"\n    Interpolate dataframes at fixed x intervals.\n    \"\"\"\n\n    x_min = min(x1.min(), x2.min())\n    x_max = max(x1.max(), x2.max())\n\n    # Create a new set of x values at fixed intervals\n    # - The new x-values are produced as a floating point numpy `arange` array range of values.\n    #   See: https://numpy.org/doc/stable/reference/generated/numpy.arange.html\n    x_new = np.arange(x_min, x_max + x_interval, x_interval)  # <========= HOW TO CREATE A NEW NUMPY\n                                                              # FLOATING POINT RANGE ARRAY (array\n                                                              # range)\n    x_new = pd.Series(x_new)  # convert to a Pandas Series\n\n    # Create interpolated y values for each set of data at the new x values\n    interpolation_func1 = interp1d(x1, y1, kind='linear', fill_value='extrapolate')\n    interpolation_func2 = interp1d(x2, y2, kind='linear', fill_value='extrapolate')\n    y1_new = interpolation_func1(x_new)\n    y2_new = interpolation_func2(x_new)\n    y_diff = y1_new - y2_new  # better way than doing it later, below\n\n    # Return a new dataframe with the new x values, and the two sets of y values\n    df_interpolated = pd.DataFrame({\n        x1.name + \"_new\": x_new,     # the new set of x-values; arbitrarily use `x1`'s name\n        y1.name + \"_new\": y1_new,    # the new, interpolated y1 values\n        y2.name + \"_new\": y2_new,    # the new, interpolated y2 values\n        # Better way than doing this later, below\n        \"y_diff\": y_diff\n    })\n\n    # Do some math on the values; ex: calculate the difference between the two sets of y-values\n    # - TODO/NB: if you know you need this calculation, it's cleaner to just do it *before* creating\n    #   the `df_interpolated` dataframe above. See `interpolate_df_at_fixed_x_intervals_numpy()` in\n    #   the method below, and instead just inject `\"y_diff\"` directly into `df_interpolated`\n    #   DataFrame as you create it above.\n    #\n    # df_interpolated[\"y_diff\"] = (\n    #     df_interpolated[y1.name + \"_new\"] - df_interpolated[y2.name + \"_new\"])\n\n    return df_interpolated  # Contains x_new, y1_new, y2_new, and y_diff\n\n\ndef executar(dados1, dados2, intervalo):\n    \"\"\"dados1 e dados2: DataFrames com a coluna de x primeiro e a de y depois.\"\"\"\n    x1, y1 = dados1.iloc[:, 0], dados1.iloc[:, 1]\n    x2, y2 = dados2.iloc[:, 0], dados2.iloc[:, 1]\n    return interpolate_df_at_fixed_x_intervals(x1, y1, x2, y2, intervalo)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 15.966,
+  "done_reason": "stop",
+  "prompt_eval_count": 953,
+  "eval_count": 483,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport numpy as np\nimport pandas as pd\nfrom scipy.interpolate import interp1d\n\nclass InterpolationParameters:\n    def __init__(self, x1, y1, x2, y2, x_interval):\n        self.x1 = x1\n        self.y1 = y1\n        self.x2 = x2\n        self.y2 = y2\n        self.x_interval = x_interval\n\ndef interpolate_df_at_fixed_x_intervals(params):\n    \"\"\"\n    Interpolate dataframes at fixed x intervals.\n    \"\"\"\n    x_min = min(params.x1.min(), params.x2.min())\n    x_max = max(params.x1.max(), params.x2.max())\n\n    # Create a new set of x values at fixed intervals\n    x_new = np.arange(x_min, x_max + params.x_interval, params.x_interval)\n    x_new = pd.Series(x_new)\n\n    # Create interpolated y values for each set of data at the new x values\n    interpolation_func1 = interp1d(params.x1, params.y1, kind='linear', fill_value='extrapolate')\n    interpolation_func2 = interp1d(params.x2, params.y2, kind='linear', fill_value='extrapolate')\n    y1_new = interpolation_func1(x_new)\n    y2_new = interpolation_func2(x_new)\n    y_diff = y1_new - y2_new\n\n    # Return a new dataframe with the new x values, and the two sets of y values\n    df_interpolated = pd.DataFrame({\n        params.x1.name + \"_new\": x_new,\n        params.y1.name + \"_new\": y1_new,\n        params.y2.name + \"_new\": y2_new,\n        \"y_diff\": y_diff\n    })\n\n    return df_interpolated\n\ndef executar(dados1, dados2, intervalo):\n    \"\"\"dados1 e dados2: DataFrames com a coluna de x primeiro e a de y depois.\"\"\"\n    x1, y1 = dados1.iloc[:, 0], dados1.iloc[:, 1]\n    x2, y2 = dados2.iloc[:, 0], dados2.iloc[:, 1]\n    params = InterpolationParameters(x1, y1, x2, y2, intervalo)\n    return interpolate_df_at_fixed_x_intervals(params)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T08:45:03.3896878Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport numpy as np\nimport pandas as pd\nfrom scipy.interpolate import interp1d\n\nclass InterpolationParameters:\n    def __init__(self, x1, y1, x2, y2, x_interval):\n        self.x1 = x1\n        self.y1 = y1\n        self.x2 = x2\n        self.y2 = y2\n        self.x_interval = x_interval\n\ndef interpolate_df_at_fixed_x_intervals(params):\n    \"\"\"\n    Interpolate dataframes at fixed x intervals.\n    \"\"\"\n    x_min = min(params.x1.min(), params.x2.min())\n    x_max = max(params.x1.max(), params.x2.max())\n\n    # Create a new set of x values at fixed intervals\n    x_new = np.arange(x_min, x_max + params.x_interval, params.x_interval)\n    x_new = pd.Series(x_new)\n\n    # Create interpolated y values for each set of data at the new x values\n    interpolation_func1 = interp1d(params.x1, params.y1, kind='linear', fill_value='extrapolate')\n    interpolation_func2 = interp1d(params.x2, params.y2, kind='linear', fill_value='extrapolate')\n    y1_new = interpolation_func1(x_new)\n    y2_new = interpolation_func2(x_new)\n    y_diff = y1_new - y2_new\n\n    # Return a new dataframe with the new x values, and the two sets of y values\n    df_interpolated = pd.DataFrame({\n        params.x1.name + \"_new\": x_new,\n        params.y1.name + \"_new\": y1_new,\n        params.y2.name + \"_new\": y2_new,\n        \"y_diff\": y_diff\n    })\n\n    return df_interpolated\n\ndef executar(dados1, dados2, intervalo):\n    \"\"\"dados1 e dados2: DataFrames com a coluna de x primeiro e a de y depois.\"\"\"\n    x1, y1 = dados1.iloc[:, 0], dados1.iloc[:, 1]\n    x2, y2 = dados2.iloc[:, 0], dados2.iloc[:, 1]\n    params = InterpolationParameters(x1, y1, x2, y2, intervalo)\n    return interpolate_df_at_fixed_x_intervals(params)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 11892516700,
+    "load_duration": 3856100,
+    "prompt_eval_count": 953,
+    "prompt_eval_duration": 806739000,
+    "eval_count": 483,
+    "eval_duration": 11032502000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-14__few_shot__s43",
+  "instancia": "LPL-14",
+  "smell": "LPL",
+  "tecnica": "few_shot",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T06:03:49.888928+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):\n    produto = {\n        'nome': nome,\n        'preco': preco,\n        'quantidade': quantidade,\n        'categoria': categoria,\n        'fornecedor': fornecedor,\n        'desconto': desconto\n    }\n    banco_de_dados.salvar(produto)\n    return produto\nCódigo refatorado:\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Produto:\n    nome: str\n    preco: float\n    quantidade: int\n    categoria: str\n    fornecedor: str\n    desconto: float\n\ndef cadastrar_produto(produto: Produto):\n    banco_de_dados.salvar(asdict(produto))\n    return produto\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Simulacao de uma bola quicando, passo a passo.\n\nPonto de entrada publico: executar(estado, tempo, fisica=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\n\ndef simulate_bouncing_ball (x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution = 0.2, g = 9.83) -> list:\n    \"\"\">>>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param x0: initial x position\n    :param y0: initial y position\n    :param vx0: initial x velocity\n    :param vy0: initial y velocity\n    :param steps: number of steps\n    :param dt: time step\n    :param g: gravity constant\n    :param coefficient_of_restitution: coefficient of restitution of each bounce\n    :return: list of positions\n    \"\"\"\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef executar(estado, tempo, fisica=None):\n    \"\"\"estado: (x0, y0, vx0, vy0). tempo: (passos, dt).\n\n    fisica: (coeficiente de restituicao, gravidade); sem ela, valem os\n    valores padrao da simulacao.\n    \"\"\"\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    if fisica is None:\n        return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt)\n    coefficient_of_restitution, g = fisica\n    return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution, g)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 27.055,
+  "done_reason": "stop",
+  "prompt_eval_count": 1175,
+  "eval_count": 463,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Physics:\n    coefficient_of_restitution: float = 0.2\n    g: float = 9.83\n\n@dataclass\nclass BouncingBall:\n    x0: float\n    y0: float\n    vx0: float\n    vy0: float\n    steps: int\n    dt: float\n\ndef simulate_bouncing_ball(ball: BouncingBall, physics: Physics) -> list:\n    x_positions = [ball.x0]\n    y_positions = [ball.y0]\n    vx = ball.vx0\n    vy = ball.vy0\n    for i in range(ball.steps):\n        x_positions.append(x_positions[-1] + vx * ball.dt)\n        y_positions.append(y_positions[-1] + vy * ball.dt)\n        if y_positions[-1] < 0:\n            vy = -vy * physics.coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * ball.dt\n            vy = vy - physics.g * ball.dt\n    return x_positions, y_positions\n\ndef executar(estado, tempo, fisica=None):\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    if fisica is None:\n        return simulate_bouncing_ball(BouncingBall(x0, y0, vx0, vy0, steps, dt), Physics())\n    coefficient_of_restitution, g = fisica\n    return simulate_bouncing_ball(BouncingBall(x0, y0, vx0, vy0, steps, dt), Physics(coefficient_of_restitution, g))\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T06:03:47.8308001Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Physics:\n    coefficient_of_restitution: float = 0.2\n    g: float = 9.83\n\n@dataclass\nclass BouncingBall:\n    x0: float\n    y0: float\n    vx0: float\n    vy0: float\n    steps: int\n    dt: float\n\ndef simulate_bouncing_ball(ball: BouncingBall, physics: Physics) -> list:\n    x_positions = [ball.x0]\n    y_positions = [ball.y0]\n    vx = ball.vx0\n    vy = ball.vy0\n    for i in range(ball.steps):\n        x_positions.append(x_positions[-1] + vx * ball.dt)\n        y_positions.append(y_positions[-1] + vy * ball.dt)\n        if y_positions[-1] < 0:\n            vy = -vy * physics.coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * ball.dt\n            vy = vy - physics.g * ball.dt\n    return x_positions, y_positions\n\ndef executar(estado, tempo, fisica=None):\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    if fisica is None:\n        return simulate_bouncing_ball(BouncingBall(x0, y0, vx0, vy0, steps, dt), Physics())\n    coefficient_of_restitution, g = fisica\n    return simulate_bouncing_ball(BouncingBall(x0, y0, vx0, vy0, steps, dt), Physics(coefficient_of_restitution, g))\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 24971270000,
+    "load_duration": 5734100,
+    "prompt_eval_count": 1175,
+    "prompt_eval_duration": 1977105000,
+    "eval_count": 463,
+    "eval_duration": 22622226000
+  }
+}

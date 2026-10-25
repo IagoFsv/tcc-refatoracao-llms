@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-19__role__s43",
+  "instancia": "LPL-19",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T06:13:24.236953+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Montagem de uma camada convolucional num grafo de operacoes.\n\nPonto de entrada publico: executar(camada). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nAs operacoes (variavel, normal truncada, constante, convolucao, max pooling,\nReLU, soma e escopo de nome) sao versoes minimas que nao calculam nada: cada\numa devolve um no do grafo que registra a operacao, o escopo de nome em que\nfoi criada e as entradas. A convolucao recusa filtro que nao tenha 4\ndimensoes, como a versao real.\n\"\"\"\n\nfrom types import SimpleNamespace\n\n_escopos = []\n\n\nclass _No:\n    \"\"\"No do grafo: descricao da operacao e formato do resultado, se conhecido.\"\"\"\n\n    def __init__(self, descricao, formato=None):\n        self.descricao = descricao\n        self.formato = formato\n\n    def __add__(self, outro):\n        return _No((\"add\", _escopo_atual(), self.descricao, outro.descricao), self.formato)\n\n\ndef _escopo_atual():\n    return \"/\".join(_escopos)\n\n\nclass _EscopoDeNome:\n    def __init__(self, name):\n        self.name = name\n\n    def __enter__(self):\n        _escopos.append(self.name)\n        return self.name\n\n    def __exit__(self, *excecao):\n        _escopos.pop()\n        return False\n\n\ndef _variable(initial_value):\n    return _No((\"Variable\", _escopo_atual(), initial_value.descricao), initial_value.formato)\n\n\ndef _truncated_normal(shape, mean=0.0, stddev=1.0):\n    return _No((\"truncated_normal\", tuple(shape), mean, stddev), tuple(shape))\n\n\ndef _constant(value, dtype=None, shape=None):\n    return _No((\"constant\", value, tuple(shape)), tuple(shape))\n\n\ndef _conv2d(input, filter, strides, padding):\n    if filter.formato is not None and len(filter.formato) != 4:\n        raise ValueError(f\"Shape must be rank 4 but is rank {len(filter.formato)}\")\n    return _No((\"conv2d\", _escopo_atual(), input.descricao, filter.descricao,\n                tuple(strides), padding))\n\n\ndef _max_pool(value, ksize, strides, padding):\n    return _No((\"max_pool\", _escopo_atual(), value.descricao, tuple(ksize),\n                tuple(strides), padding))\n\n\ndef _relu(features):\n    return _No((\"relu\", _escopo_atual(), features.descricao))\n\n\ntf = SimpleNamespace(\n    Variable=_variable,\n    truncated_normal=_truncated_normal,\n    constant=_constant,\n    name_scope=_EscopoDeNome,\n    nn=SimpleNamespace(conv2d=_conv2d, max_pool=_max_pool, relu=_relu),\n)\n\n\ndef create_weights(shape):\n    return tf.Variable(tf.truncated_normal(shape, stddev=0.05))\n\n\ndef create_biases(size):\n    return tf.Variable(tf.constant(0.05, shape=[size]))\n\n\ndef create_convolutional_layer(input, num_input_channels, num_filters, filter_shape, pool_shape, name):\n    with tf.name_scope(name):\n        weights = create_weights(shape=filter_shape)\n        biases = create_biases(num_filters)\n        layer = tf.nn.conv2d(input=input, filter=weights, strides=[\n                             1, 1, 1, 1], padding='SAME')\n        layer += biases\n        layer = tf.nn.max_pool(\n            value=layer, ksize=pool_shape, strides=pool_shape, padding='SAME')\n        layer = tf.nn.relu(layer)\n        return layer\n\n\ndef executar(camada):\n    \"\"\"camada: formato_entrada, num_input_channels, num_filters, filter_shape,\n    pool_shape e name. Devolve a descricao do no final do grafo.\"\"\"\n    c = camada\n    entrada = _No((\"entrada\", tuple(c[\"formato_entrada\"])), tuple(c[\"formato_entrada\"]))\n    no = create_convolutional_layer(entrada, c[\"num_input_channels\"], c[\"num_filters\"],\n                                    c[\"filter_shape\"], c[\"pool_shape\"], c[\"name\"])\n    return no.descricao\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 55.715,
+  "done_reason": "stop",
+  "prompt_eval_count": 1597,
+  "eval_count": 904,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nfrom types import SimpleNamespace\n\n_scopes = []\n\n\nclass Node:\n    def __init__(self, description, format=None):\n        self.description = description\n        self.format = format\n\n    def __add__(self, other):\n        return Node((\"add\", self._current_scope(), self.description, other.description), self.format)\n\n\ndef _current_scope():\n    return \"/\".join(_scopes)\n\n\nclass Scope:\n    def __init__(self, name):\n        self.name = name\n\n    def __enter__(self):\n        _scopes.append(self.name)\n        return self.name\n\n    def __exit__(self, *exception):\n        _scopes.pop()\n        return False\n\n\ndef _variable(initial_value):\n    return Node((\"Variable\", _current_scope(), initial_value.description), initial_value.format)\n\n\ndef _truncated_normal(shape, mean=0.0, stddev=1.0):\n    return Node((\"truncated_normal\", tuple(shape), mean, stddev), tuple(shape))\n\n\ndef _constant(value, dtype=None, shape=None):\n    return Node((\"constant\", value, tuple(shape)), tuple(shape))\n\n\ndef _conv2d(input, filter, strides, padding):\n    if filter.format is not None and len(filter.format) != 4:\n        raise ValueError(f\"Shape must be rank 4 but is rank {len(filter.format)}\")\n    return Node((\"conv2d\", _current_scope(), input.description, filter.description, tuple(strides), padding))\n\n\ndef _max_pool(value, ksize, strides, padding):\n    return Node((\"max_pool\", _current_scope(), value.description, tuple(ksize), tuple(strides), padding))\n\n\ndef _relu(features):\n    return Node((\"relu\", _current_scope(), features.description))\n\n\ntf = SimpleNamespace(\n    Variable=_variable,\n    truncated_normal=_truncated_normal,\n    constant=_constant,\n    name_scope=Scope,\n    nn=SimpleNamespace(conv2d=_conv2d, max_pool=_max_pool, relu=_relu),\n)\n\n\ndef create_weights(shape):\n    return tf.Variable(tf.truncated_normal(shape, stddev=0.05))\n\n\ndef create_biases(size):\n    return tf.Variable(tf.constant(0.05, shape=[size]))\n\n\ndef create_convolutional_layer(input, num_input_channels, num_filters, filter_shape, pool_shape, name):\n    with tf.name_scope(name):\n        weights = create_weights(shape=filter_shape)\n        biases = create_biases(num_filters)\n        layer = tf.nn.conv2d(input=input, filter=weights, strides=[1, 1, 1, 1], padding='SAME')\n        layer += biases\n        layer = tf.nn.max_pool(value=layer, ksize=pool_shape, strides=pool_shape, padding='SAME')\n        layer = tf.nn.relu(layer)\n        return layer\n\n\ndef execute(layer):\n    c = layer\n    input = Node((\"input\", tuple(c[\"format_input\"])), tuple(c[\"format_input\"]))\n    node = create_convolutional_layer(input, c[\"num_input_channels\"], c[\"num_filters\"], c[\"filter_shape\"], c[\"pool_shape\"], c[\"name\"])\n    return node.description\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T06:13:22.1983582Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom types import SimpleNamespace\n\n_scopes = []\n\n\nclass Node:\n    def __init__(self, description, format=None):\n        self.description = description\n        self.format = format\n\n    def __add__(self, other):\n        return Node((\"add\", self._current_scope(), self.description, other.description), self.format)\n\n\ndef _current_scope():\n    return \"/\".join(_scopes)\n\n\nclass Scope:\n    def __init__(self, name):\n        self.name = name\n\n    def __enter__(self):\n        _scopes.append(self.name)\n        return self.name\n\n    def __exit__(self, *exception):\n        _scopes.pop()\n        return False\n\n\ndef _variable(initial_value):\n    return Node((\"Variable\", _current_scope(), initial_value.description), initial_value.format)\n\n\ndef _truncated_normal(shape, mean=0.0, stddev=1.0):\n    return Node((\"truncated_normal\", tuple(shape), mean, stddev), tuple(shape))\n\n\ndef _constant(value, dtype=None, shape=None):\n    return Node((\"constant\", value, tuple(shape)), tuple(shape))\n\n\ndef _conv2d(input, filter, strides, padding):\n    if filter.format is not None and len(filter.format) != 4:\n        raise ValueError(f\"Shape must be rank 4 but is rank {len(filter.format)}\")\n    return Node((\"conv2d\", _current_scope(), input.description, filter.description, tuple(strides), padding))\n\n\ndef _max_pool(value, ksize, strides, padding):\n    return Node((\"max_pool\", _current_scope(), value.description, tuple(ksize), tuple(strides), padding))\n\n\ndef _relu(features):\n    return Node((\"relu\", _current_scope(), features.description))\n\n\ntf = SimpleNamespace(\n    Variable=_variable,\n    truncated_normal=_truncated_normal,\n    constant=_constant,\n    name_scope=Scope,\n    nn=SimpleNamespace(conv2d=_conv2d, max_pool=_max_pool, relu=_relu),\n)\n\n\ndef create_weights(shape):\n    return tf.Variable(tf.truncated_normal(shape, stddev=0.05))\n\n\ndef create_biases(size):\n    return tf.Variable(tf.constant(0.05, shape=[size]))\n\n\ndef create_convolutional_layer(input, num_input_channels, num_filters, filter_shape, pool_shape, name):\n    with tf.name_scope(name):\n        weights = create_weights(shape=filter_shape)\n        biases = create_biases(num_filters)\n        layer = tf.nn.conv2d(input=input, filter=weights, strides=[1, 1, 1, 1], padding='SAME')\n        layer += biases\n        layer = tf.nn.max_pool(value=layer, ksize=pool_shape, strides=pool_shape, padding='SAME')\n        layer = tf.nn.relu(layer)\n        return layer\n\n\ndef execute(layer):\n    c = layer\n    input = Node((\"input\", tuple(c[\"format_input\"])), tuple(c[\"format_input\"]))\n    node = create_convolutional_layer(input, c[\"num_input_channels\"], c[\"num_filters\"], c[\"filter_shape\"], c[\"pool_shape\"], c[\"name\"])\n    return node.description\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 53673013900,
+    "load_duration": 6091700,
+    "prompt_eval_count": 1597,
+    "prompt_eval_duration": 4197198999,
+    "eval_count": 904,
+    "eval_duration": 49070324000
+  }
+}

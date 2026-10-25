@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-04__chain_of_thought__s43",
+  "instancia": "MNC-04",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:49:55.691427+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Permissoes de servicos usadas na geracao de arquivos de composicao de conteineres.\n\nPonto de entrada publico: executar(nome). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions[nome]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 16.264,
+  "done_reason": "stop",
+  "prompt_eval_count": 522,
+  "eval_count": 582,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Multiply-Nested Container\", pois contém uma estrutura de dados complexa com múltiplos níveis de nested containers (dicionários aninhados).\n2. **Explicar a técnica de refatoração:** A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a estrutura de dados complexa em componentes menores e mais fáceis de entender e manter.\n3. **Aplicar a refatoração:** Vou dividir a estrutura de dados em dois dicionários separados: `permissions_services` e `permissions_volumes`. Além disso, criarei uma função `get_permission` para obter a permissão de um serviço.\n4. **Verificar se o código refatorado preserva o comportamento original:** Verificarei se a função `executar` continua a retornar a permissão de um serviço.\n\n**Código refatorado final:**\n```python\npermissions_services = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        }\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\": \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\npermissions_volumes = {\n    \"lnd\": [\n        '${LND_DATA_DIR}:/lnd:ro'\n    ]\n}\n\ndef get_permission(nome):\n    \"\"\"Devolve a permissao de um servico.\"\"\"\n    return permissions_services.get(nome)\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return get_permission(nome)\n```\nO código refatorado preserva o comportamento original da função `executar`, que continua a retornar a permissão de um serviço. Além disso, a estrutura de dados complexa foi dividida em componentes menores e mais fáceis de entender e manter.",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:49:53.6475349Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Multiply-Nested Container\", pois contém uma estrutura de dados complexa com múltiplos níveis de nested containers (dicionários aninhados).\n2. **Explicar a técnica de refatoração:** A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a estrutura de dados complexa em componentes menores e mais fáceis de entender e manter.\n3. **Aplicar a refatoração:** Vou dividir a estrutura de dados em dois dicionários separados: `permissions_services` e `permissions_volumes`. Além disso, criarei uma função `get_permission` para obter a permissão de um serviço.\n4. **Verificar se o código refatorado preserva o comportamento original:** Verificarei se a função `executar` continua a retornar a permissão de um serviço.\n\n**Código refatorado final:**\n```python\npermissions_services = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        }\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\": \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\npermissions_volumes = {\n    \"lnd\": [\n        '${LND_DATA_DIR}:/lnd:ro'\n    ]\n}\n\ndef get_permission(nome):\n    \"\"\"Devolve a permissao de um servico.\"\"\"\n    return permissions_services.get(nome)\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return get_permission(nome)\n```\nO código refatorado preserva o comportamento original da função `executar`, que continua a retornar a permissão de um serviço. Além disso, a estrutura de dados complexa foi dividida em componentes menores e mais fáceis de entender e manter."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14221170000,
+    "load_duration": 7422600,
+    "prompt_eval_count": 522,
+    "prompt_eval_duration": 443463000,
+    "eval_count": 582,
+    "eval_duration": 13708058000
+  }
+}

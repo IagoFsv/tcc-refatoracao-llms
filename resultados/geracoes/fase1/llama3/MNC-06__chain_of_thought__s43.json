@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-06__chain_of_thought__s43",
+  "instancia": "MNC-06",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:51:29.275003+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Gravacao de perguntas de um jogo de perguntas e respostas num banco local.\n\nPonto de entrada publico: executar(data). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 16.642,
+  "done_reason": "stop",
+  "prompt_eval_count": 566,
+  "eval_count": 585,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Multiply-Nested Container\" pois contém várias estruturas aninhadas (lists, dictionaries, loops) que tornam o código difícil de entender e manter.\n2. **Explicar a técnica de refatoração:** A técnica de refatoração indicada é \"Decompose Container\", que consiste em decompor estruturas aninhadas em componentes menores e mais fáceis de entender. Isso ajudará a simplificar o código e melhorar sua legibilidade.\n3. **Aplicar a refatoração:** Vou decompor as estruturas aninhadas em funções menores e mais fáceis de entender. Em especial, vou extrair a lógica de manipulação de strings em uma função separada.\n\n**Código refatorado:**\n```python\nimport json\nimport sqlite3\n\n\ndef format_question(question):\n    \"\"\"Formata uma pergunta para armazenamento no banco\"\"\"\n    return question.replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n\n\ndef format_question_data(question_data):\n    \"\"\"Formata os dados de uma pergunta para armazenamento no banco\"\"\"\n    return json.dumps(question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for question in data['results']:\n        question.pop('type')\n        question.pop('difficulty')\n        question.pop('question')\n        formatted_question = format_question(question['question'])\n        formatted_question_data = format_question_data(question)\n        c.execute(\"INSERT INTO questions (question, questionData)\" \"VALUES (?, ?)\", (formatted_question, formatted_question_data))\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```\n**Verificar se o código refatorado preserva o comportamento original:** Sim, o código refatorado mantém o mesmo comportamento que o original. A função `add_question` agora é mais fácil de entender e manter, e a lógica de formatação de strings foi extraída em funções separadas.",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:51:27.2202025Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Multiply-Nested Container\" pois contém várias estruturas aninhadas (lists, dictionaries, loops) que tornam o código difícil de entender e manter.\n2. **Explicar a técnica de refatoração:** A técnica de refatoração indicada é \"Decompose Container\", que consiste em decompor estruturas aninhadas em componentes menores e mais fáceis de entender. Isso ajudará a simplificar o código e melhorar sua legibilidade.\n3. **Aplicar a refatoração:** Vou decompor as estruturas aninhadas em funções menores e mais fáceis de entender. Em especial, vou extrair a lógica de manipulação de strings em uma função separada.\n\n**Código refatorado:**\n```python\nimport json\nimport sqlite3\n\n\ndef format_question(question):\n    \"\"\"Formata uma pergunta para armazenamento no banco\"\"\"\n    return question.replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n\n\ndef format_question_data(question_data):\n    \"\"\"Formata os dados de uma pergunta para armazenamento no banco\"\"\"\n    return json.dumps(question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for question in data['results']:\n        question.pop('type')\n        question.pop('difficulty')\n        question.pop('question')\n        formatted_question = format_question(question['question'])\n        formatted_question_data = format_question_data(question)\n        c.execute(\"INSERT INTO questions (question, questionData)\" \"VALUES (?, ?)\", (formatted_question, formatted_question_data))\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```\n**Verificar se o código refatorado preserva o comportamento original:** Sim, o código refatorado mantém o mesmo comportamento que o original. A função `add_question` agora é mais fácil de entender e manter, e a lógica de formatação de strings foi extraída em funções separadas."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14612986800,
+    "load_duration": 6071500,
+    "prompt_eval_count": 566,
+    "prompt_eval_duration": 451090000,
+    "eval_count": 585,
+    "eval_duration": 14093763000
+  }
+}

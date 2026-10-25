@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-14__role__s43",
+  "instancia": "LPL-14",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:39:19.534391+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Simulacao de uma bola quicando, passo a passo.\n\nPonto de entrada publico: executar(estado, tempo, fisica=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\n\ndef simulate_bouncing_ball (x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution = 0.2, g = 9.83) -> list:\n    \"\"\">>>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param x0: initial x position\n    :param y0: initial y position\n    :param vx0: initial x velocity\n    :param vy0: initial y velocity\n    :param steps: number of steps\n    :param dt: time step\n    :param g: gravity constant\n    :param coefficient_of_restitution: coefficient of restitution of each bounce\n    :return: list of positions\n    \"\"\"\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef executar(estado, tempo, fisica=None):\n    \"\"\"estado: (x0, y0, vx0, vy0). tempo: (passos, dt).\n\n    fisica: (coeficiente de restituicao, gravidade); sem ela, valem os\n    valores padrao da simulacao.\n    \"\"\"\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    if fisica is None:\n        return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt)\n    coefficient_of_restitution, g = fisica\n    return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution, g)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 9.998,
+  "done_reason": "stop",
+  "prompt_eval_count": 682,
+  "eval_count": 302,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\ndef simulate_bouncing_ball(state, time, physical_params=None):\n    \"\"\"Simulate the bouncing ball. Gravity affects the y coordinate only. When it hits the floor on the y axis, it bounces back\n    :param state: initial state (x0, y0, vx0, vy0)\n    :param time: time parameters (steps, dt)\n    :param physical_params: physical parameters (coefficient_of_restitution, g); None for default values\n    :return: list of positions\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    if physical_params is None:\n        physical_params = PhysicalParams(coefficient_of_restitution=0.2, g=9.83)\n    return simulate_bouncing_ball_(state, time, physical_params)\n\n\nclass PhysicalParams:\n    def __init__(self, coefficient_of_restitution=0.2, g=9.83):\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\n\ndef executar(estado, tempo):\n    \"\"\"estado: (x0, y0, vx0, vy0). tempo: (passos, dt).\n    \"\"\"\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    return simulate_bouncing_ball((x0, y0, vx0, vy0), (steps, dt))\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:39:17.4844915Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\ndef simulate_bouncing_ball(state, time, physical_params=None):\n    \"\"\"Simulate the bouncing ball. Gravity affects the y coordinate only. When it hits the floor on the y axis, it bounces back\n    :param state: initial state (x0, y0, vx0, vy0)\n    :param time: time parameters (steps, dt)\n    :param physical_params: physical parameters (coefficient_of_restitution, g); None for default values\n    :return: list of positions\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    if physical_params is None:\n        physical_params = PhysicalParams(coefficient_of_restitution=0.2, g=9.83)\n    return simulate_bouncing_ball_(state, time, physical_params)\n\n\nclass PhysicalParams:\n    def __init__(self, coefficient_of_restitution=0.2, g=9.83):\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\n\ndef executar(estado, tempo):\n    \"\"\"estado: (x0, y0, vx0, vy0). tempo: (passos, dt).\n    \"\"\"\n    x0, y0, vx0, vy0 = estado\n    steps, dt = tempo\n    return simulate_bouncing_ball((x0, y0, vx0, vy0), (steps, dt))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7961395800,
+    "load_duration": 5149800,
+    "prompt_eval_count": 682,
+    "prompt_eval_duration": 649467000,
+    "eval_count": 302,
+    "eval_duration": 7222404000
+  }
+}

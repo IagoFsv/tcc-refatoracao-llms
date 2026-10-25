@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-19__role__s43",
+  "instancia": "MNC-19",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T06:55:41.991615+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: consulta de uma posicao.\n\nPonto de entrada publico: executar(x, y, z). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 19.386,
+  "done_reason": "stop",
+  "prompt_eval_count": 699,
+  "eval_count": 339,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "class Location:\n    def  __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def  __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\nclass GameWorld:\n    def __init__(self, x, y, z):\n        self.world = World(x, y, z)\n\n    def get_location(self, x, y, z):\n        return self.world.get_location(x, y, z)\n\n\ndef executar(x, y, z):\n    return GameWorld(2, 3, 4).get_location(x, y, z).location\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T06:55:39.9140109Z",
+    "message": {
+      "role": "assistant",
+      "content": "class Location:\n    def  __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def  __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\nclass GameWorld:\n    def __init__(self, x, y, z):\n        self.world = World(x, y, z)\n\n    def get_location(self, x, y, z):\n        return self.world.get_location(x, y, z)\n\n\ndef executar(x, y, z):\n    return GameWorld(2, 3, 4).get_location(x, y, z).location\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17312469600,
+    "load_duration": 5250600,
+    "prompt_eval_count": 699,
+    "prompt_eval_duration": 1788490000,
+    "eval_count": 339,
+    "eval_duration": 15228790000
+  }
+}

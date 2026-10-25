@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-05__role__s44",
+  "instancia": "MNC-05",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T11:05:02.448680+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Conversao da lista de conteineres de um aplicativo em servicos nomeados.\n\nPonto de entrada publico: executar(app). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\ndef convertContainersToServices(app: dict):\n    app['services'] = {}\n    for container in app['containers']:\n        app['services'][container['name']] = container\n        del app['services'][container['name']]['name']\n    del app['containers']\n    return app\n\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 7.948,
+  "done_reason": "stop",
+  "prompt_eval_count": 477,
+  "eval_count": 108,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\ndef convertContainersToServices(app: dict):\n    app['services'] = {container['name']: container for container in app.get('containers', [])}\n    del app['containers']\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T11:05:00.3987463Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\ndef convertContainersToServices(app: dict):\n    app['services'] = {container['name']: container for container in app.get('containers', [])}\n    del app['containers']\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 5880837500,
+    "load_duration": 6059500,
+    "prompt_eval_count": 477,
+    "prompt_eval_duration": 987355000,
+    "eval_count": 108,
+    "eval_duration": 4639732000
+  }
+}

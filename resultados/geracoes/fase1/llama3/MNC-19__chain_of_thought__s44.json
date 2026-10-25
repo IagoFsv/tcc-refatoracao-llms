@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-19__chain_of_thought__s44",
+  "instancia": "MNC-19",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:36:19.630568+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: consulta de uma posicao.\n\nPonto de entrada publico: executar(x, y, z). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.world_map_size_x = tamanho_x\n        self.world_map_size_y = tamanho_y\n        self.world_map_size_z = tamanho_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 17.989,
+  "done_reason": "stop",
+  "prompt_eval_count": 515,
+  "eval_count": 642,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "Vou seguir os passos para refatorar o código:\n\n1. Identifique por que o trecho apresenta o code smell indicado:\n\nO code smell \"Multiply-Nested Container\" ocorre quando um objeto contém outros objetos que também contêm outros objetos, criando uma estrutura de dados complexa e difícil de entender. No caso, o objeto `World` contém um atributo `world_map` que é uma lista de listas de listas (`[[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]`), o que é um exemplo de Multiply-Nested Container.\n\n2. Explique como a técnica de refatoração indicada se aplica ao trecho:\n\nA técnica de refatoração indicada é a Decompose Container, que consiste em dividir o objeto complexo em objetos menores e mais fáceis de entender. Nesse caso, podemos criar um objeto `LocationMap` que represente o mapa do mundo, e outro objeto `Location` que represente uma casa no mapa.\n\n3. Aplique a refatoração:\n\nAquí está o código refatorado:\n```python\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n\nclass LocationMap:\n    \"\"\"O mapa do mundo, representado por uma matriz de Location.\"\"\"\n\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.size_x = tamanho_x\n        self.size_y = tamanho_y\n        self.size_z = tamanho_z\n        self.locations = self.generate_world_map()\n\n    def generate_world_map(self):\n        return [[Location(x, y, z) for z in range(self.size_z)] for y in range(self.size_y)] for x in range(self.size_x)]\n\n    def get_location(self, x, y, z):\n        return self.locations[x][y][z]\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    world_map = LocationMap(2, 3, 4)\n    return world_map.get_location(x, y, z).x, world_map.get_location(x, y, z).y, world_map.get_location(x, y, z).z\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n\nO código refatorado mantém a mesma funcionalidade do original. A função `executar` ainda retorna as coordenadas da casa encontrada no mapa. No entanto, agora o código é mais fácil de entender e manter, pois a estrutura de dados complexa foi dividida em objetos mais simples e fáceis de compreender.",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:36:17.6157592Z",
+    "message": {
+      "role": "assistant",
+      "content": "Vou seguir os passos para refatorar o código:\n\n1. Identifique por que o trecho apresenta o code smell indicado:\n\nO code smell \"Multiply-Nested Container\" ocorre quando um objeto contém outros objetos que também contêm outros objetos, criando uma estrutura de dados complexa e difícil de entender. No caso, o objeto `World` contém um atributo `world_map` que é uma lista de listas de listas (`[[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]`), o que é um exemplo de Multiply-Nested Container.\n\n2. Explique como a técnica de refatoração indicada se aplica ao trecho:\n\nA técnica de refatoração indicada é a Decompose Container, que consiste em dividir o objeto complexo em objetos menores e mais fáceis de entender. Nesse caso, podemos criar um objeto `LocationMap` que represente o mapa do mundo, e outro objeto `Location` que represente uma casa no mapa.\n\n3. Aplique a refatoração:\n\nAquí está o código refatorado:\n```python\nclass Location:\n    \"\"\"Uma casa do mapa, identificada pelas coordenadas.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n\nclass LocationMap:\n    \"\"\"O mapa do mundo, representado por uma matriz de Location.\"\"\"\n\n    def __init__(self, tamanho_x, tamanho_y, tamanho_z):\n        self.size_x = tamanho_x\n        self.size_y = tamanho_y\n        self.size_z = tamanho_z\n        self.locations = self.generate_world_map()\n\n    def generate_world_map(self):\n        return [[Location(x, y, z) for z in range(self.size_z)] for y in range(self.size_y)] for x in range(self.size_x)]\n\n    def get_location(self, x, y, z):\n        return self.locations[x][y][z]\n\ndef executar(x, y, z):\n    \"\"\"Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.\n    Ponto de entrada publico desta unidade.\"\"\"\n    world_map = LocationMap(2, 3, 4)\n    return world_map.get_location(x, y, z).x, world_map.get_location(x, y, z).y, world_map.get_location(x, y, z).z\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n\nO código refatorado mantém a mesma funcionalidade do original. A função `executar` ainda retorna as coordenadas da casa encontrada no mapa. No entanto, agora o código é mais fácil de entender e manter, pois a estrutura de dados complexa foi dividida em objetos mais simples e fáceis de compreender."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15965269200,
+    "load_duration": 5977200,
+    "prompt_eval_count": 515,
+    "prompt_eval_duration": 408832000,
+    "eval_count": 642,
+    "eval_duration": 15487690000
+  }
+}

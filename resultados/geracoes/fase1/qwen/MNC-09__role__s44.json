@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-09__role__s44",
+  "instancia": "MNC-09",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:04:36.923656+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: nome do pacote a partir do pyproject.toml.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 5.422,
+  "done_reason": "stop",
+  "prompt_eval_count": 365,
+  "eval_count": 130,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_name_from_toml():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_name_from_toml()\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:04:34.8987292Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_name_from_toml():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_name_from_toml()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 3388864400,
+    "load_duration": 5423500,
+    "prompt_eval_count": 365,
+    "prompt_eval_duration": 334587000,
+    "eval_count": 130,
+    "eval_duration": 2992478000
+  }
+}

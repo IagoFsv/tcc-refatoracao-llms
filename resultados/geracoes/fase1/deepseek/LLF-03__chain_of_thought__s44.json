@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-03__chain_of_thought__s44",
+  "instancia": "LLF-03",
+  "smell": "LLF",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:20:47.279960+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Gravacao de valores aninhados na configuracao do jogo, como texto.\n\nPonto de entrada publico: executar(valor). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 33.676,
+  "done_reason": "stop",
+  "prompt_eval_count": 645,
+  "eval_count": 656,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "1. Identificação do Code Smell:\nO code smell identificado nesse caso é o \"Long Lambda Function\". Uma função lambda é definida com um número grande de operações, o que torna difícil entender o que a função faz. Além disso, se houver uma alteração no código, é difícil saber qual parte do código está relacionada a essa função.\n\n2. Aplicação da Refatoração:\nA técnica de refatoração que se aplica a esse caso é \"Replace Lambda with Named Function\". Nessa técnica, uma função lambda é substituída por uma função nomeada definida anteriormente no código. Isso torna o código mais legível e fácil de entender.\n\n3. Refatoração:\nAbaixo está o código refatorado:\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def join_values(self, value):\n        return \",\".join(map(self.join_values_inner, value))\n\n    def join_values_inner(self, value):\n        return \",\".join(map(self.join_values_middle, value))\n\n    def join_values_middle(self, value):\n        return \",\".join(map(self.join_values_outer, value))\n\n    def join_values_outer(self, value):\n        return \",\".join(value)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = self.join_values(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\n4. Verificação do Comportamento:\nO código refatorado preserva o comportamento original, pois a função lambda original foi substituída por uma série de funções nomeadas. As operações que antes eram feitas por uma única função lambda agora são feitas por várias funções chamando uma após a outra.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:20:45.1960845Z",
+    "message": {
+      "role": "assistant",
+      "content": "1. Identificação do Code Smell:\nO code smell identificado nesse caso é o \"Long Lambda Function\". Uma função lambda é definida com um número grande de operações, o que torna difícil entender o que a função faz. Além disso, se houver uma alteração no código, é difícil saber qual parte do código está relacionada a essa função.\n\n2. Aplicação da Refatoração:\nA técnica de refatoração que se aplica a esse caso é \"Replace Lambda with Named Function\". Nessa técnica, uma função lambda é substituída por uma função nomeada definida anteriormente no código. Isso torna o código mais legível e fácil de entender.\n\n3. Refatoração:\nAbaixo está o código refatorado:\n\n```python\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def join_values(self, value):\n        return \",\".join(map(self.join_values_inner, value))\n\n    def join_values_inner(self, value):\n        return \",\".join(map(self.join_values_middle, value))\n\n    def join_values_middle(self, value):\n        return \",\".join(map(self.join_values_outer, value))\n\n    def join_values_outer(self, value):\n        return \",\".join(value)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = self.join_values(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```\n\n4. Verificação do Comportamento:\nO código refatorado preserva o comportamento original, pois a função lambda original foi substituída por uma série de funções nomeadas. As operações que antes eram feitas por uma única função lambda agora são feitas por várias funções chamando uma após a outra.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 31613358700,
+    "load_duration": 5959400,
+    "prompt_eval_count": 645,
+    "prompt_eval_duration": 559384000,
+    "eval_count": 656,
+    "eval_duration": 30791573000
+  }
+}

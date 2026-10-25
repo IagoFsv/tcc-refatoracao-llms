@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-20__role__s44",
+  "instancia": "MNC-20",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T11:31:10.276034+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: desenho da cena no terminal.\n\nPonto de entrada publico: executar(descricoes). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, com a descricao que aparece na cena.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Mapa montado a partir das descricoes: descricoes[x][y][z].\n\n    O tamanho em cada eixo vem do primeiro elemento; se as fileiras tiverem\n    tamanhos diferentes, o mapa fica irregular.\n    \"\"\"\n\n    def __init__(self, descricoes):\n        self.world_map = [[[Location(texto) for texto in fileira] for fileira in plano] for plano in descricoes]\n        primeiro_plano = descricoes[0]\n        self.world_map_size_x = len(descricoes)\n        self.world_map_size_y = len(primeiro_plano)\n        self.world_map_size_z = len(primeiro_plano[0])\n\n    def get_location(self, x, y, z):\n        plano = self.world_map[x]\n        return plano[y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    \"\"\"Desenha a cena do mapa descrito. Ponto de entrada publico desta unidade.\"\"\"\n    render_scene(World(descricoes))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 28.684,
+  "done_reason": "stop",
+  "prompt_eval_count": 969,
+  "eval_count": 504,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell a ser refatorado é o \"Multiply-Nested Container\", o qual ocorre quando temos um contêiner aninhado muito profundamente. Neste caso, a classe World é aninhada muitas vezes, o que pode levar a complexidade e dificuldade de manutenção do código. A técnica de refatoração a ser aplicada é a \"Decompose Container\", que consiste em dividir a classe World em duas ou mais classes menores, de forma a reduzir a complexidade.\n\nSegue o código refatorado:\n\n```python\nclass Location:\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    def __init__(self, descriptions):\n        self.planes = [Location(description) for description in descriptions]\n\n\nclass World:\n    def __init__(self, descriptions):\n        self.world_map = [Plane(plane_descriptions) for plane_descriptions in descriptions]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].planes[y].get_description()\n\n\ndef render_scene(world):\n    print(\"\\n\" * 100)\n\n    for x in range(len(world.world_map)):\n        for y in range(len(world.world_map[x].planes)):\n            print(world.get_location(x, y, 0), end=\"\")\n        print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    render_scene(World(descricoes))\n```\n\nNeste refatorado, a classe World foi decomposição em duas classes: World e Plane. A classe Plane agora contém uma lista de locais, enquanto a classe World contém uma lista de Planos. Isso reduz a complexidade do código, pois cada classe tem um único propósito.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T11:31:08.227536Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell a ser refatorado é o \"Multiply-Nested Container\", o qual ocorre quando temos um contêiner aninhado muito profundamente. Neste caso, a classe World é aninhada muitas vezes, o que pode levar a complexidade e dificuldade de manutenção do código. A técnica de refatoração a ser aplicada é a \"Decompose Container\", que consiste em dividir a classe World em duas ou mais classes menores, de forma a reduzir a complexidade.\n\nSegue o código refatorado:\n\n```python\nclass Location:\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    def __init__(self, descriptions):\n        self.planes = [Location(description) for description in descriptions]\n\n\nclass World:\n    def __init__(self, descriptions):\n        self.world_map = [Plane(plane_descriptions) for plane_descriptions in descriptions]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].planes[y].get_description()\n\n\ndef render_scene(world):\n    print(\"\\n\" * 100)\n\n    for x in range(len(world.world_map)):\n        for y in range(len(world.world_map[x].planes)):\n            print(world.get_location(x, y, 0), end=\"\")\n        print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    render_scene(World(descricoes))\n```\n\nNeste refatorado, a classe World foi decomposição em duas classes: World e Plane. A classe Plane agora contém uma lista de locais, enquanto a classe World contém uma lista de Planos. Isso reduz a complexidade do código, pois cada classe tem um único propósito.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26653216100,
+    "load_duration": 4375700,
+    "prompt_eval_count": 969,
+    "prompt_eval_duration": 1710505000,
+    "eval_count": 504,
+    "eval_duration": 24600007000
+  }
+}

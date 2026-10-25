@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-01__role__s43",
+  "instancia": "LPL-01",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:25:50.153390+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Uma epoca de treino de um classificador.\n\nPonto de entrada publico: executar(lotes). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\nAs pecas de treino (tensor, modelo, perda, otimizador, loader) sao versoes\nminimas em Python puro. O modelo soma um vies por classe ao score de cada\namostra; a perda e quanto o maior score passa o score da classe certa.\n\"\"\"\n\nfrom types import SimpleNamespace\n\nfrom tqdm import tqdm\n\n_NUM_CLASSES = 3\n_TAXA_APRENDIZADO = 0.5\n\n\nclass _Tensor:\n    \"\"\"Tensor sobre listas: 1D (valores) ou 2D (uma linha por amostra).\"\"\"\n\n    def __init__(self, valores, modelo=None):\n        self.valores = valores\n        self.modelo = modelo\n\n    def to(self, device):\n        return self\n\n    def argmax(self, dim, keepdim):\n        return _Tensor([[linha.index(max(linha))] for linha in self.valores])\n\n    def view_as(self, outro):\n        return _Tensor([[valor] for valor in self.valores])\n\n    def eq(self, outro):\n        return _Tensor([a == b for a, b in zip(self.valores, outro.valores)])\n\n    def sum(self):\n        return _Tensor(sum(self.valores))\n\n    def item(self):\n        return self.valores\n\n\nclass _Modelo:\n    \"\"\"Um vies por classe, somado ao score de cada amostra.\"\"\"\n\n    def __init__(self):\n        self.vies = [0.0] * _NUM_CLASSES\n        self.grad = [0.0] * _NUM_CLASSES\n        self.training = False\n\n    def train(self):\n        self.training = True\n        return self\n\n    def __call__(self, data):\n        linhas = [_somar(amostra, self.vies) for amostra in data.valores]\n        return _Tensor(linhas, modelo=self)\n\n\ndef _somar(a, b):\n    return [x + y for x, y in zip(a, b)]\n\n\nclass _Perda:\n    \"\"\"Media, no lote, de quanto o maior score passa o da classe certa.\"\"\"\n\n    def __init__(self, output, target):\n        self.output = output\n        self.pares = list(zip(output.valores, target.valores))\n\n    def item(self):\n        return sum(max(linha) - linha[classe] for linha, classe in self.pares) / len(self.pares)\n\n    def backward(self):\n        grad = self.output.modelo.grad\n        for linha, classe in self.pares:\n            grad[linha.index(max(linha))] += 1 / len(self.pares)\n            grad[classe] -= 1 / len(self.pares)\n\n\nclass _Otimizador:\n    \"\"\"Descida de gradiente sobre o vies do modelo.\"\"\"\n\n    def __init__(self, modelo):\n        self.modelo = modelo\n\n    def zero_grad(self):\n        self.modelo.grad[:] = [0.0] * _NUM_CLASSES\n\n    def step(self):\n        passo = [_TAXA_APRENDIZADO * g for g in self.modelo.grad]\n        self.modelo.vies = [b - p for b, p in zip(self.modelo.vies, passo)]\n\n\nclass DataLoader:\n    \"\"\"Itera sobre lotes (data, target) ja montados.\"\"\"\n\n    def __init__(self, lotes):\n        self.lotes = lotes\n        self.dataset = [amostra for data, _ in lotes for amostra in data.valores]\n\n    def __iter__(self):\n        return iter(self.lotes)\n\n    def __len__(self):\n        return len(self.lotes)\n\n\ntorch = SimpleNamespace(device=str)\nnn = SimpleNamespace(Module=_Modelo, modules=_Modelo)\noptim = SimpleNamespace(Optimizer=_Otimizador)\n\n\ndef train(\n        model:nn.modules,\n        device:torch.device, \n        train_loader: DataLoader, \n        optimizer:optim.Optimizer, \n        criterion: nn.Module\n        )->tuple[float, float, nn.Module]:\n    '''\n    basic train function generate by github-copilot\n    args\n        device: device to train the model\n        train_loader: training data loader\n        optimizer: optimizer for the model\n        criterion: loss function    \n    return\n        train_loss: loss of the training process\n        accuracy: accuracy of the training process\n        model: trained model\n    '''\n    model.train()\n    train_loss = 0\n    correct = 0\n    pbar = tqdm(train_loader)\n    for batch_idx, (data, target) in enumerate(pbar):\n        data, target = data.to(device), target.to(device)\n        optimizer.zero_grad()\n        output = model(data)\n        loss = criterion(output, target)\n        loss.backward()\n        optimizer.step()\n        train_loss += loss.item()\n        pred = output.argmax(dim=1, keepdim=True)\n        correct += pred.eq(target.view_as(pred)).sum().item()\n        pbar.set_description(desc=f'Train Loss={train_loss/len(train_loader.dataset ):.4f}'+\n                                  f'|Batch_id={batch_idx}'+\n                                  f'|Accuracy={correct / len(train_loader.dataset):.2f}')\n    # train_loss /= len(train_loader.dataset)\n    train_loss /= len(train_loader.dataset)\n    accuracy = 100. * correct / len(train_loader.dataset)\n    return train_loss, accuracy, model  \n\n\ndef executar(lotes):\n    \"\"\"Treina por uma epoca. Ponto de entrada publico desta unidade.\n\n    lotes: lista de (amostras, rotulos); cada amostra tem um score por classe.\n    Devolve (perda, acuracia, vies final do modelo, modelo em modo de treino).\n    \"\"\"\n    modelo = _Modelo()\n    loader = DataLoader([(_Tensor(a), _Tensor(r)) for a, r in lotes])\n    perda, acuracia, modelo = train(modelo, \"cpu\", loader, _Otimizador(modelo), _Perda)\n    return perda, acuracia, modelo.vies, modelo.training\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 6.975,
+  "done_reason": "stop",
+  "prompt_eval_count": 1481,
+  "eval_count": 144,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\ndef executar(lotes):\n    \"\"\"Treina por uma epoca. Ponto de entrada publico desta unidade.\n\n    lotes: lista de (amostras, rotulos); cada amostra tem um score por classe.\n    Devolve (perda, acuracia, vies final do modelo, modelo em modo de treino).\n    \"\"\"\n    TrainParams = SimpleNamespace(\n        modelo=_Modelo(),\n        device=\"cpu\",\n        train_loader=DataLoader([(_Tensor(a), _Tensor(r)) for a, r in lotes]),\n        optimizer=_Otimizador(modelo),\n        criterion=_Perda\n    )\n\n    return train(**TrainParams.__dict__)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:25:48.1169535Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\ndef executar(lotes):\n    \"\"\"Treina por uma epoca. Ponto de entrada publico desta unidade.\n\n    lotes: lista de (amostras, rotulos); cada amostra tem um score por classe.\n    Devolve (perda, acuracia, vies final do modelo, modelo em modo de treino).\n    \"\"\"\n    TrainParams = SimpleNamespace(\n        modelo=_Modelo(),\n        device=\"cpu\",\n        train_loader=DataLoader([(_Tensor(a), _Tensor(r)) for a, r in lotes]),\n        optimizer=_Otimizador(modelo),\n        criterion=_Perda\n    )\n\n    return train(**TrainParams.__dict__)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 4936268300,
+    "load_duration": 4885700,
+    "prompt_eval_count": 1481,
+    "prompt_eval_duration": 1313303000,
+    "eval_count": 144,
+    "eval_duration": 3532252000
+  }
+}

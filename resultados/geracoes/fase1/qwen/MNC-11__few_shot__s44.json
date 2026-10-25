@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-11__few_shot__s44",
+  "instancia": "MNC-11",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:06:44.012967+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: gerar e publicar uma versao.\n\nPonto de entrada publico: executar(version, falhar_publicacao=False). Nao\naltere o nome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\n\nclass ContextoDeBuild(Context):\n    \"\"\"Contexto que nao roda comandos de verdade.\n\n    Cada chamada de run registra o comando, os argumentos e a versao gravada\n    no pyproject.toml naquele momento. Com falhar ligado, o comando termina\n    com codigo 1, como faria um build ou publicacao que falhou.\n    \"\"\"\n\n    comandos = []\n    falhar = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as arquivo:\n            poetry = toml.load(arquivo)['tool']['poetry']\n        ContextoDeBuild.comandos.append((command, kwargs, poetry['version']))\n        if ContextoDeBuild.falhar:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n\n@task\ndef release(context: Context, version: str) -> None:\n    '''Build & Publish to PyPI.'''\n\n    # load pyproject\n    pyproject_path = 'pyproject.toml'\n    pyproject_string = ''\n    with open(pyproject_path, 'r', encoding='utf-8') as pyproject_file:\n        pyproject_string = pyproject_file.read()\n    pyproject = toml.loads(pyproject_string)\n    # change version to today datetime\n    pyproject['tool']['poetry']['version'] = version\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    # build & publish\n    try:\n        context.run(\n            '''\n                poetry build --no-interaction\n                poetry publish --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n            pyproject_file.write(pyproject_string)\n        raise exception from exception\n\n    # recover to original\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        pyproject_file.write(pyproject_string)\n\n\ndef executar(version, falhar_publicacao=False):\n    \"\"\"Roda a publicacao da versao; devolve os comandos registrados. Ponto de entrada publico desta unidade.\"\"\"\n    ContextoDeBuild.comandos = []\n    ContextoDeBuild.falhar = falhar_publicacao\n    release(ContextoDeBuild(), version)\n    return ContextoDeBuild.comandos\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 12.413,
+  "done_reason": "stop",
+  "prompt_eval_count": 1074,
+  "eval_count": 419,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\nclass ContextoDeBuild(Context):\n    comandos = []\n    falhar = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as arquivo:\n            poetry = toml.load(arquivo)['tool']['poetry']\n        ContextoDeBuild.comandos.append((command, kwargs, poetry['version']))\n        if ContextoDeBuild.falhar:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n@task\ndef release(context: Context, version: str) -> None:\n    pyproject_path = 'pyproject.toml'\n    with open(pyproject_path, 'r', encoding='utf-8') as pyproject_file:\n        pyproject_string = pyproject_file.read()\n    pyproject = toml.loads(pyproject_string)\n    pyproject['tool']['poetry']['version'] = version\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    try:\n        context.run(\n            '''\n                poetry build --no-interaction\n                poetry publish --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n            pyproject_file.write(pyproject_string)\n        raise exception from exception\n\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        pyproject_file.write(pyproject_string)\n\ndef executar(version, falhar_publicacao=False):\n    ContextoDeBuild.comandos = []\n    ContextoDeBuild.falhar = falhar_publicacao\n    release(ContextoDeBuild(), version)\n    return ContextoDeBuild.comandos\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:06:41.9598235Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\nclass ContextoDeBuild(Context):\n    comandos = []\n    falhar = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as arquivo:\n            poetry = toml.load(arquivo)['tool']['poetry']\n        ContextoDeBuild.comandos.append((command, kwargs, poetry['version']))\n        if ContextoDeBuild.falhar:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n@task\ndef release(context: Context, version: str) -> None:\n    pyproject_path = 'pyproject.toml'\n    with open(pyproject_path, 'r', encoding='utf-8') as pyproject_file:\n        pyproject_string = pyproject_file.read()\n    pyproject = toml.loads(pyproject_string)\n    pyproject['tool']['poetry']['version'] = version\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    try:\n        context.run(\n            '''\n                poetry build --no-interaction\n                poetry publish --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n            pyproject_file.write(pyproject_string)\n        raise exception from exception\n\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        pyproject_file.write(pyproject_string)\n\ndef executar(version, falhar_publicacao=False):\n    ContextoDeBuild.comandos = []\n    ContextoDeBuild.falhar = falhar_publicacao\n    release(ContextoDeBuild(), version)\n    return ContextoDeBuild.comandos\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10370275700,
+    "load_duration": 5438700,
+    "prompt_eval_count": 1074,
+    "prompt_eval_duration": 538609000,
+    "eval_count": 419,
+    "eval_duration": 9755406000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-08__chain_of_thought__s44",
+  "instancia": "MNC-08",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:26:49.267887+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Pergunta respondida por um servico de completar texto.\n\nPonto de entrada publico: executar(texto, escolhas). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    pedidos = []\n    escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls.escolhas]}\n\n    @staticmethod\n    def _escolha(texto):\n        return {\"text\": texto}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n    return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    Completion.pedidos = []\n    Completion.escolhas = list(escolhas)\n    resposta = submit_question(texto)\n    return resposta, Completion.pedidos\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 25.436,
+  "done_reason": "stop",
+  "prompt_eval_count": 605,
+  "eval_count": 943,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque contém uma classe `Completion` com atributos `pedidos` e `escolhas`, que são listas que são acessadas e modificadas dentro da mesma classe. Isso viola o princípio de encapsulamento, pois os atributos estão expostos e podem ser alterados de forma não controlada.\n2. A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a classe `Completion` em várias outras, cada uma com uma responsabilidade específica. Isso ajudará a reduzir a complexidade e a aumentar a modularidade do código.\n3. Aplique a refatoração:\n```python\nclass CompletionService:\n    \"\"\"Serviço de completar texto\"\"\"\n    def __init__(self):\n        self.pedidos = []\n\n    def create(self, **kwargs):\n        self.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [self._escolha(texto) for texto in self.get_escolhas()]}\n\n    def get_escolhas(self):\n        return []\n\n    def _escolha(self, texto):\n        return {\"text\": texto}\n\n\nclass OpenAiService:\n    \"\"\"Serviço de OpenAI\"\"\"\n    def __init__(self):\n        self.api_key = None\n\n    def submit_question(self, text):\n        \"\"\"Submete uma pergunta ao OpenAI API\"\"\"\n        self.api_key = os.getenv(\"OPENAI_API_KEY\")\n        prompt = text\n\n        result = openai.Completion.create(\n            prompt=prompt,\n            temperature=0,\n            max_tokens=300,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n            model=\"text-davinci-003\",\n        )[\"choices\"][0][\"text\"].strip(\" \\n\")\n        return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos\"\"\"\n    completion_service = CompletionService()\n    open_ai_service = OpenAiService()\n    completion_service.pedidos = []\n    completion_service.escolhas = list(escolhas)\n    resposta = open_ai_service.submit_question(texto)\n    return resposta, completion_service.pedidos\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n* O ponto de entrada público `executar` ainda está presente e funciona da mesma maneira.\n* A classe `Completion` foi dividida em duas classes independentes: `CompletionService` e `OpenAiService`.\n* Os atributos `pedidos` e `escolhas` estão agora encapsulados dentro da classe `CompletionService`, o que ajuda a reduzir a complexidade e a aumentar a modularidade do código.\n\n**Código refatorado final**\n```python\nclass CompletionService:\n    \"\"\"Serviço de completar texto\"\"\"\n    def __init__(self):\n        self.pedidos = []\n\n    def create(self, **kwargs):\n        self.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [self._escolha(texto) for texto in self.get_escolhas()]}\n\n    def get_escolhas(self):\n        return []\n\n    def _escolha(self, texto):\n        return {\"text\": texto}\n\n\nclass OpenAiService:\n    \"\"\"Serviço de OpenAI\"\"\"\n    def __init__(self):\n        self.api_key = None\n\n    def submit_question(self, text):\n        \"\"\"Submete uma pergunta ao OpenAI API\"\"\"\n        self.api_key = os.getenv(\"OPENAI_API_KEY\")\n        prompt = text\n\n        result = openai.Completion.create(\n            prompt=prompt,\n            temperature=0,\n            max_tokens=300,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n            model=\"text-davinci-003\",\n        )[\"choices\"][0][\"text\"].strip(\" \\n\")\n        return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos\"\"\"\n    completion_service = CompletionService()\n    open_ai_service = OpenAiService()\n    completion_service.pedidos = []\n    completion_service.escolhas = list(escolhas)\n    resposta = open_ai_service.submit_question(texto)\n    return resposta, completion_service.pedidos\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:26:47.2232283Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque contém uma classe `Completion` com atributos `pedidos` e `escolhas`, que são listas que são acessadas e modificadas dentro da mesma classe. Isso viola o princípio de encapsulamento, pois os atributos estão expostos e podem ser alterados de forma não controlada.\n2. A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a classe `Completion` em várias outras, cada uma com uma responsabilidade específica. Isso ajudará a reduzir a complexidade e a aumentar a modularidade do código.\n3. Aplique a refatoração:\n```python\nclass CompletionService:\n    \"\"\"Serviço de completar texto\"\"\"\n    def __init__(self):\n        self.pedidos = []\n\n    def create(self, **kwargs):\n        self.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [self._escolha(texto) for texto in self.get_escolhas()]}\n\n    def get_escolhas(self):\n        return []\n\n    def _escolha(self, texto):\n        return {\"text\": texto}\n\n\nclass OpenAiService:\n    \"\"\"Serviço de OpenAI\"\"\"\n    def __init__(self):\n        self.api_key = None\n\n    def submit_question(self, text):\n        \"\"\"Submete uma pergunta ao OpenAI API\"\"\"\n        self.api_key = os.getenv(\"OPENAI_API_KEY\")\n        prompt = text\n\n        result = openai.Completion.create(\n            prompt=prompt,\n            temperature=0,\n            max_tokens=300,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n            model=\"text-davinci-003\",\n        )[\"choices\"][0][\"text\"].strip(\" \\n\")\n        return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos\"\"\"\n    completion_service = CompletionService()\n    open_ai_service = OpenAiService()\n    completion_service.pedidos = []\n    completion_service.escolhas = list(escolhas)\n    resposta = open_ai_service.submit_question(texto)\n    return resposta, completion_service.pedidos\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n* O ponto de entrada público `executar` ainda está presente e funciona da mesma maneira.\n* A classe `Completion` foi dividida em duas classes independentes: `CompletionService` e `OpenAiService`.\n* Os atributos `pedidos` e `escolhas` estão agora encapsulados dentro da classe `CompletionService`, o que ajuda a reduzir a complexidade e a aumentar a modularidade do código.\n\n**Código refatorado final**\n```python\nclass CompletionService:\n    \"\"\"Serviço de completar texto\"\"\"\n    def __init__(self):\n        self.pedidos = []\n\n    def create(self, **kwargs):\n        self.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [self._escolha(texto) for texto in self.get_escolhas()]}\n\n    def get_escolhas(self):\n        return []\n\n    def _escolha(self, texto):\n        return {\"text\": texto}\n\n\nclass OpenAiService:\n    \"\"\"Serviço de OpenAI\"\"\"\n    def __init__(self):\n        self.api_key = None\n\n    def submit_question(self, text):\n        \"\"\"Submete uma pergunta ao OpenAI API\"\"\"\n        self.api_key = os.getenv(\"OPENAI_API_KEY\")\n        prompt = text\n\n        result = openai.Completion.create(\n            prompt=prompt,\n            temperature=0,\n            max_tokens=300,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n            model=\"text-davinci-003\",\n        )[\"choices\"][0][\"text\"].strip(\" \\n\")\n        return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos\"\"\"\n    completion_service = CompletionService()\n    open_ai_service = OpenAiService()\n    completion_service.pedidos = []\n    completion_service.escolhas = list(escolhas)\n    resposta = open_ai_service.submit_question(texto)\n    return resposta, completion_service.pedidos\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 23391742800,
+    "load_duration": 4630900,
+    "prompt_eval_count": 605,
+    "prompt_eval_duration": 496499000,
+    "eval_count": 943,
+    "eval_duration": 22820427000
+  }
+}

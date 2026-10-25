@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-09__chain_of_thought__s44",
+  "instancia": "MNC-09",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:27:30.127290+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Tarefas de manutencao de um projeto Python: nome do pacote a partir do pyproject.toml.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    return get_project_path()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.631,
+  "done_reason": "stop",
+  "prompt_eval_count": 397,
+  "eval_count": 343,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque o método `get_project_path` é responsável por abrir um arquivo (`pyproject.toml`), ler o conteúdo e processá-lo, e também chamar outro método (`get_pep8_compliant_name`) para manipular o nome do projeto. Isso resulta em uma estrutura complexa e difícil de entender.\n2. A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a responsabilidade do método `get_project_path` em métodos menores e mais fáceis de entender.\n3. Aplique a refatoração:\n```python\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef read_project_file() -> dict:\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef get_project_name(data: dict) -> str:\n    return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    file_data = read_project_file()\n    return get_project_name(file_data)\n```\n4. Verifique se o código refatorado preserva o comportamento original:\nO código refatorado mantém a mesma lógica do original, apenas a estrutura foi alterada para ser mais modular e fácil de entender.",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:27:28.0680772Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque o método `get_project_path` é responsável por abrir um arquivo (`pyproject.toml`), ler o conteúdo e processá-lo, e também chamar outro método (`get_pep8_compliant_name`) para manipular o nome do projeto. Isso resulta em uma estrutura complexa e difícil de entender.\n2. A técnica de refatoração indicada é \"Decompose Container\", que consiste em dividir a responsabilidade do método `get_project_path` em métodos menores e mais fáceis de entender.\n3. Aplique a refatoração:\n```python\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef read_project_file() -> dict:\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef get_project_name(data: dict) -> str:\n    return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef executar():\n    \"\"\"Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade.\"\"\"\n    file_data = read_project_file()\n    return get_project_name(file_data)\n```\n4. Verifique se o código refatorado preserva o comportamento original:\nO código refatorado mantém a mesma lógica do original, apenas a estrutura foi alterada para ser mais modular e fácil de entender."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8592815200,
+    "load_duration": 4964500,
+    "prompt_eval_count": 397,
+    "prompt_eval_duration": 312408000,
+    "eval_count": 343,
+    "eval_duration": 8224847000
+  }
+}

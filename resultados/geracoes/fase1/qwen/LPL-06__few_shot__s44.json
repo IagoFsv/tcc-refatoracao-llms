@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-06__few_shot__s44",
+  "instancia": "LPL-06",
+  "smell": "LPL",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T08:39:11.626453+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):\n    produto = {\n        'nome': nome,\n        'preco': preco,\n        'quantidade': quantidade,\n        'categoria': categoria,\n        'fornecedor': fornecedor,\n        'desconto': desconto\n    }\n    banco_de_dados.salvar(produto)\n    return produto\nCódigo refatorado:\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Produto:\n    nome: str\n    preco: float\n    quantidade: int\n    categoria: str\n    fornecedor: str\n    desconto: float\n\ndef cadastrar_produto(produto: Produto):\n    banco_de_dados.salvar(asdict(produto))\n    return produto\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Cadastro de servidores SSH num banco SQLite.\n\nPonto de entrada publico: executar(cadastrados, servidor). Nao altere o nome\nnem a assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nO banco e o arquivo frSSH.db da pasta atual. executar cria a tabela de\nservidores, grava os servidores ja cadastrados, grava um servidor novo e devolve as\nlinhas da tabela, na ordem de insercao.\n\"\"\"\n\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(ip, port, username, password, keyid):\n    # THIS IS THE REDUNDANT FUNCTION.\n    # THIS IS REPLACED BY .operate.addserverviapwd and .operate.addserverviakey\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (ip, port, username, password, keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    ip, port, username, password, keyid = servidor\n    add_server(ip, port, username, password, keyid)\n    return _linhas()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.618,
+  "done_reason": "stop",
+  "prompt_eval_count": 801,
+  "eval_count": 336,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport sqlite3\nfrom dataclasses import dataclass, asdict\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n@dataclass\nclass Servidor:\n    ip: str\n    port: int\n    username: str\n    password: str\n    keyid: str\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", (asdict(s) for s in cadastrados))\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(servidor: Servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor: Servidor):\n    \"\"\"cadastrados: lista de Servidor.\"\"\"\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T08:39:09.588702Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport sqlite3\nfrom dataclasses import dataclass, asdict\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n@dataclass\nclass Servidor:\n    ip: str\n    port: int\n    username: str\n    password: str\n    keyid: str\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", (asdict(s) for s in cadastrados))\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(servidor: Servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor: Servidor):\n    \"\"\"cadastrados: lista de Servidor.\"\"\"\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8569378900,
+    "load_duration": 5112400,
+    "prompt_eval_count": 801,
+    "prompt_eval_duration": 657652000,
+    "eval_count": 336,
+    "eval_duration": 7864886000
+  }
+}

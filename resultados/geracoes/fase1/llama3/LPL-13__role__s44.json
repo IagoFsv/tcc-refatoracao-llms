@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-13__role__s44",
+  "instancia": "LPL-13",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:11:18.546312+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Interpolacao bilinear de um ponto dentro de um retangulo.\n\nPonto de entrada publico: executar(ponto, cantos, valores). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\n\ndef bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    x : float\n        x coordinate to which the value will be interpolated.\n    y : float\n        y coordinate to which the value will be interpolated.\n    x1 : float\n        x coordinate of the first point.\n    x2 : float\n        x coordinate of the second point.\n    y1 : float\n        y coordinate of the first point.\n    y2 : float\n        y coordinate of the second point.\n    z11 : float\n        Value at the first point.\n    z12 : float\n        Value at the second point.\n    z21 : float\n        Value at the third point.\n    z22 : float\n        Value at the fourth point.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation\n    >>> bilinear_interpolation(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)\n    0.5\n    \"\"\"\n    return (\n        z11 * (x2 - x) * (y2 - y)\n        + z21 * (x - x1) * (y2 - y)\n        + z12 * (x2 - x) * (y - y1)\n        + z22 * (x - x1) * (y - y1)\n    ) / ((x2 - x1) * (y2 - y1))\n\n\ndef executar(ponto, cantos, valores):\n    \"\"\"ponto: (x, y). cantos: (x1, x2, y1, y2). valores: (z11, z12, z21, z22).\"\"\"\n    x, y = ponto\n    x1, x2, y1, y2 = cantos\n    z11, z12, z21, z22 = valores\n    return bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 8.834,
+  "done_reason": "stop",
+  "prompt_eval_count": 736,
+  "eval_count": 248,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass BilinearInterpolationData:\n    x1: float\n    x2: float\n    y1: float\n    y2: float\n    z11: float\n    z12: float\n    z21: float\n    z22: float\n\ndef bilinear_interpolation(data: BilinearInterpolationData, x: float, y: float) -> float:\n    return (\n        data.z11 * (data.x2 - x) * (data.y2 - y)\n        + data.z21 * (x - data.x1) * (data.y2 - y)\n        + data.z12 * (data.x2 - x) * (y - data.y1)\n        + data.z22 * (x - data.x1) * (y - data.y1)\n    ) / ((data.x2 - data.x1) * (data.y2 - data.y1))\n\ndef executar(ponto, cantos, valores):\n    data = BilinearInterpolationData(*cants, *valores)\n    x, y = ponto\n    return bilinear_interpolation(data, x, y)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:11:16.4791569Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass BilinearInterpolationData:\n    x1: float\n    x2: float\n    y1: float\n    y2: float\n    z11: float\n    z12: float\n    z21: float\n    z22: float\n\ndef bilinear_interpolation(data: BilinearInterpolationData, x: float, y: float) -> float:\n    return (\n        data.z11 * (data.x2 - x) * (data.y2 - y)\n        + data.z21 * (x - data.x1) * (data.y2 - y)\n        + data.z12 * (data.x2 - x) * (y - data.y1)\n        + data.z22 * (x - data.x1) * (y - data.y1)\n    ) / ((data.x2 - data.x1) * (data.y2 - data.y1))\n\ndef executar(ponto, cantos, valores):\n    data = BilinearInterpolationData(*cants, *valores)\n    x, y = ponto\n    return bilinear_interpolation(data, x, y)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6779879400,
+    "load_duration": 5859200,
+    "prompt_eval_count": 736,
+    "prompt_eval_duration": 659353000,
+    "eval_count": 248,
+    "eval_duration": 6007181000
+  }
+}

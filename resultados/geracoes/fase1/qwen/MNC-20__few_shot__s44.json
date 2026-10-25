@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-20__few_shot__s44",
+  "instancia": "MNC-20",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:14:46.617829+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Mapa tridimensional de um jogo de aventura: desenho da cena no terminal.\n\nPonto de entrada publico: executar(descricoes). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\n\nclass Location:\n    \"\"\"Uma casa do mapa, com a descricao que aparece na cena.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Mapa montado a partir das descricoes: descricoes[x][y][z].\n\n    O tamanho em cada eixo vem do primeiro elemento; se as fileiras tiverem\n    tamanhos diferentes, o mapa fica irregular.\n    \"\"\"\n\n    def __init__(self, descricoes):\n        self.world_map = [[[Location(texto) for texto in fileira] for fileira in plano] for plano in descricoes]\n        primeiro_plano = descricoes[0]\n        self.world_map_size_x = len(descricoes)\n        self.world_map_size_y = len(primeiro_plano)\n        self.world_map_size_z = len(primeiro_plano[0])\n\n    def get_location(self, x, y, z):\n        plano = self.world_map[x]\n        return plano[y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    \"\"\"Desenha a cena do mapa descrito. Ponto de entrada publico desta unidade.\"\"\"\n    render_scene(World(descricoes))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.388,
+  "done_reason": "stop",
+  "prompt_eval_count": 937,
+  "eval_count": 342,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nclass Location:\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    def __init__(self, fileiras):\n        self.plane = [[Location(texto) for texto in fileira] for fileira in fileiras]\n\n\nclass Row:\n    def __init__(self, descricoes):\n        self.row = [Plane(descricoes)]\n\n\nclass World:\n    def __init__(self, descricoes):\n        self.world_map = [Row(descricoes)]\n        self.world_map_size_x = 1\n        self.world_map_size_y = 1\n        self.world_map_size_z = len(descricoes[0][0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].row[y].plane[z]\n\n\ndef render_scene(world):\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    render_scene(World(descricoes))\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:14:44.5632479Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nclass Location:\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    def __init__(self, fileiras):\n        self.plane = [[Location(texto) for texto in fileira] for fileira in fileiras]\n\n\nclass Row:\n    def __init__(self, descricoes):\n        self.row = [Plane(descricoes)]\n\n\nclass World:\n    def __init__(self, descricoes):\n        self.world_map = [Row(descricoes)]\n        self.world_map_size_x = 1\n        self.world_map_size_y = 1\n        self.world_map_size_z = len(descricoes[0][0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].row[y].plane[z]\n\n\ndef render_scene(world):\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef executar(descricoes):\n    render_scene(World(descricoes))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8368556500,
+    "load_duration": 5335300,
+    "prompt_eval_count": 937,
+    "prompt_eval_duration": 421901000,
+    "eval_count": 342,
+    "eval_duration": 7879013000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-16__chain_of_thought__s43",
+  "instancia": "MNC-16",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T06:52:17.608409+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        \"\"\"check for date field\n           if the day is same, print the content in the same line\n           if the day is different, print the content in the next line\n        \"\"\"\n        day = \"\"\n        for i in range(0, len(response['list'])):\n            if day == response['list'][i]['dt_txt'][0:10]:\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n            else:\n                day = response['list'][i]['dt_txt'][0:10]\n                print(\"-------------------------------------------------------\")\n                print(\"Date: \" + day)\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])             \n\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        #convert to centrigrade and set precision 1\n        print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n        print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n        print(\"Weather: \" + response['weather'][0]['main'])\n        #print other conditions including feels like,humidity, temp_min, temp_max\n        print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n        print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n        print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n        print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 51.832,
+  "done_reason": "stop",
+  "prompt_eval_count": 1271,
+  "eval_count": 900,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell identificado no código é o \"Multiply-Nested Container\", que ocorre quando há muitos níveis de aninhamento no código. Isso torna o código difícil de entender e de manter, pois é difícil identificar o que cada parte do código está fazendo.\n\nUma das técnicas de refatoração para lidar com esse code smell é a \"Decompose Container\", que envolve dividir o código em partes menores e mais fáceis de entender e manter. Nesse caso, podemos refatorar o código para remover os vários níveis de aninhamento e tornar o código mais legível.\n\nAbaixo está o código refatorado:\n\n```python\noption = '-c'\n\ndef parse_current_weather(response, CITY, met):\n    print(\"-------------------------------------------------------\")\n    print(\"Current Weather for \" + CITY)\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n    print(\"Weather: \" + response['weather'][0]['main'])\n\ndef parse_forecast(response, CITY, met):\n    print(\"5-day Forecast for \" + CITY)\n    day = \"\"\n    for i in range(0, len(response['list'])):\n        if day == response['list'][i]['dt_txt'][0:10]:\n            print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n        else:\n            day = response['list'][i]['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n\ndef parseJSONforCITY(response, CITY):\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        parse_forecast(response, CITY, met)\n    else:\n        parse_current_weather(response, CITY, met)\n\ndef executar(response, cidade, opcao):\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n```\n\nNesse código, a função `parseJSONforCITY` foi dividida em duas novas funções: `parse_current_weather` e `parse_forecast`. Essas novas funções são menores e mais fáceis de entender, pois elas são responsáveis por imprimir apenas uma parte do clima: a previsão atual ou a previsão para os próximos dias. Isso reduz o nível de aninhamento no código original, facilitando a leitura e a manutenção.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T06:52:15.5593442Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell identificado no código é o \"Multiply-Nested Container\", que ocorre quando há muitos níveis de aninhamento no código. Isso torna o código difícil de entender e de manter, pois é difícil identificar o que cada parte do código está fazendo.\n\nUma das técnicas de refatoração para lidar com esse code smell é a \"Decompose Container\", que envolve dividir o código em partes menores e mais fáceis de entender e manter. Nesse caso, podemos refatorar o código para remover os vários níveis de aninhamento e tornar o código mais legível.\n\nAbaixo está o código refatorado:\n\n```python\noption = '-c'\n\ndef parse_current_weather(response, CITY, met):\n    print(\"-------------------------------------------------------\")\n    print(\"Current Weather for \" + CITY)\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n    print(\"Weather: \" + response['weather'][0]['main'])\n\ndef parse_forecast(response, CITY, met):\n    print(\"5-day Forecast for \" + CITY)\n    day = \"\"\n    for i in range(0, len(response['list'])):\n        if day == response['list'][i]['dt_txt'][0:10]:\n            print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n        else:\n            day = response['list'][i]['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n\ndef parseJSONforCITY(response, CITY):\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        parse_forecast(response, CITY, met)\n    else:\n        parse_current_weather(response, CITY, met)\n\ndef executar(response, cidade, opcao):\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n```\n\nNesse código, a função `parseJSONforCITY` foi dividida em duas novas funções: `parse_current_weather` e `parse_forecast`. Essas novas funções são menores e mais fáceis de entender, pois elas são responsáveis por imprimir apenas uma parte do clima: a previsão atual ou a previsão para os próximos dias. Isso reduz o nível de aninhamento no código original, facilitando a leitura e a manutenção.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 49766575600,
+    "load_duration": 4313500,
+    "prompt_eval_count": 1271,
+    "prompt_eval_duration": 3142124000,
+    "eval_count": 900,
+    "eval_duration": 46332153000
+  }
+}

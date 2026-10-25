@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-08__role__s44",
+  "instancia": "MNC-08",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:03:36.746094+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Pergunta respondida por um servico de completar texto.\n\nPonto de entrada publico: executar(texto, escolhas). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    pedidos = []\n    escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls.escolhas]}\n\n    @staticmethod\n    def _escolha(texto):\n        return {\"text\": texto}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n    return result\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    Completion.pedidos = []\n    Completion.escolhas = list(escolhas)\n    resposta = submit_question(texto)\n    return resposta, Completion.pedidos\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 12.76,
+  "done_reason": "stop",
+  "prompt_eval_count": 577,
+  "eval_count": 448,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    pedidos = []\n    escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls.escolhas]}\n\n    @staticmethod\n    def _escolha(texto):\n        return {\"text\": texto}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n    return result\n\n\ndef get_completion_params(text, escolhas):\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n    return openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    Completion.pedidos = []\n    Completion.escolhas = list(escolhas)\n    resposta = get_completion_params(texto, escolhas)\n    return resposta, Completion.pedidos\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:03:34.7122725Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    pedidos = []\n    escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls.escolhas]}\n\n    @staticmethod\n    def _escolha(texto):\n        return {\"text\": texto}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n    return result\n\n\ndef get_completion_params(text, escolhas):\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n    return openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef executar(texto, escolhas):\n    \"\"\"Envia a pergunta; devolve a resposta e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    Completion.pedidos = []\n    Completion.escolhas = list(escolhas)\n    resposta = get_completion_params(texto, escolhas)\n    return resposta, Completion.pedidos\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10707464300,
+    "load_duration": 1954100,
+    "prompt_eval_count": 577,
+    "prompt_eval_duration": 472392000,
+    "eval_count": 448,
+    "eval_duration": 10159145000
+  }
+}

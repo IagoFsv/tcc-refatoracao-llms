@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-11__few_shot__s44",
+  "instancia": "LLF-11",
+  "smell": "LLF",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T08:13:30.463319+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\nordenar = lambda itens, chave, reverso, limite: sorted(\n    [i for i in itens if i[chave] > limite],\n    key=lambda x: x[chave],\n    reverse=reverso\n)\nCódigo refatorado:\ndef ordenar_itens(itens, chave, reverso, limite):\n    itens_filtrados = [i for i in itens if i[chave] > limite]\n    return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(lambda w: w.split(\",\"), z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 7.754,
+  "done_reason": "stop",
+  "prompt_eval_count": 571,
+  "eval_count": 237,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self._split_and_map(self.config[section][key], 4)\n\n    def _split_and_map(self, valor, n):\n        for _ in range(n):\n            valor = map(lambda x: map(lambda y: y.split(\",\"), x.split(\",\")), valor.split(\",\"))\n        return valor\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T08:13:28.428781Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self._split_and_map(self.config[section][key], 4)\n\n    def _split_and_map(self, valor, n):\n        for _ in range(n):\n            valor = map(lambda x: map(lambda y: y.split(\",\"), x.split(\",\")), valor.split(\",\"))\n        return valor\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 5714677500,
+    "load_duration": 5882200,
+    "prompt_eval_count": 571,
+    "prompt_eval_duration": 205415000,
+    "eval_count": 237,
+    "eval_duration": 5453161000
+  }
+}

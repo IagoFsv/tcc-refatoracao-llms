@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-15__role__s44",
+  "instancia": "LPL-15",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:13:23.193893+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Bloco de uma cadeia de blocos: dados, hash e representacao em dicionario.\n\nPonto de entrada publico: executar(campos). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass Block(object):\n    def __init__(self, index, timestamp, transactions, previous_hash, proof=None, *args, **kwargs):\n        self.index = index\n        self.timestamp = timestamp\n        self.transactions = transactions\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    transacoes = [_Transacao(descricao) for descricao in campos[\"transacoes\"]]\n    if \"proof\" in campos:\n        bloco = Block(campos[\"index\"], campos[\"timestamp\"], transacoes,\n                      campos[\"previous_hash\"], campos[\"proof\"])\n    else:\n        bloco = Block(campos[\"index\"], campos[\"timestamp\"], transacoes,\n                      campos[\"previous_hash\"])\n    return bloco.repr_json()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 11.357,
+  "done_reason": "stop",
+  "prompt_eval_count": 627,
+  "eval_count": 357,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nimport hashlib\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass Block(object):\n    def __init__(self, campos):\n        self.index = campos[\"index\"]\n        self.timestamp = campos[\"timestamp\"]\n        self.transactions = [_Transacao(descricao) for descricao in campos[\"transacoes\"]]\n        self.previous_hash = campos[\"previous_hash\"]\n        if \"proof\" in campos:\n            self.proof = campos[\"proof\"]\n        else:\n            self.proof = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: um dicionario com index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    return Block(campos).repr_json()\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:13:21.1462052Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nimport hashlib\n\nclass _Transacao:\n    \"\"\"Transacao minima, so com o que o bloco usa: hash e repr_json.\"\"\"\n\n    def __init__(self, descricao):\n        self.descricao = descricao\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"descricao\": self.descricao}\n\n\nclass Block(object):\n    def __init__(self, campos):\n        self.index = campos[\"index\"]\n        self.timestamp = campos[\"timestamp\"]\n        self.transactions = [_Transacao(descricao) for descricao in campos[\"transacoes\"]]\n        self.previous_hash = campos[\"previous_hash\"]\n        if \"proof\" in campos:\n            self.proof = campos[\"proof\"]\n        else:\n            self.proof = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef executar(campos):\n    \"\"\"campos: um dicionario com index, timestamp, transacoes (descricoes), previous_hash e,\n    opcionalmente, proof. Devolve a representacao do bloco em dicionario.\"\"\"\n    return Block(campos).repr_json()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 9336237400,
+    "load_duration": 5554200,
+    "prompt_eval_count": 627,
+    "prompt_eval_duration": 582886000,
+    "eval_count": 357,
+    "eval_duration": 8627993000
+  }
+}

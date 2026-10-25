@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-06__chain_of_thought__s44",
+  "instancia": "MNC-06",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:24:26.921149+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Gravacao de perguntas de um jogo de perguntas e respostas num banco local.\n\nPonto de entrada publico: executar(data). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 22.182,
+  "done_reason": "stop",
+  "prompt_eval_count": 566,
+  "eval_count": 810,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque contém uma função `add_question` que executa operações de banco de dados dentro de uma estrutura de repetição (`for`) e que também manipula objetos JSON. Isso cria uma complexidade desnecessária e dificulta a leitura e manutenção do código.\n2. A técnica de refatoração indicada é a \"Decompose Container\", que consiste em separar as responsabilidades da função `add_question` em funções mais menores e específicas.\n3. Aplique a refatoração:\n```python\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    # Remove nested operations\n    for i in range(len(data['results'])):\n        data['results'][i] = _prepare_question(data['results'][i])\n    _insert_questions(c, data['results'])\n    conn.commit()\n    conn.close()\n\ndef _prepare_question(question):\n    question.pop('type')\n    question.pop('difficulty')\n    question['question'] = question['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n    return question\n\ndef _insert_questions(c, questions):\n    for question in questions:\n        questionData = json.dumps(question).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question['question'] + \"\\\", \\\"\" + questionData + \"\\\")\")\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n\t* A função `add_question` agora é mais simples e não executa operações de banco de dados dentro de uma estrutura de repetição.\n\t* A função `_prepare_question` é responsável por preparar cada pergunta para ser inserida no banco de dados.\n\t* A função `_insert_questions` é responsável por inserir as perguntas no banco de dados.\n\n**Código refatorado final**\n```python\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i] = _prepare_question(data['results'][i])\n    _insert_questions(c, data['results'])\n    conn.commit()\n    conn.close()\n\n\ndef _prepare_question(question):\n    question.pop('type')\n    question.pop('difficulty')\n    question['question'] = question['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n    return question\n\n\ndef _insert_questions(c, questions):\n    for question in questions:\n        questionData = json.dumps(question).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question['question'] + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:24:24.8820261Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio**\n\n1. O trecho apresenta o code smell \"Multiply-Nested Container\" porque contém uma função `add_question` que executa operações de banco de dados dentro de uma estrutura de repetição (`for`) e que também manipula objetos JSON. Isso cria uma complexidade desnecessária e dificulta a leitura e manutenção do código.\n2. A técnica de refatoração indicada é a \"Decompose Container\", que consiste em separar as responsabilidades da função `add_question` em funções mais menores e específicas.\n3. Aplique a refatoração:\n```python\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    # Remove nested operations\n    for i in range(len(data['results'])):\n        data['results'][i] = _prepare_question(data['results'][i])\n    _insert_questions(c, data['results'])\n    conn.commit()\n    conn.close()\n\ndef _prepare_question(question):\n    question.pop('type')\n    question.pop('difficulty')\n    question['question'] = question['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n    return question\n\ndef _insert_questions(c, questions):\n    for question in questions:\n        questionData = json.dumps(question).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question['question'] + \"\\\", \\\"\" + questionData + \"\\\")\")\n```\n4. Verifique se o código refatorado preserva o comportamento original:\n\t* A função `add_question` agora é mais simples e não executa operações de banco de dados dentro de uma estrutura de repetição.\n\t* A função `_prepare_question` é responsável por preparar cada pergunta para ser inserida no banco de dados.\n\t* A função `_insert_questions` é responsável por inserir as perguntas no banco de dados.\n\n**Código refatorado final**\n```python\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i] = _prepare_question(data['results'][i])\n    _insert_questions(c, data['results'])\n    conn.commit()\n    conn.close()\n\n\ndef _prepare_question(question):\n    question.pop('type')\n    question.pop('difficulty')\n    question['question'] = question['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n    return question\n\n\ndef _insert_questions(c, questions):\n    for question in questions:\n        questionData = json.dumps(question).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question['question'] + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20144605200,
+    "load_duration": 5772100,
+    "prompt_eval_count": 566,
+    "prompt_eval_duration": 453796000,
+    "eval_count": 810,
+    "eval_duration": 19622350000
+  }
+}

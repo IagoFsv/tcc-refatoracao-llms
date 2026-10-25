@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-16__role__s44",
+  "instancia": "MNC-16",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T11:24:34.277083+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        \"\"\"check for date field\n           if the day is same, print the content in the same line\n           if the day is different, print the content in the next line\n        \"\"\"\n        day = \"\"\n        for i in range(0, len(response['list'])):\n            if day == response['list'][i]['dt_txt'][0:10]:\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n            else:\n                day = response['list'][i]['dt_txt'][0:10]\n                print(\"-------------------------------------------------------\")\n                print(\"Date: \" + day)\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])             \n\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        #convert to centrigrade and set precision 1\n        print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n        print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n        print(\"Weather: \" + response['weather'][0]['main'])\n        #print other conditions including feels like,humidity, temp_min, temp_max\n        print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n        print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n        print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n        print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 53.297,
+  "done_reason": "stop",
+  "prompt_eval_count": 1217,
+  "eval_count": 911,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\nTEMP_METRIC = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\ndef parse_json_for_city(response, city, option):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n    print_current_weather(response, city, option)\n    print_forecast(response, city, option)\n\ndef print_current_weather(response, city, option):\n    print(\"-------------------------------------------------------\")\n    print(\"Current Weather for \" + city)\n    print_temperature(response, option)\n    print_wind_speed(response, option)\n    print(\"Weather: \" + response['weather'][0]['main'])\n    print_other_conditions(response, option)\n    print(\"-------------------------------------------------------\")\n\ndef print_forecast(response, city, option):\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + city)\n        print_forecast_details(response, option)\n\ndef print_temperature(response, option):\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + TEMP_METRIC[option][0])\n\ndef print_wind_speed(response, option):\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + TEMP_METRIC[option][1])\n\ndef print_other_conditions(response, option):\n    print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + TEMP_METRIC[option][0])\n    print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n    print(\"Minimum Temperature: \" + str('%.1f' % (response['main']['temp_min'])) + TEMP_METRIC[option][0])\n    print(\"Maximum Temperature: \" + str('%.1f' % (response['main']['temp_max'])) + TEMP_METRIC[option][0])\n\ndef print_forecast_details(response, option):\n    day = \"\"\n    for i in range(0, len(response['list'])):\n        if day == response['list'][i]['dt_txt'][0:10]:\n            print_forecast_item(response['list'][i], option)\n        else:\n            day = response['list'][i]['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print_forecast_item(response['list'][i], option)\n\ndef print_forecast_item(item, option):\n    print(\"Time: \" + item['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (item['main']['temp'])) + TEMP_METRIC[option][0] + \" Weather: \" + item['weather'][0]['main'])\n\ndef executar(response, city, option):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    parse_json_for_city(response, city, option)\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T11:24:32.2386684Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\nTEMP_METRIC = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\ndef parse_json_for_city(response, city, option):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n    print_current_weather(response, city, option)\n    print_forecast(response, city, option)\n\ndef print_current_weather(response, city, option):\n    print(\"-------------------------------------------------------\")\n    print(\"Current Weather for \" + city)\n    print_temperature(response, option)\n    print_wind_speed(response, option)\n    print(\"Weather: \" + response['weather'][0]['main'])\n    print_other_conditions(response, option)\n    print(\"-------------------------------------------------------\")\n\ndef print_forecast(response, city, option):\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + city)\n        print_forecast_details(response, option)\n\ndef print_temperature(response, option):\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + TEMP_METRIC[option][0])\n\ndef print_wind_speed(response, option):\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + TEMP_METRIC[option][1])\n\ndef print_other_conditions(response, option):\n    print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + TEMP_METRIC[option][0])\n    print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n    print(\"Minimum Temperature: \" + str('%.1f' % (response['main']['temp_min'])) + TEMP_METRIC[option][0])\n    print(\"Maximum Temperature: \" + str('%.1f' % (response['main']['temp_max'])) + TEMP_METRIC[option][0])\n\ndef print_forecast_details(response, option):\n    day = \"\"\n    for i in range(0, len(response['list'])):\n        if day == response['list'][i]['dt_txt'][0:10]:\n            print_forecast_item(response['list'][i], option)\n        else:\n            day = response['list'][i]['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print_forecast_item(response['list'][i], option)\n\ndef print_forecast_item(item, option):\n    print(\"Time: \" + item['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (item['main']['temp'])) + TEMP_METRIC[option][0] + \" Weather: \" + item['weather'][0]['main'])\n\ndef executar(response, city, option):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    parse_json_for_city(response, city, option)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 51215633400,
+    "load_duration": 4993600,
+    "prompt_eval_count": 1217,
+    "prompt_eval_duration": 2778778000,
+    "eval_count": 911,
+    "eval_duration": 48140117000
+  }
+}

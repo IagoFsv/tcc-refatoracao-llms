@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-03__role__s43",
+  "instancia": "MNC-03",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:48:20.660803+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Resumo de texto por um servico de completar texto.\n\nPonto de entrada publico: executar(texto, escolhas). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    pedidos = []\n    escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls.escolhas]}\n\n    @staticmethod\n    def _escolha(texto):\n        return {\"text\": texto}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef summarize(text):\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n\n    response = openai.Completion.create(\n        model=\"text-davinci-002\",\n        prompt=text,\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n    return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef executar(texto, escolhas):\n    \"\"\"Resume texto; devolve o resumo e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    Completion.pedidos = []\n    Completion.escolhas = list(escolhas)\n    resumo = summarize(texto)\n    return resumo, Completion.pedidos\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 12.181,
+  "done_reason": "stop",
+  "prompt_eval_count": 552,
+  "eval_count": 395,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nimport os\nfrom types import SimpleNamespace\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    _pedidos = []\n    _escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls._pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls._escolhas]}\n\n    @classmethod\n    def _escolha(cls, texto):\n        return {\"text\": texto}\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\nclass Summarizer:\n    \"\"\"Resumo de texto por um servico de completar texto.\"\"\"\n\n    def __init__(self, api_key):\n        self.api_key = api_key\n\n    def summarize(self, texto):\n        \"\"\"Summarize a text string and return a summary of the text\"\"\"\n        response = openai.Completion.create(\n            model=\"text-davinci-002\",\n            prompt=texto,\n            temperature=0.7,\n            max_tokens=256,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n        )\n        return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\ndef executar(texto, escolhas):\n    \"\"\"Resume texto; devolve o resumo e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    summarizer = Summarizer(openai.api_key)\n    Completion._escolhas = list(escolhas)\n    resumo = summarizer.summarize(texto)\n    return resumo, Completion._pedidos\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:48:18.6220752Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nimport os\nfrom types import SimpleNamespace\n\nclass Completion:\n    \"\"\"Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).\n\n    create registra a chave e os parametros de cada pedido e devolve as\n    escolhas preparadas em `escolhas`.\n    \"\"\"\n\n    _pedidos = []\n    _escolhas = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls._pedidos.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._escolha(texto) for texto in cls._escolhas]}\n\n    @classmethod\n    def _escolha(cls, texto):\n        return {\"text\": texto}\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\nclass Summarizer:\n    \"\"\"Resumo de texto por um servico de completar texto.\"\"\"\n\n    def __init__(self, api_key):\n        self.api_key = api_key\n\n    def summarize(self, texto):\n        \"\"\"Summarize a text string and return a summary of the text\"\"\"\n        response = openai.Completion.create(\n            model=\"text-davinci-002\",\n            prompt=texto,\n            temperature=0.7,\n            max_tokens=256,\n            top_p=1,\n            frequency_penalty=0,\n            presence_penalty=0,\n        )\n        return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\ndef executar(texto, escolhas):\n    \"\"\"Resume texto; devolve o resumo e os pedidos feitos. Ponto de entrada publico desta unidade.\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    summarizer = Summarizer(openai.api_key)\n    Completion._escolhas = list(escolhas)\n    resumo = summarizer.summarize(texto)\n    return resumo, Completion._pedidos\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10142326000,
+    "load_duration": 6793900,
+    "prompt_eval_count": 552,
+    "prompt_eval_duration": 521304999,
+    "eval_count": 395,
+    "eval_duration": 9485657000
+  }
+}

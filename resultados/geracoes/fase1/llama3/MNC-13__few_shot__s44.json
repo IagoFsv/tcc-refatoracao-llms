@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-13__few_shot__s44",
+  "instancia": "MNC-13",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:31:03.885024+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens.\n\nPonto de entrada publico: executar(token, endpoint). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport requests\nimport datetime\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    # function to remove duplicates from a list\n    def remove_duplicates(self, users):\n        # create an empty list\n        new_users = []\n        # loop through the list\n        for i in users:\n            # if the user is not in the new list, append it\n            if i not in new_users:\n                new_users.append(i)\n        # return the new list\n        return new_users\n\n    def send_request(self, endpoint):\n        # send a request to the telegram bot api\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))\n        # if the response is not 200, raise an exception\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        if endpoint == 'getMe':\n            # Try to return the bot username, first name, username, and id\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                    response.json()['result']['id']\n            except KeyError:\n                raise Exception('Error: {}'.format(response.text))\n        elif endpoint == 'getUpdates':\n            # append the user id and username to a list\n            users = []\n            for i in response.json()['result']:\n                try:\n                    users.append((i['message']['from']['id'], i['message']['from']['username']))\n                except KeyError:\n                    pass\n            # call a function to remove duplicates\n            users = self.remove_duplicates(users)\n            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n            with open('users.log', 'a') as f:\n                for username, user_id in users:\n                    f.write(f'{now}, {self.token}, {username}, {user_id}\\n')\n            return users\n\n\ndef executar(token, endpoint):\n    \"\"\"Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).send_request(endpoint)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 10.83,
+  "done_reason": "stop",
+  "prompt_eval_count": 926,
+  "eval_count": 337,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass BotConfig:\n    token: str\n\n@dataclass\nclass Bot:\n    config: BotConfig\n\n    def __init__(self, config: BotConfig):\n        self.config = config\n\n    def remove_duplicates(self, users):\n        new_users = []\n        for i in users:\n            if i not in new_users:\n                new_users.append(i)\n        return new_users\n\n    def send_request(self, endpoint):\n        response = requests.get(f'https://api.telegram.org/bot{self.config.token}/{endpoint}')\n        if response.status_code != 200:\n            raise Exception(f'Error: {response.text}')\n        if endpoint == 'getMe':\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'], response.json()['result']['id']\n            except KeyError:\n                raise Exception(f'Error: {response.text}')\n        elif endpoint == 'getUpdates':\n            users = []\n            for i in response.json()['result']:\n                try:\n                    users.append((i['message']['from']['id'], i['message']['from']['username']))\n                except KeyError:\n                    pass\n            users = self.remove_duplicates(users)\n            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n            with open('users.log', 'a') as f:\n                for username, user_id in users:\n                    f.write(f'{now}, {self.config.token}, {username}, {user_id}\\n')\n            return users\n\ndef executar(token, endpoint):\n    return Bot(BotConfig(token)).send_request(endpoint)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:31:01.8554555Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nfrom dataclasses import dataclass\n\n@dataclass\nclass BotConfig:\n    token: str\n\n@dataclass\nclass Bot:\n    config: BotConfig\n\n    def __init__(self, config: BotConfig):\n        self.config = config\n\n    def remove_duplicates(self, users):\n        new_users = []\n        for i in users:\n            if i not in new_users:\n                new_users.append(i)\n        return new_users\n\n    def send_request(self, endpoint):\n        response = requests.get(f'https://api.telegram.org/bot{self.config.token}/{endpoint}')\n        if response.status_code != 200:\n            raise Exception(f'Error: {response.text}')\n        if endpoint == 'getMe':\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'], response.json()['result']['id']\n            except KeyError:\n                raise Exception(f'Error: {response.text}')\n        elif endpoint == 'getUpdates':\n            users = []\n            for i in response.json()['result']:\n                try:\n                    users.append((i['message']['from']['id'], i['message']['from']['username']))\n                except KeyError:\n                    pass\n            users = self.remove_duplicates(users)\n            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n            with open('users.log', 'a') as f:\n                for username, user_id in users:\n                    f.write(f'{now}, {self.config.token}, {username}, {user_id}\\n')\n            return users\n\ndef executar(token, endpoint):\n    return Bot(BotConfig(token)).send_request(endpoint)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8773982600,
+    "load_duration": 6163900,
+    "prompt_eval_count": 926,
+    "prompt_eval_duration": 521205000,
+    "eval_count": 337,
+    "eval_duration": 8150651000
+  }
+}

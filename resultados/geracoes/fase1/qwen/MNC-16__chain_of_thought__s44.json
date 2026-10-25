@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-16__chain_of_thought__s44",
+  "instancia": "MNC-16",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:11:34.846016+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Previsao do tempo de uma cidade, impressa no terminal.\n\nPonto de entrada publico: executar(response, cidade, opcao). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        \"\"\"check for date field\n           if the day is same, print the content in the same line\n           if the day is different, print the content in the next line\n        \"\"\"\n        day = \"\"\n        for i in range(0, len(response['list'])):\n            if day == response['list'][i]['dt_txt'][0:10]:\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n            else:\n                day = response['list'][i]['dt_txt'][0:10]\n                print(\"-------------------------------------------------------\")\n                print(\"Date: \" + day)\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])             \n\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        #convert to centrigrade and set precision 1\n        print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n        print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n        print(\"Weather: \" + response['weather'][0]['main'])\n        #print other conditions including feels like,humidity, temp_min, temp_max\n        print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n        print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n        print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n        print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n        print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 24.726,
+  "done_reason": "stop",
+  "prompt_eval_count": 945,
+  "eval_count": 933,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "### Raciocínio Passo a Passo:\n\n1. **Identificação do Code Smell**:\n   - O trecho apresenta um `Multiply-Nested Container` code smell, onde há uma estrutura de loop e condicional muito aninhada, dificultando a leitura e manutenção.\n\n2. **Aplicação da Técnica de Refatoração**:\n   - A técnica de refatoração `Decompose Container` sugere que o código dentro do loop e das condições deve ser decomposto em funções menores e mais específicas. Isso tornará o código mais modular e fácil de entender.\n\n3. **Aplicação da Refatoração**:\n   - Vamos criar funções separadas para lidar com diferentes partes do código, como a impressão de previsões diárias e a impressão de previsões atuais.\n\n4. **Verificação do Comportamento Original**:\n   - Após a refatoração, o código deve continuar imprimindo as informações de previsão do tempo de forma correta.\n\n### Código Refatorado:\n\n```python\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    Print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        print_forecast_by_day(response['list'])\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        print_current_weather(response)\n\ndef print_forecast_by_day(forecast_list):\n    day = \"\"\n    for forecast in forecast_list:\n        if day == forecast['dt_txt'][0:10]:\n            print_weather_details(forecast)\n        else:\n            day = forecast['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print_weather_details(forecast)\n\ndef print_weather_details(forecast):\n    print(\"Time: \" + forecast['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (forecast['main']['temp'])) + met[option][0] + \" Weather: \" + forecast['weather'][0]['main'])\n\ndef print_current_weather(response):\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n    print(\"Weather: \" + response['weather'][0]['main'])\n    print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n    print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n    print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n    print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n    print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n```\n\n### Explicação da Refatoração:\n\n- **Função `print_forecast_by_day`**: Esta função trata a impressão das previsões diárias, separando a lógica de verificação da data e a impressão dos detalhes.\n- **Função `print_weather_details`**: Esta função imprime os detalhes das previsões, como tempo, temperatura, vento, etc.\n- **Função `print_current_weather`**: Esta função imprime as informações do clima atual.\n\nEssas funções menores e mais específicas tornam o código mais fácil de ler e manter, removendo a complexidade da estrutura de loop e condicional muito aninhada.",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:11:32.8311206Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Raciocínio Passo a Passo:\n\n1. **Identificação do Code Smell**:\n   - O trecho apresenta um `Multiply-Nested Container` code smell, onde há uma estrutura de loop e condicional muito aninhada, dificultando a leitura e manutenção.\n\n2. **Aplicação da Técnica de Refatoração**:\n   - A técnica de refatoração `Decompose Container` sugere que o código dentro do loop e das condições deve ser decomposto em funções menores e mais específicas. Isso tornará o código mais modular e fácil de entender.\n\n3. **Aplicação da Refatoração**:\n   - Vamos criar funções separadas para lidar com diferentes partes do código, como a impressão de previsões diárias e a impressão de previsões atuais.\n\n4. **Verificação do Comportamento Original**:\n   - Após a refatoração, o código deve continuar imprimindo as informações de previsão do tempo de forma correta.\n\n### Código Refatorado:\n\n```python\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    Print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        print_forecast_by_day(response['list'])\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        print_current_weather(response)\n\ndef print_forecast_by_day(forecast_list):\n    day = \"\"\n    for forecast in forecast_list:\n        if day == forecast['dt_txt'][0:10]:\n            print_weather_details(forecast)\n        else:\n            day = forecast['dt_txt'][0:10]\n            print(\"-------------------------------------------------------\")\n            print(\"Date: \" + day)\n            print_weather_details(forecast)\n\ndef print_weather_details(forecast):\n    print(\"Time: \" + forecast['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (forecast['main']['temp'])) + met[option][0] + \" Weather: \" + forecast['weather'][0]['main'])\n\ndef print_current_weather(response):\n    print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n    print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n    print(\"Weather: \" + response['weather'][0]['main'])\n    print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n    print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n    print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n    print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n    print(\"-------------------------------------------------------\")\n\n\ndef executar(response, cidade, opcao):\n    \"\"\"Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade.\"\"\"\n    global option\n    option = opcao\n    parseJSONforCITY(response, cidade)\n```\n\n### Explicação da Refatoração:\n\n- **Função `print_forecast_by_day`**: Esta função trata a impressão das previsões diárias, separando a lógica de verificação da data e a impressão dos detalhes.\n- **Função `print_weather_details`**: Esta função imprime os detalhes das previsões, como tempo, temperatura, vento, etc.\n- **Função `print_current_weather`**: Esta função imprime as informações do clima atual.\n\nEssas funções menores e mais específicas tornam o código mais fácil de ler e manter, removendo a complexidade da estrutura de loop e condicional muito aninhada."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22717172200,
+    "load_duration": 1659800,
+    "prompt_eval_count": 945,
+    "prompt_eval_duration": 732103000,
+    "eval_count": 933,
+    "eval_duration": 21933462000
+  }
+}

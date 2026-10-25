@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-21__few_shot__s44",
+  "instancia": "MNC-21",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:15:57.713129+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Sugestoes de codigo vindas de um servico de autocompletar, lidas em fluxo.\n\nPonto de entrada publico: executar(prompt, stops, suffix=\"\"). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport json\nfrom contextlib import suppress\n\nimport requests\n\n\ndef get_copilot_token():\n    \"\"\"Token de acesso ao servico (fixo nesta unidade).\"\"\"\n    return \"tok-123\"\n\n\ndef get_suggestion(prompt: str, stops: list[str], suffix: str = \"\") -> str:\n    \"\"\"\n    Get a suggestion from GitHub Copilot\n    \"\"\"\n\n    def get_temperature(line_count):\n        line_count = max(1, line_count - 2)\n        if line_count <= 1:\n            return 0\n        elif line_count <= 10:\n            return 0.2\n        elif line_count < 20:\n            return 0.4\n        else:\n            return 0.8\n\n    if suffix:\n        stops += ([\"def \", \"class \", \"if \", \"\\n#\"],)\n\n    # TODO: Calculate next indent\n\n    payload = json.dumps(\n        {\n            \"prompt\": prompt,\n            \"suffix\": suffix,\n            \"max_tokens\": 200,\n            \"temperature\": get_temperature(prompt.count(\"\\n\")),\n            \"top_p\": 1,\n            \"n\": 1,\n            # \"logprobs\": 0,\n            \"stop\": stops,\n            \"stream\": True,  # The API must be called with stream=True\n            # \"feature_flags\": [\"trim_to_block\"],\n            \"extra\": {\n                \"language\": \"python\",\n                \"next_indent\": 0,\n                \"trim_by_indentation\": True,\n            },\n        },\n    )\n    headers = {\n        \"OpenAI-Intent\": \"copilot-ghost\",\n        \"OpenAI-Organization\": \"github-copilot\",\n        \"Authorization\": f\"Bearer {get_copilot_token()}\",\n        \"Content-Type\": \"application/json\",\n    }\n\n    lines = []\n\n    with requests.post(\n        \"https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions\",\n        data=payload,\n        headers=headers,\n        stream=True,\n    ) as resp:\n        # The API returns a stream of JSON-like objects or blank lines\n        # We need to parse the JSON-like objects and ignore the blank lines\n        # The format of the JSON-like objects is:\n        # data: {\"choices\": [{\"text\": \"suggestion\"}]}}\n\n        for line in resp.iter_lines():\n            if line:\n                line = line.decode(\"utf-8\")[6:]  # Remove the data: prefix\n                with suppress(json.JSONDecodeError):\n                    lines.append(json.loads(line)[\"choices\"][0][\"text\"])\n\n    return \"\".join(lines)\n\n\ndef executar(prompt, stops, suffix=\"\"):\n    \"\"\"Pede a sugestao para o trecho de codigo. Ponto de entrada publico desta unidade.\"\"\"\n    return get_suggestion(prompt, stops, suffix)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 15.131,
+  "done_reason": "stop",
+  "prompt_eval_count": 1107,
+  "eval_count": 529,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nfrom __future__ import annotations\n\nimport json\nfrom contextlib import suppress\nimport requests\n\ndef get_copilot_token():\n    \"\"\"Token de acesso ao servico (fixo nesta unidade).\"\"\"\n    return \"tok-123\"\n\ndef get_temperature(line_count):\n    line_count = max(1, line_count - 2)\n    if line_count <= 1:\n        return 0\n    elif line_count <= 10:\n        return 0.2\n    elif line_count < 20:\n        return 0.4\n    else:\n        return 0.8\n\ndef get_payload(prompt: str, stops: list[str], suffix: str = \"\") -> str:\n    if suffix:\n        stops += ([\"def \", \"class \", \"if \", \"\\n#\"],)\n    return json.dumps({\n        \"prompt\": prompt,\n        \"suffix\": suffix,\n        \"max_tokens\": 200,\n        \"temperature\": get_temperature(prompt.count(\"\\n\")),\n        \"top_p\": 1,\n        \"n\": 1,\n        \"stop\": stops,\n        \"stream\": True,\n        \"extra\": {\n            \"language\": \"python\",\n            \"next_indent\": 0,\n            \"trim_by_indentation\": True,\n        },\n    })\n\ndef get_headers() -> dict:\n    return {\n        \"OpenAI-Intent\": \"copilot-ghost\",\n        \"OpenAI-Organization\": \"github-copilot\",\n        \"Authorization\": f\"Bearer {get_copilot_token()}\",\n        \"Content-Type\": \"application/json\",\n    }\n\ndef process_response(resp):\n    lines = []\n    for line in resp.iter_lines():\n        if line:\n            line = line.decode(\"utf-8\")[6:]\n            with suppress(json.JSONDecodeError):\n                lines.append(json.loads(line)[\"choices\"][0][\"text\"])\n    return \"\".join(lines)\n\ndef get_suggestion(prompt: str, stops: list[str], suffix: str = \"\") -> str:\n    payload = get_payload(prompt, stops, suffix)\n    headers = get_headers()\n    with requests.post(\n        \"https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions\",\n        data=payload,\n        headers=headers,\n        stream=True,\n    ) as resp:\n        return process_response(resp)\n\ndef executar(prompt, stops, suffix=\"\"):\n    \"\"\"Pede a sugestao para o trecho de codigo. Ponto de entrada publico desta unidade.\"\"\"\n    return get_suggestion(prompt, stops, suffix)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:15:55.6735514Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom __future__ import annotations\n\nimport json\nfrom contextlib import suppress\nimport requests\n\ndef get_copilot_token():\n    \"\"\"Token de acesso ao servico (fixo nesta unidade).\"\"\"\n    return \"tok-123\"\n\ndef get_temperature(line_count):\n    line_count = max(1, line_count - 2)\n    if line_count <= 1:\n        return 0\n    elif line_count <= 10:\n        return 0.2\n    elif line_count < 20:\n        return 0.4\n    else:\n        return 0.8\n\ndef get_payload(prompt: str, stops: list[str], suffix: str = \"\") -> str:\n    if suffix:\n        stops += ([\"def \", \"class \", \"if \", \"\\n#\"],)\n    return json.dumps({\n        \"prompt\": prompt,\n        \"suffix\": suffix,\n        \"max_tokens\": 200,\n        \"temperature\": get_temperature(prompt.count(\"\\n\")),\n        \"top_p\": 1,\n        \"n\": 1,\n        \"stop\": stops,\n        \"stream\": True,\n        \"extra\": {\n            \"language\": \"python\",\n            \"next_indent\": 0,\n            \"trim_by_indentation\": True,\n        },\n    })\n\ndef get_headers() -> dict:\n    return {\n        \"OpenAI-Intent\": \"copilot-ghost\",\n        \"OpenAI-Organization\": \"github-copilot\",\n        \"Authorization\": f\"Bearer {get_copilot_token()}\",\n        \"Content-Type\": \"application/json\",\n    }\n\ndef process_response(resp):\n    lines = []\n    for line in resp.iter_lines():\n        if line:\n            line = line.decode(\"utf-8\")[6:]\n            with suppress(json.JSONDecodeError):\n                lines.append(json.loads(line)[\"choices\"][0][\"text\"])\n    return \"\".join(lines)\n\ndef get_suggestion(prompt: str, stops: list[str], suffix: str = \"\") -> str:\n    payload = get_payload(prompt, stops, suffix)\n    headers = get_headers()\n    with requests.post(\n        \"https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions\",\n        data=payload,\n        headers=headers,\n        stream=True,\n    ) as resp:\n        return process_response(resp)\n\ndef executar(prompt, stops, suffix=\"\"):\n    \"\"\"Pede a sugestao para o trecho de codigo. Ponto de entrada publico desta unidade.\"\"\"\n    return get_suggestion(prompt, stops, suffix)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 13070179100,
+    "load_duration": 6064000,
+    "prompt_eval_count": 1107,
+    "prompt_eval_duration": 573528000,
+    "eval_count": 529,
+    "eval_duration": 12424577000
+  }
+}

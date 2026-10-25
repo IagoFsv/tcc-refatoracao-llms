@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-14__chain_of_thought__s43",
+  "instancia": "MNC-14",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T06:49:58.142721+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens: arquivos recebidos.\n\nPonto de entrada publico: executar(token). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport requests\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        # create an empty list\n        new_files = []\n        # loop through the list\n        for i in files:\n            # if the user is not in the new list, append it\n            if i not in new_files:\n                new_files.append(i)\n        # return the new list\n        return new_files\n\n    def get_tg_files(self):\n            # get the telegram bot updates\n            response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))\n            # for each update, get the file id if it exists\n            files = []\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['reply_to_message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # for each update, get the file id if it exists\n            for i in response.json()['result']:\n                try:\n                    files.append(i['message']['document']['file_id'])\n                except KeyError:\n                    pass\n            # call the remove_file_duplicates function to remove duplicate ids\n            files = self.remove_file_duplicates(files)\n            # for each file id, send a request to the telegram bot api to get the file path and store it in a list\n            file_paths = []\n            for i in files:\n                response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, i))\n                file_paths.append(response.json()['result']['file_path'])\n            # return the file paths\n            return file_paths\n\n\ndef executar(token):\n    \"\"\"Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).get_tg_files()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 42.846,
+  "done_reason": "stop",
+  "prompt_eval_count": 929,
+  "eval_count": 792,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell que está sendo diagnosticado é o de \"Multiply-Nested Container\", que é um code smell onde há múltiplos níveis de encapsulamento em um único método ou classe. O código original apresenta um exemplo disso, onde há um método dentro de uma classe que é responsável por duas grandes tarefas: remover duplicatas de arquivos e obter os arquivos do telegram.\n\nA técnica de refatoração \"Decompose Container\" é a de separar o método em dois, um para obter os arquivos do telegram e outro para remover as duplicatas. Isso reduz o nível de encapsulamento, tornando o código mais legível e menos complexo.\n\nAqui está o código refatorado:\n\n```python\nimport requests\n\nclass TelegramBot:\n    def __init__(self, token):\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        return list(set(files))\n\n    def get_tg_files(self):\n        response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))\n        files = self.get_files_from_updates(response.json()['result'])\n        files = self.remove_file_duplicates(files)\n        file_paths = self.get_file_paths(files)\n        return file_paths\n\n    def get_files_from_updates(self, updates):\n        files = []\n        for update in updates:\n            files.extend(self.get_files_from_update(update))\n        return files\n\n    def get_files_from_update(self, update):\n        files = []\n        try:\n            files.append(update['message']['reply_to_message']['document']['file_id'])\n        except KeyError:\n            pass\n        try:\n            files.append(update['message']['document']['file_id'])\n        except KeyError:\n            pass\n        return files\n\n    def get_file_paths(self, files):\n        file_paths = []\n        for file in files:\n            response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, file))\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\ndef executar(token):\n    return TelegramBot(token).get_tg_files()\n```\n\nNeste refatorado, o método `get_tg_files` foi dividido em três métodos: `get_files_from_updates`, `get_files_from_update` e `get_file_paths`. O método original `get_tg_files` foi simplificado para apenas chamar esses novos métodos e retornar o resultado. Isso reduz o nível de encapsulamento e torna o código mais legível. Além disso, o método `remove_file_duplicates` foi movido para fora da classe, pois ele não depende de nenhum estado da classe e pode ser usado em outro lugar, caso necessário.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T06:49:56.0890981Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell que está sendo diagnosticado é o de \"Multiply-Nested Container\", que é um code smell onde há múltiplos níveis de encapsulamento em um único método ou classe. O código original apresenta um exemplo disso, onde há um método dentro de uma classe que é responsável por duas grandes tarefas: remover duplicatas de arquivos e obter os arquivos do telegram.\n\nA técnica de refatoração \"Decompose Container\" é a de separar o método em dois, um para obter os arquivos do telegram e outro para remover as duplicatas. Isso reduz o nível de encapsulamento, tornando o código mais legível e menos complexo.\n\nAqui está o código refatorado:\n\n```python\nimport requests\n\nclass TelegramBot:\n    def __init__(self, token):\n        self.token = token\n\n    def remove_file_duplicates(self, files):\n        return list(set(files))\n\n    def get_tg_files(self):\n        response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))\n        files = self.get_files_from_updates(response.json()['result'])\n        files = self.remove_file_duplicates(files)\n        file_paths = self.get_file_paths(files)\n        return file_paths\n\n    def get_files_from_updates(self, updates):\n        files = []\n        for update in updates:\n            files.extend(self.get_files_from_update(update))\n        return files\n\n    def get_files_from_update(self, update):\n        files = []\n        try:\n            files.append(update['message']['reply_to_message']['document']['file_id'])\n        except KeyError:\n            pass\n        try:\n            files.append(update['message']['document']['file_id'])\n        except KeyError:\n            pass\n        return files\n\n    def get_file_paths(self, files):\n        file_paths = []\n        for file in files:\n            response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, file))\n            file_paths.append(response.json()['result']['file_path'])\n        return file_paths\n\ndef executar(token):\n    return TelegramBot(token).get_tg_files()\n```\n\nNeste refatorado, o método `get_tg_files` foi dividido em três métodos: `get_files_from_updates`, `get_files_from_update` e `get_file_paths`. O método original `get_tg_files` foi simplificado para apenas chamar esses novos métodos e retornar o resultado. Isso reduz o nível de encapsulamento e torna o código mais legível. Além disso, o método `remove_file_duplicates` foi movido para fora da classe, pois ele não depende de nenhum estado da classe e pode ser usado em outro lugar, caso necessário.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 40805517700,
+    "load_duration": 4286000,
+    "prompt_eval_count": 929,
+    "prompt_eval_duration": 2234031000,
+    "eval_count": 792,
+    "eval_duration": 38299986000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-07__role__s44",
+  "instancia": "MNC-07",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:02:11.782370+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Heuristica de avaliacao de um jogo de alinhar pecas num tabuleiro n x n.\n\nPonto de entrada publico: executar(linhas, s, jogador). Nao altere o nome nem\na assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport numpy as np\nfrom scipy.signal import convolve2d\n\n\nclass Game:\n    \"\"\"Estado do jogo: uma matriz 0/1 para cada jogador (X, O) e uma para os bloqueios (B).\"\"\"\n\n    def __init__(self, n, s, blocs):\n        self.n = n\n        self.s = s\n        self.blocs = blocs\n        self.current_state = {'X': np.zeros((self.n,self.n), dtype=np.int8),\n                              'O':np.zeros((self.n,self.n), dtype=np.int8),\n                              'B':np.zeros((self.n,self.n), dtype=np.int8)}\n        for bloc in self.blocs:\n            self.current_state['B'][bloc[0],bloc[1]] = 1\n        self.construct_winstates()\n\n    def construct_winstates(self):\n        '''generates a list of all the possible winstates (horizontal, vertical, ascending, descending)\n        for use determining win condition and in heuristic calculation.'''\n        self.winstates = (\n            np.ones((self.s,1), dtype=np.int8),    #horizontal\n            np.ones((1,self.s), dtype=np.int8),    #vertical\n            np.identity(self.s, dtype=np.int8),    #descending\n            np.flipud(np.identity(self.s, dtype=bool)))  #ascending\n\n    def convolve_winstates(self, state):\n        '''Convolves each of the possible win states (horizontal, vertical, ascending, descending)\n        with the given player's board state and returns a list of the results. Used for determining win conditions, and for heuristic calculation.'''\n        convs = []\n        #perform the convolution on every winstate\n        for winstate in self.winstates:\n            convs.append(convolve2d(state, winstate, mode='valid'))\n        return convs\n\n\nclass Agent:\n    def __init__(self, player):\n        self.p = player\n\n    def heuristic_1(self, game):\n        '''heuristic 1: a weighted sum of the number of k-in-a-rows that a player has.\n        Calculated by counting the number of potential winstates with (2 to s) pieces in them.\n        '''\n\n        score = 0\n\n        #convolve the individual board states\n        convs = [game.convolve_winstates(game.current_state[self.p]),\n                 game.convolve_winstates(game.current_state['X' if self.p == 'O' else 'O']),\n                 game.convolve_winstates(game.current_state['B'])]\n\n        # set score to +/- inf if one player has won\n        for conv in convs[0]:\n            if game.s in conv:\n                return float('inf')\n        for conv in convs[1]:\n            if game.s in conv:\n                return float('-inf')\n    \n        # combines the convolved matricies to a usable state\n        # any entry in our convolution that also has an entry in the opponents, or in b, is blocked.\n        for i in range(len(convs[0])):\n            for j in range(1,game.s):\n                # score: the number of unobstructed win conditions, weighted by 2^(length of the condition)\n                # this feels like code golf and github copilot had a child, and it's ugly\n                score += (np.count_nonzero(convs[0][i][convs[1][i]+convs[2][i] == 0] == j) - np.count_nonzero(convs[1][i][convs[0][i]+convs[2][i] == 0] == j))<<(j<<1)\n        return score\n\n\ndef executar(linhas, s, jogador):\n    \"\"\"Avalia o tabuleiro para o jogador. Ponto de entrada publico desta unidade.\n\n    linhas: uma string por linha do tabuleiro; 'X' e 'O' sao pecas, '*' e\n    bloqueio e qualquer outro caractere e casa vazia.\n    \"\"\"\n    blocs = [(x, y) for x, linha in enumerate(linhas) for y, casa in enumerate(linha) if casa == '*']\n    game = Game(len(linhas), s, blocs)\n    for x, linha in enumerate(linhas):\n        for y, casa in enumerate(linha):\n            if casa in ('X', 'O'):\n                game.current_state[casa][x, y] = 1\n    return Agent(jogador).heuristic_1(game)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 17.587,
+  "done_reason": "stop",
+  "prompt_eval_count": 1205,
+  "eval_count": 630,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport numpy as np\nfrom scipy.signal import convolve2d\n\nclass Game:\n    def __init__(self, n, s, blocs):\n        self.n = n\n        self.s = s\n        self.blocs = blocs\n        self.current_state = {'X': np.zeros((n, n), dtype=np.int8),\n                              'O': np.zeros((n, n), dtype=np.int8),\n                              'B': np.zeros((n, n), dtype=np.int8)}\n        self.initialize_board(blocs)\n        self.construct_winstates()\n\n    def initialize_board(self, blocs):\n        for bloc in blocs:\n            self.current_state['B'][bloc[0], bloc[1]] = 1\n\n    def construct_winstates(self):\n        self.winstates = (\n            np.ones((self.s, 1), dtype=np.int8),\n            np.ones((1, self.s), dtype=np.int8),\n            np.identity(self.s, dtype=np.int8),\n            np.flipud(np.identity(self.s, dtype=bool))\n        )\n\n    def convolve_winstates(self, state):\n        convs = []\n        for winstate in self.winstates:\n            convs.append(convolve2d(state, winstate, mode='valid'))\n        return convs\n\nclass Agent:\n    def __init__(self, player):\n        self.p = player\n\n    def heuristic_1(self, game):\n        score = 0\n        convs = [game.convolve_winstates(game.current_state[self.p]),\n                 game.convolve_winstates(game.current_state['X' if self.p == 'O' else 'O']),\n                 game.convolve_winstates(game.current_state['B'])]\n\n        for conv in convs[0]:\n            if game.s in conv:\n                return float('inf')\n        for conv in convs[1]:\n            if game.s in conv:\n                return float('-inf')\n\n        for i in range(len(convs[0])):\n            for j in range(1, game.s):\n                score += (np.count_nonzero(convs[0][i][convs[1][i] + convs[2][i] == 0] == j) - \n                          np.count_nonzero(convs[1][i][convs[0][i] + convs[2][i] == 0] == j)) << (j << 1)\n        return score\n\ndef executar(linhas, s, jogador):\n    blocs = [(x, y) for x, linha in enumerate(linhas) for y, casa in enumerate(linha) if casa == '*']\n    game = Game(len(linhas), s, blocs)\n    for x, linha in enumerate(linhas):\n        for y, casa in enumerate(linha):\n            if casa in ('X', 'O'):\n                game.current_state[casa][x, y] = 1\n    return Agent(jogador).heuristic_1(game)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:02:09.7439505Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport numpy as np\nfrom scipy.signal import convolve2d\n\nclass Game:\n    def __init__(self, n, s, blocs):\n        self.n = n\n        self.s = s\n        self.blocs = blocs\n        self.current_state = {'X': np.zeros((n, n), dtype=np.int8),\n                              'O': np.zeros((n, n), dtype=np.int8),\n                              'B': np.zeros((n, n), dtype=np.int8)}\n        self.initialize_board(blocs)\n        self.construct_winstates()\n\n    def initialize_board(self, blocs):\n        for bloc in blocs:\n            self.current_state['B'][bloc[0], bloc[1]] = 1\n\n    def construct_winstates(self):\n        self.winstates = (\n            np.ones((self.s, 1), dtype=np.int8),\n            np.ones((1, self.s), dtype=np.int8),\n            np.identity(self.s, dtype=np.int8),\n            np.flipud(np.identity(self.s, dtype=bool))\n        )\n\n    def convolve_winstates(self, state):\n        convs = []\n        for winstate in self.winstates:\n            convs.append(convolve2d(state, winstate, mode='valid'))\n        return convs\n\nclass Agent:\n    def __init__(self, player):\n        self.p = player\n\n    def heuristic_1(self, game):\n        score = 0\n        convs = [game.convolve_winstates(game.current_state[self.p]),\n                 game.convolve_winstates(game.current_state['X' if self.p == 'O' else 'O']),\n                 game.convolve_winstates(game.current_state['B'])]\n\n        for conv in convs[0]:\n            if game.s in conv:\n                return float('inf')\n        for conv in convs[1]:\n            if game.s in conv:\n                return float('-inf')\n\n        for i in range(len(convs[0])):\n            for j in range(1, game.s):\n                score += (np.count_nonzero(convs[0][i][convs[1][i] + convs[2][i] == 0] == j) - \n                          np.count_nonzero(convs[1][i][convs[0][i] + convs[2][i] == 0] == j)) << (j << 1)\n        return score\n\ndef executar(linhas, s, jogador):\n    blocs = [(x, y) for x, linha in enumerate(linhas) for y, casa in enumerate(linha) if casa == '*']\n    game = Game(len(linhas), s, blocs)\n    for x, linha in enumerate(linhas):\n        for y, casa in enumerate(linha):\n            if casa in ('X', 'O'):\n                game.current_state[casa][x, y] = 1\n    return Agent(jogador).heuristic_1(game)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15547386100,
+    "load_duration": 1859800,
+    "prompt_eval_count": 1205,
+    "prompt_eval_duration": 1007488000,
+    "eval_count": 630,
+    "eval_duration": 14483911000
+  }
+}

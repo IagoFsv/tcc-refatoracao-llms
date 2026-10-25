@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-05__role__s44",
+  "instancia": "LPL-05",
+  "smell": "LPL",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T08:37:47.764598+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Rede recorrente para classificar a proxima letra de um nome.\n\nPonto de entrada publico: executar(dimensoes). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nAs camadas (modulo base, LSTM, linear, ReLU) sao versoes minimas que so\nguardam a configuracao recebida. O modulo base registra cada subcamada\natribuida, pelo nome do atributo, e recusa subcamada atribuida antes da\ninicializacao da classe base.\n\"\"\"\n\nfrom types import SimpleNamespace\n\n\nclass _Modulo:\n    \"\"\"Base das camadas: registra as subcamadas atribuidas.\"\"\"\n\n    def __init__(self):\n        self._camadas = {}\n\n    def __setattr__(self, nome, valor):\n        if isinstance(valor, _Modulo):\n            if \"_camadas\" not in self.__dict__:\n                raise AttributeError(\"cannot assign module before Module.__init__() call\")\n            self._camadas[nome] = valor\n        object.__setattr__(self, nome, valor)\n\n\nclass _LSTM(_Modulo):\n    \"\"\"Guarda a configuracao; valida tamanho e camadas como a versao real.\"\"\"\n\n    def __init__(self, input_size, hidden_size, num_layers=1, bias=True, batch_first=False):\n        super().__init__()\n        if not isinstance(hidden_size, int):\n            raise TypeError(f\"hidden_size should be of type int, got: {type(hidden_size).__name__}\")\n        if hidden_size <= 0:\n            raise ValueError(\"hidden_size must be greater than zero\")\n        if num_layers <= 0:\n            raise ValueError(\"num_layers must be greater than zero\")\n        self.descricao = (\"LSTM\", input_size, hidden_size, num_layers, bias, batch_first)\n\n\nclass _Linear(_Modulo):\n    def __init__(self, in_features, out_features, bias=True):\n        super().__init__()\n        self.descricao = (\"Linear\", in_features, out_features, bias)\n\n\nclass _ReLU(_Modulo):\n    def __init__(self, inplace=False):\n        super().__init__()\n        self.descricao = (\"ReLU\", inplace)\n\n\nnn = SimpleNamespace(Module=_Modulo, LSTM=_LSTM, Linear=_Linear, ReLU=_ReLU)\n\n\nclass BasicLSTM(nn.Module):\n\tdef __init__(self, num_classes, input_size, hidden_size, num_layers):\n\t\t# github copilot suggestion\n\t\tsuper(BasicLSTM, self).__init__()\n\t\tself.num_classes = num_classes\n\t\tself.num_layers = num_layers\n\t\tself.input_size = input_size\n\t\tself.hidden_size = hidden_size\n\t\t# I figure we will need this one, should be 27 for alpahebet plus EOS\n\t\t# self.seq_length = 27\n\t\tself.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, batch_first=True)\n\t\t# self.fc_1 = nn.Linear(hidden_size, 64)\n\t\t# self.fc_2 = nn.Linear(64, num_classes)\n\t\t# starting with a smaller number of nodes to keep training time down\n\t\tself.fc_1 = nn.Linear(hidden_size, 32)\n\t\tself.fc_2 = nn.Linear(32, num_classes)\n\n\t\t# this one wasn't suggested by copilot, not needed? a ReLu can't hurt though..\n\t\tself.relu = nn.ReLU()\n\n\ndef _resumo(modelo):\n    \"\"\"Hiperparametros guardados no modelo e configuracao de cada subcamada.\"\"\"\n    nomes = (\"num_classes\", \"input_size\", \"hidden_size\", \"num_layers\")\n    hiperparametros = {nome: getattr(modelo, nome) for nome in nomes}\n    camadas = {nome: camada.descricao for nome, camada in modelo._camadas.items()}\n    return hiperparametros, camadas\n\n\ndef executar(dimensoes):\n    \"\"\"Monta a rede com as dimensoes dadas e devolve o resumo dela.\"\"\"\n    modelo = BasicLSTM(\n        dimensoes[\"num_classes\"],\n        dimensoes[\"input_size\"],\n        dimensoes[\"hidden_size\"],\n        dimensoes[\"num_layers\"],\n    )\n    return _resumo(modelo)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 17.313,
+  "done_reason": "stop",
+  "prompt_eval_count": 1095,
+  "eval_count": 618,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nfrom types import SimpleNamespace\n\n\nclass _Modulo:\n    \"\"\"Base das camadas: registra as subcamadas atribuidas.\"\"\"\n\n    def __init__(self):\n        self._camadas = {}\n\n    def __setattr__(self, nome, valor):\n        if isinstance(valor, _Modulo):\n            if \"_camadas\" not in self.__dict__:\n                raise AttributeError(\"cannot assign module before Module.__init__() call\")\n            self._camadas[nome] = valor\n        object.__setattr__(self, nome, valor)\n\n\nclass _LSTM(_Modulo):\n    \"\"\"Guarda a configuracao; valida tamanho e camadas como a versao real.\"\"\"\n\n    def __init__(self, input_size, hidden_size, num_layers=1, bias=True, batch_first=False):\n        super().__init__()\n        if not isinstance(hidden_size, int):\n            raise TypeError(f\"hidden_size should be of type int, got: {type(hidden_size).__name__}\")\n        if hidden_size <= 0:\n            raise ValueError(\"hidden_size must be greater than zero\")\n        if num_layers <= 0:\n            raise ValueError(\"num_layers must be greater than zero\")\n        self.descricao = (\"LSTM\", input_size, hidden_size, num_layers, bias, batch_first)\n\n\nclass _Linear(_Modulo):\n    def __init__(self, in_features, out_features, bias=True):\n        super().__init__()\n        self.descricao = (\"Linear\", in_features, out_features, bias)\n\n\nclass _ReLU(_Modulo):\n    def __init__(self, inplace=False):\n        super().__init__()\n        self.descricao = (\"ReLU\", inplace)\n\n\nnn = SimpleNamespace(Module=_Modulo, LSTM=_LSTM, Linear=_Linear, ReLU=_ReLU)\n\n\nclass BasicLSTM(nn.Module):\n    def __init__(self, config):\n        super(BasicLSTM, self).__init__()\n        self.num_classes = config.num_classes\n        self.num_layers = config.num_layers\n        self.input_size = config.input_size\n        self.hidden_size = config.hidden_size\n        self.lstm = nn.LSTM(input_size=config.input_size, hidden_size=config.hidden_size, num_layers=config.num_layers, batch_first=True)\n        self.fc_1 = nn.Linear(hidden_size=config.hidden_size, out_features=32)\n        self.fc_2 = nn.Linear(32, config.num_classes)\n        self.relu = nn.ReLU()\n\n\ndef _resumo(modelo):\n    nomes = (\"num_classes\", \"input_size\", \"hidden_size\", \"num_layers\")\n    hiperparametros = {nome: getattr(modelo, nome) for nome in nomes}\n    camadas = {nome: camada.descricao for nome, camada in modelo._camadas.items()}\n    return hiperparametros, camadas\n\n\ndef executar(dimensoes):\n    config = SimpleNamespace(**dimensoes)\n    modelo = BasicLSTM(config)\n    return _resumo(modelo)\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T08:37:45.695982Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom types import SimpleNamespace\n\n\nclass _Modulo:\n    \"\"\"Base das camadas: registra as subcamadas atribuidas.\"\"\"\n\n    def __init__(self):\n        self._camadas = {}\n\n    def __setattr__(self, nome, valor):\n        if isinstance(valor, _Modulo):\n            if \"_camadas\" not in self.__dict__:\n                raise AttributeError(\"cannot assign module before Module.__init__() call\")\n            self._camadas[nome] = valor\n        object.__setattr__(self, nome, valor)\n\n\nclass _LSTM(_Modulo):\n    \"\"\"Guarda a configuracao; valida tamanho e camadas como a versao real.\"\"\"\n\n    def __init__(self, input_size, hidden_size, num_layers=1, bias=True, batch_first=False):\n        super().__init__()\n        if not isinstance(hidden_size, int):\n            raise TypeError(f\"hidden_size should be of type int, got: {type(hidden_size).__name__}\")\n        if hidden_size <= 0:\n            raise ValueError(\"hidden_size must be greater than zero\")\n        if num_layers <= 0:\n            raise ValueError(\"num_layers must be greater than zero\")\n        self.descricao = (\"LSTM\", input_size, hidden_size, num_layers, bias, batch_first)\n\n\nclass _Linear(_Modulo):\n    def __init__(self, in_features, out_features, bias=True):\n        super().__init__()\n        self.descricao = (\"Linear\", in_features, out_features, bias)\n\n\nclass _ReLU(_Modulo):\n    def __init__(self, inplace=False):\n        super().__init__()\n        self.descricao = (\"ReLU\", inplace)\n\n\nnn = SimpleNamespace(Module=_Modulo, LSTM=_LSTM, Linear=_Linear, ReLU=_ReLU)\n\n\nclass BasicLSTM(nn.Module):\n    def __init__(self, config):\n        super(BasicLSTM, self).__init__()\n        self.num_classes = config.num_classes\n        self.num_layers = config.num_layers\n        self.input_size = config.input_size\n        self.hidden_size = config.hidden_size\n        self.lstm = nn.LSTM(input_size=config.input_size, hidden_size=config.hidden_size, num_layers=config.num_layers, batch_first=True)\n        self.fc_1 = nn.Linear(hidden_size=config.hidden_size, out_features=32)\n        self.fc_2 = nn.Linear(32, config.num_classes)\n        self.relu = nn.ReLU()\n\n\ndef _resumo(modelo):\n    nomes = (\"num_classes\", \"input_size\", \"hidden_size\", \"num_layers\")\n    hiperparametros = {nome: getattr(modelo, nome) for nome in nomes}\n    camadas = {nome: camada.descricao for nome, camada in modelo._camadas.items()}\n    return hiperparametros, camadas\n\n\ndef executar(dimensoes):\n    config = SimpleNamespace(**dimensoes)\n    modelo = BasicLSTM(config)\n    return _resumo(modelo)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15245771800,
+    "load_duration": 3278100,
+    "prompt_eval_count": 1095,
+    "prompt_eval_duration": 896953000,
+    "eval_count": 618,
+    "eval_duration": 14261068000
+  }
+}

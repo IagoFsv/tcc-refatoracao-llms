@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-05__chain_of_thought__s43",
+  "instancia": "MNC-05",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:50:37.646276+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Conversao da lista de conteineres de um aplicativo em servicos nomeados.\n\nPonto de entrada publico: executar(app). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\ndef convertContainersToServices(app: dict):\n    app['services'] = {}\n    for container in app['containers']:\n        app['services'][container['name']] = container\n        del app['services'][container['name']]['name']\n    del app['containers']\n    return app\n\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 13.733,
+  "done_reason": "stop",
+  "prompt_eval_count": 364,
+  "eval_count": 472,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "Vou seguir os passos:\n\n1. Identifique o code smell: O code smell é o \"Multiply-Nested Container\", que ocorre quando um container (neste caso, um dicionário) é aninhado em outro container. Isso pode tornar o código difícil de entender e manter.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho: A técnica de refatoração indicada é a \"Decompose Container\", que consiste em decompor o container aninhado em dois ou mais containers menores, facilitando a compreensão e manutenção do código.\n3. Aplique a refatoração: Vou criar um novo dicionário `services` e iterar sobre `app['containers']`, adicionando cada container como um valor no `services` com o nome do container como chave.\n\nCódigo refatorado:\n```python\ndef convertContainersToServices(app: dict):\n    services = {}\n    for container in app['containers']:\n        services[container['name']] = container.copy()\n        del services[container['name']]['name']\n    del app['containers']\n    app['services'] = services\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```\n4. Verifique se o código refatorado preserva o comportamento original: Sim, o código refatorado ainda converte os containers em serviços e remove o nome dos containers. A única diferença é que agora o container `services` é criado fora do loop e adicionado ao dicionário `app` no final.\n\nCódigo refatorado final:\n```python\ndef convertContainersToServices(app: dict):\n    services = {}\n    for container in app['containers']:\n        services[container['name']] = container.copy()\n        del services[container['name']]['name']\n    del app['containers']\n    app['services'] = services\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:50:35.5849813Z",
+    "message": {
+      "role": "assistant",
+      "content": "Vou seguir os passos:\n\n1. Identifique o code smell: O code smell é o \"Multiply-Nested Container\", que ocorre quando um container (neste caso, um dicionário) é aninhado em outro container. Isso pode tornar o código difícil de entender e manter.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho: A técnica de refatoração indicada é a \"Decompose Container\", que consiste em decompor o container aninhado em dois ou mais containers menores, facilitando a compreensão e manutenção do código.\n3. Aplique a refatoração: Vou criar um novo dicionário `services` e iterar sobre `app['containers']`, adicionando cada container como um valor no `services` com o nome do container como chave.\n\nCódigo refatorado:\n```python\ndef convertContainersToServices(app: dict):\n    services = {}\n    for container in app['containers']:\n        services[container['name']] = container.copy()\n        del services[container['name']]['name']\n    del app['containers']\n    app['services'] = services\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```\n4. Verifique se o código refatorado preserva o comportamento original: Sim, o código refatorado ainda converte os containers em serviços e remove o nome dos containers. A única diferença é que agora o container `services` é criado fora do loop e adicionado ao dicionário `app` no final.\n\nCódigo refatorado final:\n```python\ndef convertContainersToServices(app: dict):\n    services = {}\n    for container in app['containers']:\n        services[container['name']] = container.copy()\n        del services[container['name']]['name']\n    del app['containers']\n    app['services'] = services\n    return app\n\ndef executar(app):\n    \"\"\"Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade.\"\"\"\n    return convertContainersToServices(app)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 11712118800,
+    "load_duration": 3977600,
+    "prompt_eval_count": 364,
+    "prompt_eval_duration": 305988000,
+    "eval_count": 472,
+    "eval_duration": 11350378000
+  }
+}

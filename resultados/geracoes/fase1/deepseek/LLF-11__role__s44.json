@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-11__role__s44",
+  "instancia": "LLF-11",
+  "smell": "LLF",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:32:05.302013+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Leitura de valores aninhados da configuracao do jogo, gravados como texto.\n\nPonto de entrada publico: executar(texto). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(lambda w: w.split(\",\"), z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [_materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 17.427,
+  "done_reason": "stop",
+  "prompt_eval_count": 651,
+  "eval_count": 317,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self.map_values(self.config[section][key], self.split_comma)\n\n    @staticmethod\n    def split_comma(value):\n        return value.split(\",\")\n\n    @staticmethod\n    def map_values(value, func):\n        return list(map(func, value.split(\",\")))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas  (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [ _materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:32:03.2502071Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_list(self, section, key):\n        return self.map_values(self.config[section][key], self.split_comma)\n\n    @staticmethod\n    def split_comma(value):\n        return value.split(\",\")\n\n    @staticmethod\n    def map_values(value, func):\n        return list(map(func, value.split(\",\")))\n\n\ndef _materializar(valor):\n    \"\"\"Converte sequencias aninhadas  (inclusive iteradores) em listas.\"\"\"\n    if isinstance(valor, str):\n        return valor\n    try:\n        itens = iter(valor)\n    except TypeError:\n        return valor\n    return [ _materializar(item) for item in itens]\n\n\ndef executar(texto):\n    \"\"\"Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {\"regioes\": texto}\n    return _materializar(config.get_config_section_key_dict_dict_dict_list(\"mundo\", \"regioes\"))\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15360653000,
+    "load_duration": 4860300,
+    "prompt_eval_count": 651,
+    "prompt_eval_duration": 722823000,
+    "eval_count": 317,
+    "eval_duration": 14353186000
+  }
+}

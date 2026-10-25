@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-06__chain_of_thought__s43",
+  "instancia": "LPL-06",
+  "smell": "LPL",
+  "tecnica": "chain_of_thought",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:32:16.735698+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Cadastro de servidores SSH num banco SQLite.\n\nPonto de entrada publico: executar(cadastrados, servidor). Nao altere o nome\nnem a assinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\nO banco e o arquivo frSSH.db da pasta atual. executar cria a tabela de\nservidores, grava os servidores ja cadastrados, grava um servidor novo e devolve as\nlinhas da tabela, na ordem de insercao.\n\"\"\"\n\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(ip, port, username, password, keyid):\n    # THIS IS THE REDUNDANT FUNCTION.\n    # THIS IS REPLACED BY .operate.addserverviapwd and .operate.addserverviakey\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (ip, port, username, password, keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor):\n    \"\"\"cadastrados: lista de tuplas (ip, port, username, password, keyid).\"\"\"\n    _preparar_banco(cadastrados)\n    ip, port, username, password, keyid = servidor\n    add_server(ip, port, username, password, keyid)\n    return _linhas()\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 19.018,
+  "done_reason": "stop",
+  "prompt_eval_count": 660,
+  "eval_count": 680,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Long Parameter List\" pois a função `executar` tem um parâmetro `servidor` com 5 argumentos (ip, port, username, password, keyid) que são utilizados individualmente dentro da função.\n2. **Explicar como a técnica de refatoração se aplica:** A técnica de refatoração indicada é a \"Introduce Parameter Object\", que consiste em criar uma classe ou estrutura de dados para encapsular os parâmetros individuais em um objeto único.\n3. **Aplicar a refatoração:** Criaremos uma classe `Server` para encapsular os parâmetros individuais:\n```python\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```\nEntão, modificaremos a função `executar` para receber um objeto `Server` em vez de uma lista de argumentos individuais:\n```python\ndef executar(cadastrados, servidor):\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```\n4. **Verificar se o código refatorado preserva o comportamento original:** O código refatorado mantém o mesmo comportamento original: a função `executar` ainda prepara o banco de dados, adiciona um servidor novo e devolve as linhas da tabela.\n\n**Código refatorado final:**\n```python\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor):\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:32:14.6920216Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Raciocínio passo a passo:**\n\n1. **Identificar o code smell:** O trecho apresenta o code smell \"Long Parameter List\" pois a função `executar` tem um parâmetro `servidor` com 5 argumentos (ip, port, username, password, keyid) que são utilizados individualmente dentro da função.\n2. **Explicar como a técnica de refatoração se aplica:** A técnica de refatoração indicada é a \"Introduce Parameter Object\", que consiste em criar uma classe ou estrutura de dados para encapsular os parâmetros individuais em um objeto único.\n3. **Aplicar a refatoração:** Criaremos uma classe `Server` para encapsular os parâmetros individuais:\n```python\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```\nEntão, modificaremos a função `executar` para receber um objeto `Server` em vez de uma lista de argumentos individuais:\n```python\ndef executar(cadastrados, servidor):\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```\n4. **Verificar se o código refatorado preserva o comportamento original:** O código refatorado mantém o mesmo comportamento original: a função `executar` ainda prepara o banco de dados, adiciona um servidor novo e devolve as linhas da tabela.\n\n**Código refatorado final:**\n```python\nimport sqlite3\n\n_COLUNAS = \"ip, port, username, password, keyid\"\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n\ndef _preparar_banco(cadastrados):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)\", cadastrados)\n    conn.commit()\n    conn.close()\n\n\ndef _linhas():\n    conn = sqlite3.connect('frSSH.db')\n    linhas = conn.execute(f\"SELECT {_COLUNAS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return linhas\n\n\ndef add_server(servidor):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)\", (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))\n    conn.commit()\n    conn.close()\n    print(\"Server added.\")\n\n\ndef executar(cadastrados, servidor):\n    _preparar_banco(cadastrados)\n    add_server(servidor)\n    return _linhas()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17004423100,
+    "load_duration": 6072200,
+    "prompt_eval_count": 660,
+    "prompt_eval_duration": 540963000,
+    "eval_count": 680,
+    "eval_duration": 16378979000
+  }
+}

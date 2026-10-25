@@ -1,0 +1,65 @@
+{
+  "identificador": "LLF-04__few_shot__s43",
+  "instancia": "LLF-04",
+  "smell": "LLF",
+  "tecnica": "few_shot",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T07:04:47.106894+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\nordenar = lambda itens, chave, reverso, limite: sorted(\n    [i for i in itens if i[chave] > limite],\n    key=lambda x: x[chave],\n    reverse=reverso\n)\nCódigo refatorado:\ndef ordenar_itens(itens, chave, reverso, limite):\n    itens_filtrados = [i for i in itens if i[chave] > limite]\n    return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Lambda Function\nTécnica de refatoração: Replace Lambda with Named Function\nCódigo original:\n\"\"\"Gravacao de valores aninhados na configuracao do jogo, como texto.\n\nPonto de entrada publico: executar(valor). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(map(str, z)), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef executar(valor):\n    \"\"\"Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade.\"\"\"\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 6.529,
+  "done_reason": "stop",
+  "prompt_eval_count": 517,
+  "eval_count": 178,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "Código refatorado:\n```python\nimport logging\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = self.format_value(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def format_value(self, value):\n        return \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(map(str, z)), y)), x)), value))\n\ndef executar(valor):\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T07:04:45.0808877Z",
+    "message": {
+      "role": "assistant",
+      "content": "Código refatorado:\n```python\nimport logging\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict_int(self, section, key, value):\n        self.config[section][key] = self.format_value(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def format_value(self, value):\n        return \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(map(str, z)), y)), x)), value))\n\ndef executar(valor):\n    config = Config()\n    config.config[\"mundo\"] = {}\n    config.set_config_dict_dict_dict_dict_int(\"mundo\", \"regioes\", valor)\n    return config.config[\"mundo\"][\"regioes\"]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 4495451400,
+    "load_duration": 5450900,
+    "prompt_eval_count": 517,
+    "prompt_eval_duration": 177745000,
+    "eval_count": 178,
+    "eval_duration": 4243417000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "LPL-10__few_shot__s43",
+  "instancia": "LPL-10",
+  "smell": "LPL",
+  "tecnica": "few_shot",
+  "execucao": 2,
+  "seed": 43,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T05:56:01.368824+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\ndef cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):\n    produto = {\n        'nome': nome,\n        'preco': preco,\n        'quantidade': quantidade,\n        'categoria': categoria,\n        'fornecedor': fornecedor,\n        'desconto': desconto\n    }\n    banco_de_dados.salvar(produto)\n    return produto\nCódigo refatorado:\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Produto:\n    nome: str\n    preco: float\n    quantidade: int\n    categoria: str\n    fornecedor: str\n    desconto: float\n\ndef cadastrar_produto(produto: Produto):\n    banco_de_dados.salvar(asdict(produto))\n    return produto\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Parameter List\nTécnica de refatoração: Introduce Parameter Object\nCódigo original:\n\"\"\"Desenho de um segmento colorido numa imagem RGB.\n\nPonto de entrada publico: executar(tamanho, segmento, cor=None). Nao altere o\nnome nem a assinatura dessa funcao; o restante do arquivo pode ser\nreorganizado livremente.\n\nA imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor\npadrao do desenho.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_line(self, y0, x0, y1, x1, color=(0, 0, 0)):\n        \"\"\"\n        Draw a line on the image.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        @param color: color of the line\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = color\n        return self\n\n\ndef executar(tamanho, segmento, cor=None):\n    \"\"\"tamanho: (linhas, colunas). segmento: (y0, x0, y1, x1). cor: (r, g, b).\"\"\"\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segmento\n    if cor is None:\n        resultado = imagem.draw_line(y0, x0, y1, x1)\n    else:\n        resultado = imagem.draw_line(y0, x0, y1, x1, cor)\n    return resultado.image\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 21.239,
+  "done_reason": "stop",
+  "prompt_eval_count": 1069,
+  "eval_count": 355,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nimport skimage\nimport numpy as np\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Cor:\n    r: int\n    g: int\n    b: int\n\n@dataclass\nclass Ponto:\n    y: int\n    x: int\n\nclass Image:\n    def __init__(self, array):\n        self.image = array\n\nclass RGB_Image(Image):\n    def draw_line(self, ponto1: Ponto, ponto2: Ponto, cor: Cor=None):\n        if cor is None:\n            cor = Cor(0, 0, 0)\n        line = skimage.draw.line(ponto1.y, ponto1.x, ponto2.y, ponto2.x)\n        self.image[line] = asdict(cor)\n        return self\n\ndef executar(tamanho, segmento, cor=None):\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segmento\n    if cor is None:\n        resultado = imagem.draw_line(Ponto(y0, x0), Ponto(y1, x1))\n    else:\n        resultado = imagem.draw_line(Ponto(y0, x0), Ponto(y1, x1), Cor(*cor))\n    return resultado.image\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T05:55:59.3233396Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport skimage\nimport numpy as np\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Cor:\n    r: int\n    g: int\n    b: int\n\n@dataclass\nclass Ponto:\n    y: int\n    x: int\n\nclass Image:\n    def __init__(self, array):\n        self.image = array\n\nclass RGB_Image(Image):\n    def draw_line(self, ponto1: Ponto, ponto2: Ponto, cor: Cor=None):\n        if cor is None:\n            cor = Cor(0, 0, 0)\n        line = skimage.draw.line(ponto1.y, ponto1.x, ponto2.y, ponto2.x)\n        self.image[line] = asdict(cor)\n        return self\n\ndef executar(tamanho, segmento, cor=None):\n    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segmento\n    if cor is None:\n        resultado = imagem.draw_line(Ponto(y0, x0), Ponto(y1, x1))\n    else:\n        resultado = imagem.draw_line(Ponto(y0, x0), Ponto(y1, x1), Cor(*cor))\n    return resultado.image\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19185965900,
+    "load_duration": 5288500,
+    "prompt_eval_count": 1069,
+    "prompt_eval_duration": 1747919000,
+    "eval_count": 355,
+    "eval_duration": 17041997000
+  }
+}

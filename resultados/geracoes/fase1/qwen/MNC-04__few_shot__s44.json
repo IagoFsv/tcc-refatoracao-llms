@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-04__few_shot__s44",
+  "instancia": "MNC-04",
+  "smell": "MNC",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T08:59:40.951033+00:00",
+  "modelo": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\ndados = {\n    'pedidos': [\n        {\n            'cliente': {\n                'nome': 'Ana',\n                'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}\n            },\n            'itens': [\n                {'produto': 'caneta', 'qtd': 2},\n                {'produto': 'caderno', 'qtd': 1}\n            ]\n        }\n    ]\n}\nCódigo refatorado:\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Endereco:\n    cidade: str\n    cep: str\n\n@dataclass\nclass Cliente:\n    nome: str\n    endereco: Endereco\n\n@dataclass\nclass Item:\n    produto: str\n    qtd: int\n\n@dataclass\nclass Pedido:\n    cliente: Cliente\n    itens: List[Item] = field(default_factory=list)\n\ndados = [\n    Pedido(\n        cliente=Cliente(\n            nome='Ana',\n            endereco=Endereco(cidade='Fortaleza', cep='60000-000')\n        ),\n        itens=[Item('caneta', 2), Item('caderno', 1)]\n    )\n]\n\nAgora refatore o trecho a seguir.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Permissoes de servicos usadas na geracao de arquivos de composicao de conteineres.\n\nPonto de entrada publico: executar(nome). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef executar(nome):\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions[nome]\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 11.028,
+  "done_reason": "stop",
+  "prompt_eval_count": 755,
+  "eval_count": 372,
+  "uso_gpu": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```python\nfrom dataclasses import dataclass, field\nfrom typing import Dict, List, Any\n\n@dataclass\nclass EnvVars:\n    LND_IP: str\n    LND_GRPC_PORT: str\n    LND_REST_PORT: str\n    BITCOIN_NETWORK: str\n\n@dataclass\nclass Volumes:\n    volumes: List[str]\n\n@dataclass\nclass ServiceConfig:\n    env: EnvVars\n    volumes: Volumes\n\n@dataclass\nclass Permissions:\n    lnd: ServiceConfig\n    bitcoind: ServiceConfig\n\npermissions = Permissions(\n    lnd=ServiceConfig(\n        env=EnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\"\n        ),\n        volumes=Volumes(\n            volumes=['${LND_DATA_DIR}:/lnd:ro']\n        )\n    ),\n    bitcoind=ServiceConfig(\n        env=EnvVars(\n            BITCOIN_IP=\"${BITCOIN_IP}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\",\n            BITCOIN_P2P_PORT=\"${BITCOIN_P2P_PORT}\",\n            BITCOIN_RPC_PORT=\"${BITCOIN_RPC_PORT}\",\n            BITCOIN_RPC_USER=\"${BITCOIN_RPC_USER}\",\n            BITCOIN_RPC_PASS=\"${BITCOIN_RPC_PASS}\",\n            BITCOIN_RPC_AUTH=\"${BITCOIN_RPC_AUTH}\"\n        ),\n        volumes=Volumes(\n            volumes=[]\n        )\n    )\n)\n\ndef executar(nome: str) -> Dict[str, Any]:\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions.__dict__.get(nome, {})\n```",
+  "resposta_bruta": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T08:59:38.925898Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom dataclasses import dataclass, field\nfrom typing import Dict, List, Any\n\n@dataclass\nclass EnvVars:\n    LND_IP: str\n    LND_GRPC_PORT: str\n    LND_REST_PORT: str\n    BITCOIN_NETWORK: str\n\n@dataclass\nclass Volumes:\n    volumes: List[str]\n\n@dataclass\nclass ServiceConfig:\n    env: EnvVars\n    volumes: Volumes\n\n@dataclass\nclass Permissions:\n    lnd: ServiceConfig\n    bitcoind: ServiceConfig\n\npermissions = Permissions(\n    lnd=ServiceConfig(\n        env=EnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\"\n        ),\n        volumes=Volumes(\n            volumes=['${LND_DATA_DIR}:/lnd:ro']\n        )\n    ),\n    bitcoind=ServiceConfig(\n        env=EnvVars(\n            BITCOIN_IP=\"${BITCOIN_IP}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\",\n            BITCOIN_P2P_PORT=\"${BITCOIN_P2P_PORT}\",\n            BITCOIN_RPC_PORT=\"${BITCOIN_RPC_PORT}\",\n            BITCOIN_RPC_USER=\"${BITCOIN_RPC_USER}\",\n            BITCOIN_RPC_PASS=\"${BITCOIN_RPC_PASS}\",\n            BITCOIN_RPC_AUTH=\"${BITCOIN_RPC_AUTH}\"\n        ),\n        volumes=Volumes(\n            volumes=[]\n        )\n    )\n)\n\ndef executar(nome: str) -> Dict[str, Any]:\n    \"\"\"Devolve a permissao de um servico. Ponto de entrada publico desta unidade.\"\"\"\n    return permissions.__dict__.get(nome, {})\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8999794100,
+    "load_duration": 4803400,
+    "prompt_eval_count": 755,
+    "prompt_eval_duration": 297807000,
+    "eval_count": 372,
+    "eval_duration": 8640647000
+  }
+}

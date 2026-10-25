@@ -1,0 +1,65 @@
+{
+  "identificador": "LM-03__few_shot__s44",
+  "instancia": "LM-03",
+  "smell": "LM",
+  "tecnica": "few_shot",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T09:38:47.293136+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nExemplo:\n\nCode smell: Long Method\nTécnica de refatoração: Extract Method\nCódigo original:\ndef processar_pedido(pedido):\n    for item in pedido['itens']:\n        if item['quantidade'] <= 0:\n            raise ValueError(f\"Quantidade invalida: {item['nome']}\")\n        if item['preco'] <= 0:\n            raise ValueError(f\"Preco invalido: {item['nome']}\")\n    subtotal = 0\n    for item in pedido['itens']:\n        subtotal += item['quantidade'] * item['preco']\n    desconto = 0\n    if pedido['cliente']['tipo'] == 'premium':\n        desconto = subtotal * 0.15\n    elif pedido['cliente']['tipo'] == 'regular':\n        desconto = subtotal * 0.05\n    total = subtotal - desconto\n    resumo = f\"Cliente: {pedido['cliente']['nome']}\\n\"\n    resumo += f\"Subtotal: R$ {subtotal:.2f}\\n\"\n    resumo += f\"Desconto: R$ {desconto:.2f}\\n\"\n    resumo += f\"Total: R$ {total:.2f}\\n\"\n    return resumo\nCódigo refatorado:\ndef _validar_itens(itens):\n    for item in itens:\n        if item['quantidade'] <= 0:\n            raise ValueError(f\"Quantidade invalida: {item['nome']}\")\n        if item['preco'] <= 0:\n            raise ValueError(f\"Preco invalido: {item['nome']}\")\n\ndef _calcular_subtotal(itens):\n    return sum(item['quantidade'] * item['preco'] for item in itens)\n\ndef _aplicar_desconto(subtotal, tipo_cliente):\n    if tipo_cliente == 'premium':\n        return subtotal * 0.15\n    elif tipo_cliente == 'regular':\n        return subtotal * 0.05\n    return 0\n\ndef _gerar_resumo(cliente, subtotal, desconto):\n    total = subtotal - desconto\n    resumo = f\"Cliente: {cliente['nome']}\\n\"\n    resumo += f\"Subtotal: R$ {subtotal:.2f}\\n\"\n    resumo += f\"Desconto: R$ {desconto:.2f}\\n\"\n    resumo += f\"Total: R$ {total:.2f}\\n\"\n    return resumo\n\ndef processar_pedido(pedido):\n    _validar_itens(pedido['itens'])\n    subtotal = _calcular_subtotal(pedido['itens'])\n    desconto = _aplicar_desconto(subtotal, pedido['cliente']['tipo'])\n    return _gerar_resumo(pedido['cliente'], subtotal, desconto)\n\nAgora refatore o trecho a seguir.\n\nCode smell: Long Method\nTécnica de refatoração: Extract Method\nCódigo original:\n\"\"\"Grade de colunas e linhas para dispor elementos em paisagem.\n\nPonto de entrada publico: executar(). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport math\n\n\ndef get_layout_size(elements):\n    if elements <= 1:\n        return 1, 1\n    elif elements == 2:\n        return 2, 1\n    elif elements == 3:\n        return 3, 1\n    elif elements == 4:\n        return 4, 1\n    elif elements == 5:\n        return 5, 1\n    elif elements == 6:\n        return 6, 1\n    elif elements == 7:\n        return 4, 2\n    elif elements == 8:\n        return 4, 2\n    elif elements == 9:\n        return 5, 2\n    elif elements == 10:\n        return 5, 2\n    elif elements == 11:\n        return 6, 2\n    elif elements == 12:\n        return 6, 2\n    elif elements in range(13, 19):\n        return 6, 3\n    elif elements in range(19, 25):\n        return 6, 4\n    elif elements in range(25, 31):\n        return 6, 5\n    elif elements in range(31, 36):\n        return 7, 5\n    elif elements in range(36, 43):\n        return 7, 6\n    elif elements in range(43, 50):\n        return 7, 7\n    elif elements in range(50, 57):\n        return 7, 8\n    elif elements in range(57, 64):\n        return 7, 9\n    elif elements in range(64, 71):\n        return 7, 10\n    elif elements in range(71, 78):\n        return 7, 11\n    elif elements in range(78, 85):\n        return 7, 12\n    elif elements in range(85, 92):\n        return 7, 13\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        long_edge = math.ceil(elements / short_edge)\n        return short_edge, long_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef executar(elementos):\n    \"\"\"Devolve (colunas, linhas) para o numero de elementos. Ponto de entrada publico desta unidade.\"\"\"\n    return get_layout_size(elementos)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 40.79,
+  "done_reason": "stop",
+  "prompt_eval_count": 1760,
+  "eval_count": 632,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "Código refatorado:\n\n```python\nimport math\n\ndef _get_layout_size(elements):\n    if elements <= 1:\n        return 1, 1\n    elif elements == 2:\n        return 2, 1\n    elif elements == 3:\n        return 3, 1\n    elif elements == 4:\n        return 4, 1\n    elif elements == 5:\n        return 5, 1\n    elif elements == 6:\n        return 6, 1\n    elif elements == 7:\n        return 4, 2\n    elif elements == 8:\n        return 4, 2\n    elif elements == 9:\n        return 5, 2\n    elif elements == 10:\n        return 5, 2\n    elif elements == 11:\n        return 6, 2\n    elif elements == 12:\n        return 6, 2\n    elif elements in range(13, 19):\n        return 6, 3\n    elif elements in range(19, 25):\n        return 6, 4\n    elif elements in range(25, 31):\n        return 6, 5\n    elif elements in range(31, 36):\n        return 7, 5\n    elif elements in range(36, 43):\n        return 7, 6\n    elif elements in range(43, 50):\n        return 7, 7\n    elif elements in range(50, 57):\n        return 7, 8\n    elif elements in range(57, 64):\n        return 7, 9\n    elif elements in range(64, 71):\n        return 7, 10\n    elif elements in range(71, 78):\n        return 7, 11\n    elif elements in range(78, 85):\n        return 7, 12\n    elif elements in range(85, 92):\n        return 7, 13\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        long_edge = math.ceil(elements / short_edge)\n        return short_edge, long_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef executar(elementos):\n    \"\"\"Devolve (colunas, linhas) para o numero de elementos. Ponto de entrada publico desta unidade.\"\"\"\n    return _get_layout_size(elementos)\n```\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T09:38:45.2470898Z",
+    "message": {
+      "role": "assistant",
+      "content": "Código refatorado:\n\n```python\nimport math\n\ndef _get_layout_size(elements):\n    if elements <= 1:\n        return 1, 1\n    elif elements == 2:\n        return 2, 1\n    elif elements == 3:\n        return 3, 1\n    elif elements == 4:\n        return 4, 1\n    elif elements == 5:\n        return 5, 1\n    elif elements == 6:\n        return 6, 1\n    elif elements == 7:\n        return 4, 2\n    elif elements == 8:\n        return 4, 2\n    elif elements == 9:\n        return 5, 2\n    elif elements == 10:\n        return 5, 2\n    elif elements == 11:\n        return 6, 2\n    elif elements == 12:\n        return 6, 2\n    elif elements in range(13, 19):\n        return 6, 3\n    elif elements in range(19, 25):\n        return 6, 4\n    elif elements in range(25, 31):\n        return 6, 5\n    elif elements in range(31, 36):\n        return 7, 5\n    elif elements in range(36, 43):\n        return 7, 6\n    elif elements in range(43, 50):\n        return 7, 7\n    elif elements in range(50, 57):\n        return 7, 8\n    elif elements in range(57, 64):\n        return 7, 9\n    elif elements in range(64, 71):\n        return 7, 10\n    elif elements in range(71, 78):\n        return 7, 11\n    elif elements in range(78, 85):\n        return 7, 12\n    elif elements in range(85, 92):\n        return 7, 13\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        long_edge = math.ceil(elements / short_edge)\n        return short_edge, long_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef executar(elementos):\n    \"\"\"Devolve (colunas, linhas) para o numero de elementos. Ponto de entrada publico desta unidade.\"\"\"\n    return _get_layout_size(elementos)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 38743661900,
+    "load_duration": 4884600,
+    "prompt_eval_count": 1760,
+    "prompt_eval_duration": 1864342000,
+    "eval_count": 632,
+    "eval_duration": 35940135000
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-13__chain_of_thought__s44",
+  "instancia": "MNC-13",
+  "smell": "MNC",
+  "tecnica": "chain_of_thought",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T11:21:54.532029+00:00",
+  "modelo": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nAntes de responder, raciocine passo a passo:\n1. Identifique por que o trecho apresenta o code smell indicado.\n2. Explique como a técnica de refatoração indicada se aplica ao trecho.\n3. Aplique a refatoração.\n4. Verifique se o código refatorado preserva o comportamento original.\n\nApós o raciocínio, exiba o código refatorado final em um único bloco de código Python.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Cliente da API de bots de um aplicativo de mensagens.\n\nPonto de entrada publico: executar(token, endpoint). Nao altere o nome nem a\nassinatura dessa funcao; o restante do arquivo pode ser reorganizado\nlivremente.\n\"\"\"\n\nimport requests\nimport datetime\n\n\nclass TelegramBot:\n    # function to initialize the class\n    def __init__(self, token):\n        # set the token\n        self.token = token\n\n    # function to remove duplicates from a list\n    def remove_duplicates(self, users):\n        # create an empty list\n        new_users = []\n        # loop through the list\n        for i in users:\n            # if the user is not in the new list, append it\n            if i not in new_users:\n                new_users.append(i)\n        # return the new list\n        return new_users\n\n    def send_request(self, endpoint):\n        # send a request to the telegram bot api\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))\n        # if the response is not 200, raise an exception\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        if endpoint == 'getMe':\n            # Try to return the bot username, first name, username, and id\n            try:\n                return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                    response.json()['result']['id']\n            except KeyError:\n                raise Exception('Error: {}'.format(response.text))\n        elif endpoint == 'getUpdates':\n            # append the user id and username to a list\n            users = []\n            for i in response.json()['result']:\n                try:\n                    users.append((i['message']['from']['id'], i['message']['from']['username']))\n                except KeyError:\n                    pass\n            # call a function to remove duplicates\n            users = self.remove_duplicates(users)\n            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n            with open('users.log', 'a') as f:\n                for username, user_id in users:\n                    f.write(f'{now}, {self.token}, {username}, {user_id}\\n')\n            return users\n\n\ndef executar(token, endpoint):\n    \"\"\"Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade.\"\"\"\n    return TelegramBot(token).send_request(endpoint)\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 46.775,
+  "done_reason": "stop",
+  "prompt_eval_count": 998,
+  "eval_count": 839,
+  "uso_gpu": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "fracao_gpu": 0.835,
+    "context_length": 8192
+  },
+  "resposta_texto": "O code smell identificado no código é o \"Multiply-Nested Container\", o que ocorre quando há vários níveis de encapsulamento aninhados, o que torna o código difícil de entender e manter. A técnica de refatoração \"Decompose Container\" sugere que o problema pode ser resolvido dividindo o código em vários contêineres menores, cada um com uma única responsabilidade.\n\nO código está aninhado em classes e funções, o que torna difícil entender o que cada função faz e como elas se relacionam. Podemos refatorar dividindo a classe em várias classes menores, cada uma com uma única responsabilidade. Isso torna o código mais fácil de entender, manter e testar.\n\nAqui está o código refatorado:\n\n```python\nimport requests\nimport datetime\n\nclass TelegramBot:\n    def __init__(self, token):\n        self.token = token\n\n    def remove_duplicates(self, users):\n        new_users = []\n        for i in users:\n            if i not in new_users:\n                new_users.append(i)\n        return new_users\n\nclass TelegramBotRequest:\n    @staticmethod\n    def send_request(bot, endpoint):\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(bot.token, endpoint))\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        return response\n\nclass TelegramBotGetMe:\n    @staticmethod\n    def get_info(response):\n        try:\n            return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                response.json()['result']['id']\n        except KeyError:\n            raise Exception('Error: {}'.format(response.text))\n\nclass TelegramBotGetUpdates:\n    @staticmethod\n    def get_updates(bot, response):\n        users = []\n        for i in response.json()['result']:\n            try:\n                users.append((i['message']['from']['id'], i['message']['from']['username']))\n            except KeyError:\n                pass\n        users = bot.remove_duplicates(users)\n        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n        with open('users.log', 'a') as f:\n            for username, user_id in users:\n                f.write(f'{now}, {bot.token}, {username}, {user_id}\\n')\n        return users\n\ndef executar(token, endpoint):\n    bot = TelegramBot(token)\n    response = TelegramBotRequest.send_request(bot, endpoint)\n    if endpoint == 'getMe':\n        return TelegramBotGetMe.get_info(response)\n    elif endpoint == 'getUpdates':\n        return TelegramBotGetUpdates.get_updates(bot, response)\n```\n\nEsse refatoramento separa as responsabilidades de cada operação em classes diferentes, tornando o código mais fácil de entender e manter. Além disso, a função `executar` também foi refatorada para chamar as novas classes de forma mais organizada e eficiente.\n",
+  "resposta_bruta": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-10-25T11:21:52.4942889Z",
+    "message": {
+      "role": "assistant",
+      "content": "O code smell identificado no código é o \"Multiply-Nested Container\", o que ocorre quando há vários níveis de encapsulamento aninhados, o que torna o código difícil de entender e manter. A técnica de refatoração \"Decompose Container\" sugere que o problema pode ser resolvido dividindo o código em vários contêineres menores, cada um com uma única responsabilidade.\n\nO código está aninhado em classes e funções, o que torna difícil entender o que cada função faz e como elas se relacionam. Podemos refatorar dividindo a classe em várias classes menores, cada uma com uma única responsabilidade. Isso torna o código mais fácil de entender, manter e testar.\n\nAqui está o código refatorado:\n\n```python\nimport requests\nimport datetime\n\nclass TelegramBot:\n    def __init__(self, token):\n        self.token = token\n\n    def remove_duplicates(self, users):\n        new_users = []\n        for i in users:\n            if i not in new_users:\n                new_users.append(i)\n        return new_users\n\nclass TelegramBotRequest:\n    @staticmethod\n    def send_request(bot, endpoint):\n        response = requests.get('https://api.telegram.org/bot{}/{}'.format(bot.token, endpoint))\n        if response.status_code != 200:\n            raise Exception('Error: {}'.format(response.text))\n        return response\n\nclass TelegramBotGetMe:\n    @staticmethod\n    def get_info(response):\n        try:\n            return response.json()['result']['username'], response.json()['result']['first_name'],\\\n                response.json()['result']['id']\n        except KeyError:\n            raise Exception('Error: {}'.format(response.text))\n\nclass TelegramBotGetUpdates:\n    @staticmethod\n    def get_updates(bot, response):\n        users = []\n        for i in response.json()['result']:\n            try:\n                users.append((i['message']['from']['id'], i['message']['from']['username']))\n            except KeyError:\n                pass\n        users = bot.remove_duplicates(users)\n        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n        with open('users.log', 'a') as f:\n            for username, user_id in users:\n                f.write(f'{now}, {bot.token}, {username}, {user_id}\\n')\n        return users\n\ndef executar(token, endpoint):\n    bot = TelegramBot(token)\n    response = TelegramBotRequest.send_request(bot, endpoint)\n    if endpoint == 'getMe':\n        return TelegramBotGetMe.get_info(response)\n    elif endpoint == 'getUpdates':\n        return TelegramBotGetUpdates.get_updates(bot, response)\n```\n\nEsse refatoramento separa as responsabilidades de cada operação em classes diferentes, tornando o código mais fácil de entender e manter. Além disso, a função `executar` também foi refatorada para chamar as novas classes de forma mais organizada e eficiente.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 44724800800,
+    "load_duration": 3868600,
+    "prompt_eval_count": 998,
+    "prompt_eval_duration": 1992904000,
+    "eval_count": 839,
+    "eval_duration": 42429934000
+  }
+}

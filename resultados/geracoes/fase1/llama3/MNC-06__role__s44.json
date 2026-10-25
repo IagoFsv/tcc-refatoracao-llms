@@ -1,0 +1,65 @@
+{
+  "identificador": "MNC-06__role__s44",
+  "instancia": "MNC-06",
+  "smell": "MNC",
+  "tecnica": "role",
+  "execucao": 3,
+  "seed": 44,
+  "commit": "07ce1ef91129e21981647260ef26060a86805eeb",
+  "sessao": "20261025T023933",
+  "timestamp_utc": "2026-10-25T12:23:44.347804+00:00",
+  "modelo": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_versao": "0.33.2",
+  "endpoint": "http://localhost:11434/api/chat",
+  "requisicao": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).\n\nVocê receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.\n\nResponda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.\n\nCode smell: Multiply-Nested Container\nTécnica de refatoração: Decompose Container\nCódigo original:\n\"\"\"Gravacao de perguntas de um jogo de perguntas e respostas num banco local.\n\nPonto de entrada publico: executar(data). Nao altere o nome nem a assinatura\ndessa funcao; o restante do arquivo pode ser reorganizado livremente.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latencia_s": 8.577,
+  "done_reason": "stop",
+  "prompt_eval_count": 517,
+  "eval_count": 264,
+  "uso_gpu": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "fracao_gpu": 1.0,
+    "context_length": 8192
+  },
+  "resposta_texto": "```\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    questions = []\n    for result in data['results']:\n        del result['type']\n        del result['difficulty']\n        question = result['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        del result['question']\n        question_data = json.dumps(result).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        questions.append((question, question_data))\n    c.executemany(\"INSERT INTO questions (question, questionData) VALUES (?, ?)\", questions)\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```",
+  "resposta_bruta": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-10-25T12:23:42.3009415Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    questions = []\n    for result in data['results']:\n        del result['type']\n        del result['difficulty']\n        question = result['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        del result['question']\n        question_data = json.dumps(result).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        questions.append((question, question_data))\n    c.executemany(\"INSERT INTO questions (question, questionData) VALUES (?, ?)\", questions)\n    conn.commit()\n    conn.close()\n\n\ndef executar(data):\n    \"\"\"Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    linhas = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return linhas\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6538081500,
+    "load_duration": 4735300,
+    "prompt_eval_count": 517,
+    "prompt_eval_duration": 360124000,
+    "eval_count": 264,
+    "eval_duration": 6095995000
+  }
+}
