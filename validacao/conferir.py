@@ -13,6 +13,7 @@ Uso:
 
 import argparse
 import shutil
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -21,14 +22,24 @@ from adaptacao.checklist import _caminhos, _pytest, _selecao
 from dados.pysmell.detectar import detectar_arquivo
 
 
-def conferir(inst, caminho):
-    """{testes, preservou, restantes, outros, removeu} de um arquivo refatorado."""
+def conferir(inst, caminho, timeout=None):
+    """{testes, preservou, restantes, outros, removeu} de um arquivo refatorado.
+
+    Com timeout (segundos), o pytest que estoura o tempo conta como nao
+    preservou e `testes` vira "timeout".
+    """
     _, unidade, teste, _ = _caminhos(inst)
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
         shutil.copy(caminho, Path(tmp, unidade.name))
         shutil.copy(teste, tmp)
-        r = _pytest(Path(tmp))
-    ultima = (r.stdout.strip().splitlines() or ["(sem saida)"])[-1]
+        try:
+            r = _pytest(Path(tmp), timeout=timeout)
+        except subprocess.TimeoutExpired:
+            r = None
+    if r is None:
+        ultima = "timeout"
+    else:
+        ultima = (r.stdout.strip().splitlines() or ["(sem saida)"])[-1]
     deteccoes = detectar_arquivo(str(caminho))
     restantes = [f"{d['smell']} L{d['linha']} {d['metricas']}"
                  for d in deteccoes if d["smell"] == inst["smell"]]
@@ -36,7 +47,7 @@ def conferir(inst, caminho):
               for d in deteccoes if d["smell"] != inst["smell"]]
     return {
         "testes": ultima,
-        "preservou": r.returncode == 0 and "3 passed" in ultima,
+        "preservou": r is not None and r.returncode == 0 and "3 passed" in ultima,
         "restantes": restantes,
         "outros": outros,
         "removeu": not restantes,
