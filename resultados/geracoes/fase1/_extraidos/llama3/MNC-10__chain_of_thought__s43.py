@@ -1,0 +1,38 @@
+# rename_project.py
+
+import shutil
+from invoke import Context
+from toml import load, dump
+
+def get_pep8_compliant_name(project_name: str) -> str:
+    return project_name.replace('-', '_')
+
+def get_project_path():
+    """Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual."""
+    with open('pyproject.toml', encoding='utf-8') as file:
+        poetry = load(file)['tool']['poetry']
+        return get_pep8_compliant_name(poetry['name'])
+
+def rename_project(_context: Context, project_name: str):
+    # Get the current project path
+    current_project_path = get_project_path()
+
+    # Rename the directory
+    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))
+
+    # Update the project name in pyproject.toml
+    with open('pyproject.toml', 'r', encoding='utf-8') as file:
+        data = load(file)
+
+    data['tool']['poetry']['name'] = project_name
+
+    with open('pyproject.toml', 'w', encoding='utf-8') as file:
+        dump(data, file)
+
+# main.py
+
+from rename_project import rename_project
+
+def executar(project_name):
+    """Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade."""
+    rename_project(Context(), project_name)

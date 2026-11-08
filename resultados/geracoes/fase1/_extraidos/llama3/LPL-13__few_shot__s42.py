@@ -1,0 +1,67 @@
+from dataclasses import dataclass, asdict
+
+@dataclass
+class Canto:
+    x1: float
+    x2: float
+    y1: float
+    y2: float
+
+@dataclass
+class Valores:
+    z11: float
+    z12: float
+    z21: float
+    z22: float
+
+def executar(ponto: tuple, canto: Canto, valores: Valores):
+    x, y = ponto
+    x1, x2, y1, y2 = canto.x1, canto.x2, canto.y1, canto.y2
+    z11, z12, z21, z22 = valores.z11, valores.z12, valores.z21, valores.z22
+    return bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22)
+
+def bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22):
+    """Bilinear interpolation. It considers the values of the four points
+    around the point to be interpolated and returns the interpolated value.
+    Made with a lot of help from GitHub Copilot.
+
+    Parameters
+    ----------
+    x : float
+        x coordinate to which the value will be interpolated.
+    y : float
+        y coordinate to which the value will be interpolated.
+    x1 : float
+        x coordinate of the first point.
+    x2 : float
+        x coordinate of the second point.
+    y1 : float
+        y coordinate of the first point.
+    y2 : float
+        y coordinate of the second point.
+    z11 : float
+        Value at the first point.
+    z12 : float
+        Value at the second point.
+    z21 : float
+        Value at the third point.
+    z22 : float
+        Value at the fourth point.
+
+    Returns
+    -------
+    float
+        Interpolated value.
+
+    Examples
+    --------
+    >>> from rocketpy.tools import bilinear_interpolation
+    >>> bilinear_interpolation(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)
+    0.5
+    """
+    return (
+        z11 * (x2 - x) * (y2 - y)
+        + z21 * (x - x1) * (y2 - y)
+        + z12 * (x2 - x) * (y - y1)
+        + z22 * (x - x1) * (y - y1)
+    ) / ((x2 - x1) * (y2 - y1))

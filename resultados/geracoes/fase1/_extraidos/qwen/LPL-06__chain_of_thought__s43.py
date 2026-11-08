@@ -1,0 +1,45 @@
+import sqlite3
+
+class Servidor:
+    def __init__(self, ip, port, username, password, keyid):
+        self.ip = ip
+        self.port = port
+        self.username = username
+        self.password = password
+        self.keyid = keyid
+
+_COLUNAS = "ip, port, username, password, keyid"
+
+
+def _preparar_banco(cadastrados):
+    conn = sqlite3.connect('frSSH.db')
+    conn.execute(f"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})")
+    for servidor in cadastrados:
+        conn.execute("INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)", 
+                      (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))
+    conn.commit()
+    conn.close()
+
+
+def _linhas():
+    conn = sqlite3.connect('frSSH.db')
+    linhas = conn.execute(f"SELECT {_COLUNAS} FROM servers ORDER BY rowid").fetchall()
+    conn.close()
+    return linhas
+
+
+def add_server(servidor):
+    conn = sqlite3.connect('frSSH.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO servers (ip, port, username, password, keyid) VALUES (?, ?, ?, ?, ?)", 
+              (servidor.ip, servidor.port, servidor.username, servidor.password, servidor.keyid))
+    conn.commit()
+    conn.close()
+    print("Server added.")
+
+
+def executar(cadastrados, servidor):
+    """cadastrados: lista de objetos Servidor. servidor: objeto Servidor."""
+    _preparar_banco(cadastrados)
+    add_server(servidor)
+    return _linhas()
