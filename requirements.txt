@@ -5,9 +5,10 @@
 pyyaml>=6.0        # leitura do config.yaml
 # O cliente do Ollama (geracao/cliente.py) usa o requests, fixado abaixo.
  
-pytest>=8.0        # validacao funcional (testes de comportamento)
-radon>=6.0         # Complexidade Ciclomatica (CC) e Indice de Manutenibilidade (MI)
-pylint>=3.0        # Pontuacao Pylint
+pytest==9.1.1      # validacao funcional (versao da etapa 5, sessoes.jsonl)
+radon==6.0.1       # Complexidade Ciclomatica (CC) e Indice de Manutenibilidade (MI)
+pylint==4.0.7      # Pontuacao Pylint
+astroid==4.0.4     # analisador usado pelo pylint; versao diferente muda a nota
  
 # Pysmell (detector de code smells, de Chen et al.) NAO vem do PyPI.
 # O pacote "pysmell" do PyPI e outro projeto (autocomplete), nao use.
