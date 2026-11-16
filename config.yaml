@@ -1,56 +1,58 @@
-# Configuracao dos modelos avaliados, todos locais, via Ollama.
+# Configuration of the evaluated models, all local, through Ollama.
 #
-# Tags e digests conferidos na biblioteca do Ollama e no Ollama instalado
-# (GET /api/tags) em 21/10/2026. O cliente aborta a rodada se o digest
-# instalado for diferente do daqui: um "ollama pull" trocaria o modelo sem
-# aviso. Mesma quantizacao (Q4_K_M) nos tres, para nao variar junto com o
-# modelo.
+# Tags and digests checked against the Ollama library and the installed
+# Ollama (GET /api/tags). The client aborts the run if the installed digest
+# differs from the one here: an "ollama pull" would swap the model silently.
+# Same quantization (Q4_K_M) for all three, so it does not vary together with
+# the model.
 
 ollama:
   base_url: "http://localhost:11434"
-  # Versao em que tudo foi conferido. O loop de geracao (geracao/gerar.py)
-  # aborta se o Ollama instalado for outro: o app do Windows se atualiza
-  # sozinho, e uma versao nova pode mudar padroes e o llama.cpp por baixo.
-  versao: "0.33.2"
+  # Version everything was checked with. The generation loop
+  # (generation/generate.py) aborts if the installed Ollama is a different
+  # one: the Windows app updates itself, and a new version may change
+  # defaults and the underlying llama.cpp.
+  version: "0.33.2"
 
-# Vai em "options" do POST /api/chat, igual para todos os modelos e tecnicas.
-# Tudo explicito: o que nao e enviado cai no padrao do Ollama (temperature
-# 0.8, top_k 40, top_p 0.9), pensado para conversa e sujeito a mudar entre
-# versoes. Decisoes do Iago (21/10/2026).
-parametros:
-  # > 0 de proposito: mantem a variabilidade entre as 3 execucoes de cada
-  # instancia. Valor FECHADO em 0.5 (aval da Carla em 22/09/2026).
+# Goes into "options" of POST /api/chat, the same for every model and
+# technique. Everything is explicit: what is not sent falls back to the
+# Ollama defaults (temperature 0.8, top_k 40, top_p 0.9), meant for chat and
+# subject to change between versions.
+options:
+  # > 0 on purpose: keeps the variability between the 3 runs of each
+  # instance.
   temperature: 0.5
-  # Janela do Llama 3 (8.192), a menor dos tres. num_predict = metade, entao
-  # prompt + saida nunca passa da janela se o prompt tiver ate 4.096 tokens.
+  # Window of Llama 3 (8,192), the smallest of the three. num_predict = half,
+  # so prompt + output never exceed the window if the prompt has at most
+  # 4,096 tokens.
   num_ctx: 8192
   num_predict: 4096
-  # Valores que desligam cada amostrador no llama.cpp: so a temperatura age.
+  # Values that disable each sampler in llama.cpp: only the temperature acts.
   top_k: 0
   top_p: 1.0
   min_p: 0.0
   repeat_penalty: 1.0
 
-# Uma seed por execucao (1, 2 e 3), igual para todos os modelos e tecnicas.
-# Mesma seed com a mesma temperatura daria execucoes identicas.
+# One seed per run (1, 2 and 3), the same for every model and technique.
+# The same seed with the same temperature would give identical runs.
 seeds: [42, 43, 44]
 
-# Campos de topo do POST /api/chat. Com false, prompt maior que o num_ctx da
-# erro em vez de ser cortado em silencio (truncate) e a geracao nao descarta
-# o inicio do contexto ao chegar no limite (shift).
-requisicao:
+# Top-level fields of POST /api/chat. With false, a prompt larger than num_ctx
+# raises an error instead of being cut silently (truncate), and generation
+# does not discard the start of the context when it reaches the limit (shift).
+request:
   truncate: false
   shift: false
 
-modelos:
-  - nome: qwen
+models:
+  - name: qwen
     tag: "qwen2.5-coder:7b-instruct-q4_K_M"
     digest: "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364"
 
-  - nome: deepseek
+  - name: deepseek
     tag: "deepseek-coder:6.7b-instruct-q4_K_M"
     digest: "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5"
 
-  - nome: llama3
+  - name: llama3
     tag: "llama3:8b-instruct-q4_K_M"
     digest: "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86"

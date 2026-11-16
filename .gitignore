@@ -1,4 +1,4 @@
-# Segredos (NUNCA versionar)
+# Secrets (NEVER version)
 .env
 
 # Python
@@ -11,33 +11,34 @@ venv/
 CLAUDE.md
 briefing_claude_desktop.md
 
-# Saidas do smoke test (descartaveis).
-# ATENCAO: as geracoes REAIS do estudo (resultados/geracoes/) DEVEM ser
-# versionadas, pois sao a evidencia bruta. So o _smoke_test fica de fora.
-resultados/geracoes/_smoke_test/
+# Smoke test and generation pilot outputs (disposable: they only test the
+# pipeline and measure time). The REAL generations (results/generations/<phase>/)
+# MUST be versioned, as they are the raw evidence.
+results/generations/_smoke_test/
+results/generations/_pilot/
+results/pilot/geracoes/_smoke_test/
+results/pilot/geracoes/_piloto/
 
-# Artigos em PDF (material de terceiros, com direito autoral).
-# O artigo do Zhang et al. (2024) e da ACM e nao pode ser redistribuido:
-#   https://doi.org/10.1145/3691620.3695290
+# Leftovers of an interrupted run (lock and half-written files).
+results/**/_running.lock
+results/**/_rodando.lock
+results/**/*.tmp
+
+# Papers in PDF and thesis text (third-party material, with copyright).
+#   Zhang et al. (2024): https://doi.org/10.1145/3691620.3695290
 artigo/
 
-# Dataset de Zhang et al. (2024): 5,5 MB de codigo de ~51 repositorios de
-# terceiros, a maioria sem licenca explicita. Nao redistribuir; baixar do
-# Zenodo, que e a fonte citavel e permanente:
+# Zhang et al. (2024) dataset: 5.5 MB of code from ~51 third-party
+# repositories, most without an explicit license. Do not redistribute;
+# download it from Zenodo, the citable and permanent source:
 #   https://doi.org/10.5281/zenodo.13335000
-# Descompacte em dados/dataset_zhang/ (ver dados/pysmell/README.md).
-dados/dataset_zhang/
+# Unzip it into data/dataset_zhang/ (see pysmell/README.md).
+data/dataset_zhang/
 
 # PyExamine corpus (third-party code, Zenodo 10.5281/zenodo.14066039): only
-# the .py files, rebuilt with python -m dados.pyexamine.extract_py.
-dados/dataset_pyexamine/
+# the .py files, rebuilt with python -m data.pyexamine.extract_py.
+data/dataset_pyexamine/
 
-# Lixo do Windows/OneDrive
+# Windows/OneDrive junk
 desktop.ini
 Thumbs.db
-
-# Piloto da geracao (descartavel: so mede tempo e testa o pipeline) e restos
-# de uma rodada interrompida (trava e escrita pela metade).
-resultados/geracoes/_piloto/
-resultados/geracoes/**/_rodando.lock
-resultados/geracoes/**/*.tmp
