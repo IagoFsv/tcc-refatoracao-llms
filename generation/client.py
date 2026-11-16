@@ -87,12 +87,34 @@ def build_body(cfg, model, messages, seed):
     }
 
 
+def unload_all(cfg, timeout=120):
+    """Unloads every model loaded in Ollama and waits until GET /api/ps is empty.
+
+    The next call then loads its model from scratch and processes the whole
+    prompt. Without this, Ollama reuses the prompt already processed by the
+    previous call, and with part of a model on the CPU (DeepSeek) a prompt
+    taken from that cache gives a different output for the same seed than
+    one processed from scratch. Unloading also keeps any other model from
+    holding VRAM and changing the GPU/CPU split. Raises RuntimeError if a
+    model is still loaded after `timeout` seconds.
+    """
+    loaded = [m["name"] for m in _get(cfg, "/api/ps")["models"]]
+    for name in loaded:
+        _post(cfg, "/api/generate", {"model": name, "keep_alive": 0}, timeout=timeout)
+    deadline = time.time() + timeout
+    while _get(cfg, "/api/ps")["models"]:
+        if time.time() > deadline:
+            raise RuntimeError(f"models still loaded {timeout} s after the unload request")
+        time.sleep(0.5)
+
+
 def gpu_usage(cfg, model):
     """Fraction of the model loaded on the GPU, read from GET /api/ps.
 
-    Call right after a generation, with the model still loaded. It only
-    affects speed, not the result; it is recorded to document when part of
-    the model runs on the CPU.
+    Call right after a generation, with the model still loaded. It is
+    recorded to document how much of the model ran on the CPU: the split
+    changes speed and, because CPU and GPU round differently, may change a
+    token of the output.
     """
     for m in _get(cfg, "/api/ps")["models"]:
         if m["name"] == model["tag"]:

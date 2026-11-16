@@ -5,9 +5,14 @@ runs, one independent call (fresh context) per combination.
 Ordered in layers, one per seed (runs 1, 2 and 3). Each layer covers every
 instance, model and technique, so stopping in the middle of the run leaves
 complete, balanced layers, and never a whole model without output. Within a
-layer, one model at a time (with 8 GB of VRAM only one fits loaded, and
-alternating would make Ollama reload at every call); within it, instance and
-technique. Each call becomes an immutable JSON at
+layer, one model at a time; within it, instance and technique.
+
+Before every call, every model is unloaded from Ollama (client.unload_all),
+so each call loads its model from scratch and processes the whole prompt.
+Reusing the prompt cache of the previous call would make the output depend
+on the order of the calls: with part of DeepSeek on the CPU, the same prompt
+and seed give a different output when the prompt comes from the cache. The
+price is the load time in every call, which goes into latency_s. Each call becomes an immutable JSON at
 results/generations/<phase>/<model>/<ID>__<technique>__s<seed>.json.
 
 Resumable: whatever already has a record is skipped, so it is enough to run
@@ -210,6 +215,7 @@ def main(argv=None):
             messages = prompts.build(technique, smell, unit.read_text(encoding="utf-8"))
             try:
                 _check_instrument(cfg, m)
+                client.unload_all(cfg)
                 text, body, raw, latency = client.call_model(cfg, m, messages, seed)
                 gpu = client.gpu_usage(cfg, m)
             except (requests.RequestException, RuntimeError) as e:
@@ -225,7 +231,7 @@ def main(argv=None):
             client.record(target.parent, target.stem, cfg, m, environments[m["name"]],
                           body, raw, text, latency, gpu,
                           extra={"instance": ident, "smell": smell, "technique": technique,
-                                 "run": run, "seed": seed,
+                                 "run": run, "seed": seed, "loaded_from_scratch": True,
                                  "commit": commit, "session": session})
             done += 1
             latencies[m["name"]].append(latency)

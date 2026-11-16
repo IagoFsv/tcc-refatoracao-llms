@@ -7,7 +7,9 @@
 # the model.
 
 ollama:
-  base_url: "http://localhost:11434"
+  # 127.0.0.1 and not localhost: on Windows, localhost tries IPv6 first and
+  # every request waits about 2 s before falling back to IPv4.
+  base_url: "http://127.0.0.1:11434"
   # Version everything was checked with. The generation loop
   # (generation/generate.py) aborts if the installed Ollama is a different
   # one: the Windows app updates itself, and a new version may change
