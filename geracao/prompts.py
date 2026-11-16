@@ -3,17 +3,15 @@ Montagem dos prompts enviados aos modelos.
 
 Tres tecnicas (Role Prompting, Few-Shot e Chain-of-Thought) com o mesmo nucleo
 de tarefa; o que varia entre elas e apenas a camada da tecnica. Os textos
-aprovados vivem em prompts/*.txt e sao carregados verbatim: este modulo
-preenche os campos e monta a mensagem, nunca reescreve o enunciado.
+vivem em prompts/*.txt e sao carregados verbatim: este modulo preenche os
+campos e monta a mensagem, nunca reescreve o enunciado.
 
 Todas as tecnicas viram UMA unica mensagem de papel "user", sem mensagem de
-"system". Isso e deliberado: se a persona do Role fosse para o "system" e as
-outras duas nao tivessem essa mensagem, a estrutura da conversa passaria a
-variar junto com o texto, e a tecnica de prompt deixaria de ser o unico fator
-manipulado. Sem "system" no pedido, cada modelo recebe o SYSTEM padrao do seu
-Modelfile (decisao do Iago, 21/10/2026): o texto e fixo por modelo, igual nas
-tres tecnicas, conhecido e registrado a cada rodada (cliente.ambiente), o que
-o separa do contexto oculto da interface de chat criticado pela banca.
+"system". Se a persona do Role fosse para o "system" e as outras duas nao
+tivessem essa mensagem, a estrutura da conversa variaria junto com o texto, e
+a tecnica deixaria de ser o unico fator manipulado. Sem "system" no pedido,
+cada modelo recebe o SYSTEM padrao do seu Modelfile, fixo por modelo e
+registrado a cada rodada (cliente.ambiente).
 """
 
 import functools
@@ -29,7 +27,7 @@ TECNICAS = ("role", "few_shot", "chain_of_thought")
 
 @functools.lru_cache(maxsize=None)
 def catalogo():
-    """Devolve o catalogo dos smells (nome, tecnica e par de exemplo)."""
+    """Devolve o catalogo dos smells (nome, definicao, tecnica e par de exemplo)."""
     with open(DIR_PROMPTS / "smells.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
@@ -61,16 +59,20 @@ def montar(tecnica, smell, codigo):
     s = smells[smell]
 
     # O exemplo do few-shot e sempre do mesmo smell da instancia, entao
-    # {smell}/{technique} e {smell_exemplo}/{technique_exemplo} saem da mesma
+    # {smell}/{technique} e {example_smell}/{example_technique} saem da mesma
     # entrada do catalogo. Os campos de exemplo sobram nos outros dois
     # templates; format() ignora chave nao usada.
+    # O codigo vai entre cercas ```python nos templates; so as quebras de
+    # linha do fim sao cortadas, para a cerca fechar logo apos a ultima linha.
     texto = template(tecnica).format(
-        smell=s["nome"],
-        technique=s["tecnica"],
-        code=codigo,
-        smell_exemplo=s["nome"],
-        technique_exemplo=s["tecnica"],
-        codigo_exemplo_antes=s["exemplo_antes"],
-        codigo_exemplo_depois=s["exemplo_depois"],
+        smell=s["name"],
+        definition=s["definition"],
+        technique=s["technique"],
+        code=codigo.rstrip("\n"),
+        example_smell=s["name"],
+        example_definition=s["definition"],
+        example_technique=s["technique"],
+        example_before=s["example_before"],
+        example_after=s["example_after"],
     )
     return [{"role": "user", "content": texto}]

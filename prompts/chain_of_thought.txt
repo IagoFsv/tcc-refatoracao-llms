@@ -1,14 +1,17 @@
-Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.
+You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.
 
-Antes de responder, raciocine passo a passo:
-1. Identifique por que o trecho apresenta o code smell indicado.
-2. Explique como a técnica de refatoração indicada se aplica ao trecho.
-3. Aplique a refatoração.
-4. Verifique se o código refatorado preserva o comportamento original.
+Before answering, reason step by step:
+1. Identify why the code exhibits the indicated code smell.
+2. Explain how the indicated refactoring technique applies to the code.
+3. Apply the refactoring.
+4. Verify that the refactored code preserves the original behavior.
 
-Após o raciocínio, exiba o código refatorado final em um único bloco de código Python.
+After the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.
 
 Code smell: {smell}
-Técnica de refatoração: {technique}
-Código original:
+Definition: {definition}
+Refactoring technique: {technique}
+Original code:
+```python
 {code}
+```

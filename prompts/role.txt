@@ -1,10 +1,13 @@
-Você é um desenvolvedor Python experiente, especializado em refatoração de código e práticas de código limpo (clean code).
+You are an experienced Python developer, specialized in code refactoring and clean code practices.
 
-Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.
+You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.
 
-Responda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.
+Respond only with the complete refactored file, in a single Python code block, without explanations.
 
 Code smell: {smell}
-Técnica de refatoração: {technique}
-Código original:
+Definition: {definition}
+Refactoring technique: {technique}
+Original code:
+```python
 {code}
+```

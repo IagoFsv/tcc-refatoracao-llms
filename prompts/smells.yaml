@@ -1,162 +1,173 @@
-# Catalogo dos quatro smells do estudo.
+# Catalog of the code smells in the study.
 #
-# Para cada smell: o nome canonico e a tecnica de refatoracao indicada (que
-# preenchem {smell} e {technique} nos TRES prompts) e o par antes/depois
-# demonstrativo (que preenche o bloco de exemplo, so no few_shot.txt).
+# For each smell: the canonical name, the definition and the indicated
+# refactoring technique (which fill {smell}, {definition} and {technique} in
+# the three prompts), and the demonstrative before/after pair (which fills the
+# example block, only in few_shot.txt).
 #
-# Os pares sao os Codigos-fonte 1 a 8 da Fundamentacao Teorica, de autoria do
-# proprio Iago: nao vem do dataset de Zhang et al. (2024), o que evita
-# contaminar a amostra do estudo.
+# The pairs do not come from the study instances, so the sample is not
+# contaminated. The MNC pair covers both forms that Pysmell measures: nested
+# literal (DNC/NCT) and chained index access (LEC).
 
 LM:
-  nome: "Long Method"
-  tecnica: "Extract Method"
-  exemplo_antes: |-
-    def processar_pedido(pedido):
-        for item in pedido['itens']:
-            if item['quantidade'] <= 0:
-                raise ValueError(f"Quantidade invalida: {item['nome']}")
-            if item['preco'] <= 0:
-                raise ValueError(f"Preco invalido: {item['nome']}")
+  name: "Long Method"
+  definition: "A method or function that exceeds a considerable length."
+  technique: "Extract Method"
+  example_before: |-
+    def process_order(order):
+        for item in order['items']:
+            if item['quantity'] <= 0:
+                raise ValueError(f"Invalid quantity: {item['name']}")
+            if item['price'] <= 0:
+                raise ValueError(f"Invalid price: {item['name']}")
         subtotal = 0
-        for item in pedido['itens']:
-            subtotal += item['quantidade'] * item['preco']
-        desconto = 0
-        if pedido['cliente']['tipo'] == 'premium':
-            desconto = subtotal * 0.15
-        elif pedido['cliente']['tipo'] == 'regular':
-            desconto = subtotal * 0.05
-        total = subtotal - desconto
-        resumo = f"Cliente: {pedido['cliente']['nome']}\n"
-        resumo += f"Subtotal: R$ {subtotal:.2f}\n"
-        resumo += f"Desconto: R$ {desconto:.2f}\n"
-        resumo += f"Total: R$ {total:.2f}\n"
-        return resumo
-  exemplo_depois: |-
-    def _validar_itens(itens):
-        for item in itens:
-            if item['quantidade'] <= 0:
-                raise ValueError(f"Quantidade invalida: {item['nome']}")
-            if item['preco'] <= 0:
-                raise ValueError(f"Preco invalido: {item['nome']}")
+        for item in order['items']:
+            subtotal += item['quantity'] * item['price']
+        discount = 0
+        if order['customer']['type'] == 'premium':
+            discount = subtotal * 0.15
+        elif order['customer']['type'] == 'regular':
+            discount = subtotal * 0.05
+        total = subtotal - discount
+        summary = f"Customer: {order['customer']['name']}\n"
+        summary += f"Subtotal: $ {subtotal:.2f}\n"
+        summary += f"Discount: $ {discount:.2f}\n"
+        summary += f"Total: $ {total:.2f}\n"
+        return summary
+  example_after: |-
+    def _validate_items(items):
+        for item in items:
+            if item['quantity'] <= 0:
+                raise ValueError(f"Invalid quantity: {item['name']}")
+            if item['price'] <= 0:
+                raise ValueError(f"Invalid price: {item['name']}")
 
-    def _calcular_subtotal(itens):
-        return sum(item['quantidade'] * item['preco'] for item in itens)
+    def _compute_subtotal(items):
+        return sum(item['quantity'] * item['price'] for item in items)
 
-    def _aplicar_desconto(subtotal, tipo_cliente):
-        if tipo_cliente == 'premium':
+    def _compute_discount(subtotal, customer_type):
+        if customer_type == 'premium':
             return subtotal * 0.15
-        elif tipo_cliente == 'regular':
+        elif customer_type == 'regular':
             return subtotal * 0.05
         return 0
 
-    def _gerar_resumo(cliente, subtotal, desconto):
-        total = subtotal - desconto
-        resumo = f"Cliente: {cliente['nome']}\n"
-        resumo += f"Subtotal: R$ {subtotal:.2f}\n"
-        resumo += f"Desconto: R$ {desconto:.2f}\n"
-        resumo += f"Total: R$ {total:.2f}\n"
-        return resumo
+    def _build_summary(customer, subtotal, discount):
+        total = subtotal - discount
+        summary = f"Customer: {customer['name']}\n"
+        summary += f"Subtotal: $ {subtotal:.2f}\n"
+        summary += f"Discount: $ {discount:.2f}\n"
+        summary += f"Total: $ {total:.2f}\n"
+        return summary
 
-    def processar_pedido(pedido):
-        _validar_itens(pedido['itens'])
-        subtotal = _calcular_subtotal(pedido['itens'])
-        desconto = _aplicar_desconto(subtotal, pedido['cliente']['tipo'])
-        return _gerar_resumo(pedido['cliente'], subtotal, desconto)
+    def process_order(order):
+        _validate_items(order['items'])
+        subtotal = _compute_subtotal(order['items'])
+        discount = _compute_discount(subtotal, order['customer']['type'])
+        return _build_summary(order['customer'], subtotal, discount)
 
 LPL:
-  nome: "Long Parameter List"
-  tecnica: "Introduce Parameter Object"
-  exemplo_antes: |-
-    def cadastrar_produto(nome, preco, quantidade, categoria, fornecedor, desconto):
-        produto = {
-            'nome': nome,
-            'preco': preco,
-            'quantidade': quantidade,
-            'categoria': categoria,
-            'fornecedor': fornecedor,
-            'desconto': desconto
+  name: "Long Parameter List"
+  definition: "A method or function with an extensive list of parameters."
+  technique: "Introduce Parameter Object"
+  example_before: |-
+    def register_product(name, price, quantity, category, supplier, discount):
+        product = {
+            'name': name,
+            'price': price,
+            'quantity': quantity,
+            'category': category,
+            'supplier': supplier,
+            'discount': discount
         }
-        banco_de_dados.salvar(produto)
-        return produto
-  exemplo_depois: |-
+        database.save(product)
+        return product
+  example_after: |-
     from dataclasses import dataclass, asdict
 
     @dataclass
-    class Produto:
-        nome: str
-        preco: float
-        quantidade: int
-        categoria: str
-        fornecedor: str
-        desconto: float
+    class Product:
+        name: str
+        price: float
+        quantity: int
+        category: str
+        supplier: str
+        discount: float
 
-    def cadastrar_produto(produto: Produto):
-        banco_de_dados.salvar(asdict(produto))
-        return produto
+    def register_product(product: Product):
+        database.save(asdict(product))
+        return product
 
 LLF:
-  nome: "Long Lambda Function"
-  tecnica: "Replace Lambda with Named Function"
-  exemplo_antes: |-
-    ordenar = lambda itens, chave, reverso, limite: sorted(
-        [i for i in itens if i[chave] > limite],
-        key=lambda x: x[chave],
-        reverse=reverso
+  name: "Long Lambda Function"
+  definition: "A lambda function that exceeds a considerable length."
+  technique: "Replace Lambda with Named Function"
+  example_before: |-
+    sort_items = lambda items, key, reverse_order, threshold: sorted(
+        [i for i in items if i[key] > threshold],
+        key=lambda x: x[key],
+        reverse=reverse_order
     )
-  exemplo_depois: |-
-    def ordenar_itens(itens, chave, reverso, limite):
-        itens_filtrados = [i for i in itens if i[chave] > limite]
-        return sorted(itens_filtrados, key=lambda x: x[chave], reverse=reverso)
+  example_after: |-
+    def sort_items(items, key, reverse_order, threshold):
+        filtered_items = [i for i in items if i[key] > threshold]
+        return sorted(filtered_items, key=lambda x: x[key], reverse=reverse_order)
 
 MNC:
-  nome: "Multiply-Nested Container"
-  tecnica: "Decompose Container"
-  exemplo_antes: |-
-    dados = {
-        'pedidos': [
+  name: "Multiply-Nested Container"
+  definition: "A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c']."
+  technique: "Decompose Container"
+  example_before: |-
+    data = {
+        'orders': [
             {
-                'cliente': {
-                    'nome': 'Ana',
-                    'endereco': {'cidade': 'Fortaleza', 'cep': '60000-000'}
+                'customer': {
+                    'name': 'Ana',
+                    'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}
                 },
-                'itens': [
-                    {'produto': 'caneta', 'qtd': 2},
-                    {'produto': 'caderno', 'qtd': 1}
+                'items': [
+                    {'product': 'pen', 'qty': 2},
+                    {'product': 'notebook', 'qty': 1}
                 ]
             }
         ]
     }
-  exemplo_depois: |-
+
+    def first_order_city(data):
+        return data['orders'][0]['customer']['address']['city']
+  example_after: |-
     from dataclasses import dataclass, field
     from typing import List
 
     @dataclass
-    class Endereco:
-        cidade: str
-        cep: str
+    class Address:
+        city: str
+        zip_code: str
 
     @dataclass
-    class Cliente:
-        nome: str
-        endereco: Endereco
+    class Customer:
+        name: str
+        address: Address
 
     @dataclass
     class Item:
-        produto: str
-        qtd: int
+        product: str
+        qty: int
 
     @dataclass
-    class Pedido:
-        cliente: Cliente
-        itens: List[Item] = field(default_factory=list)
+    class Order:
+        customer: Customer
+        items: List[Item] = field(default_factory=list)
 
-    dados = [
-        Pedido(
-            cliente=Cliente(
-                nome='Ana',
-                endereco=Endereco(cidade='Fortaleza', cep='60000-000')
+    data = [
+        Order(
+            customer=Customer(
+                name='Ana',
+                address=Address(city='Fortaleza', zip_code='60000-000')
             ),
-            itens=[Item('caneta', 2), Item('caderno', 1)]
+            items=[Item('pen', 2), Item('notebook', 1)]
         )
     ]
+
+    def first_order_city(data):
+        return data[0].customer.address.city

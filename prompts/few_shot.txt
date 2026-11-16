@@ -1,19 +1,27 @@
-Você receberá um trecho de código Python que contém um code smell específico, já diagnosticado. Refatore o trecho para remover esse code smell aplicando a técnica de refatoração indicada. Preserve o comportamento original do código: altere apenas a estrutura interna, nunca o que o código faz.
+You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.
 
-Responda apenas com o código refatorado final, em um único bloco de código Python, sem explicações.
+Respond only with the complete refactored file, in a single Python code block, without explanations.
 
-Exemplo:
+Example:
 
-Code smell: {smell_exemplo}
-Técnica de refatoração: {technique_exemplo}
-Código original:
-{codigo_exemplo_antes}
-Código refatorado:
-{codigo_exemplo_depois}
+Code smell: {example_smell}
+Definition: {example_definition}
+Refactoring technique: {example_technique}
+Original code:
+```python
+{example_before}
+```
+Refactored code:
+```python
+{example_after}
+```
 
-Agora refatore o trecho a seguir.
+Now refactor the following file.
 
 Code smell: {smell}
-Técnica de refatoração: {technique}
-Código original:
+Definition: {definition}
+Refactoring technique: {technique}
+Original code:
+```python
 {code}
+```
