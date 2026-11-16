@@ -1,7 +1,7 @@
-"""Grade de colunas e linhas para dispor elementos em paisagem.
+"""Grid of columns and rows to lay out elements in landscape.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(elements). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import math
@@ -65,6 +65,6 @@ def get_layout_size(elements):
         raise ValueError(f'Unsupported number of elements: {elements}')
 
 
-def executar(elementos):
-    """Devolve (colunas, linhas) para o numero de elementos. Ponto de entrada publico desta unidade."""
-    return get_layout_size(elementos)
+def run(elements):
+    """Returns (columns, rows) for the number of elements. Public entry point of this unit."""
+    return get_layout_size(elements)

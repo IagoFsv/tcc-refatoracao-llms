@@ -1,25 +1,25 @@
-"""Testes da instancia MNC-17: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-17: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode reorganizar o acesso ao JSON;
-o que nao pode mudar e o texto impresso (cidade e primeira condicao, ou a
-mensagem de erro quando nao ha dados) e o erro diante de resposta sem as
-condicoes do tempo.
+Only run() is imported. The refactoring may reorganize the access to the
+JSON; what must not change is the printed text (city and first condition, or
+the error message when there is no data) and the error on a response without
+the weather conditions.
 """
 
 import pytest
 
-from MNC_17 import executar
+from MNC_17 import run
 
 
-def test_tipico_cidade_e_descricao(capsys):
-    executar({"name": "Lisbon", "weather": [{"description": "clear sky"}]})
+def test_typical_city_and_description(capsys):
+    run({"name": "Lisbon", "weather": [{"description": "clear sky"}]})
 
     assert capsys.readouterr().out == "The weather in Lisbon is clear sky\n"
 
 
-def test_borda_varias_condicoes_e_sem_dados(capsys):
-    executar({"name": "Recife", "weather": [{"description": "light rain"}, {"description": "mist"}]})
-    executar(None)
+def test_edge_several_conditions_and_no_data(capsys):
+    run({"name": "Recife", "weather": [{"description": "light rain"}, {"description": "mist"}]})
+    run(None)
 
     assert capsys.readouterr().out == (
         "The weather in Recife is light rain\n"
@@ -27,6 +27,6 @@ def test_borda_varias_condicoes_e_sem_dados(capsys):
     )
 
 
-def test_invalido_resposta_sem_condicoes(capsys):
+def test_invalid_response_without_conditions(capsys):
     with pytest.raises(IndexError):
-        executar({"name": "Lisbon", "weather": []})
+        run({"name": "Lisbon", "weather": []})

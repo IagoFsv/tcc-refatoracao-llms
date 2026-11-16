@@ -1,76 +1,76 @@
-"""Testes da instancia MNC-12: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-12: they pin the observable behavior of run().
 
-So executar() e importado. executar roda o arquivo da unidade como programa
-(bloco __main__), com a cidade na linha de comando. O teste roda numa pasta
-temporaria com o config.ini e intercepta requests.get, que devolve uma
-resposta gravada da API de clima. A refatoracao pode reorganizar o bloco
-principal (inclusive move-lo para uma funcao chamada sob a mesma guarda); o
-que nao pode mudar e a URL consultada, o texto impresso e a saida com codigo
-1 diante de cidade invalida.
+Only run() is imported. run executes the unit file as a program (__main__
+block), with the city on the command line. The test runs in a temporary
+folder with config.ini and intercepts requests.get, which returns a recorded
+response of the weather API. The refactoring may reorganize the main block
+(including moving it into a function called under the same guard); what
+must not change is the URL queried, the printed text and the exit with code
+1 on an invalid city.
 """
 
 import pytest
 import requests
 
-from MNC_12 import executar
+from MNC_12 import run
 
-CONFIG = "[openweathermap]\napi_key = chave123\nbase_url = http://api.exemplo.com/weather?\n"
+CONFIG = "[openweathermap]\napi_key = key123\nbase_url = http://api.example.com/weather?\n"
 
 
-class Resposta:
-    def __init__(self, dados):
-        self.dados = dados
+class Response:
+    def __init__(self, data):
+        self.data = data
 
     def json(self):
-        return self.dados
+        return self.data
 
 
 @pytest.fixture
 def api(tmp_path, monkeypatch):
-    """Pasta com o config.ini e requests.get interceptado; devolve as URLs pedidas."""
+    """Folder with config.ini and requests.get intercepted; returns the URLs requested."""
     (tmp_path / "config.ini").write_text(CONFIG, encoding="utf-8")
     monkeypatch.chdir(tmp_path)
-    pedidos = []
-    respostas = {}
+    requests_made = []
+    responses = {}
 
-    def falso_get(url, *args, **kwargs):
-        pedidos.append(url)
-        return Resposta(respostas["dados"])
+    def fake_get(url, *args, **kwargs):
+        requests_made.append(url)
+        return Response(responses["data"])
 
-    monkeypatch.setattr(requests, "get", falso_get)
-    return pedidos, respostas
-
-
-def clima(*descricoes):
-    return {"cod": 200, "weather": [{"description": d} for d in descricoes]}
+    monkeypatch.setattr(requests, "get", fake_get)
+    return requests_made, responses
 
 
-def test_tipico_imprime_a_descricao_do_clima(api, capsys):
-    pedidos, respostas = api
-    respostas["dados"] = clima("light rain")
+def weather(*descriptions):
+    return {"cod": 200, "weather": [{"description": d} for d in descriptions]}
 
-    executar("London")
 
-    assert pedidos == ["http://api.exemplo.com/weather?appid=chave123&q=London"]
+def test_typical_prints_the_weather_description(api, capsys):
+    requests_made, responses = api
+    responses["data"] = weather("light rain")
+
+    run("London")
+
+    assert requests_made == ["http://api.example.com/weather?appid=key123&q=London"]
     assert capsys.readouterr().out == "light rain\n"
 
 
-def test_borda_cidade_com_espacos_e_varias_condicoes(api, capsys):
-    pedidos, respostas = api
-    respostas["dados"] = clima("haze", "mist")
+def test_edge_city_with_spaces_and_several_conditions(api, capsys):
+    requests_made, responses = api
+    responses["data"] = weather("haze", "mist")
 
-    executar("Rio de Janeiro")
+    run("Rio de Janeiro")
 
-    assert pedidos == ["http://api.exemplo.com/weather?appid=chave123&q=Rio de Janeiro"]
-    assert capsys.readouterr().out == "haze\n"  # so a primeira condicao
+    assert requests_made == ["http://api.example.com/weather?appid=key123&q=Rio de Janeiro"]
+    assert capsys.readouterr().out == "haze\n"  # only the first condition
 
 
-def test_invalido_cidade_inexistente_sai_com_codigo_1(api, capsys):
-    _, respostas = api
-    respostas["dados"] = {"cod": "404", "message": "city not found"}
+def test_invalid_nonexistent_city_exits_with_code_1(api, capsys):
+    _, responses = api
+    responses["data"] = {"cod": "404", "message": "city not found"}
 
-    with pytest.raises(SystemExit) as saida:
-        executar("Atlantida")
+    with pytest.raises(SystemExit) as exit_info:
+        run("Atlantis")
 
-    assert saida.value.code == 1
+    assert exit_info.value.code == 1
     assert capsys.readouterr().out == "Invalid city name\n"

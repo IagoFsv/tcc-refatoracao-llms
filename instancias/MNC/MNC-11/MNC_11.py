@@ -1,8 +1,7 @@
-"""Tarefas de manutencao de um projeto Python: gerar e publicar uma versao.
+"""Maintenance tasks of a Python project: building and publishing a release.
 
-Ponto de entrada publico: executar(version, falhar_publicacao=False). Nao
-altere o nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(version, fail_publish=False). Do not change its name
+or signature; the rest of the file may be freely reorganized.
 """
 
 import toml
@@ -11,22 +10,22 @@ from invoke.exceptions import UnexpectedExit
 from invoke.runners import Result
 
 
-class ContextoDeBuild(Context):
-    """Contexto que nao roda comandos de verdade.
+class BuildContext(Context):
+    """Context that does not run commands for real.
 
-    Cada chamada de run registra o comando, os argumentos e a versao gravada
-    no pyproject.toml naquele momento. Com falhar ligado, o comando termina
-    com codigo 1, como faria um build ou publicacao que falhou.
+    Each call to run records the command, the arguments and the version
+    written to pyproject.toml at that moment. With fail on, the command ends
+    with exit code 1, as a failed build or publication would.
     """
 
-    comandos = []
-    falhar = False
+    commands = []
+    fail = False
 
     def run(self, command, **kwargs):
-        with open('pyproject.toml', encoding='utf-8') as arquivo:
-            poetry = toml.load(arquivo)['tool']['poetry']
-        ContextoDeBuild.comandos.append((command, kwargs, poetry['version']))
-        if ContextoDeBuild.falhar:
+        with open('pyproject.toml', encoding='utf-8') as file:
+            poetry = toml.load(file)['tool']['poetry']
+        BuildContext.commands.append((command, kwargs, poetry['version']))
+        if BuildContext.fail:
             raise UnexpectedExit(Result(command=command, exited=1))
         return Result(command=command, exited=0)
 
@@ -65,9 +64,9 @@ def release(context: Context, version: str) -> None:
         pyproject_file.write(pyproject_string)
 
 
-def executar(version, falhar_publicacao=False):
-    """Roda a publicacao da versao; devolve os comandos registrados. Ponto de entrada publico desta unidade."""
-    ContextoDeBuild.comandos = []
-    ContextoDeBuild.falhar = falhar_publicacao
-    release(ContextoDeBuild(), version)
-    return ContextoDeBuild.comandos
+def run(version, fail_publish=False):
+    """Runs the release of the version; returns the recorded commands. Public entry point of this unit."""
+    BuildContext.commands = []
+    BuildContext.fail = fail_publish
+    release(BuildContext(), version)
+    return BuildContext.commands

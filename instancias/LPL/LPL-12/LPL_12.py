@@ -1,8 +1,7 @@
-"""Interpolacao de duas series (x, y) num mesmo conjunto de x igualmente espacados.
+"""Interpolation of two (x, y) series on the same set of equally spaced x.
 
-Ponto de entrada publico: executar(dados1, dados2, intervalo). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(data1, data2, interval). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 import numpy as np
@@ -54,8 +53,8 @@ def interpolate_df_at_fixed_x_intervals(x1, y1, x2, y2, x_interval):
     return df_interpolated  # Contains x_new, y1_new, y2_new, and y_diff
 
 
-def executar(dados1, dados2, intervalo):
-    """dados1 e dados2: DataFrames com a coluna de x primeiro e a de y depois."""
-    x1, y1 = dados1.iloc[:, 0], dados1.iloc[:, 1]
-    x2, y2 = dados2.iloc[:, 0], dados2.iloc[:, 1]
-    return interpolate_df_at_fixed_x_intervals(x1, y1, x2, y2, intervalo)
+def run(data1, data2, interval):
+    """data1 and data2: DataFrames with the x column first and the y column second. Public entry point of this unit."""
+    x1, y1 = data1.iloc[:, 0], data1.iloc[:, 1]
+    x2, y2 = data2.iloc[:, 0], data2.iloc[:, 1]
+    return interpolate_df_at_fixed_x_intervals(x1, y1, x2, y2, interval)

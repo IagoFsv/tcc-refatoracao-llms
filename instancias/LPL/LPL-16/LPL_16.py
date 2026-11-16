@@ -1,8 +1,7 @@
-"""Transacao entre duas partes: dados, hash e representacao em dicionario.
+"""Transaction between two parties: data, hash and dictionary representation.
 
-Ponto de entrada publico: executar(campos). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(fields). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import hashlib
@@ -31,9 +30,12 @@ class Transaction(object):
         }
 
 
-def executar(campos):
-    """campos: sender, receiver, amount e timestamp. Devolve a representacao
-    da transacao em dicionario."""
-    transacao = Transaction(campos["sender"], campos["receiver"], campos["amount"],
-                            campos["timestamp"])
-    return transacao.repr_json()
+def run(fields):
+    """Public entry point of this unit.
+
+    fields: sender, receiver, amount and timestamp. Returns the dictionary
+    representation of the transaction.
+    """
+    transaction = Transaction(fields["sender"], fields["receiver"], fields["amount"],
+                              fields["timestamp"])
+    return transaction.repr_json()

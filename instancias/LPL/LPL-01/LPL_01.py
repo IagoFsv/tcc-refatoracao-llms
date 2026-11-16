@@ -1,11 +1,12 @@
-"""Uma epoca de treino de um classificador.
+"""One training epoch of a classifier.
 
-Ponto de entrada publico: executar(lotes). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(batches). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 
-As pecas de treino (tensor, modelo, perda, otimizador, loader) sao versoes
-minimas em Python puro. O modelo soma um vies por classe ao score de cada
-amostra; a perda e quanto o maior score passa o score da classe certa.
+The training pieces (tensor, model, loss, optimizer, loader) are minimal
+pure-Python versions. The model adds one bias per class to the score of each
+sample; the loss is how much the highest score exceeds the score of the
+correct class.
 """
 
 from types import SimpleNamespace
@@ -13,40 +14,40 @@ from types import SimpleNamespace
 from tqdm import tqdm
 
 _NUM_CLASSES = 3
-_TAXA_APRENDIZADO = 0.5
+_LEARNING_RATE = 0.5
 
 
 class _Tensor:
-    """Tensor sobre listas: 1D (valores) ou 2D (uma linha por amostra)."""
+    """Tensor over lists: 1D (values) or 2D (one row per sample)."""
 
-    def __init__(self, valores, modelo=None):
-        self.valores = valores
-        self.modelo = modelo
+    def __init__(self, values, model=None):
+        self.values = values
+        self.model = model
 
     def to(self, device):
         return self
 
     def argmax(self, dim, keepdim):
-        return _Tensor([[linha.index(max(linha))] for linha in self.valores])
+        return _Tensor([[row.index(max(row))] for row in self.values])
 
-    def view_as(self, outro):
-        return _Tensor([[valor] for valor in self.valores])
+    def view_as(self, other):
+        return _Tensor([[value] for value in self.values])
 
-    def eq(self, outro):
-        return _Tensor([a == b for a, b in zip(self.valores, outro.valores)])
+    def eq(self, other):
+        return _Tensor([a == b for a, b in zip(self.values, other.values)])
 
     def sum(self):
-        return _Tensor(sum(self.valores))
+        return _Tensor(sum(self.values))
 
     def item(self):
-        return self.valores
+        return self.values
 
 
-class _Modelo:
-    """Um vies por classe, somado ao score de cada amostra."""
+class _Model:
+    """One bias per class, added to the score of each sample."""
 
     def __init__(self):
-        self.vies = [0.0] * _NUM_CLASSES
+        self.bias = [0.0] * _NUM_CLASSES
         self.grad = [0.0] * _NUM_CLASSES
         self.training = False
 
@@ -55,62 +56,62 @@ class _Modelo:
         return self
 
     def __call__(self, data):
-        linhas = [_somar(amostra, self.vies) for amostra in data.valores]
-        return _Tensor(linhas, modelo=self)
+        rows = [_add(sample, self.bias) for sample in data.values]
+        return _Tensor(rows, model=self)
 
 
-def _somar(a, b):
+def _add(a, b):
     return [x + y for x, y in zip(a, b)]
 
 
-class _Perda:
-    """Media, no lote, de quanto o maior score passa o da classe certa."""
+class _Loss:
+    """Batch mean of how much the highest score exceeds the correct class score."""
 
     def __init__(self, output, target):
         self.output = output
-        self.pares = list(zip(output.valores, target.valores))
+        self.pairs = list(zip(output.values, target.values))
 
     def item(self):
-        return sum(max(linha) - linha[classe] for linha, classe in self.pares) / len(self.pares)
+        return sum(max(row) - row[label] for row, label in self.pairs) / len(self.pairs)
 
     def backward(self):
-        grad = self.output.modelo.grad
-        for linha, classe in self.pares:
-            grad[linha.index(max(linha))] += 1 / len(self.pares)
-            grad[classe] -= 1 / len(self.pares)
+        grad = self.output.model.grad
+        for row, label in self.pairs:
+            grad[row.index(max(row))] += 1 / len(self.pairs)
+            grad[label] -= 1 / len(self.pairs)
 
 
-class _Otimizador:
-    """Descida de gradiente sobre o vies do modelo."""
+class _Optimizer:
+    """Gradient descent on the model bias."""
 
-    def __init__(self, modelo):
-        self.modelo = modelo
+    def __init__(self, model):
+        self.model = model
 
     def zero_grad(self):
-        self.modelo.grad[:] = [0.0] * _NUM_CLASSES
+        self.model.grad[:] = [0.0] * _NUM_CLASSES
 
     def step(self):
-        passo = [_TAXA_APRENDIZADO * g for g in self.modelo.grad]
-        self.modelo.vies = [b - p for b, p in zip(self.modelo.vies, passo)]
+        delta = [_LEARNING_RATE * g for g in self.model.grad]
+        self.model.bias = [b - d for b, d in zip(self.model.bias, delta)]
 
 
 class DataLoader:
-    """Itera sobre lotes (data, target) ja montados."""
+    """Iterates over ready-made (data, target) batches."""
 
-    def __init__(self, lotes):
-        self.lotes = lotes
-        self.dataset = [amostra for data, _ in lotes for amostra in data.valores]
+    def __init__(self, batches):
+        self.batches = batches
+        self.dataset = [sample for data, _ in batches for sample in data.values]
 
     def __iter__(self):
-        return iter(self.lotes)
+        return iter(self.batches)
 
     def __len__(self):
-        return len(self.lotes)
+        return len(self.batches)
 
 
 torch = SimpleNamespace(device=str)
-nn = SimpleNamespace(Module=_Modelo, modules=_Modelo)
-optim = SimpleNamespace(Optimizer=_Otimizador)
+nn = SimpleNamespace(Module=_Model, modules=_Model)
+optim = SimpleNamespace(Optimizer=_Optimizer)
 
 
 def train(
@@ -155,13 +156,13 @@ def train(
     return train_loss, accuracy, model  
 
 
-def executar(lotes):
-    """Treina por uma epoca. Ponto de entrada publico desta unidade.
+def run(batches):
+    """Trains for one epoch. Public entry point of this unit.
 
-    lotes: lista de (amostras, rotulos); cada amostra tem um score por classe.
-    Devolve (perda, acuracia, vies final do modelo, modelo em modo de treino).
+    batches: list of (samples, labels); each sample has one score per class.
+    Returns (loss, accuracy, final model bias, whether the model is in training mode).
     """
-    modelo = _Modelo()
-    loader = DataLoader([(_Tensor(a), _Tensor(r)) for a, r in lotes])
-    perda, acuracia, modelo = train(modelo, "cpu", loader, _Otimizador(modelo), _Perda)
-    return perda, acuracia, modelo.vies, modelo.training
+    model = _Model()
+    loader = DataLoader([(_Tensor(s), _Tensor(l)) for s, l in batches])
+    loss, accuracy, model = train(model, "cpu", loader, _Optimizer(model), _Loss)
+    return loss, accuracy, model.bias, model.training

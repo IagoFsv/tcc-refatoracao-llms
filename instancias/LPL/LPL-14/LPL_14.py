@@ -1,8 +1,7 @@
-"""Simulacao de uma bola quicando, passo a passo.
+"""Simulation of a bouncing ball, step by step.
 
-Ponto de entrada publico: executar(estado, tempo, fisica=None). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(state, time, physics=None). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 
@@ -35,15 +34,15 @@ def simulate_bouncing_ball (x0, y0, vx0, vy0, steps, dt, coefficient_of_restitut
     return x_positions, y_positions
 
 
-def executar(estado, tempo, fisica=None):
-    """estado: (x0, y0, vx0, vy0). tempo: (passos, dt).
+def run(state, time, physics=None):
+    """state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.
 
-    fisica: (coeficiente de restituicao, gravidade); sem ela, valem os
-    valores padrao da simulacao.
+    physics: (coefficient of restitution, gravity); without it, the default
+    values of the simulation apply.
     """
-    x0, y0, vx0, vy0 = estado
-    steps, dt = tempo
-    if fisica is None:
+    x0, y0, vx0, vy0 = state
+    steps, dt = time
+    if physics is None:
         return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt)
-    coefficient_of_restitution, g = fisica
+    coefficient_of_restitution, g = physics
     return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution, g)

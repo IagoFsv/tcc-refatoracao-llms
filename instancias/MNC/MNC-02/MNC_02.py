@@ -1,7 +1,7 @@
-"""Comando de clima de um bot de chat: consulta a previsao e responde com um cartao.
+"""Weather command of a chat bot: queries the forecast and replies with a card.
 
-Ponto de entrada publico: executar(local). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(location). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import asyncio
@@ -11,7 +11,7 @@ import requests
 
 
 class Embed:
-    """Cartao de mensagem, com a mesma interface de discord.Embed."""
+    """Message card, with the same interface as discord.Embed."""
 
     def __init__(self, **kwargs):
         self.title = kwargs.get("title")
@@ -36,8 +36,8 @@ class Embed:
 discord = SimpleNamespace(Embed=Embed)
 
 
-class ComandoSlash:
-    """Comando registrado; invoke repassa os argumentos para a corrotina."""
+class CommandObject:
+    """Registered command; invoke passes the arguments on to the coroutine."""
 
     def __init__(self, func):
         self.func = func
@@ -47,11 +47,11 @@ class ComandoSlash:
 
 
 class SlashCommand:
-    """Registro de comandos de barra; slash() devolve o comando registrado."""
+    """Registry of slash commands; slash() returns the registered command."""
 
     def slash(self, *, name=None, description=None, guild_ids=None, options=None, **kwargs):
         def wrapper(cmd):
-            return ComandoSlash(cmd)
+            return CommandObject(cmd)
         return wrapper
 
 
@@ -63,15 +63,15 @@ def create_option(name, description, option_type, required, choices=None):
 slash = SlashCommand()
 
 
-class Contexto:
-    """Contexto do comando: quem pediu e as mensagens enviadas de volta."""
+class Context:
+    """Command context: who asked and the messages sent back."""
 
     def __init__(self):
-        self.author = SimpleNamespace(name="Ana", avatar_url="https://cdn.exemplo.com/ana.png")
-        self.enviados = []
+        self.author = SimpleNamespace(name="Ana", avatar_url="https://cdn.example.com/ana.png")
+        self.sent = []
 
     async def send(self, content=None, *, embed=None):
-        self.enviados.append(embed)
+        self.sent.append(embed)
 
 
 @slash.slash(name="weather",
@@ -115,8 +115,8 @@ async def weather(ctx, location):
   await ctx.send(embed=embed)
 
 
-def executar(local):
-    """Roda o comando para o local e devolve os cartoes enviados. Ponto de entrada publico desta unidade."""
-    ctx = Contexto()
-    asyncio.run(weather.invoke(ctx, local))
-    return ctx.enviados
+def run(location):
+    """Runs the command for the location and returns the cards sent. Public entry point of this unit."""
+    ctx = Context()
+    asyncio.run(weather.invoke(ctx, location))
+    return ctx.sent

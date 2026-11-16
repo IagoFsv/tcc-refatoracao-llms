@@ -1,7 +1,7 @@
-"""Tarefas de manutencao de um projeto Python: nome do pacote a partir do pyproject.toml.
+"""Maintenance tasks of a Python project: package name from pyproject.toml.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(). Do not change its name or signature; the rest of
+the file may be freely reorganized.
 """
 
 import toml
@@ -18,6 +18,6 @@ def get_project_path():
         return project_name
 
 
-def executar():
-    """Le o pyproject.toml da pasta atual e devolve o nome do pacote. Ponto de entrada publico desta unidade."""
+def run():
+    """Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit."""
     return get_project_path()

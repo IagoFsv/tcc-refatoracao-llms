@@ -1,69 +1,69 @@
-"""Testes da instancia MNC-14: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-14: they pin the observable behavior of run().
 
-So executar() e importado. O teste intercepta requests.get com respostas
-gravadas da API de bots (getUpdates e getFile). A refatoracao pode
-reorganizar o acesso ao JSON e os lacos; o que nao pode mudar e a ordem dos
-pedidos, a lista de caminhos devolvida (primeiro documentos de respostas,
-depois documentos diretos, sem repetir) e o erro quando getFile nao traz o
-resultado.
+Only run() is imported. The test intercepts requests.get with recorded
+responses of the bot API (getUpdates and getFile). The refactoring may
+reorganize the access to the JSON and the loops; what must not change is the
+order of the requests, the returned list of paths (first documents from
+replies, then direct documents, without repeats) and the error when getFile
+does not bring the result.
 """
 
 import pytest
 import requests
 
-from MNC_14 import executar
+from MNC_14 import run
 
 URL = "https://api.telegram.org/bot{}/{}"
 
 
-class Resposta:
-    def __init__(self, dados):
-        self.dados = dados
+class Response:
+    def __init__(self, data):
+        self.data = data
 
     def json(self):
-        return self.dados
+        return self.data
 
 
-def documento(file_id):
+def document(file_id):
     return {"document": {"file_id": file_id, "file_name": file_id + ".pdf"}}
 
 
-def resposta_a(file_id):
-    return {"message": {"reply_to_message": documento(file_id), "text": "veja"}}
+def reply_to(file_id):
+    return {"message": {"reply_to_message": document(file_id), "text": "see"}}
 
 
-def direto(file_id):
-    return {"message": documento(file_id)}
+def direct(file_id):
+    return {"message": document(file_id)}
 
 
 @pytest.fixture
 def api(monkeypatch):
-    """Intercepta requests.get; devolve (pedidos, atualizacoes, caminhos)."""
-    pedidos = []
-    atualizacoes = []
-    caminhos = {}
+    """Intercepts requests.get; returns (requests made, updates, paths)."""
+    requests_made = []
+    updates = []
+    paths = {}
 
-    def falso_get(url, *args, **kwargs):
-        pedidos.append(url)
+    def fake_get(url, *args, **kwargs):
+        requests_made.append(url)
         if url.endswith("/getUpdates"):
-            return Resposta({"ok": True, "result": atualizacoes})
+            return Response({"ok": True, "result": updates})
         file_id = url.split("file_id=")[1]
-        if file_id in caminhos:
-            return Resposta({"ok": True, "result": {"file_id": file_id, "file_path": caminhos[file_id]}})
-        return Resposta({"ok": False, "description": "Bad Request: invalid file_id"})
+        if file_id in paths:
+            return Response({"ok": True, "result": {"file_id": file_id, "file_path": paths[file_id]}})
+        return Response({"ok": False, "description": "Bad Request: invalid file_id"})
 
-    monkeypatch.setattr(requests, "get", falso_get)
-    return pedidos, atualizacoes, caminhos
+    monkeypatch.setattr(requests, "get", fake_get)
+    return requests_made, updates, paths
 
 
-def test_tipico_respostas_primeiro_depois_diretos_sem_repetir(api):
-    pedidos, atualizacoes, caminhos = api
-    atualizacoes += [direto("d1"), resposta_a("r1"), {"message": {"text": "so texto"}},
-                     resposta_a("d1"), direto("d2")]
-    caminhos.update(r1="documents/r1.pdf", d1="documents/d1.pdf", d2="documents/d2.pdf")
+def test_typical_replies_first_then_direct_without_repeats(api):
+    requests_made, updates, paths = api
+    updates += [direct("d1"), reply_to("r1"), {"message": {"text": "text only"}},
+                reply_to("d1"), direct("d2")]
+    paths.update(r1="documents/r1.pdf", d1="documents/d1.pdf", d2="documents/d2.pdf")
 
-    assert executar("TOKEN") == ["documents/r1.pdf", "documents/d1.pdf", "documents/d2.pdf"]
-    assert pedidos == [
+    assert run("TOKEN") == ["documents/r1.pdf", "documents/d1.pdf", "documents/d2.pdf"]
+    assert requests_made == [
         URL.format("TOKEN", "getUpdates"),
         URL.format("TOKEN", "getFile?file_id=r1"),
         URL.format("TOKEN", "getFile?file_id=d1"),
@@ -71,17 +71,17 @@ def test_tipico_respostas_primeiro_depois_diretos_sem_repetir(api):
     ]
 
 
-def test_borda_sem_arquivos_e_resposta_a_mensagem_sem_documento(api):
-    pedidos, atualizacoes, _ = api
-    atualizacoes += [{"message": {"reply_to_message": {"text": "oi"}}}, {"edited_message": {}}]
+def test_edge_no_files_and_reply_to_a_message_without_document(api):
+    requests_made, updates, _ = api
+    updates += [{"message": {"reply_to_message": {"text": "hi"}}}, {"edited_message": {}}]
 
-    assert executar("T1") == []
-    assert pedidos == [URL.format("T1", "getUpdates")]
+    assert run("T1") == []
+    assert requests_made == [URL.format("T1", "getUpdates")]
 
 
-def test_invalido_get_file_sem_resultado(api):
-    _, atualizacoes, _ = api
-    atualizacoes.append(direto("apagado"))
+def test_invalid_get_file_without_result(api):
+    _, updates, _ = api
+    updates.append(direct("deleted"))
 
     with pytest.raises(KeyError):
-        executar("T1")
+        run("T1")

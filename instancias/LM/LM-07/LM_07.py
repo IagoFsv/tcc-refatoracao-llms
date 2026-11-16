@@ -1,7 +1,7 @@
-"""Gerador de listas de senhas aleatorias, pelo console.
+"""Generator of lists of random passwords, from the console.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(). Do not change its name or signature; the rest of
+the file may be freely reorganized.
 """
 
 import random
@@ -189,10 +189,10 @@ def main():
             print("")       
 
 
-def executar():
-    """Roda o gerador interativo. Ponto de entrada publico desta unidade."""
+def run():
+    """Runs the interactive generator. Public entry point of this unit."""
     return main()
 
 
 if __name__ == '__main__':
-    executar()
+    run()

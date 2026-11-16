@@ -1,54 +1,55 @@
-"""Testes da instancia LPL-03: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-03: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-simulate_heapsort e de heapify num objeto, mudar as assinaturas ou tirar
-heapify de dentro, desde que atualize as chamadas dentro da unidade; o que
-nao pode mudar e o resultado, a sequencia de quadros da animacao e os ticks.
+Only run() is imported. The refactoring may group the parameters of
+simulate_heapsort and heapify into an object, change the signatures or move
+heapify out, as long as it updates the calls inside the unit; what must not
+change is the result, the sequence of animation frames and the ticks.
 
-Contas do teste tipico, [2, 3, 1] (n = 3):
-  montagem do heap, i de 3 a 0: so i = 0 tem filhos.
-    compara 0 e 1 (2 <= 3, o maior vira 1), compara 1 e 2 (3 > 1, fica 1),
-    compara 0 e 1 de novo antes de trocar; troca: [3, 2, 1].
-  extracao, i = 2: troca 2 e 0: [1, 2, 3]. heapify(n=2, 0): compara 0 e 1
-    (1 <= 2), compara 0 e 1 de novo, troca: [2, 1, 3].
-  extracao, i = 1: troca 1 e 0: [1, 2, 3]. heapify(n=1, 0) nao compara.
-  Cada comparacao desenha 2 quadros (sem destaque, depois com o par
-  destacado), com um tick depois de cada; no fim, 1 quadro e 1 tick.
-  5 comparacoes: 11 quadros e 11 ticks, todos com taxa 3.
+Arithmetic of the typical test, [2, 3, 1] (n = 3):
+  heap building, i from 3 to 0: only i = 0 has children.
+    compares 0 and 1 (2 <= 3, the largest becomes 1), compares 1 and 2
+    (3 > 1, stays 1), compares 0 and 1 again before swapping; swap: [3, 2, 1].
+  extraction, i = 2: swaps 2 and 0: [1, 2, 3]. heapify(n=2, 0): compares 0
+    and 1 (1 <= 2), compares 0 and 1 again, swaps: [2, 1, 3].
+  extraction, i = 1: swaps 1 and 0: [1, 2, 3]. heapify(n=1, 0) compares
+    nothing.
+  Each comparison draws 2 frames (no highlight, then with the pair
+  highlighted), with a tick after each; at the end, 1 frame and 1 tick.
+  5 comparisons: 11 frames and 11 ticks, all with rate 3.
 """
 
 import pytest
 
-from LPL_03 import executar
+from LPL_03 import run
 
 
-def _q(textos, destaque=()):
-    return (tuple(textos), tuple(destaque), 40, 100)
+def _f(texts, highlight=()):
+    return (tuple(texts), tuple(highlight), 40, 100)
 
 
-def test_tipico_tres_elementos_fora_de_ordem():
-    ordenado, quadros, ticks = executar([2, 3, 1])
+def test_typical_three_elements_out_of_order():
+    ordered, frames, ticks = run([2, 3, 1])
 
-    assert ordenado == [1, 2, 3]
-    assert quadros == [
-        _q("231"), _q("231", (0, 1)),
-        _q("231"), _q("231", (1, 2)),
-        _q("231"), _q("231", (0, 1)),
-        _q("123"), _q("123", (0, 1)),
-        _q("123"), _q("123", (0, 1)),
-        _q("123"),
+    assert ordered == [1, 2, 3]
+    assert frames == [
+        _f("231"), _f("231", (0, 1)),
+        _f("231"), _f("231", (1, 2)),
+        _f("231"), _f("231", (0, 1)),
+        _f("123"), _f("123", (0, 1)),
+        _f("123"), _f("123", (0, 1)),
+        _f("123"),
     ]
     assert ticks == [3] * 11
 
 
-def test_borda_lista_vazia_so_desenha_o_quadro_final():
-    ordenado, quadros, ticks = executar([])
+def test_edge_empty_list_only_draws_the_final_frame():
+    ordered, frames, ticks = run([])
 
-    assert ordenado == []
-    assert quadros == [_q("")]
+    assert ordered == []
+    assert frames == [_f("")]
     assert ticks == [3]
 
 
-def test_invalido_valores_que_nao_se_comparam():
+def test_invalid_values_that_cannot_be_compared():
     with pytest.raises(TypeError):
-        executar([3, "a", 1])
+        run([3, "a", 1])

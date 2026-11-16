@@ -1,7 +1,7 @@
-"""Resposta de linha de comando com o clima atual e a previsao.
+"""Command-line response with the current weather and the forecast.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(data, city, country_code). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 from termcolor import colored
@@ -127,6 +127,6 @@ def fmt_cli_resp(data, city: str, country_code: str, start_time: datetime) -> st
     )
 
 
-def executar(dados, cidade, codigo_pais):
-    """Imprime o clima de dados, cronometrando a partir de agora. Ponto de entrada publico desta unidade."""
-    return fmt_cli_resp(dados, cidade, codigo_pais, datetime.now())
+def run(data, city, country_code):
+    """Prints the weather in data, timing from now. Public entry point of this unit."""
+    return fmt_cli_resp(data, city, country_code, datetime.now())

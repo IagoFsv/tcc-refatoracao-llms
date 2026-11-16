@@ -1,32 +1,31 @@
-"""Cadastro de servidores SSH num banco SQLite.
+"""Registry of SSH servers in an SQLite database.
 
-Ponto de entrada publico: executar(cadastrados, servidor). Nao altere o nome
-nem a assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(registered, server). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 
-O banco e o arquivo frSSH.db da pasta atual. executar cria a tabela de
-servidores, grava os servidores ja cadastrados, remove um servidor e devolve as
-linhas da tabela, na ordem de insercao.
+The database is the file frSSH.db in the current folder. run creates the
+servers table, stores the already registered servers, removes a server and
+returns the rows of the table, in insertion order.
 """
 
 import sqlite3
 
-_COLUNAS = "ip, port, username, password, keyid"
+_COLUMNS = "ip, port, username, password, keyid"
 
 
-def _preparar_banco(cadastrados):
+def _prepare_database(registered):
     conn = sqlite3.connect('frSSH.db')
-    conn.execute(f"CREATE TABLE IF NOT EXISTS servers ({_COLUNAS})")
-    conn.executemany(f"INSERT INTO servers ({_COLUNAS}) VALUES (?, ?, ?, ?, ?)", cadastrados)
+    conn.execute(f"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})")
+    conn.executemany(f"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)", registered)
     conn.commit()
     conn.close()
 
 
-def _linhas():
+def _rows():
     conn = sqlite3.connect('frSSH.db')
-    linhas = conn.execute(f"SELECT {_COLUNAS} FROM servers ORDER BY rowid").fetchall()
+    rows = conn.execute(f"SELECT {_COLUMNS} FROM servers ORDER BY rowid").fetchall()
     conn.close()
-    return linhas
+    return rows
 
 
 def remove_server(ip, port, username, password, keyid):
@@ -38,9 +37,9 @@ def remove_server(ip, port, username, password, keyid):
     print("Server removed.")
 
 
-def executar(cadastrados, servidor):
-    """cadastrados: lista de tuplas (ip, port, username, password, keyid)."""
-    _preparar_banco(cadastrados)
-    ip, port, username, password, keyid = servidor
+def run(registered, server):
+    """registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit."""
+    _prepare_database(registered)
+    ip, port, username, password, keyid = server
     remove_server(ip, port, username, password, keyid)
-    return _linhas()
+    return _rows()

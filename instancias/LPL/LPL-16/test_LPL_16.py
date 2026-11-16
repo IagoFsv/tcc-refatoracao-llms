@@ -1,28 +1,28 @@
-"""Testes da instancia LPL-16: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-16: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-Transaction.__init__ num objeto, mudar a assinatura ou dividir o metodo,
-desde que atualize a chamada dentro da unidade; o que nao pode mudar e a
-representacao da transacao em dicionario, inclusive o hash.
+Only run() is imported. The refactoring may group the parameters of
+Transaction.__init__ into an object, change the signature or split the
+method, as long as it updates the call inside the unit; what must not change
+is the dictionary representation of the transaction, including the hash.
 
-O hash da transacao e o sha256 de str(sender) + str(receiver) +
+The transaction hash is the sha256 of str(sender) + str(receiver) +
 str(amount) + str(timestamp).
 """
 
 import hashlib
 
-from LPL_16 import executar
+from LPL_16 import run
 
 
-def _sha(texto):
-    return hashlib.sha256(texto.encode("utf-8")).hexdigest()
+def _sha(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def test_tipico_transferencia_entre_duas_pessoas():
-    transacao = executar({"sender": "Alice", "receiver": "Bob", "amount": 100,
-                          "timestamp": 1700000000.0})
+def test_typical_transfer_between_two_people():
+    transaction = run({"sender": "Alice", "receiver": "Bob", "amount": 100,
+                       "timestamp": 1700000000.0})
 
-    assert transacao == {
+    assert transaction == {
         "sender": "Alice",
         "receiver": "Bob",
         "amount": 100,
@@ -31,11 +31,11 @@ def test_tipico_transferencia_entre_duas_pessoas():
     }
 
 
-def test_borda_valor_zero_para_si_mesma():
-    transacao = executar({"sender": "Alice", "receiver": "Alice", "amount": 0,
-                          "timestamp": 0})
+def test_edge_zero_amount_to_oneself():
+    transaction = run({"sender": "Alice", "receiver": "Alice", "amount": 0,
+                       "timestamp": 0})
 
-    assert transacao == {
+    assert transaction == {
         "sender": "Alice",
         "receiver": "Alice",
         "amount": 0,
@@ -44,14 +44,14 @@ def test_borda_valor_zero_para_si_mesma():
     }
 
 
-def test_invalido_dados_de_tipo_errado_sao_aceitos_sem_validacao():
-    transacao = executar({"sender": None, "receiver": "Bob", "amount": -50,
-                          "timestamp": "ontem"})
+def test_invalid_data_of_the_wrong_type_is_accepted_without_validation():
+    transaction = run({"sender": None, "receiver": "Bob", "amount": -50,
+                       "timestamp": "yesterday"})
 
-    assert transacao == {
+    assert transaction == {
         "sender": None,
         "receiver": "Bob",
         "amount": -50,
-        "timestamp": "ontem",
-        "hash": _sha("None" + "Bob" + "-50" + "ontem"),
+        "timestamp": "yesterday",
+        "hash": _sha("None" + "Bob" + "-50" + "yesterday"),
     }

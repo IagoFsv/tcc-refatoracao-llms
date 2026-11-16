@@ -1,8 +1,7 @@
-"""Tarefas de manutencao de um projeto Python: renomear o projeto.
+"""Maintenance tasks of a Python project: renaming the project.
 
-Ponto de entrada publico: executar(project_name). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(project_name). Do not change its name or signature;
+the rest of the file may be freely reorganized.
 """
 
 import shutil
@@ -16,7 +15,7 @@ def get_pep8_compliant_name(project_name: str) -> str:
 
 
 def get_project_path():
-    """Nome do pacote (com _ no lugar de -) lido do pyproject.toml da pasta atual."""
+    """Package name (with _ instead of -) read from pyproject.toml in the current folder."""
     with open('pyproject.toml', encoding='utf-8') as file:
         poetry = toml.load(file)['tool']['poetry']
         return get_pep8_compliant_name(poetry['name'])
@@ -40,6 +39,6 @@ def rename_project(_context: Context, project_name: str):
         toml.dump(data, file)
 
 
-def executar(project_name):
-    """Renomeia o projeto da pasta atual. Ponto de entrada publico desta unidade."""
+def run(project_name):
+    """Renames the project in the current folder. Public entry point of this unit."""
     rename_project(Context(), project_name)

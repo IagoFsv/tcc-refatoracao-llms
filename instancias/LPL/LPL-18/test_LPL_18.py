@@ -1,49 +1,49 @@
-"""Testes da instancia LPL-18: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-18: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-DQNAgent.__init__ num objeto, mudar a assinatura ou dividir o metodo, desde
-que atualize a chamada dentro da unidade; o que nao pode mudar sao os oito
-hiperparametros guardados no agente, a memoria (capacidade 1000, vazia),
-as duas redes (com as mesmas dimensoes, objetos distintos, a alvo com os
-pesos copiados da principal) e o erro diante de tamanho negativo.
+Only run() is imported. The refactoring may group the parameters of
+DQNAgent.__init__ into an object, change the signature or split the method,
+as long as it updates the call inside the unit; what must not change are the
+eight hyperparameters stored in the agent, the memory (capacity 1000, empty),
+the two networks (same dimensions, distinct objects, the target with the
+weights copied from the main one) and the error on a negative size.
 """
 
 import pytest
 
-from LPL_18 import executar
+from LPL_18 import run
 
 
-def _configuracao(**mudancas):
+def _configuration(**changes):
     base = {"input_size": 4, "n_actions": 2, "hidden_size": 24, "gamma": 0.95,
             "batch_size": 32, "epsilon": 1.0, "epsilon_min": 0.01, "epsilon_decay": 0.995}
-    base.update(mudancas)
+    base.update(changes)
     return base
 
 
-def _esperado(c):
-    dimensoes = (c["input_size"], c["n_actions"], c["hidden_size"], c["gamma"])
+def _expected(c):
+    dimensions = (c["input_size"], c["n_actions"], c["hidden_size"], c["gamma"])
     return {
-        "hiperparametros": c,
-        "memoria": (1000, 0),
-        "redes": (dimensoes, dimensoes),
-        "redes_distintas": True,
-        "alvo_sincronizado": True,
+        "hyperparameters": c,
+        "memory": (1000, 0),
+        "networks": (dimensions, dimensions),
+        "distinct_networks": True,
+        "target_in_sync": True,
     }
 
 
-def test_tipico_agente_para_quatro_entradas_e_duas_acoes():
-    c = _configuracao()
+def test_typical_agent_for_four_inputs_and_two_actions():
+    c = _configuration()
 
-    assert executar(c) == _esperado(c)
-
-
-def test_borda_exploracao_ja_no_minimo_e_lote_de_um():
-    c = _configuracao(input_size=1, n_actions=1, hidden_size=1, batch_size=1,
-                      epsilon=0.01, epsilon_min=0.01, epsilon_decay=1.0)
-
-    assert executar(c) == _esperado(c)
+    assert run(c) == _expected(c)
 
 
-def test_invalido_camada_oculta_negativa():
+def test_edge_exploration_already_at_minimum_and_batch_of_one():
+    c = _configuration(input_size=1, n_actions=1, hidden_size=1, batch_size=1,
+                       epsilon=0.01, epsilon_min=0.01, epsilon_decay=1.0)
+
+    assert run(c) == _expected(c)
+
+
+def test_invalid_negative_hidden_layer():
     with pytest.raises(RuntimeError):
-        executar(_configuracao(hidden_size=-1))
+        run(_configuration(hidden_size=-1))

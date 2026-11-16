@@ -1,42 +1,42 @@
-"""Testes da instancia LLF-03: fixam o comportamento observavel de executar().
+"""Tests for instance LLF-03: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode trocar as lambdas por funcoes
-nomeadas, lacos ou compreensoes; o que nao pode mudar e o texto gravado na
-configuracao, a mensagem registrada no log depois da gravacao e o erro diante
-de item que nao e texto.
+Only run() is imported. The refactoring may replace the lambdas with named
+functions, loops or comprehensions; what must not change is the text stored
+in the configuration, the message logged after storing it, and the error on
+an item that is not text.
 
-Os testes fixam o comportamento como ele e: os quatro niveis viram uma lista
-plana separada por virgula (a estrutura se perde), nivel vazio deixa virgula
-sobrando e texto no ultimo nivel e separado letra por letra.
+The tests pin the behavior as it is: the four levels become a flat
+comma-separated list (the structure is lost), an empty level leaves an extra
+comma, and text at the last level is split letter by letter.
 """
 
 import logging
 
 import pytest
 
-from LLF_03 import executar
+from LLF_03 import run
 
 
-def test_tipico_quatro_niveis_viram_texto_separado_por_virgula(caplog):
+def test_typical_four_levels_become_comma_separated_text(caplog):
     caplog.set_level(logging.INFO)
-    valor = [
+    value = [
         [[["a", "b"], ["c"]], [["d"]]],
         [[["e", "f"]]],
     ]
 
-    assert executar(valor) == "a,b,c,d,e,f"
-    assert caplog.messages == ["Config: {'mundo': {'regioes': 'a,b,c,d,e,f'}}"]
+    assert run(value) == "a,b,c,d,e,f"
+    assert caplog.messages == ["Config: {'world': {'regions': 'a,b,c,d,e,f'}}"]
 
 
-def test_borda_texto_no_ultimo_nivel_niveis_vazios_e_tuplas(caplog):
+def test_edge_text_at_last_level_empty_levels_and_tuples(caplog):
     caplog.set_level(logging.INFO)
 
-    assert executar([[["xy", ""]], [[]], []]) == "x,y,,,"  # "xy" sai letra por letra
-    assert executar([]) == ""
-    assert executar((((("pa",),),),)) == "pa"
-    assert caplog.messages[0] == "Config: {'mundo': {'regioes': 'x,y,,,'}}"
+    assert run([[["xy", ""]], [[]], []]) == "x,y,,,"  # "xy" comes out letter by letter
+    assert run([]) == ""
+    assert run((((("pa",),),),)) == "pa"
+    assert caplog.messages[0] == "Config: {'world': {'regions': 'x,y,,,'}}"
 
 
-def test_invalido_item_que_nao_e_texto():
+def test_invalid_item_that_is_not_text():
     with pytest.raises(TypeError):
-        executar([[[[1, 2]]]])
+        run([[[[1, 2]]]])

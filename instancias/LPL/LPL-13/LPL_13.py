@@ -1,8 +1,7 @@
-"""Interpolacao bilinear de um ponto dentro de um retangulo.
+"""Bilinear interpolation of a point inside a rectangle.
 
-Ponto de entrada publico: executar(ponto, cantos, valores). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(point, corners, values). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 
@@ -53,9 +52,9 @@ def bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22):
     ) / ((x2 - x1) * (y2 - y1))
 
 
-def executar(ponto, cantos, valores):
-    """ponto: (x, y). cantos: (x1, x2, y1, y2). valores: (z11, z12, z21, z22)."""
-    x, y = ponto
-    x1, x2, y1, y2 = cantos
-    z11, z12, z21, z22 = valores
+def run(point, corners, values):
+    """point: (x, y). corners: (x1, x2, y1, y2). values: (z11, z12, z21, z22). Public entry point of this unit."""
+    x, y = point
+    x1, x2, y1, y2 = corners
+    z11, z12, z21, z22 = values
     return bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22)

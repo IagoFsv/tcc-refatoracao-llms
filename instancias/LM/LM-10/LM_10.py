@@ -1,7 +1,7 @@
-"""Calculadora de condicionamento fisico (IMC, TMB, gasto diario e calorias).
+"""Fitness calculator (BMI, BMR, daily expenditure and calories).
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(). Do not change its name or signature; the rest of
+the file may be freely reorganized.
 """
 
 
@@ -101,10 +101,10 @@ def calc():
         print("Invalid number, choose a wise one next time")
 
 
-def executar():
-    """Roda a calculadora interativa. Ponto de entrada publico desta unidade."""
+def run():
+    """Runs the interactive calculator. Public entry point of this unit."""
     return calc()
 
 
 if __name__ == "__main__":
-    executar()
+    run()

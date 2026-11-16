@@ -1,11 +1,10 @@
-"""Desenho de um segmento colorido numa imagem RGB.
+"""Drawing of a colored segment on an RGB image.
 
-Ponto de entrada publico: executar(tamanho, segmento, cor=None). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(size, segment, color=None). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 
-A imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor
-padrao do desenho.
+The image starts all white (255 in the three channels). Without a color, the
+default color of the drawing applies.
 """
 
 import skimage
@@ -47,12 +46,12 @@ class RGB_Image(Image):
         return self
 
 
-def executar(tamanho, segmento, cor=None):
-    """tamanho: (linhas, colunas). segmento: (y0, x0, y1, x1). cor: (r, g, b)."""
-    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))
-    y0, x0, y1, x1 = segmento
-    if cor is None:
-        resultado = imagem.draw_line(y0, x0, y1, x1)
+def run(size, segment, color=None):
+    """size: (rows, columns). segment: (y0, x0, y1, x1). color: (r, g, b). Public entry point of this unit."""
+    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))
+    y0, x0, y1, x1 = segment
+    if color is None:
+        result = image.draw_line(y0, x0, y1, x1)
     else:
-        resultado = imagem.draw_line(y0, x0, y1, x1, cor)
-    return resultado.image
+        result = image.draw_line(y0, x0, y1, x1, color)
+    return result.image

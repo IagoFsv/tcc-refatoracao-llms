@@ -1,15 +1,15 @@
-"""Testes da instancia MNC-21: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-21: they pin the observable behavior of run().
 
-So executar() e importado. O teste intercepta requests.post com uma resposta
-em fluxo gravada (linhas "data: {...}"). A refatoracao pode reorganizar a
-montagem do pedido e a leitura do fluxo; o que nao pode mudar e o pedido
-(URL, cabecalhos, corpo JSON, stream ligado), o texto devolvido (pedacos
-juntados na ordem, linhas vazias e linhas que nao sao JSON ignoradas) e o
-erro diante de pedaco sem choices.
+Only run() is imported. The test intercepts requests.post with a recorded
+streamed response ("data: {...}" lines). The refactoring may reorganize how
+the request is built and how the stream is read; what must not change is the
+request (URL, headers, JSON body, stream on), the returned text (chunks
+joined in order, empty lines and lines that are not JSON ignored) and the
+error on a chunk without choices.
 
-Os testes fixam o comportamento como ele e, inclusive o defeito do original:
-com suffix, a lista de paradas extras entra como um item so (uma lista dentro
-de stops), nao como quatro paradas.
+The tests pin the behavior as it is, including the defect of the original:
+with suffix, the list of extra stops goes in as a single item (a list inside
+stops), not as four stops.
 """
 
 import json
@@ -17,10 +17,10 @@ import json
 import pytest
 import requests
 
-from MNC_21 import executar
+from MNC_21 import run
 
 URL = "https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions"
-CABECALHOS = {
+HEADERS = {
     "OpenAI-Intent": "copilot-ghost",
     "OpenAI-Organization": "github-copilot",
     "Authorization": "Bearer tok-123",
@@ -28,44 +28,44 @@ CABECALHOS = {
 }
 
 
-class RespostaEmFluxo:
-    def __init__(self, linhas):
-        self.linhas = linhas
+class StreamedResponse:
+    def __init__(self, lines):
+        self.lines = lines
 
     def __enter__(self):
         return self
 
-    def __exit__(self, *erro):
+    def __exit__(self, *exc):
         return False
 
     def iter_lines(self):
-        return iter(self.linhas)
+        return iter(self.lines)
 
 
 @pytest.fixture
 def api(monkeypatch):
-    """Intercepta requests.post; devolve (pedidos, fluxo)."""
-    pedidos = []
-    fluxo = []
+    """Intercepts requests.post; returns (requests made, stream)."""
+    requests_made = []
+    stream = []
 
-    def falso_post(url, **kwargs):
-        pedidos.append((url, kwargs))
-        return RespostaEmFluxo(list(fluxo))
+    def fake_post(url, **kwargs):
+        requests_made.append((url, kwargs))
+        return StreamedResponse(list(stream))
 
-    monkeypatch.setattr(requests, "post", falso_post)
-    return pedidos, fluxo
-
-
-def pedaco(texto):
-    return ("data: " + json.dumps({"choices": [{"text": texto, "index": 0}]})).encode("utf-8")
+    monkeypatch.setattr(requests, "post", fake_post)
+    return requests_made, stream
 
 
-def corpo(prompt, suffix, temperatura, stops):
+def chunk(text):
+    return ("data: " + json.dumps({"choices": [{"text": text, "index": 0}]})).encode("utf-8")
+
+
+def body(prompt, suffix, temperature, stops):
     return {
         "prompt": prompt,
         "suffix": suffix,
         "max_tokens": 200,
-        "temperature": temperatura,
+        "temperature": temperature,
         "top_p": 1,
         "n": 1,
         "stop": stops,
@@ -74,36 +74,36 @@ def corpo(prompt, suffix, temperatura, stops):
     }
 
 
-def test_tipico_pedacos_juntados_e_pedido_completo(api):
-    pedidos, fluxo = api
-    fluxo += [pedaco("return "), b"", pedaco("a + b"), b"data: [DONE]"]
-    prompt = "def soma(a, b):\n    "
+def test_typical_chunks_joined_and_complete_request(api):
+    requests_made, stream = api
+    stream += [chunk("return "), b"", chunk("a + b"), b"data: [DONE]"]
+    prompt = "def add(a, b):\n    "
 
-    assert executar(prompt, ["\n\n"]) == "return a + b"
+    assert run(prompt, ["\n\n"]) == "return a + b"
 
-    assert len(pedidos) == 1
-    url, kwargs = pedidos[0]
+    assert len(requests_made) == 1
+    url, kwargs = requests_made[0]
     assert url == URL
-    assert kwargs["headers"] == CABECALHOS
+    assert kwargs["headers"] == HEADERS
     assert kwargs["stream"] is True
-    assert json.loads(kwargs["data"]) == corpo(prompt, "", 0, ["\n\n"])
+    assert json.loads(kwargs["data"]) == body(prompt, "", 0, ["\n\n"])
 
 
-def test_borda_suffix_temperatura_por_numero_de_linhas_e_fluxo_vazio(api):
-    pedidos, fluxo = api
+def test_edge_suffix_temperature_by_line_count_and_empty_stream(api):
+    requests_made, stream = api
 
-    assert executar("x = 1\n" * 12, ["\n"], suffix="fim") == ""
-    for quebras in (3, 4, 13, 21, 22):  # linhas contadas = quebras - 2
-        assert executar("x = 1\n" * quebras, []) == ""
+    assert run("x = 1\n" * 12, ["\n"], suffix="end") == ""
+    for breaks in (3, 4, 13, 21, 22):  # lines counted = breaks - 2
+        assert run("x = 1\n" * breaks, []) == ""
 
-    enviados = [json.loads(kwargs["data"]) for _, kwargs in pedidos]
-    assert enviados[0] == corpo("x = 1\n" * 12, "fim", 0.2, ["\n", ["def ", "class ", "if ", "\n#"]])
-    assert [e["temperature"] for e in enviados[1:]] == [0, 0.2, 0.4, 0.4, 0.8]
+    sent = [json.loads(kwargs["data"]) for _, kwargs in requests_made]
+    assert sent[0] == body("x = 1\n" * 12, "end", 0.2, ["\n", ["def ", "class ", "if ", "\n#"]])
+    assert [s["temperature"] for s in sent[1:]] == [0, 0.2, 0.4, 0.4, 0.8]
 
 
-def test_invalido_pedaco_sem_choices(api):
-    _, fluxo = api
-    fluxo += [pedaco("ok"), b'data: {"error": "rate limited"}']
+def test_invalid_chunk_without_choices(api):
+    _, stream = api
+    stream += [chunk("ok"), b'data: {"error": "rate limited"}']
 
     with pytest.raises(KeyError):
-        executar("def f():\n", [])
+        run("def f():\n", [])

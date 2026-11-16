@@ -1,36 +1,36 @@
-"""Testes da instancia MNC-05: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-05: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode reorganizar o acesso aos
-dicionarios; o que nao pode mudar e o aplicativo devolvido (servicos
-indexados pelo nome do conteiner, sem a chave name, sem a lista containers,
-demais chaves intactas) e o erro diante de conteiner sem nome.
+Only run() is imported. The refactoring may reorganize the access to the
+dictionaries; what must not change is the returned app (services indexed by
+container name, without the name key, without the containers list, other
+keys intact) and the error on a container without a name.
 """
 
 import pytest
 
-from MNC_05 import executar
+from MNC_05 import run
 
 
-def conteiner(nome, imagem):
-    return {"name": nome, "image": imagem}
+def container(name, image):
+    return {"name": name, "image": image}
 
 
-def test_tipico_conteineres_viram_servicos_nomeados():
-    app = {"id": "loja", "containers": [conteiner("web", "nginx"), conteiner("db", "postgres")]}
+def test_typical_containers_become_named_services():
+    app = {"id": "shop", "containers": [container("web", "nginx"), container("db", "postgres")]}
 
-    assert executar(app) == {
-        "id": "loja",
+    assert run(app) == {
+        "id": "shop",
         "services": {"web": {"image": "nginx"}, "db": {"image": "postgres"}},
     }
 
 
-def test_borda_nome_repetido_fica_o_ultimo_e_lista_vazia():
-    app = {"containers": [conteiner("web", "nginx"), conteiner("web", "caddy")]}
-    assert executar(app) == {"services": {"web": {"image": "caddy"}}}
+def test_edge_repeated_name_keeps_the_last_one_and_empty_list():
+    app = {"containers": [container("web", "nginx"), container("web", "caddy")]}
+    assert run(app) == {"services": {"web": {"image": "caddy"}}}
 
-    assert executar({"containers": []}) == {"services": {}}
+    assert run({"containers": []}) == {"services": {}}
 
 
-def test_invalido_conteiner_sem_nome():
+def test_invalid_container_without_a_name():
     with pytest.raises(KeyError):
-        executar({"containers": [{"image": "nginx"}]})
+        run({"containers": [{"image": "nginx"}]})

@@ -1,34 +1,33 @@
-"""Rede recorrente para classificar a proxima letra de um nome.
+"""Recurrent network to classify the next letter of a name.
 
-Ponto de entrada publico: executar(dimensoes). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(dimensions). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 
-As camadas (modulo base, LSTM, linear, ReLU) sao versoes minimas que so
-guardam a configuracao recebida. O modulo base registra cada subcamada
-atribuida, pelo nome do atributo, e recusa subcamada atribuida antes da
-inicializacao da classe base.
+The layers (base module, LSTM, linear, ReLU) are minimal versions that only
+keep the configuration they receive. The base module registers each assigned
+sublayer by attribute name, and refuses a sublayer assigned before the base
+class is initialized.
 """
 
 from types import SimpleNamespace
 
 
-class _Modulo:
-    """Base das camadas: registra as subcamadas atribuidas."""
+class _Module:
+    """Base of the layers: registers the assigned sublayers."""
 
     def __init__(self):
-        self._camadas = {}
+        self._modules = {}
 
-    def __setattr__(self, nome, valor):
-        if isinstance(valor, _Modulo):
-            if "_camadas" not in self.__dict__:
+    def __setattr__(self, name, value):
+        if isinstance(value, _Module):
+            if "_modules" not in self.__dict__:
                 raise AttributeError("cannot assign module before Module.__init__() call")
-            self._camadas[nome] = valor
-        object.__setattr__(self, nome, valor)
+            self._modules[name] = value
+        object.__setattr__(self, name, value)
 
 
-class _LSTM(_Modulo):
-    """Guarda a configuracao; valida tamanho e camadas como a versao real."""
+class _LSTM(_Module):
+    """Keeps the configuration; validates size and layers like the real version."""
 
     def __init__(self, input_size, hidden_size, num_layers=1, bias=True, batch_first=False):
         super().__init__()
@@ -38,22 +37,22 @@ class _LSTM(_Modulo):
             raise ValueError("hidden_size must be greater than zero")
         if num_layers <= 0:
             raise ValueError("num_layers must be greater than zero")
-        self.descricao = ("LSTM", input_size, hidden_size, num_layers, bias, batch_first)
+        self.description = ("LSTM", input_size, hidden_size, num_layers, bias, batch_first)
 
 
-class _Linear(_Modulo):
+class _Linear(_Module):
     def __init__(self, in_features, out_features, bias=True):
         super().__init__()
-        self.descricao = ("Linear", in_features, out_features, bias)
+        self.description = ("Linear", in_features, out_features, bias)
 
 
-class _ReLU(_Modulo):
+class _ReLU(_Module):
     def __init__(self, inplace=False):
         super().__init__()
-        self.descricao = ("ReLU", inplace)
+        self.description = ("ReLU", inplace)
 
 
-nn = SimpleNamespace(Module=_Modulo, LSTM=_LSTM, Linear=_Linear, ReLU=_ReLU)
+nn = SimpleNamespace(Module=_Module, LSTM=_LSTM, Linear=_Linear, ReLU=_ReLU)
 
 
 class BasicLSTM(nn.Module):
@@ -77,20 +76,20 @@ class BasicLSTM(nn.Module):
 		self.relu = nn.ReLU()
 
 
-def _resumo(modelo):
-    """Hiperparametros guardados no modelo e configuracao de cada subcamada."""
-    nomes = ("num_classes", "input_size", "hidden_size", "num_layers")
-    hiperparametros = {nome: getattr(modelo, nome) for nome in nomes}
-    camadas = {nome: camada.descricao for nome, camada in modelo._camadas.items()}
-    return hiperparametros, camadas
+def _summary(model):
+    """Hyperparameters stored in the model and the configuration of each sublayer."""
+    names = ("num_classes", "input_size", "hidden_size", "num_layers")
+    hyperparameters = {name: getattr(model, name) for name in names}
+    layers = {name: layer.description for name, layer in model._modules.items()}
+    return hyperparameters, layers
 
 
-def executar(dimensoes):
-    """Monta a rede com as dimensoes dadas e devolve o resumo dela."""
-    modelo = BasicLSTM(
-        dimensoes["num_classes"],
-        dimensoes["input_size"],
-        dimensoes["hidden_size"],
-        dimensoes["num_layers"],
+def run(dimensions):
+    """Builds the network with the given dimensions and returns its summary. Public entry point of this unit."""
+    model = BasicLSTM(
+        dimensions["num_classes"],
+        dimensions["input_size"],
+        dimensions["hidden_size"],
+        dimensions["num_layers"],
     )
-    return _resumo(modelo)
+    return _summary(model)

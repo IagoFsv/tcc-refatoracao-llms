@@ -1,67 +1,68 @@
-"""Testes da instancia MNC-02: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-02: they pin the observable behavior of run().
 
-So executar() e importado. O teste roda numa pasta temporaria com o arquivo
-tokens/weather.txt e intercepta requests.get, que devolve uma resposta
-gravada da API de clima. A refatoracao pode reorganizar o acesso ao JSON;
-o que nao pode mudar e a URL consultada, o cartao enviado (titulo, cor,
-miniatura, campos na ordem, rodape) e o erro diante de resposta de erro da API.
+Only run() is imported. The test runs in a temporary folder with the file
+tokens/weather.txt and intercepts requests.get, which returns a recorded
+response of the weather API. The refactoring may reorganize the access to
+the JSON; what must not change is the URL queried, the card sent (title,
+color, thumbnail, fields in order, footer) and the error on an error
+response from the API.
 """
 
 import pytest
 import requests
 
-from MNC_02 import executar
+from MNC_02 import run
 
 
-class Resposta:
-    def __init__(self, dados):
-        self.dados = dados
+class Response:
+    def __init__(self, data):
+        self.data = data
 
     def json(self):
-        return self.dados
+        return self.data
 
 
-def resposta_clima(temp, cidade, pais):
+def weather_response(temp, city, country):
     return {
         "main": {"temp": temp, "humidity": 72, "pressure": 1012},
         "weather": [{"main": "Clouds", "icon": "04d"}],
         "wind": {"speed": 4.6},
         "clouds": {"all": 75},
-        "name": cidade,
-        "sys": {"country": pais},
+        "name": city,
+        "sys": {"country": country},
     }
 
 
 @pytest.fixture
 def api(tmp_path, monkeypatch):
-    """Pasta com o token e requests.get interceptado; devolve as URLs pedidas."""
+    """Folder with the token and requests.get intercepted; returns the URLs requested."""
     (tmp_path / "tokens").mkdir()
-    (tmp_path / "tokens" / "weather.txt").write_text("chave123", encoding="utf-8")
+    (tmp_path / "tokens" / "weather.txt").write_text("key123", encoding="utf-8")
     monkeypatch.chdir(tmp_path)
-    pedidos = []
-    respostas = {}
+    requests_made = []
+    responses = {}
 
-    def falso_get(url, *args, **kwargs):
-        pedidos.append(url)
-        return Resposta(respostas["dados"])
+    def fake_get(url, *args, **kwargs):
+        requests_made.append(url)
+        return Response(responses["data"])
 
-    monkeypatch.setattr(requests, "get", falso_get)
-    return pedidos, respostas
+    monkeypatch.setattr(requests, "get", fake_get)
+    return requests_made, responses
 
 
-def test_tipico_cartao_com_os_dados_do_clima(api):
-    pedidos, respostas = api
-    respostas["dados"] = resposta_clima(288.15, "London", "GB")
+def test_typical_card_with_the_weather_data(api):
+    requests_made, responses = api
+    responses["data"] = weather_response(288.15, "London", "GB")
 
-    enviados = executar("London")
+    sent = run("London")
 
-    assert pedidos == ["https://api.openweathermap.org/data/2.5/weather?q=London&appid=chave123"]
-    assert len(enviados) == 1
-    cartao = enviados[0]
-    assert cartao.title == "Weather in London, GB"
-    assert cartao.color == 0x3f3f3f
-    assert cartao.thumbnail == "http://openweathermap.org/img/wn/04d@4x.png"
-    assert cartao.fields == [
+    assert requests_made == ["https://api.openweathermap.org/data/2.5/weather?q=London&appid=key123"]
+    assert len(sent) == 1
+    card = sent[0]
+    assert card.title == "Weather in London, GB"
+    assert card.color == 0x3f3f3f
+    assert card.thumbnail == "http://openweathermap.org/img/wn/04d@4x.png"
+    assert card.fields == [
         ("Temperature", "15°C", True),
         ("Weather", "Clouds", True),
         ("Wind", "4.6m/s", True),
@@ -69,23 +70,23 @@ def test_tipico_cartao_com_os_dados_do_clima(api):
         ("Pressure", "1012hPa", True),
         ("Cloud Cover", "75%", True),
     ]
-    assert cartao.footer == ("Requested by Ana", "https://cdn.exemplo.com/ana.png")
+    assert card.footer == ("Requested by Ana", "https://cdn.example.com/ana.png")
 
 
-def test_borda_temperatura_negativa_arredondada(api):
-    pedidos, respostas = api
-    respostas["dados"] = resposta_clima(263.0, "Oslo", "NO")  # -10.15 graus
+def test_edge_negative_temperature_rounded(api):
+    requests_made, responses = api
+    responses["data"] = weather_response(263.0, "Oslo", "NO")  # -10.15 degrees
 
-    cartao = executar("Oslo")[0]
+    card = run("Oslo")[0]
 
-    assert pedidos == ["https://api.openweathermap.org/data/2.5/weather?q=Oslo&appid=chave123"]
-    assert cartao.title == "Weather in Oslo, NO"
-    assert cartao.fields[0] == ("Temperature", "-10°C", True)
+    assert requests_made == ["https://api.openweathermap.org/data/2.5/weather?q=Oslo&appid=key123"]
+    assert card.title == "Weather in Oslo, NO"
+    assert card.fields[0] == ("Temperature", "-10°C", True)
 
 
-def test_invalido_resposta_de_erro_da_api(api):
-    _, respostas = api
-    respostas["dados"] = {"cod": "404", "message": "city not found"}
+def test_invalid_error_response_from_the_api(api):
+    _, responses = api
+    responses["data"] = {"cod": "404", "message": "city not found"}
 
     with pytest.raises(KeyError):
-        executar("Atlantida")
+        run("Atlantis")

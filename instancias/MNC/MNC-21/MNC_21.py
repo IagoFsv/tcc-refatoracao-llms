@@ -1,8 +1,7 @@
-"""Sugestoes de codigo vindas de um servico de autocompletar, lidas em fluxo.
+"""Code suggestions from an autocomplete service, read as a stream.
 
-Ponto de entrada publico: executar(prompt, stops, suffix=""). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(prompt, stops, suffix=""). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 from __future__ import annotations
@@ -14,7 +13,7 @@ import requests
 
 
 def get_copilot_token():
-    """Token de acesso ao servico (fixo nesta unidade)."""
+    """Access token of the service (fixed in this unit)."""
     return "tok-123"
 
 
@@ -87,6 +86,6 @@ def get_suggestion(prompt: str, stops: list[str], suffix: str = "") -> str:
     return "".join(lines)
 
 
-def executar(prompt, stops, suffix=""):
-    """Pede a sugestao para o trecho de codigo. Ponto de entrada publico desta unidade."""
+def run(prompt, stops, suffix=""):
+    """Requests the suggestion for the code snippet. Public entry point of this unit."""
     return get_suggestion(prompt, stops, suffix)

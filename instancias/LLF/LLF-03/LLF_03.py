@@ -1,7 +1,7 @@
-"""Gravacao de valores aninhados na configuracao do jogo, como texto.
+"""Stores nested values in the game configuration, as text.
 
-Ponto de entrada publico: executar(valor). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(value). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import logging
@@ -17,9 +17,9 @@ class Config(object):
         self.logger.info("Config: " + str(self.config))
 
 
-def executar(valor):
-    """Grava valor na configuracao e devolve o texto gravado. Ponto de entrada publico desta unidade."""
+def run(value):
+    """Stores value in the configuration and returns the stored text. Public entry point of this unit."""
     config = Config()
-    config.config["mundo"] = {}
-    config.set_config_dict_dict_dict_dict("mundo", "regioes", valor)
-    return config.config["mundo"]["regioes"]
+    config.config["world"] = {}
+    config.set_config_dict_dict_dict_dict("world", "regions", value)
+    return config.config["world"]["regions"]

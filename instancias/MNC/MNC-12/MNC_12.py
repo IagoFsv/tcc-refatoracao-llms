@@ -1,8 +1,7 @@
-"""Programa de linha de comando que mostra o clima de uma cidade.
+"""Command-line program that shows the weather of a city.
 
-Ponto de entrada publico: executar(cidade). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(city). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import runpy
@@ -24,14 +23,14 @@ def call_api(city):
     return response_from_api.json()
 
 
-def executar(cidade):
-    """Roda este arquivo como programa, com a cidade na linha de comando. Ponto de entrada publico desta unidade."""
-    argv_anterior = sys.argv
-    sys.argv = [__file__, cidade]
+def run(city):
+    """Runs this file as a program, with the city on the command line. Public entry point of this unit."""
+    previous_argv = sys.argv
+    sys.argv = [__file__, city]
     try:
         runpy.run_path(__file__, run_name='__main__')
     finally:
-        sys.argv = argv_anterior
+        sys.argv = previous_argv
 
 
 if __name__ == '__main__':

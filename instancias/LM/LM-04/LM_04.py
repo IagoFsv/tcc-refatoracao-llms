@@ -1,7 +1,7 @@
-"""Aventura de texto: uma sala do jogo, com descricao, acoes e dica.
+"""Text adventure: one room of the game, with description, actions and hint.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(room, previous_message="", first_room=False). Do not
+change its name or signature; the rest of the file may be freely reorganized.
 """
 
 import time
@@ -212,6 +212,6 @@ def play_room(room_id, message_from_previous_room, isFirstRoom):
       move_cursor("up",3)
 
 
-def executar(sala, mensagem_anterior="", primeira_sala=False):
-  """Joga a sala ate o jogador sair dela; devolve [proxima_sala, mensagem]. Ponto de entrada publico desta unidade."""
-  return play_room(sala, mensagem_anterior, primeira_sala)
+def run(room, previous_message="", first_room=False):
+  """Plays the room until the player leaves it; returns [next_room, message]. Public entry point of this unit."""
+  return play_room(room, previous_message, first_room)

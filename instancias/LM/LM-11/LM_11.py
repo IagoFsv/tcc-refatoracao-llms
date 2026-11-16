@@ -1,7 +1,7 @@
-"""Desenho da forca do jogo da forca, conforme o numero de erros.
+"""Drawing of the gallows in a hangman game, according to the number of misses.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(misses). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 
@@ -71,6 +71,6 @@ def print_hangman(guessCount):
         print('|')
 
 
-def executar(erros):
-    """Imprime a forca para o numero de erros. Ponto de entrada publico desta unidade."""
-    return print_hangman(erros)
+def run(misses):
+    """Prints the gallows for the number of misses. Public entry point of this unit."""
+    return print_hangman(misses)

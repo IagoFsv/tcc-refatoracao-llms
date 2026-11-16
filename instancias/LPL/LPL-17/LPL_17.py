@@ -1,53 +1,52 @@
-"""Rede Q profunda: camadas, otimizador e funcao de perda.
+"""Deep Q-network: layers, optimizer and loss function.
 
-Ponto de entrada publico: executar(dimensoes). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(dimensions). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 
-As pecas de rede (camada linear, ReLU, sequencia, otimizador Adam, perda
-quadratica) sao versoes minimas que so guardam a configuracao recebida. A
-camada linear cria os pesos com o formato (saidas, entradas) e o vies com
-(saidas,), e recusa tamanho negativo, como a versao real.
+The network pieces (linear layer, ReLU, sequence, Adam optimizer, squared
+loss) are minimal versions that only keep the configuration they receive.
+The linear layer creates the weights with shape (outputs, inputs) and the
+bias with (outputs,), and refuses a negative size, like the real version.
 """
 
 from types import SimpleNamespace
 
 
-class _Parametro:
-    def __init__(self, formato):
-        self.formato = formato
+class _Parameter:
+    def __init__(self, shape):
+        self.shape = shape
 
 
-def _vazio(*formato):
-    if any(dimensao < 0 for dimensao in formato):
-        raise RuntimeError(f"Trying to create tensor with negative dimension: {list(formato)}")
-    return _Parametro(formato)
+def _empty(*shape):
+    if any(dimension < 0 for dimension in shape):
+        raise RuntimeError(f"Trying to create tensor with negative dimension: {list(shape)}")
+    return _Parameter(shape)
 
 
 class _Linear:
     def __init__(self, in_features, out_features, bias=True):
-        self.descricao = ("Linear", in_features, out_features, bias)
-        self.weight = _vazio(out_features, in_features)
-        self.bias = _vazio(out_features) if bias else None
+        self.description = ("Linear", in_features, out_features, bias)
+        self.weight = _empty(out_features, in_features)
+        self.bias = _empty(out_features) if bias else None
 
-    def parametros(self):
+    def own_parameters(self):
         return [p for p in (self.weight, self.bias) if p is not None]
 
 
 class _ReLU:
     def __init__(self, inplace=False):
-        self.descricao = ("ReLU", inplace)
+        self.description = ("ReLU", inplace)
 
-    def parametros(self):
+    def own_parameters(self):
         return []
 
 
 class _Sequential:
-    def __init__(self, *camadas):
-        self.camadas = camadas
+    def __init__(self, *layers):
+        self.layers = layers
 
     def parameters(self):
-        return iter([p for camada in self.camadas for p in camada.parametros()])
+        return iter([p for layer in self.layers for p in layer.own_parameters()])
 
 
 class _Adam:
@@ -86,23 +85,23 @@ class DQN:
         self.n_actions = n_actions
 
 
-def _resumo(rede):
-    """Camadas em ordem, otimizador, perda e os dois valores guardados."""
-    parametros = list(rede.model.parameters())
-    otimizador = rede.optimizer
-    mesmos = len(otimizador.params) == len(parametros) and all(
-        a is b for a, b in zip(otimizador.params, parametros))
+def _summary(network):
+    """Layers in order, optimizer, loss and the two stored values."""
+    parameters = list(network.model.parameters())
+    optimizer = network.optimizer
+    same = len(optimizer.params) == len(parameters) and all(
+        a is b for a, b in zip(optimizer.params, parameters))
     return {
-        "camadas": [camada.descricao for camada in rede.model.camadas],
-        "otimizador": ("Adam", [p.formato for p in otimizador.params], otimizador.lr, mesmos),
-        "perda": ("MSELoss", rede.loss_fn.reduction),
-        "gamma": rede.gamma,
-        "n_actions": rede.n_actions,
+        "layers": [layer.description for layer in network.model.layers],
+        "optimizer": ("Adam", [p.shape for p in optimizer.params], optimizer.lr, same),
+        "loss": ("MSELoss", network.loss_fn.reduction),
+        "gamma": network.gamma,
+        "n_actions": network.n_actions,
     }
 
 
-def executar(dimensoes):
-    """dimensoes: input_size, n_actions, hidden_size e gamma."""
-    rede = DQN(dimensoes["input_size"], dimensoes["n_actions"],
-               dimensoes["hidden_size"], dimensoes["gamma"])
-    return _resumo(rede)
+def run(dimensions):
+    """dimensions: input_size, n_actions, hidden_size and gamma. Public entry point of this unit."""
+    network = DQN(dimensions["input_size"], dimensions["n_actions"],
+                  dimensions["hidden_size"], dimensions["gamma"])
+    return _summary(network)

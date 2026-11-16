@@ -1,18 +1,18 @@
-"""Testes da instancia MNC-04: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-04: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode quebrar a tabela de permissoes
-em partes nomeadas ou monta-la de outro jeito; o que nao pode mudar e o
-conteudo de cada permissao (variaveis de ambiente e volumes) e o erro diante
-de servico desconhecido.
+Only run() is imported. The refactoring may split the permissions table into
+named parts or build it another way; what must not change is the content of
+each permission (environment variables and volumes) and the error on an
+unknown service.
 """
 
 import pytest
 
-from MNC_04 import executar
+from MNC_04 import run
 
 
-def test_tipico_permissao_com_ambiente_e_volume():
-    assert executar("lnd") == {
+def test_typical_permission_with_environment_and_volume():
+    assert run("lnd") == {
         "env": {
             "LND_IP": "${LND_IP}",
             "LND_GRPC_PORT": "${LND_GRPC_PORT}",
@@ -23,11 +23,11 @@ def test_tipico_permissao_com_ambiente_e_volume():
     }
 
 
-def test_borda_permissao_so_com_ambiente_sem_volumes():
-    permissao = executar("bitcoind")
+def test_edge_permission_with_environment_only_and_no_volumes():
+    permission = run("bitcoind")
 
-    assert "volumes" not in permissao
-    assert permissao == {
+    assert "volumes" not in permission
+    assert permission == {
         "env": {
             "BITCOIN_IP": "${BITCOIN_IP}",
             "BITCOIN_NETWORK": "${BITCOIN_NETWORK}",
@@ -40,6 +40,6 @@ def test_borda_permissao_so_com_ambiente_sem_volumes():
     }
 
 
-def test_invalido_servico_desconhecido():
+def test_invalid_unknown_service():
     with pytest.raises(KeyError):
-        executar("electrs")
+        run("electrs")

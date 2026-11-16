@@ -1,7 +1,7 @@
-"""Conversor de video em lote com ffmpeg.
+"""Batch video converter with ffmpeg.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(). Do not change its name or signature; the rest of
+the file may be freely reorganized.
 """
 
 import os
@@ -129,10 +129,10 @@ def main():
             # Output preview frame using ffmpeg
             os.system(f"ffmpeg -y -i {out_file} -vframes 1 -f image2 {out_file.parent / (out_file.stem + '.jpg')}")
 
-def executar():
-    """Executa o conversor. Ponto de entrada publico desta unidade."""
+def run():
+    """Runs the converter. Public entry point of this unit."""
     return main()
 
 
 if __name__ == "__main__":
-    executar()
+    run()

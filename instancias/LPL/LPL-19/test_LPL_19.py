@@ -1,54 +1,54 @@
-"""Testes da instancia LPL-19: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-19: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-create_convolutional_layer num objeto, tirar o que nao e usado, mudar a
-assinatura ou dividir a funcao, desde que atualize a chamada dentro da
-unidade; o que nao pode mudar e o grafo montado (operacoes, entradas,
-argumentos e escopo de nome de cada uma) e o erro diante de filtro que nao
-tem 4 dimensoes.
+Only run() is imported. The refactoring may group the parameters of
+create_convolutional_layer into an object, drop what is unused, change the
+signature or split the function, as long as it updates the call inside the
+unit; what must not change is the graph that is built (operations, inputs,
+arguments and name scope of each one) and the error on a filter that does
+not have 4 dimensions.
 
-O grafo esperado: relu(max_pool(conv2d(entrada, pesos) + vies)), tudo dentro
-do escopo com o nome da camada; pesos sao uma variavel com normal truncada
-(desvio 0.05) no formato do filtro, e o vies uma variavel constante 0.05 com
-um valor por filtro.
+The expected graph: relu(max_pool(conv2d(input, weights) + bias)), all inside
+the scope named after the layer; the weights are a variable with a truncated
+normal (stddev 0.05) in the filter shape, and the bias a variable with the
+constant 0.05, one value per filter.
 """
 
 import pytest
 
-from LPL_19 import executar
+from LPL_19 import run
 
 
-def _grafo(entrada, filtro, num_filters, pool, nome):
-    pesos = ("Variable", nome, ("truncated_normal", tuple(filtro), 0.0, 0.05))
-    vies = ("Variable", nome, ("constant", 0.05, (num_filters,)))
-    conv = ("conv2d", nome, ("entrada", tuple(entrada)), pesos, (1, 1, 1, 1), "SAME")
-    soma = ("add", nome, conv, vies)
-    pool_ = ("max_pool", nome, soma, tuple(pool), tuple(pool), "SAME")
-    return ("relu", nome, pool_)
+def _graph(input_shape, filter_shape, num_filters, pool, name):
+    weights = ("Variable", name, ("truncated_normal", tuple(filter_shape), 0.0, 0.05))
+    bias = ("Variable", name, ("constant", 0.05, (num_filters,)))
+    conv = ("conv2d", name, ("input", tuple(input_shape)), weights, (1, 1, 1, 1), "SAME")
+    total = ("add", name, conv, bias)
+    pooled = ("max_pool", name, total, tuple(pool), tuple(pool), "SAME")
+    return ("relu", name, pooled)
 
 
-def test_tipico_primeira_camada_para_imagens_28x28():
-    camada = {"formato_entrada": [None, 28, 28, 1], "num_input_channels": 1,
-              "num_filters": 32, "filter_shape": [5, 5, 1, 32],
-              "pool_shape": [1, 2, 2, 1], "name": "layer_conv1"}
+def test_typical_first_layer_for_28x28_images():
+    layer = {"input_shape": [None, 28, 28, 1], "num_input_channels": 1,
+             "num_filters": 32, "filter_shape": [5, 5, 1, 32],
+             "pool_shape": [1, 2, 2, 1], "name": "layer_conv1"}
 
-    assert executar(camada) == _grafo([None, 28, 28, 1], [5, 5, 1, 32], 32,
-                                      [1, 2, 2, 1], "layer_conv1")
-
-
-def test_borda_um_filtro_1x1_sem_reducao_no_pooling():
-    camada = {"formato_entrada": [1, 4, 4, 3], "num_input_channels": 3,
-              "num_filters": 1, "filter_shape": [1, 1, 3, 1],
-              "pool_shape": [1, 1, 1, 1], "name": "minima"}
-
-    assert executar(camada) == _grafo([1, 4, 4, 3], [1, 1, 3, 1], 1, [1, 1, 1, 1], "minima")
+    assert run(layer) == _graph([None, 28, 28, 1], [5, 5, 1, 32], 32,
+                                [1, 2, 2, 1], "layer_conv1")
 
 
-def test_invalido_filtro_com_duas_dimensoes():
-    # E o formato que o create_model do arquivo original usa.
-    camada = {"formato_entrada": [None, 28, 28, 1], "num_input_channels": 1,
-              "num_filters": 32, "filter_shape": [5, 5],
-              "pool_shape": [2, 2], "name": "layer_conv1"}
+def test_edge_one_1x1_filter_without_pooling_reduction():
+    layer = {"input_shape": [1, 4, 4, 3], "num_input_channels": 3,
+             "num_filters": 1, "filter_shape": [1, 1, 3, 1],
+             "pool_shape": [1, 1, 1, 1], "name": "minimal"}
+
+    assert run(layer) == _graph([1, 4, 4, 3], [1, 1, 3, 1], 1, [1, 1, 1, 1], "minimal")
+
+
+def test_invalid_filter_with_two_dimensions():
+    # It is the shape that create_model in the original file uses.
+    layer = {"input_shape": [None, 28, 28, 1], "num_input_channels": 1,
+             "num_filters": 32, "filter_shape": [5, 5],
+             "pool_shape": [2, 2], "name": "layer_conv1"}
 
     with pytest.raises(ValueError):
-        executar(camada)
+        run(layer)

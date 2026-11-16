@@ -1,25 +1,24 @@
-"""Bloco de uma cadeia de blocos: dados, hash e representacao em dicionario.
+"""Block of a blockchain: data, hash and dictionary representation.
 
-Ponto de entrada publico: executar(campos). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(fields). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import hashlib
 
 
-class _Transacao:
-    """Transacao minima, so com o que o bloco usa: hash e repr_json."""
+class _Transaction:
+    """Minimal transaction, with only what the block uses: hash and repr_json."""
 
-    def __init__(self, descricao):
-        self.descricao = descricao
+    def __init__(self, description):
+        self.description = description
 
     @property
     def hash(self):
-        return hashlib.sha256(self.descricao.encode('utf-8')).hexdigest()
+        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()
 
     def repr_json(self):
-        return {"descricao": self.descricao}
+        return {"description": self.description}
 
 
 class Block(object):
@@ -45,14 +44,17 @@ class Block(object):
         }
 
 
-def executar(campos):
-    """campos: index, timestamp, transacoes (descricoes), previous_hash e,
-    opcionalmente, proof. Devolve a representacao do bloco em dicionario."""
-    transacoes = [_Transacao(descricao) for descricao in campos["transacoes"]]
-    if "proof" in campos:
-        bloco = Block(campos["index"], campos["timestamp"], transacoes,
-                      campos["previous_hash"], campos["proof"])
+def run(fields):
+    """Public entry point of this unit.
+
+    fields: index, timestamp, transactions (descriptions), previous_hash and,
+    optionally, proof. Returns the dictionary representation of the block.
+    """
+    transactions = [_Transaction(description) for description in fields["transactions"]]
+    if "proof" in fields:
+        block = Block(fields["index"], fields["timestamp"], transactions,
+                      fields["previous_hash"], fields["proof"])
     else:
-        bloco = Block(campos["index"], campos["timestamp"], transacoes,
-                      campos["previous_hash"])
-    return bloco.repr_json()
+        block = Block(fields["index"], fields["timestamp"], transactions,
+                      fields["previous_hash"])
+    return block.repr_json()

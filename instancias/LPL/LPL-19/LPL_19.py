@@ -1,82 +1,81 @@
-"""Montagem de uma camada convolucional num grafo de operacoes.
+"""Building a convolutional layer in a graph of operations.
 
-Ponto de entrada publico: executar(camada). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(layer). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 
-As operacoes (variavel, normal truncada, constante, convolucao, max pooling,
-ReLU, soma e escopo de nome) sao versoes minimas que nao calculam nada: cada
-uma devolve um no do grafo que registra a operacao, o escopo de nome em que
-foi criada e as entradas. A convolucao recusa filtro que nao tenha 4
-dimensoes, como a versao real.
+The operations (variable, truncated normal, constant, convolution, max
+pooling, ReLU, addition and name scope) are minimal versions that compute
+nothing: each one returns a graph node that records the operation, the name
+scope it was created in and its inputs. The convolution refuses a filter
+that does not have 4 dimensions, like the real version.
 """
 
 from types import SimpleNamespace
 
-_escopos = []
+_scopes = []
 
 
-class _No:
-    """No do grafo: descricao da operacao e formato do resultado, se conhecido."""
+class _Node:
+    """Graph node: description of the operation and shape of the result, if known."""
 
-    def __init__(self, descricao, formato=None):
-        self.descricao = descricao
-        self.formato = formato
+    def __init__(self, description, shape=None):
+        self.description = description
+        self.shape = shape
 
-    def __add__(self, outro):
-        return _No(("add", _escopo_atual(), self.descricao, outro.descricao), self.formato)
-
-
-def _escopo_atual():
-    return "/".join(_escopos)
+    def __add__(self, other):
+        return _Node(("add", _current_scope(), self.description, other.description), self.shape)
 
 
-class _EscopoDeNome:
+def _current_scope():
+    return "/".join(_scopes)
+
+
+class _NameScope:
     def __init__(self, name):
         self.name = name
 
     def __enter__(self):
-        _escopos.append(self.name)
+        _scopes.append(self.name)
         return self.name
 
-    def __exit__(self, *excecao):
-        _escopos.pop()
+    def __exit__(self, *exc):
+        _scopes.pop()
         return False
 
 
 def _variable(initial_value):
-    return _No(("Variable", _escopo_atual(), initial_value.descricao), initial_value.formato)
+    return _Node(("Variable", _current_scope(), initial_value.description), initial_value.shape)
 
 
 def _truncated_normal(shape, mean=0.0, stddev=1.0):
-    return _No(("truncated_normal", tuple(shape), mean, stddev), tuple(shape))
+    return _Node(("truncated_normal", tuple(shape), mean, stddev), tuple(shape))
 
 
 def _constant(value, dtype=None, shape=None):
-    return _No(("constant", value, tuple(shape)), tuple(shape))
+    return _Node(("constant", value, tuple(shape)), tuple(shape))
 
 
 def _conv2d(input, filter, strides, padding):
-    if filter.formato is not None and len(filter.formato) != 4:
-        raise ValueError(f"Shape must be rank 4 but is rank {len(filter.formato)}")
-    return _No(("conv2d", _escopo_atual(), input.descricao, filter.descricao,
-                tuple(strides), padding))
+    if filter.shape is not None and len(filter.shape) != 4:
+        raise ValueError(f"Shape must be rank 4 but is rank {len(filter.shape)}")
+    return _Node(("conv2d", _current_scope(), input.description, filter.description,
+                  tuple(strides), padding))
 
 
 def _max_pool(value, ksize, strides, padding):
-    return _No(("max_pool", _escopo_atual(), value.descricao, tuple(ksize),
-                tuple(strides), padding))
+    return _Node(("max_pool", _current_scope(), value.description, tuple(ksize),
+                  tuple(strides), padding))
 
 
 def _relu(features):
-    return _No(("relu", _escopo_atual(), features.descricao))
+    return _Node(("relu", _current_scope(), features.description))
 
 
 tf = SimpleNamespace(
     Variable=_variable,
     truncated_normal=_truncated_normal,
     constant=_constant,
-    name_scope=_EscopoDeNome,
+    name_scope=_NameScope,
     nn=SimpleNamespace(conv2d=_conv2d, max_pool=_max_pool, relu=_relu),
 )
 
@@ -102,11 +101,14 @@ def create_convolutional_layer(input, num_input_channels, num_filters, filter_sh
         return layer
 
 
-def executar(camada):
-    """camada: formato_entrada, num_input_channels, num_filters, filter_shape,
-    pool_shape e name. Devolve a descricao do no final do grafo."""
-    c = camada
-    entrada = _No(("entrada", tuple(c["formato_entrada"])), tuple(c["formato_entrada"]))
-    no = create_convolutional_layer(entrada, c["num_input_channels"], c["num_filters"],
-                                    c["filter_shape"], c["pool_shape"], c["name"])
-    return no.descricao
+def run(layer):
+    """Public entry point of this unit.
+
+    layer: input_shape, num_input_channels, num_filters, filter_shape,
+    pool_shape and name. Returns the description of the final graph node.
+    """
+    c = layer
+    input_node = _Node(("input", tuple(c["input_shape"])), tuple(c["input_shape"]))
+    node = create_convolutional_layer(input_node, c["num_input_channels"], c["num_filters"],
+                                      c["filter_shape"], c["pool_shape"], c["name"])
+    return node.description

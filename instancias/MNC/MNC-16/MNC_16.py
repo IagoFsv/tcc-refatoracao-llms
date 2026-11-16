@@ -1,8 +1,7 @@
-"""Previsao do tempo de uma cidade, impressa no terminal.
+"""Weather forecast of a city, printed on the terminal.
 
-Ponto de entrada publico: executar(response, cidade, opcao). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(response, city, option_flag). Do not change its name
+or signature; the rest of the file may be freely reorganized.
 """
 
 option = '-c'
@@ -45,8 +44,8 @@ def parseJSONforCITY(response, CITY):
         print("-------------------------------------------------------")
 
 
-def executar(response, cidade, opcao):
-    """Imprime o clima com a opcao de linha de comando dada. Ponto de entrada publico desta unidade."""
+def run(response, city, option_flag):
+    """Prints the weather with the given command-line option. Public entry point of this unit."""
     global option
-    option = opcao
-    parseJSONforCITY(response, cidade)
+    option = option_flag
+    parseJSONforCITY(response, city)

@@ -1,42 +1,42 @@
-"""Testes da instancia LPL-10: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-10: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar as coordenadas e a cor
-de draw_line num objeto, mudar a assinatura ou dividir o metodo, desde que
-atualize a chamada dentro da unidade; o que nao pode mudar sao os pixels
-pintados na imagem devolvida, a cor padrao (preto) e o erro diante de uma
-cor com numero errado de canais.
+Only run() is imported. The refactoring may group the coordinates and the
+color of draw_line into an object, change the signature or split the method,
+as long as it updates the call inside the unit; what must not change are the
+pixels painted in the returned image, the default color (black) and the error
+on a color with the wrong number of channels.
 
-Pixels esperados: os que skimage.draw.line (scikit-image 0.26.0) devolve.
+Expected pixels: the ones skimage.draw.line (scikit-image 0.26.0) returns.
 """
 
 import numpy as np
 import pytest
 
-from LPL_10 import executar
+from LPL_10 import run
 
-SEGMENTO = (0, 0, 2, 4)
+SEGMENT = (0, 0, 2, 4)
 PIXELS = [(0, 0), (1, 1), (1, 2), (2, 3), (2, 4)]
 
 
-def _esperado(tamanho, pixels, cor):
-    imagem = np.full((*tamanho, 3), 255, dtype=np.uint8)
-    for linha, coluna in pixels:
-        imagem[linha, coluna] = cor
-    return imagem
+def _expected(size, pixels, color):
+    image = np.full((*size, 3), 255, dtype=np.uint8)
+    for row, column in pixels:
+        image[row, column] = color
+    return image
 
 
-def test_tipico_segmento_vermelho():
-    imagem = executar((3, 5), SEGMENTO, (255, 0, 0))
+def test_typical_red_segment():
+    image = run((3, 5), SEGMENT, (255, 0, 0))
 
-    assert np.array_equal(imagem, _esperado((3, 5), PIXELS, (255, 0, 0)))
-
-
-def test_borda_sem_cor_pinta_de_preto():
-    imagem = executar((3, 5), SEGMENTO)
-
-    assert np.array_equal(imagem, _esperado((3, 5), PIXELS, (0, 0, 0)))
+    assert np.array_equal(image, _expected((3, 5), PIXELS, (255, 0, 0)))
 
 
-def test_invalido_cor_com_dois_canais():
+def test_edge_no_color_paints_black():
+    image = run((3, 5), SEGMENT)
+
+    assert np.array_equal(image, _expected((3, 5), PIXELS, (0, 0, 0)))
+
+
+def test_invalid_color_with_two_channels():
     with pytest.raises(ValueError):
-        executar((3, 5), SEGMENTO, (255, 0))
+        run((3, 5), SEGMENT, (255, 0))

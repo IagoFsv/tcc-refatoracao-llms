@@ -1,8 +1,7 @@
-"""Coluna de cidade a partir da descricao de transacoes bancarias.
+"""City column from the description of bank transactions.
 
-Ponto de entrada publico: executar(descricoes, cidades). Nao altere o nome nem
-a assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(descriptions, cities). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import pandas as pd
@@ -25,8 +24,8 @@ def update_city_column(df, city_list):
     return df
 
 
-def executar(descricoes, cidades):
-    """Classifica as descricoes. Ponto de entrada publico desta unidade."""
-    df = pd.DataFrame({"Description": descricoes})
-    df = update_city_column(df, cidades)
+def run(descriptions, cities):
+    """Classifies the descriptions. Public entry point of this unit."""
+    df = pd.DataFrame({"Description": descriptions})
+    df = update_city_column(df, cities)
     return df["City"].tolist()

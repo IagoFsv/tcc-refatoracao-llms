@@ -1,7 +1,7 @@
-"""Extracao dos dados de clima de paginas HTML para um dicionario.
+"""Extraction of weather data from HTML pages into a dictionary.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(current_html, forecast_html). Do not change its name
+or signature; the rest of the file may be freely reorganized.
 """
 
 from bs4 import BeautifulSoup
@@ -96,9 +96,9 @@ def remove_special_chars(ch: str) -> str:
     return ch.strip()
 
 
-def executar(html_atual, html_previsao):
-    """Le as duas paginas (clima atual e previsao) e devolve o dicionario. Ponto de entrada publico desta unidade."""
+def run(current_html, forecast_html):
+    """Reads both pages (current weather and forecast) and returns the dictionary. Public entry point of this unit."""
     return parse_weather_to_json(
-        BeautifulSoup(html_atual, "html.parser"),
-        BeautifulSoup(html_previsao, "html.parser"),
+        BeautifulSoup(current_html, "html.parser"),
+        BeautifulSoup(forecast_html, "html.parser"),
     )

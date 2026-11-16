@@ -1,17 +1,17 @@
-"""Testes da instancia LM-03: fixam o comportamento observavel de executar().
+"""Tests for instance LM-03: they pin the observable behavior of run().
 
-So executar() e importado. A funcao e pura: o que se fixa e o par
-(colunas, linhas) devolvido para cada numero de elementos, inclusive nos
-limites entre faixas, e o erro para o que nao cai em faixa nenhuma.
+Only run() is imported. The function is pure: what is pinned is the
+(columns, rows) pair returned for each number of elements, including at the
+boundaries between ranges, and the error for what falls in no range.
 """
 
 import pytest
 
-from LM_03 import executar
+from LM_03 import run
 
 
-# (primeiro, ultimo, resultado) de cada faixa da tabela, de 1 a 91.
-FAIXAS = [
+# (first, last, result) of each range of the table, from 1 to 91.
+RANGES = [
     (1, 1, (1, 1)), (2, 2, (2, 1)), (3, 3, (3, 1)), (4, 4, (4, 1)), (5, 5, (5, 1)),
     (6, 6, (6, 1)), (7, 8, (4, 2)), (9, 10, (5, 2)), (11, 12, (6, 2)),
     (13, 18, (6, 3)), (19, 24, (6, 4)), (25, 30, (6, 5)), (31, 35, (7, 5)),
@@ -20,31 +20,31 @@ FAIXAS = [
 ]
 
 
-def test_tipico_toda_a_tabela_de_1_a_91():
-    """Caso tipico: cada inteiro de 1 a 91 cai na sua faixa da tabela."""
-    for primeiro, ultimo, resultado in FAIXAS:
-        for elementos in range(primeiro, ultimo + 1):
-            assert executar(elementos) == resultado, elementos
+def test_typical_the_whole_table_from_1_to_91():
+    """Typical case: each integer from 1 to 91 falls in its range of the table."""
+    for first, last, result in RANGES:
+        for elements in range(first, last + 1):
+            assert run(elements) == result, elements
 
 
-def test_borda_limites_das_faixas_e_proporcao_aurea():
-    """Borda: zero e negativos, viradas de faixa e o calculo acima de 91."""
-    assert executar(-3) == (1, 1)
-    assert executar(0) == (1, 1)
-    assert executar(1) == (1, 1)
-    assert executar(6) == (6, 1)
-    assert executar(12) == (6, 2)
-    assert executar(13) == (6, 3)
-    assert executar(18) == (6, 3)
-    assert executar(35) == (7, 5)
-    assert executar(36) == (7, 6)
-    assert executar(91) == (7, 13)
-    assert executar(92) == (7, 14)
-    assert executar(100) == (7, 15)
-    assert executar(1000) == (24, 42)
+def test_edge_range_boundaries_and_golden_ratio():
+    """Edge: zero and negatives, range changes and the computation above 91."""
+    assert run(-3) == (1, 1)
+    assert run(0) == (1, 1)
+    assert run(1) == (1, 1)
+    assert run(6) == (6, 1)
+    assert run(12) == (6, 2)
+    assert run(13) == (6, 3)
+    assert run(18) == (6, 3)
+    assert run(35) == (7, 5)
+    assert run(36) == (7, 6)
+    assert run(91) == (7, 13)
+    assert run(92) == (7, 14)
+    assert run(100) == (7, 15)
+    assert run(1000) == (24, 42)
 
 
-def test_invalido_numero_fracionario_fora_das_faixas():
-    """Invalido: 12.5 nao e igual a nenhum inteiro nem cai em range()."""
+def test_invalid_fractional_number_outside_the_ranges():
+    """Invalid: 12.5 equals no integer and does not fall in range()."""
     with pytest.raises(ValueError, match="Unsupported number of elements: 12.5"):
-        executar(12.5)
+        run(12.5)

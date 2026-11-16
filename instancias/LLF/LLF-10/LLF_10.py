@@ -1,7 +1,7 @@
-"""Leitura de valores aninhados da configuracao do jogo, gravados como texto.
+"""Reads nested values stored as text in the game configuration.
 
-Ponto de entrada publico: executar(texto). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(text). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 
@@ -13,19 +13,19 @@ class Config(object):
         return map(lambda x: map(lambda y: map(lambda z: map(bool, z.split(",")), y.split(",")), x.split(",")), self.config[section][key].split(","))
 
 
-def _materializar(valor):
-    """Converte sequencias aninhadas (inclusive iteradores) em listas."""
-    if isinstance(valor, str):
-        return valor
+def _materialize(value):
+    """Converts nested sequences (including iterators) into lists."""
+    if isinstance(value, str):
+        return value
     try:
-        itens = iter(valor)
+        items = iter(value)
     except TypeError:
-        return valor
-    return [_materializar(item) for item in itens]
+        return value
+    return [_materialize(item) for item in items]
 
 
-def executar(texto):
-    """Le o texto gravado na configuracao, como listas. Ponto de entrada publico desta unidade."""
+def run(text):
+    """Reads the stored text from the configuration, as lists. Public entry point of this unit."""
     config = Config()
-    config.config["mundo"] = {"regioes": texto}
-    return _materializar(config.get_config_section_key_dict_dict_dict_bool("mundo", "regioes"))
+    config.config["world"] = {"regions": text}
+    return _materialize(config.get_config_section_key_dict_dict_dict_bool("world", "regions"))

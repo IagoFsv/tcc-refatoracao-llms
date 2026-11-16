@@ -1,22 +1,22 @@
-"""Testes da instancia LPL-05: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-05: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-__init__ num objeto, mudar a assinatura ou dividir o metodo, desde que
-atualize a chamada dentro da unidade; o que nao pode mudar sao os
-hiperparametros guardados no modelo, as subcamadas registradas (nome e
-configuracao) e o erro diante de tamanho oculto zero.
+Only run() is imported. The refactoring may group the parameters of __init__
+into an object, change the signature or split the method, as long as it
+updates the call inside the unit; what must not change are the
+hyperparameters stored in the model, the registered sublayers (name and
+configuration) and the error on a hidden size of zero.
 
-Os nomes das subcamadas (lstm, fc_1, fc_2, relu) sao fixados porque sao as
-chaves do state_dict, que o programa original salva em disco. A ordem de
-registro nao e fixada.
+The sublayer names (lstm, fc_1, fc_2, relu) are pinned because they are the
+keys of the state_dict, which the original program saves to disk. The
+registration order is not pinned.
 """
 
 import pytest
 
-from LPL_05 import executar
+from LPL_05 import run
 
 
-def _camadas_esperadas(num_classes, input_size, hidden_size, num_layers):
+def _expected_layers(num_classes, input_size, hidden_size, num_layers):
     return {
         "lstm": ("LSTM", input_size, hidden_size, num_layers, True, True),
         "fc_1": ("Linear", hidden_size, 32, True),
@@ -25,24 +25,24 @@ def _camadas_esperadas(num_classes, input_size, hidden_size, num_layers):
     }
 
 
-def test_tipico_alfabeto_com_duas_camadas():
-    dimensoes = {"num_classes": 27, "input_size": 27, "hidden_size": 64, "num_layers": 2}
+def test_typical_alphabet_with_two_layers():
+    dimensions = {"num_classes": 27, "input_size": 27, "hidden_size": 64, "num_layers": 2}
 
-    hiperparametros, camadas = executar(dimensoes)
+    hyperparameters, layers = run(dimensions)
 
-    assert hiperparametros == dimensoes
-    assert camadas == _camadas_esperadas(27, 27, 64, 2)
-
-
-def test_borda_menores_dimensoes_validas():
-    dimensoes = {"num_classes": 1, "input_size": 1, "hidden_size": 1, "num_layers": 1}
-
-    hiperparametros, camadas = executar(dimensoes)
-
-    assert hiperparametros == dimensoes
-    assert camadas == _camadas_esperadas(1, 1, 1, 1)
+    assert hyperparameters == dimensions
+    assert layers == _expected_layers(27, 27, 64, 2)
 
 
-def test_invalido_tamanho_oculto_zero():
+def test_edge_smallest_valid_dimensions():
+    dimensions = {"num_classes": 1, "input_size": 1, "hidden_size": 1, "num_layers": 1}
+
+    hyperparameters, layers = run(dimensions)
+
+    assert hyperparameters == dimensions
+    assert layers == _expected_layers(1, 1, 1, 1)
+
+
+def test_invalid_hidden_size_zero():
     with pytest.raises(ValueError):
-        executar({"num_classes": 27, "input_size": 27, "hidden_size": 0, "num_layers": 2})
+        run({"num_classes": 27, "input_size": 27, "hidden_size": 0, "num_layers": 2})

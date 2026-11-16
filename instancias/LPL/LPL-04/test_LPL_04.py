@@ -1,69 +1,70 @@
-"""Testes da instancia LPL-04: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-04: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de
-simulate_quicksort, partition e quicksort num objeto, mudar as assinaturas ou
-tirar as funcoes de dentro, desde que atualize as chamadas dentro da unidade;
-o que nao pode mudar e o resultado, a sequencia de quadros e os ticks.
+Only run() is imported. The refactoring may group the parameters of
+simulate_quicksort, partition and quicksort into an object, change the
+signatures or move the functions out, as long as it updates the calls inside
+the unit; what must not change is the result, the sequence of frames and the
+ticks.
 
-Contas do teste tipico, [1, 3, 0, 2]:
-  quicksort(0, 3), partition com pivo na posicao 3 (valor 2), i = -1:
-    j = 0: compara 0 e 3 (1 <= 2): i = 0, igual a j, nao troca.
-    j = 1: compara 1 e 3 (3 > 2): segue.
-    j = 2: compara 2 e 3 (0 <= 2): i = 1, diferente de j: troca 1 e 2,
-           [1, 0, 3, 2].
-    fim: i + 1 = 2, diferente de 3: troca 2 e 3, [1, 0, 2, 3]. Pivo em 2.
-  quicksort(0, 1), partition com pivo na posicao 1 (valor 0), i = -1:
-    j = 0: compara 0 e 1 (1 > 0): segue.
-    fim: i + 1 = 0, diferente de 1: troca 0 e 1, [0, 1, 2, 3]. Pivo em 0.
-  quicksort(0, -1), quicksort(1, 1) e quicksort(3, 3) nao fazem nada.
-  Comparacao: 2 quadros (sem destaque, com o par). Troca: 4 quadros (sem
-  destaque, com o par antes, com o par depois, sem destaque depois). Cada
-  quadro e seguido de um tick. 4 comparacoes, 3 trocas e o quadro final:
-  21 quadros e 21 ticks, todos com taxa 3.
+Arithmetic of the typical test, [1, 3, 0, 2]:
+  quicksort(0, 3), partition with the pivot at position 3 (value 2), i = -1:
+    j = 0: compares 0 and 3 (1 <= 2): i = 0, equal to j, no swap.
+    j = 1: compares 1 and 3 (3 > 2): moves on.
+    j = 2: compares 2 and 3 (0 <= 2): i = 1, different from j: swaps 1 and
+           2, [1, 0, 3, 2].
+    end: i + 1 = 2, different from 3: swaps 2 and 3, [1, 0, 2, 3]. Pivot at 2.
+  quicksort(0, 1), partition with the pivot at position 1 (value 0), i = -1:
+    j = 0: compares 0 and 1 (1 > 0): moves on.
+    end: i + 1 = 0, different from 1: swaps 0 and 1, [0, 1, 2, 3]. Pivot at 0.
+  quicksort(0, -1), quicksort(1, 1) and quicksort(3, 3) do nothing.
+  Comparison: 2 frames (no highlight, with the pair). Swap: 4 frames (no
+  highlight, with the pair before, with the pair after, no highlight after).
+  Each frame is followed by a tick. 4 comparisons, 3 swaps and the final
+  frame: 21 frames and 21 ticks, all with rate 3.
 """
 
 import pytest
 
-from LPL_04 import executar
+from LPL_04 import run
 
 
-def _q(textos, destaque=()):
-    return (tuple(textos), tuple(destaque), 40, 100)
+def _f(texts, highlight=()):
+    return (tuple(texts), tuple(highlight), 40, 100)
 
 
-def _compara(textos, i, j):
-    return [_q(textos), _q(textos, (i, j))]
+def _compare(texts, i, j):
+    return [_f(texts), _f(texts, (i, j))]
 
 
-def _troca(antes, depois, i, j):
-    return [_q(antes), _q(antes, (i, j)), _q(depois, (i, j)), _q(depois)]
+def _swap(before, after, i, j):
+    return [_f(before), _f(before, (i, j)), _f(after, (i, j)), _f(after)]
 
 
-def test_tipico_quatro_elementos_com_e_sem_troca():
-    ordenado, quadros, ticks = executar([1, 3, 0, 2])
+def test_typical_four_elements_with_and_without_swaps():
+    ordered, frames, ticks = run([1, 3, 0, 2])
 
-    assert ordenado == [0, 1, 2, 3]
-    assert quadros == (
-        _compara("1302", 0, 3)
-        + _compara("1302", 1, 3)
-        + _compara("1302", 2, 3)
-        + _troca("1302", "1032", 1, 2)
-        + _troca("1032", "1023", 2, 3)
-        + _compara("1023", 0, 1)
-        + _troca("1023", "0123", 0, 1)
-        + [_q("0123")]
+    assert ordered == [0, 1, 2, 3]
+    assert frames == (
+        _compare("1302", 0, 3)
+        + _compare("1302", 1, 3)
+        + _compare("1302", 2, 3)
+        + _swap("1302", "1032", 1, 2)
+        + _swap("1032", "1023", 2, 3)
+        + _compare("1023", 0, 1)
+        + _swap("1023", "0123", 0, 1)
+        + [_f("0123")]
     )
     assert ticks == [3] * 21
 
 
-def test_borda_lista_vazia_so_desenha_o_quadro_final():
-    ordenado, quadros, ticks = executar([])
+def test_edge_empty_list_only_draws_the_final_frame():
+    ordered, frames, ticks = run([])
 
-    assert ordenado == []
-    assert quadros == [_q("")]
+    assert ordered == []
+    assert frames == [_f("")]
     assert ticks == [3]
 
 
-def test_invalido_valores_que_nao_se_comparam():
+def test_invalid_values_that_cannot_be_compared():
     with pytest.raises(TypeError):
-        executar([3, "a", 1])
+        run([3, "a", 1])

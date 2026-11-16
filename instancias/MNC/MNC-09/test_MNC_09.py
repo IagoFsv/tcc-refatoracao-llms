@@ -1,39 +1,39 @@
-"""Testes da instancia MNC-09: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-09: they pin the observable behavior of run().
 
-So executar() e importado. O teste roda numa pasta temporaria com um
-pyproject.toml. A refatoracao pode reorganizar a leitura das secoes; o que
-nao pode mudar e o nome devolvido (o de [tool.poetry], com _ no lugar de -)
-e o erro quando o arquivo nao tem a secao [tool.poetry].
+Only run() is imported. The test runs in a temporary folder with a
+pyproject.toml. The refactoring may reorganize how the sections are read;
+what must not change is the returned name (the one in [tool.poetry], with _
+instead of -) and the error when the file has no [tool.poetry] section.
 """
 
 import pytest
 
-from MNC_09 import executar
+from MNC_09 import run
 
 
-def pyproject(pasta, conteudo):
-    (pasta / "pyproject.toml").write_text(conteudo, encoding="utf-8")
+def pyproject(folder, content):
+    (folder / "pyproject.toml").write_text(content, encoding="utf-8")
 
 
-def test_tipico_nome_com_hifen_vira_sublinhado(tmp_path, monkeypatch):
+def test_typical_name_with_hyphen_becomes_underscore(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     pyproject(tmp_path, '[tool.poetry]\nname = "ai-shell"\nversion = "0.1.0"\n')
 
-    assert executar() == "ai_shell"
+    assert run() == "ai_shell"
 
 
-def test_borda_varios_hifens_sublinhado_mantido_e_outras_secoes(tmp_path, monkeypatch):
+def test_edge_several_hyphens_underscore_kept_and_other_sections(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    pyproject(tmp_path, '[project]\nname = "outro"\n\n[tool.poetry]\nname = "a-b_c-d"\n')
-    assert executar() == "a_b_c_d"
+    pyproject(tmp_path, '[project]\nname = "other"\n\n[tool.poetry]\nname = "a-b_c-d"\n')
+    assert run() == "a_b_c_d"
 
-    pyproject(tmp_path, '[tool.poetry]\nname = "simples"\n')
-    assert executar() == "simples"
+    pyproject(tmp_path, '[tool.poetry]\nname = "simple"\n')
+    assert run() == "simple"
 
 
-def test_invalido_sem_secao_tool_poetry(tmp_path, monkeypatch):
+def test_invalid_no_tool_poetry_section(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     pyproject(tmp_path, '[project]\nname = "ai-shell"\n')
 
     with pytest.raises(KeyError):
-        executar()
+        run()

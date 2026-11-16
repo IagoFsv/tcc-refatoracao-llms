@@ -1,11 +1,10 @@
-"""Desenho de um disco colorido numa imagem RGB.
+"""Drawing of a colored disk on an RGB image.
 
-Ponto de entrada publico: executar(tamanho, disco, cor=None). Nao altere o
-nome nem a assinatura dessa funcao; o restante do arquivo pode ser
-reorganizado livremente.
+Public entry point: run(size, disk, color=None). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 
-A imagem comeca toda branca (255 nos tres canais). Sem cor, vale a cor
-padrao do desenho. O disco e recortado na borda da imagem.
+The image starts all white (255 in the three channels). Without a color, the
+default color of the drawing applies. The disk is clipped at the image border.
 """
 
 import skimage
@@ -46,12 +45,12 @@ class RGB_Image(Image):
         return self
 
 
-def executar(tamanho, disco, cor=None):
-    """tamanho: (linhas, colunas). disco: (x, y, raio). cor: (r, g, b)."""
-    imagem = RGB_Image(np.full((*tamanho, 3), 255, dtype=np.uint8))
-    x, y, raio = disco
-    if cor is None:
-        resultado = imagem.draw_circle(x, y, raio)
+def run(size, disk, color=None):
+    """size: (rows, columns). disk: (x, y, radius). color: (r, g, b). Public entry point of this unit."""
+    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))
+    x, y, radius = disk
+    if color is None:
+        result = image.draw_circle(x, y, radius)
     else:
-        resultado = imagem.draw_circle(x, y, raio, cor)
-    return resultado.image
+        result = image.draw_circle(x, y, radius, color)
+    return result.image

@@ -1,43 +1,43 @@
-"""Testes da instancia LLF-05: fixam o comportamento observavel de executar().
+"""Tests for instance LLF-05: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode trocar as lambdas por funcoes
-nomeadas, lacos ou compreensoes; o que nao pode mudar e o texto gravado na
-configuracao, a mensagem registrada no log depois da gravacao e o erro diante
-de um ultimo nivel que nao e sequencia.
+Only run() is imported. The refactoring may replace the lambdas with named
+functions, loops or comprehensions; what must not change is the text stored
+in the configuration, the message logged after storing it, and the error on
+a last level that is not a sequence.
 
-Os testes fixam o comportamento como ele e: os quatro niveis viram uma lista
-plana separada por virgula (a estrutura se perde), qualquer item do ultimo
-nivel e convertido com str (inteiro, real, bool, None), nivel vazio deixa
-virgula sobrando e texto no ultimo nivel e separado letra por letra.
+The tests pin the behavior as it is: the four levels become a flat
+comma-separated list (the structure is lost), any item at the last level is
+converted with str (int, float, bool, None), an empty level leaves an extra
+comma, and text at the last level is split letter by letter.
 """
 
 import logging
 
 import pytest
 
-from LLF_05 import executar
+from LLF_05 import run
 
 
-def test_tipico_numeros_em_quatro_niveis_viram_texto(caplog):
+def test_typical_numbers_in_four_levels_become_text(caplog):
     caplog.set_level(logging.INFO)
-    valor = [
+    value = [
         [[[1, 2.5], [3]], [[-4]]],
         [[[0.1, 6]]],
     ]
 
-    assert executar(valor) == "1,2.5,3,-4,0.1,6"
-    assert caplog.messages == ["Config: {'mundo': {'regioes': '1,2.5,3,-4,0.1,6'}}"]
+    assert run(value) == "1,2.5,3,-4,0.1,6"
+    assert caplog.messages == ["Config: {'world': {'regions': '1,2.5,3,-4,0.1,6'}}"]
 
 
-def test_borda_texto_bool_none_e_niveis_vazios(caplog):
+def test_edge_text_bool_none_and_empty_levels(caplog):
     caplog.set_level(logging.INFO)
 
-    assert executar([[["12", [True, None]]], [[]]]) == "1,2,True,None,"  # "12" sai digito por digito
-    assert executar([]) == ""
-    assert executar(((((7,),),),)) == "7"
-    assert caplog.messages[0] == "Config: {'mundo': {'regioes': '1,2,True,None,'}}"
+    assert run([[["12", [True, None]]], [[]]]) == "1,2,True,None,"  # "12" comes out digit by digit
+    assert run([]) == ""
+    assert run(((((7,),),),)) == "7"
+    assert caplog.messages[0] == "Config: {'world': {'regions': '1,2,True,None,'}}"
 
 
-def test_invalido_ultimo_nivel_que_nao_e_sequencia():
+def test_invalid_last_level_that_is_not_a_sequence():
     with pytest.raises(TypeError):
-        executar([[[1, 2]]])
+        run([[[1, 2]]])

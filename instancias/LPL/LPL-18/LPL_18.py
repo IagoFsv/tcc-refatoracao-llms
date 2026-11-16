@@ -1,32 +1,31 @@
-"""Agente de aprendizado por reforco com memoria de experiencias.
+"""Reinforcement learning agent with an experience replay memory.
 
-Ponto de entrada publico: executar(configuracao). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(configuration). Do not change its name or signature;
+the rest of the file may be freely reorganized.
 
-A rede Q e uma versao minima: guarda as dimensoes recebidas e um conjunto
-de pesos proprio, que pode ser copiado de outra rede; recusa tamanho
-negativo, como a versao real.
+The Q-network is a minimal version: it keeps the dimensions it receives and
+its own set of weights, which can be copied from another network; it refuses
+a negative size, like the real version.
 """
 
 import random
 
 
 class DQN:
-    """Rede minima: dimensoes recebidas e pesos copiaveis."""
+    """Minimal network: received dimensions and copyable weights."""
 
-    def __init__(self, *dimensoes):
-        input_size, n_actions, hidden_size, gamma = dimensoes
+    def __init__(self, *dimensions):
+        input_size, n_actions, hidden_size, gamma = dimensions
         if min(input_size, n_actions, hidden_size) < 0:
             raise RuntimeError("Trying to create tensor with negative dimension")
-        self.dimensoes = dimensoes
-        self.pesos = {"pesos": object()}
+        self.dimensions = dimensions
+        self.weights = {"weights": object()}
 
     def state_dict(self):
-        return dict(self.pesos)
+        return dict(self.weights)
 
     def load_state_dict(self, state_dict):
-        self.pesos = dict(state_dict)
+        self.weights = dict(state_dict)
 
 
 class ReplayMemory:
@@ -68,23 +67,26 @@ class DQNAgent:
         self.target_dqn.load_state_dict(self.dqn.state_dict())
 
 
-def _resumo(agente):
-    """Hiperparametros guardados, memoria, as duas redes e a sincronia entre elas."""
-    nomes = ("input_size", "n_actions", "hidden_size", "gamma",
+def _summary(agent):
+    """Stored hyperparameters, memory, both networks and whether they are in sync."""
+    names = ("input_size", "n_actions", "hidden_size", "gamma",
              "batch_size", "epsilon", "epsilon_min", "epsilon_decay")
     return {
-        "hiperparametros": {nome: getattr(agente, nome) for nome in nomes},
-        "memoria": (agente.memory.capacity, agente.memory.len()),
-        "redes": (agente.dqn.dimensoes, agente.target_dqn.dimensoes),
-        "redes_distintas": agente.dqn is not agente.target_dqn,
-        "alvo_sincronizado": agente.target_dqn.state_dict()["pesos"] is agente.dqn.state_dict()["pesos"],
+        "hyperparameters": {name: getattr(agent, name) for name in names},
+        "memory": (agent.memory.capacity, agent.memory.len()),
+        "networks": (agent.dqn.dimensions, agent.target_dqn.dimensions),
+        "distinct_networks": agent.dqn is not agent.target_dqn,
+        "target_in_sync": agent.target_dqn.state_dict()["weights"] is agent.dqn.state_dict()["weights"],
     }
 
 
-def executar(configuracao):
-    """configuracao: input_size, n_actions, hidden_size, gamma, batch_size,
-    epsilon, epsilon_min e epsilon_decay."""
-    c = configuracao
-    agente = DQNAgent(c["input_size"], c["n_actions"], c["hidden_size"], c["gamma"],
-                      c["batch_size"], c["epsilon"], c["epsilon_min"], c["epsilon_decay"])
-    return _resumo(agente)
+def run(configuration):
+    """Public entry point of this unit.
+
+    configuration: input_size, n_actions, hidden_size, gamma, batch_size,
+    epsilon, epsilon_min and epsilon_decay.
+    """
+    c = configuration
+    agent = DQNAgent(c["input_size"], c["n_actions"], c["hidden_size"], c["gamma"],
+                     c["batch_size"], c["epsilon"], c["epsilon_min"], c["epsilon_decay"])
+    return _summary(agent)

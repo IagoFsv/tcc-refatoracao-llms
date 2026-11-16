@@ -1,7 +1,7 @@
-"""Conversao da lista de conteineres de um aplicativo em servicos nomeados.
+"""Conversion of an app's container list into named services.
 
-Ponto de entrada publico: executar(app). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(app). Do not change its name or signature; the rest
+of the file may be freely reorganized.
 """
 
 
@@ -14,6 +14,6 @@ def convertContainersToServices(app: dict):
     return app
 
 
-def executar(app):
-    """Converte os conteineres de app em servicos. Ponto de entrada publico desta unidade."""
+def run(app):
+    """Converts the containers of app into services. Public entry point of this unit."""
     return convertContainersToServices(app)

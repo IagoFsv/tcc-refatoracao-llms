@@ -1,18 +1,19 @@
-"""Testes da instancia MNC-08: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-08: they pin the observable behavior of run().
 
-So executar() e importado. O servico de completar texto e imitado na
-unidade: executar recebe as escolhas que o servico devolveria e devolve a
-resposta e os pedidos feitos (chave usada e parametros). A refatoracao pode
-reorganizar o acesso a resposta; o que nao pode mudar e o pedido (chave lida
-de OPENAI_API_KEY, modelo e parametros), a resposta (primeira escolha, sem
-espacos e quebras de linha nas pontas) e o erro quando nao vem escolha.
+Only run() is imported. The text completion service is imitated in the
+unit: run receives the choices the service would return and returns the
+answer and the requests made (key used and parameters). The refactoring may
+reorganize the access to the response; what must not change is the request
+(key read from OPENAI_API_KEY, model and parameters), the answer (first
+choice, without spaces and line breaks at the ends) and the error when no
+choice comes back.
 """
 
 import pytest
 
-from MNC_08 import executar
+from MNC_08 import run
 
-PARAMETROS = {
+PARAMETERS = {
     "temperature": 0,
     "max_tokens": 300,
     "top_p": 1,
@@ -22,26 +23,26 @@ PARAMETROS = {
 }
 
 
-def test_tipico_primeira_escolha_sem_espacos_nas_pontas(monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "chave-teste")
+def test_typical_first_choice_without_spaces_at_the_ends(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
 
-    resposta, pedidos = executar("Qual a capital da Noruega?", ["\n\nOslo.\n", "Bergen"])
+    answer, requests_made = run("What is the capital of Norway?", ["\n\nOslo.\n", "Bergen"])
 
-    assert resposta == "Oslo."
-    assert pedidos == [("chave-teste", dict(PARAMETROS, prompt="Qual a capital da Noruega?"))]
+    assert answer == "Oslo."
+    assert requests_made == [("test-key", dict(PARAMETERS, prompt="What is the capital of Norway?"))]
 
 
-def test_borda_tab_preservado_e_chave_ausente(monkeypatch):
+def test_edge_tab_kept_and_missing_key(monkeypatch):
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
-    resposta, pedidos = executar("", [" \n\tOslo\t \n "])
+    answer, requests_made = run("", [" \n\tOslo\t \n "])
 
-    assert resposta == "\tOslo\t"  # so espaco e quebra de linha saem das pontas
-    assert pedidos == [(None, dict(PARAMETROS, prompt=""))]
+    assert answer == "\tOslo\t"  # only spaces and line breaks leave the ends
+    assert requests_made == [(None, dict(PARAMETERS, prompt=""))]
 
 
-def test_invalido_resposta_sem_escolhas(monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "chave-teste")
+def test_invalid_response_without_choices(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
 
     with pytest.raises(IndexError):
-        executar("Pergunta", [])
+        run("Question", [])

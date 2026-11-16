@@ -1,51 +1,52 @@
-"""Testes da instancia LPL-02: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-02: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar os parametros de train
-num objeto, mudar a assinatura ou dividir a funcao, desde que atualize a
-chamada dentro da unidade; o que nao pode mudar e a perda, a acuracia, o
-estado final do modelo e o erro diante de dataset vazio.
+Only run() is imported. The refactoring may group the parameters of train
+into an object, change the signature or split the function, as long as it
+updates the call inside the unit; what must not change is the loss, the
+accuracy, the final state of the model and the error on an empty dataset.
 
-Contas do teste tipico (3 classes, vies inicial zero, taxa 0.5):
-  lote 1: acerta a 1a amostra, erra a 2a (preve 1, era 2). Perda media 0.5.
-          Gradiente [0, 0.5, -0.5], vies vira [0, -0.25, 0.25].
-  lote 2: com o vies novo acerta a 1a amostra (sem o passo do lote 1, o
-          empate entre as classes 1 e 2 daria a classe 1, errada) e erra a
-          2a (preve 2, era 0). Perda media 0.625. Gradiente [-0.5, 0, 0.5]
-          (so do lote 2: o gradiente e zerado entre os lotes), vies vira
-          [0.25, -0.25, 0].
-  perda: (0.5 + 0.625) / 4 amostras = 0.28125. O original soma as medias
-  dos lotes e divide pelo numero de amostras; fixado como e.
-  acuracia: 2 acertos em 4 = 50.0.
+Arithmetic of the typical test (3 classes, initial bias zero, rate 0.5):
+  batch 1: gets the 1st sample right, the 2nd wrong (predicts 1, was 2).
+           Mean loss 0.5. Gradient [0, 0.5, -0.5], bias becomes
+           [0, -0.25, 0.25].
+  batch 2: with the new bias it gets the 1st sample right (without the step
+           of batch 1, the tie between classes 1 and 2 would give class 1,
+           wrong) and the 2nd wrong (predicts 2, was 0). Mean loss 0.625.
+           Gradient [-0.5, 0, 0.5] (only from batch 2: the gradient is
+           zeroed between batches), bias becomes [0.25, -0.25, 0].
+  loss: (0.5 + 0.625) / 4 samples = 0.28125. The original adds up the batch
+  means and divides by the number of samples; pinned as it is.
+  accuracy: 2 hits out of 4 = 50.0.
 """
 
 import pytest
 
-from LPL_02 import executar
+from LPL_02 import run
 
 
-def test_tipico_dois_lotes_com_acertos_e_erros():
-    lotes = [
+def test_typical_two_batches_with_hits_and_misses():
+    batches = [
         ([[3, 1, 0], [0, 2, 1]], [0, 2]),
         ([[1, 2, 2], [0, 0, 1]], [2, 0]),
     ]
 
-    perda, acuracia, vies, em_treino = executar(lotes)
+    loss, accuracy, bias, training = run(batches)
 
-    assert perda == pytest.approx(0.28125)
-    assert acuracia == pytest.approx(50.0)
-    assert vies == pytest.approx([0.25, -0.25, 0.0])
-    assert em_treino is True
-
-
-def test_borda_um_lote_todo_certo_nao_mexe_no_modelo():
-    perda, acuracia, vies, em_treino = executar([([[5, 1, 0], [0, 0, 4]], [0, 2])])
-
-    assert perda == pytest.approx(0.0)
-    assert acuracia == pytest.approx(100.0)
-    assert vies == pytest.approx([0.0, 0.0, 0.0])
-    assert em_treino is True
+    assert loss == pytest.approx(0.28125)
+    assert accuracy == pytest.approx(50.0)
+    assert bias == pytest.approx([0.25, -0.25, 0.0])
+    assert training is True
 
 
-def test_invalido_dataset_vazio():
+def test_edge_one_batch_all_right_leaves_the_model_unchanged():
+    loss, accuracy, bias, training = run([([[5, 1, 0], [0, 0, 4]], [0, 2])])
+
+    assert loss == pytest.approx(0.0)
+    assert accuracy == pytest.approx(100.0)
+    assert bias == pytest.approx([0.0, 0.0, 0.0])
+    assert training is True
+
+
+def test_invalid_empty_dataset():
     with pytest.raises(ZeroDivisionError):
-        executar([])
+        run([])

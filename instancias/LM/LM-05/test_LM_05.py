@@ -1,57 +1,57 @@
-"""Testes da instancia LM-05: fixam o comportamento observavel de executar().
+"""Tests for instance LM-05: they pin the observable behavior of run().
 
-So executar() e importado. O que se fixa e o dicionario devolvido para duas
-paginas HTML montadas aqui, com a estrutura de classes que o trecho procura.
-O BeautifulSoup e o de verdade (beautifulsoup4, fixado no requirements).
+Only run() is imported. What is pinned is the dictionary returned for two
+HTML pages built here, with the class structure the code looks for.
+BeautifulSoup is the real one (beautifulsoup4, pinned in requirements).
 
-Defeito do original, fixado como e: os paineis de cada dia da previsao vem
-do ultimo cartao de meio periodo da pagina atual (a variavel do laco
-anterior), e nao da propria previsao.
+Defect of the original, pinned as it is: the panels of each forecast day
+come from the last half-day card of the current page (the variable of the
+previous loop), not from the forecast itself.
 """
 
 import pytest
 
-from LM_05 import executar
+from LM_05 import run
 
 
-def painel(rotulo, valor):
-    return f'<p class="panel-item">{rotulo}<span class="value">{valor}</span></p>'
+def panel(label, value):
+    return f'<p class="panel-item">{label}<span class="value">{value}</span></p>'
 
 
-def meio_periodo(titulo, data, temp, frase, paineis):
-    return (f'<div class="half-day-card"><h2>{titulo}</h2><span class="short-date"> {data} </span>'
-            f'<div class="temperature"> {temp}°Hi </div><div class="phrase"> {frase} </div>'
-            f'<div class="panels">{"".join(paineis)}</div></div>')
+def half_day(title, date, temp, phrase, panels):
+    return (f'<div class="half-day-card"><h2>{title}</h2><span class="short-date"> {date} </span>'
+            f'<div class="temperature"> {temp}°Hi </div><div class="phrase"> {phrase} </div>'
+            f'<div class="panels">{"".join(panels)}</div></div>')
 
 
-def detalhe(*divs):
+def detail(*divs):
     return '<div class="detail-item">' + "".join(f"<div>{d}</div>" for d in divs) + "</div>"
 
 
-def atual(detalhes, cartoes):
+def current(details, cards):
     return ('<div class="current-weather-card"><p class="sub">10:30 AM</p>'
             '<div class="display-temp"> 21°C </div><div class="phrase">Sunny\\n</div>'
-            f'<div class="current-weather-details">{"".join(detalhes)}</div></div>'
-            + "".join(cartoes))
+            f'<div class="current-weather-details">{"".join(details)}</div></div>'
+            + "".join(cards))
 
 
-def dia(nome, data, maxima, minima, chuva):
-    return (f'<div class="daily-wrapper"><h2 class="date"><span> {nome} </span><span>{data}</span></h2>'
-            f'<div class="temp"><span class="high">{maxima}°</span><span class="low">/{minima}°</span></div>'
-            f'<div class="precip"> {chuva} </div></div>')
+def day(name, date, high, low, rain):
+    return (f'<div class="daily-wrapper"><h2 class="date"><span> {name} </span><span>{date}</span></h2>'
+            f'<div class="temp"><span class="high">{high}°</span><span class="low">/{low}°</span></div>'
+            f'<div class="precip"> {rain} </div></div>')
 
 
-DIA = meio_periodo("Day", "10/21", "24", "Sunny",
-                   [painel("Max UV Index", "5 Moderate"), painel("Wind", "N 12 km/h")])
-NOITE = meio_periodo("Night", "10/21", "14", "Clear", [painel("Wind", "S 5 km/h")])
-DETALHES = [detalhe("RealFeel Sun", "25°"), detalhe("WIND", " N 10 km/h "), detalhe("so rotulo")]
+DAY = half_day("Day", "10/21", "24", "Sunny",
+               [panel("Max UV Index", "5 Moderate"), panel("Wind", "N 12 km/h")])
+NIGHT = half_day("Night", "10/21", "14", "Clear", [panel("Wind", "S 5 km/h")])
+DETAILS = [detail("RealFeel Sun", "25°"), detail("WIND", " N 10 km/h "), detail("label only")]
 
 
-def test_tipico_clima_atual_periodos_e_previsao():
-    """Caso tipico: dia, noite e dois dias de previsao."""
-    previsao = dia("Wed", "10/22", 25, 14, "20%") + dia("Thu", "10/23", 27, 15, "0%")
+def test_typical_current_weather_periods_and_forecast():
+    """Typical case: day, night and two forecast days."""
+    forecast = day("Wed", "10/22", 25, 14, "20%") + day("Thu", "10/23", 27, 15, "0%")
 
-    assert executar(atual(DETALHES, [DIA, NOITE]), previsao) == {
+    assert run(current(DETAILS, [DAY, NIGHT]), forecast) == {
         "current": {"Time": "10:30 AM", "Temp": "21°C", "Phrase": "Sunny",
                     "Realfeel sun": "25°", "Wind": "N 10 km/h"},
         "day": {"Date": "10/21", "Temp": "24°", "Phrase": "Sunny",
@@ -66,25 +66,26 @@ def test_tipico_clima_atual_periodos_e_previsao():
     }
 
 
-def test_borda_ordem_dos_cartoes_e_previsao_vazia():
-    """Borda: 'Tonight' nao contem 'day' e vai para a noite, 'Today' vai para
-    o dia; a previsao pega os paineis do ultimo cartao; sem previsao, lista vazia."""
-    noite = meio_periodo("Tonight", "10/21", "13", "Rain", [painel("Rain", "2 mm")])
-    hoje = meio_periodo("Today", "10/22", "22", "Cloudy", [painel("Cloud Cover", "80%")])
-    pagina = atual([detalhe("Humidity", "70%")], [noite, hoje])
+def test_edge_card_order_and_empty_forecast():
+    """Edge: 'Tonight' does not contain 'day' and goes to night, 'Today' goes
+    to day; the forecast takes the panels of the last card; without a
+    forecast, an empty list."""
+    night = half_day("Tonight", "10/21", "13", "Rain", [panel("Rain", "2 mm")])
+    today = half_day("Today", "10/22", "22", "Cloudy", [panel("Cloud Cover", "80%")])
+    page = current([detail("Humidity", "70%")], [night, today])
 
-    resultado = executar(pagina, dia("Fri", "10/24", 20, 11, "60%"))
-    assert resultado["night"] == {"Date": "10/21", "Temp": "13°", "Phrase": "Rain", "Rain": "2 mm"}
-    assert resultado["day"] == {"Date": "10/22", "Temp": "22°", "Phrase": "Cloudy", "Cloud Cover": "80%"}
-    assert resultado["current"] == {"Time": "10:30 AM", "Temp": "21°C", "Phrase": "Sunny",
-                                    "Humidity": "70%"}
-    assert resultado["forecast"] == [{"Date": "Fri 10/24", "Temp": {"min": "11°", "max": "20°"},
-                                      "Precipitation": "60%", "Cloud Cover": "80%"}]
+    result = run(page, day("Fri", "10/24", 20, 11, "60%"))
+    assert result["night"] == {"Date": "10/21", "Temp": "13°", "Phrase": "Rain", "Rain": "2 mm"}
+    assert result["day"] == {"Date": "10/22", "Temp": "22°", "Phrase": "Cloudy", "Cloud Cover": "80%"}
+    assert result["current"] == {"Time": "10:30 AM", "Temp": "21°C", "Phrase": "Sunny",
+                                 "Humidity": "70%"}
+    assert result["forecast"] == [{"Date": "Fri 10/24", "Temp": {"min": "11°", "max": "20°"},
+                                   "Precipitation": "60%", "Cloud Cover": "80%"}]
 
-    assert executar(pagina, "")["forecast"] == []
+    assert run(page, "")["forecast"] == []
 
 
-def test_invalido_pagina_sem_cartao_de_clima_atual():
-    """Invalido: sem o bloco current-weather-card, find devolve None."""
+def test_invalid_page_without_current_weather_card():
+    """Invalid: without the current-weather-card block, find returns None."""
     with pytest.raises(AttributeError):
-        executar("<p>pagina fora do ar</p>", "")
+        run("<p>page is down</p>", "")

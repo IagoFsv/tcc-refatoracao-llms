@@ -1,39 +1,39 @@
-"""Testes da instancia LPL-09: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-09: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar as coordenadas de
-draw_line num objeto, mudar a assinatura ou dividir o metodo, desde que
-atualize a chamada dentro da unidade; o que nao pode mudar sao os pixels
-marcados na imagem devolvida e o erro diante de ponto fora da imagem.
+Only run() is imported. The refactoring may group the coordinates of
+draw_line into an object, change the signature or split the method, as long
+as it updates the call inside the unit; what must not change are the pixels
+marked in the returned image and the error on a point outside the image.
 
-Pixels esperados: os que skimage.draw.line (scikit-image 0.26.0) devolve.
+Expected pixels: the ones skimage.draw.line (scikit-image 0.26.0) returns.
 """
 
 import numpy as np
 import pytest
 
-from LPL_09 import executar
+from LPL_09 import run
 
 
-def _esperado(tamanho, pixels):
-    imagem = np.zeros(tamanho)
-    for linha, coluna in pixels:
-        imagem[linha, coluna] = 1
-    return imagem
+def _expected(size, pixels):
+    image = np.zeros(size)
+    for row, column in pixels:
+        image[row, column] = 1
+    return image
 
 
-def test_tipico_segmento_inclinado():
-    imagem = executar((3, 5), (0, 0, 2, 4))
+def test_typical_sloped_segment():
+    image = run((3, 5), (0, 0, 2, 4))
 
     pixels = [(0, 0), (1, 1), (1, 2), (2, 3), (2, 4)]
-    assert np.array_equal(imagem, _esperado((3, 5), pixels))
+    assert np.array_equal(image, _expected((3, 5), pixels))
 
 
-def test_borda_segmento_de_um_ponto_so():
-    imagem = executar((5, 5), (2, 3, 2, 3))
+def test_edge_single_point_segment():
+    image = run((5, 5), (2, 3, 2, 3))
 
-    assert np.array_equal(imagem, _esperado((5, 5), [(2, 3)]))
+    assert np.array_equal(image, _expected((5, 5), [(2, 3)]))
 
 
-def test_invalido_ponto_fora_da_imagem():
+def test_invalid_point_outside_the_image():
     with pytest.raises(IndexError):
-        executar((5, 5), (0, 0, 0, 9))
+        run((5, 5), (0, 0, 0, 9))

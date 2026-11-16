@@ -1,7 +1,7 @@
-"""Gravacao de perguntas de um jogo de perguntas e respostas num banco local.
+"""Storing the questions of a trivia game in a local database.
 
-Ponto de entrada publico: executar(data). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(data). Do not change its name or signature; the rest
+of the file may be freely reorganized.
 """
 
 import json
@@ -29,10 +29,10 @@ def add_question(data):
     conn.close()
 
 
-def executar(data):
-    """Grava as perguntas de data e devolve as linhas do banco. Ponto de entrada publico desta unidade."""
+def run(data):
+    """Stores the questions in data and returns the database rows. Public entry point of this unit."""
     add_question(data)
     conn = sqlite3.connect('Trivia.sqlite')
-    linhas = conn.execute("SELECT id, question, questionData FROM questions ORDER BY id").fetchall()
+    rows = conn.execute("SELECT id, question, questionData FROM questions ORDER BY id").fetchall()
     conn.close()
-    return linhas
+    return rows

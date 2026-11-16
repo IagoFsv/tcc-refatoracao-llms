@@ -1,44 +1,44 @@
-"""Testes da instancia LLF-01: fixam o comportamento observavel de executar().
+"""Tests for instance LLF-01: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode trocar as lambdas por funcoes
-nomeadas, lacos ou metodos vetorizados; o que nao pode mudar e a lista de
-cidades devolvida, uma por descricao, na mesma ordem, e o erro diante de
-descricao curta demais.
+Only run() is imported. The refactoring may replace the lambdas with named
+functions, loops or vectorized methods; what must not change is the list of
+cities returned, one per description, in the same order, and the error on a
+description that is too short.
 
-Os testes fixam o comportamento como ele e, inclusive o defeito do original:
-cidade de duas palavras ("Abu Dhabi") nunca e encontrada.
+The tests pin the behavior as it is, including the defect of the original: a
+two-word city ("Abu Dhabi") is never found.
 """
 
 import pytest
 
-from LLF_01 import executar
+from LLF_01 import run
 
-CIDADES = ["Dubai", "Sharjah", "Abu Dhabi", "London"]
+CITIES = ["Dubai", "Sharjah", "Abu Dhabi", "London"]
 
 
-def test_tipico_ultima_palavra_penultima_ou_unknown():
-    descricoes = [
-        "Lulu Hypermarket Dubai",       # ultima palavra e cidade
-        "Starbucks Sharjah AE",         # so a penultima e cidade
-        "Netflix Subscription Online",  # nenhuma das duas
-        "Transfer London Dubai",        # as duas: vale a ultima
+def test_typical_last_word_second_to_last_or_unknown():
+    descriptions = [
+        "Lulu Hypermarket Dubai",       # last word is a city
+        "Starbucks Sharjah AE",         # only the second-to-last is a city
+        "Netflix Subscription Online",  # neither
+        "Transfer London Dubai",        # both: the last one wins
     ]
 
-    assert executar(descricoes, CIDADES) == ["Dubai", "Sharjah", "Unknown", "Dubai"]
+    assert run(descriptions, CITIES) == ["Dubai", "Sharjah", "Unknown", "Dubai"]
 
 
-def test_borda_maiusculas_cidade_composta_e_descricao_de_uma_palavra():
-    descricoes = [
-        "AMAZON LONDON",              # descricao toda em maiusculas
-        "payment dubai",              # descricao toda em minusculas
-        "Emirates Palace Abu Dhabi",  # cidade de duas palavras: nunca achada
-        "Dubai",                      # uma palavra so, mas e cidade: sem erro
+def test_edge_uppercase_two_word_city_and_one_word_description():
+    descriptions = [
+        "AMAZON LONDON",              # all uppercase
+        "payment dubai",              # all lowercase
+        "Emirates Palace Abu Dhabi",  # two-word city: never found
+        "Dubai",                      # a single word, but a city: no error
     ]
-    cidades = ["DUBAI", "london", "Abu Dhabi"]  # lista com caixa misturada
+    cities = ["DUBAI", "london", "Abu Dhabi"]  # list with mixed case
 
-    assert executar(descricoes, cidades) == ["London", "Dubai", "Unknown", "Dubai"]
+    assert run(descriptions, cities) == ["London", "Dubai", "Unknown", "Dubai"]
 
 
-def test_invalido_descricao_de_uma_palavra_que_nao_e_cidade():
+def test_invalid_one_word_description_that_is_not_a_city():
     with pytest.raises(IndexError):
-        executar(["Lulu Hypermarket Dubai", "Netflix"], CIDADES)
+        run(["Lulu Hypermarket Dubai", "Netflix"], CITIES)

@@ -1,8 +1,7 @@
-"""Pergunta respondida por um servico de completar texto.
+"""Question answered by a text completion service.
 
-Ponto de entrada publico: executar(texto, escolhas). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(text, choices). Do not change its name or signature;
+the rest of the file may be freely reorganized.
 """
 
 import os
@@ -10,23 +9,23 @@ from types import SimpleNamespace
 
 
 class Completion:
-    """Mesma interface de openai.Completion (biblioteca openai anterior a 1.0).
+    """Same interface as openai.Completion (openai library before 1.0).
 
-    create registra a chave e os parametros de cada pedido e devolve as
-    escolhas preparadas em `escolhas`.
+    create records the key and the parameters of each request and returns the
+    choices prepared in `prepared_choices`.
     """
 
-    pedidos = []
-    escolhas = []
+    requests_made = []
+    prepared_choices = []
 
     @classmethod
     def create(cls, **kwargs):
-        cls.pedidos.append((openai.api_key, kwargs))
-        return {"choices": [cls._escolha(texto) for texto in cls.escolhas]}
+        cls.requests_made.append((openai.api_key, kwargs))
+        return {"choices": [cls._choice(text) for text in cls.prepared_choices]}
 
     @staticmethod
-    def _escolha(texto):
-        return {"text": texto}
+    def _choice(text):
+        return {"text": text}
 
 
 openai = SimpleNamespace(api_key=None, Completion=Completion)
@@ -49,9 +48,9 @@ def submit_question(text):
     return result
 
 
-def executar(texto, escolhas):
-    """Envia a pergunta; devolve a resposta e os pedidos feitos. Ponto de entrada publico desta unidade."""
-    Completion.pedidos = []
-    Completion.escolhas = list(escolhas)
-    resposta = submit_question(texto)
-    return resposta, Completion.pedidos
+def run(text, choices):
+    """Submits the question; returns the answer and the requests made. Public entry point of this unit."""
+    Completion.requests_made = []
+    Completion.prepared_choices = list(choices)
+    answer = submit_question(text)
+    return answer, Completion.requests_made

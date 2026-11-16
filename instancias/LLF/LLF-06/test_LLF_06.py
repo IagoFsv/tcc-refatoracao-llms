@@ -1,34 +1,34 @@
-"""Testes da instancia LLF-06: fixam o comportamento observavel de executar().
+"""Tests for instance LLF-06: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode trocar as lambdas por funcoes
-nomeadas, lacos ou compreensoes, e devolver listas em vez de iteradores
-(executar converte tudo em listas antes de comparar); o que nao pode mudar e
-o conteudo lido e o erro diante de valor gravado que nao e texto.
+Only run() is imported. The refactoring may replace the lambdas with named
+functions, loops or comprehensions, and return lists instead of iterators
+(run converts everything into lists before comparing); what must not change
+is the content read and the error on a stored value that is not text.
 
-Os testes fixam o comportamento como ele e: o texto so e separado por virgula
-no primeiro nivel, e cada item volta embrulhado em tres listas de um elemento
-so (a estrutura gravada nao e recuperada). Espacos sao mantidos e virgula
-sobrando gera item vazio.
+The tests pin the behavior as it is: the text is split by comma only at the
+first level, and each item comes back wrapped in three single-element lists
+(the stored structure is not recovered). Spaces are kept and a trailing comma
+produces an empty item.
 """
 
 import pytest
 
-from LLF_06 import executar
+from LLF_06 import run
 
 
-def test_tipico_cada_item_volta_em_tres_listas_unitarias():
-    assert executar("espada,escudo,pocao") == [
-        [[["espada"]]],
-        [[["escudo"]]],
-        [[["pocao"]]],
+def test_typical_each_item_comes_back_in_three_single_element_lists():
+    assert run("sword,shield,potion") == [
+        [[["sword"]]],
+        [[["shield"]]],
+        [[["potion"]]],
     ]
 
 
-def test_borda_texto_vazio_espacos_e_virgula_sobrando():
-    assert executar("") == [[[[""]]]]
-    assert executar(" a ,b,") == [[[[" a "]]], [[["b"]]], [[[""]]]]
+def test_edge_empty_text_spaces_and_trailing_comma():
+    assert run("") == [[[[""]]]]
+    assert run(" a ,b,") == [[[[" a "]]], [[["b"]]], [[[""]]]]
 
 
-def test_invalido_valor_gravado_que_nao_e_texto():
+def test_invalid_stored_value_that_is_not_text():
     with pytest.raises(AttributeError):
-        executar(42)
+        run(42)

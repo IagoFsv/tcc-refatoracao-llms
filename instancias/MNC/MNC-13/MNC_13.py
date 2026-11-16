@@ -1,8 +1,7 @@
-"""Cliente da API de bots de um aplicativo de mensagens.
+"""Client of the bot API of a messaging app.
 
-Ponto de entrada publico: executar(token, endpoint). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(token, endpoint). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 import requests
@@ -57,6 +56,6 @@ class TelegramBot:
             return users
 
 
-def executar(token, endpoint):
-    """Envia o pedido ao endpoint e devolve o resultado. Ponto de entrada publico desta unidade."""
+def run(token, endpoint):
+    """Sends the request to the endpoint and returns the result. Public entry point of this unit."""
     return TelegramBot(token).send_request(endpoint)

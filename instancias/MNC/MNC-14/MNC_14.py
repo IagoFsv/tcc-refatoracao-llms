@@ -1,7 +1,7 @@
-"""Cliente da API de bots de um aplicativo de mensagens: arquivos recebidos.
+"""Client of the bot API of a messaging app: received files.
 
-Ponto de entrada publico: executar(token). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(token). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 import requests
@@ -51,6 +51,6 @@ class TelegramBot:
             return file_paths
 
 
-def executar(token):
-    """Devolve os caminhos dos arquivos recebidos pelo bot. Ponto de entrada publico desta unidade."""
+def run(token):
+    """Returns the paths of the files received by the bot. Public entry point of this unit."""
     return TelegramBot(token).get_tg_files()

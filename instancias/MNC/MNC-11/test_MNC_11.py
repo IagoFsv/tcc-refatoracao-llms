@@ -1,24 +1,25 @@
-"""Testes da instancia MNC-11: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-11: they pin the observable behavior of run().
 
-So executar() e importado. O teste roda numa pasta temporaria com um
-pyproject.toml; os comandos nao rodam de verdade, executar devolve o que foi
-pedido (comando, argumentos e versao gravada no arquivo naquele momento). A
-refatoracao pode reorganizar o acesso as secoes e a restauracao do arquivo;
-o que nao pode mudar e: durante o build a versao gravada e a nova, o comando
-e os argumentos sao os mesmos, e no fim o pyproject.toml volta ao texto
-original, tanto no sucesso quanto na falha (que e repassada).
+Only run() is imported. The test runs in a temporary folder with a
+pyproject.toml; the commands do not run for real, run returns what was
+requested (command, arguments and the version written to the file at that
+moment). The refactoring may reorganize the access to the sections and the
+restoration of the file; what must not change is: during the build the
+written version is the new one, the command and the arguments are the same,
+and at the end pyproject.toml goes back to the original text, both on
+success and on failure (which is propagated).
 """
 
 import pytest
 from invoke.exceptions import UnexpectedExit
 
-from MNC_11 import executar
+from MNC_11 import run
 
 PYPROJECT = (
     '[tool.poetry]\nname = "ai-shell"\nversion = "0.1.0"\n\n'
     '[build-system]\nrequires = ["poetry-core"]\n'
 )
-COMANDO = (
+COMMAND = (
     "\n"
     "                poetry build --no-interaction\n"
     "                poetry publish --no-interaction\n"
@@ -26,31 +27,31 @@ COMANDO = (
 )
 
 
-def test_tipico_build_com_versao_nova_e_arquivo_restaurado(tmp_path, monkeypatch):
+def test_typical_build_with_new_version_and_file_restored(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "pyproject.toml").write_text(PYPROJECT, encoding="utf-8")
 
-    comandos = executar("2.0.0")
+    commands = run("2.0.0")
 
-    assert comandos == [(COMANDO, {"pty": True}, "2.0.0")]
+    assert commands == [(COMMAND, {"pty": True}, "2.0.0")]
     assert (tmp_path / "pyproject.toml").read_text(encoding="utf-8") == PYPROJECT
 
 
-def test_borda_falha_na_publicacao_restaura_e_repassa_o_erro(tmp_path, monkeypatch):
+def test_edge_publish_failure_restores_and_propagates_the_error(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "pyproject.toml").write_text(PYPROJECT, encoding="utf-8")
 
     with pytest.raises(UnexpectedExit):
-        executar("2.1.0", falhar_publicacao=True)
+        run("2.1.0", fail_publish=True)
 
     assert (tmp_path / "pyproject.toml").read_text(encoding="utf-8") == PYPROJECT
 
 
-def test_invalido_sem_secao_tool_poetry(tmp_path, monkeypatch):
+def test_invalid_no_tool_poetry_section(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     original = '[project]\nname = "ai-shell"\n'
     (tmp_path / "pyproject.toml").write_text(original, encoding="utf-8")
 
     with pytest.raises(KeyError):
-        executar("2.0.0")
+        run("2.0.0")
     assert (tmp_path / "pyproject.toml").read_text(encoding="utf-8") == original

@@ -1,32 +1,32 @@
-"""Testes da instancia LLF-10: fixam o comportamento observavel de executar().
+"""Tests for instance LLF-10: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode trocar as lambdas por funcoes
-nomeadas, lacos ou compreensoes, e devolver listas em vez de iteradores
-(executar converte tudo em listas antes de comparar); o que nao pode mudar e
-o conteudo lido, com o tipo de cada item, e o erro diante de valor gravado
-que nao e texto. A comparacao e pelo repr porque 1 == True.
+Only run() is imported. The refactoring may replace the lambdas with named
+functions, loops or comprehensions, and return lists instead of iterators
+(run converts everything into lists before comparing); what must not change
+is the content read, with the type of each item, and the error on a stored
+value that is not text. The comparison uses repr because 1 == True.
 
-Os testes fixam o comportamento como ele e, inclusive o defeito do original:
-cada item passa por bool, entao qualquer texto nao vazio vira True, ate
-"False" e "0"; so o item vazio vira False. O texto so e separado por virgula
-no primeiro nivel, e cada item volta embrulhado em tres listas de um elemento
-so (a estrutura gravada nao e recuperada).
+The tests pin the behavior as it is, including the defect of the original:
+each item goes through bool, so any non-empty text becomes True, even "False"
+and "0"; only the empty item becomes False. The text is split by comma only
+at the first level, and each item comes back wrapped in three single-element
+lists (the stored structure is not recovered).
 """
 
 import pytest
 
-from LLF_10 import executar
+from LLF_10 import run
 
 
-def test_tipico_todo_texto_nao_vazio_vira_true():
-    assert repr(executar("True,False,0")) == "[[[[True]]], [[[True]]], [[[True]]]]"
+def test_typical_every_non_empty_text_becomes_true():
+    assert repr(run("True,False,0")) == "[[[[True]]], [[[True]]], [[[True]]]]"
 
 
-def test_borda_texto_vazio_e_virgulas_sobrando_viram_false():
-    assert repr(executar("")) == "[[[[False]]]]"
-    assert repr(executar("a,,")) == "[[[[True]]], [[[False]]], [[[False]]]]"
+def test_edge_empty_text_and_trailing_commas_become_false():
+    assert repr(run("")) == "[[[[False]]]]"
+    assert repr(run("a,,")) == "[[[[True]]], [[[False]]], [[[False]]]]"
 
 
-def test_invalido_valor_gravado_que_nao_e_texto():
+def test_invalid_stored_value_that_is_not_text():
     with pytest.raises(AttributeError):
-        executar(42)
+        run(42)

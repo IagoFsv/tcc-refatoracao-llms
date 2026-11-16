@@ -1,8 +1,7 @@
-"""Heuristica de avaliacao de um jogo de alinhar pecas num tabuleiro n x n.
+"""Evaluation heuristic of a game of lining up pieces on an n x n board.
 
-Ponto de entrada publico: executar(linhas, s, jogador). Nao altere o nome nem
-a assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(rows, s, player). Do not change its name or
+signature; the rest of the file may be freely reorganized.
 """
 
 import numpy as np
@@ -10,7 +9,7 @@ from scipy.signal import convolve2d
 
 
 class Game:
-    """Estado do jogo: uma matriz 0/1 para cada jogador (X, O) e uma para os bloqueios (B)."""
+    """Game state: one 0/1 matrix per player (X, O) and one for the blocks (B)."""
 
     def __init__(self, n, s, blocs):
         self.n = n
@@ -76,16 +75,16 @@ class Agent:
         return score
 
 
-def executar(linhas, s, jogador):
-    """Avalia o tabuleiro para o jogador. Ponto de entrada publico desta unidade.
+def run(rows, s, player):
+    """Evaluates the board for the player. Public entry point of this unit.
 
-    linhas: uma string por linha do tabuleiro; 'X' e 'O' sao pecas, '*' e
-    bloqueio e qualquer outro caractere e casa vazia.
+    rows: one string per board row; 'X' and 'O' are pieces, '*' is a block
+    and any other character is an empty cell.
     """
-    blocs = [(x, y) for x, linha in enumerate(linhas) for y, casa in enumerate(linha) if casa == '*']
-    game = Game(len(linhas), s, blocs)
-    for x, linha in enumerate(linhas):
-        for y, casa in enumerate(linha):
-            if casa in ('X', 'O'):
-                game.current_state[casa][x, y] = 1
-    return Agent(jogador).heuristic_1(game)
+    blocs = [(x, y) for x, row in enumerate(rows) for y, cell in enumerate(row) if cell == '*']
+    game = Game(len(rows), s, blocs)
+    for x, row in enumerate(rows):
+        for y, cell in enumerate(row):
+            if cell in ('X', 'O'):
+                game.current_state[cell][x, y] = 1
+    return Agent(player).heuristic_1(game)

@@ -1,33 +1,32 @@
-"""Animacao de uma ordenacao, quadro a quadro.
+"""Animation of a sort, frame by frame.
 
-Ponto de entrada publico: executar(valores). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(values). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 
-A tela e o relogio sao versoes minimas. A tela guarda cada quadro desenhado
-(textos na ordem atual, posicoes destacadas, largura e altura de referencia);
-o relogio guarda a taxa pedida em cada tick.
+The screen and the clock are minimal versions. The screen keeps every frame
+drawn (texts in the current order, highlighted positions, reference width
+and height); the clock keeps the rate requested at each tick.
 """
 
 FREQUENCY_CLOCK = 3
 
 
-class _Texto:
-    """Texto ja renderizado de um elemento."""
+class _Text:
+    """Already rendered text of an element."""
 
-    def __init__(self, valor):
-        self.valor = valor
+    def __init__(self, value):
+        self.value = value
 
 
-class _Tela:
-    """Guarda os quadros em vez de desenhar."""
+class _Screen:
+    """Keeps the frames instead of drawing them."""
 
     def __init__(self):
-        self.quadros = []
+        self.frames = []
 
 
-class _Relogio:
-    """Guarda a taxa de cada tick em vez de esperar."""
+class _Clock:
+    """Keeps the rate of each tick instead of waiting."""
 
     def __init__(self):
         self.ticks = []
@@ -36,12 +35,12 @@ class _Relogio:
         self.ticks.append(framerate)
 
 
-clock = _Relogio()
+clock = _Clock()
 
 
 def draw_array(display, arrTexts, width_rectangle, height_reference, poses_elevated=()):
-    textos = tuple(texto.valor for texto in arrTexts)
-    display.quadros.append((textos, tuple(poses_elevated), width_rectangle, height_reference))
+    texts = tuple(text.value for text in arrTexts)
+    display.frames.append((texts, tuple(poses_elevated), width_rectangle, height_reference))
 
 
 def swap_elements(arr, arrText, i, j):
@@ -116,15 +115,15 @@ def simulate_quicksort(arr, arrTexts, display, width_reference, height_reference
     clock.tick(FREQUENCY_CLOCK)
 
 
-def executar(valores):
-    """Ordena uma copia de valores, animando cada passo. Ponto de entrada publico.
+def run(values):
+    """Sorts a copy of values, animating each step. Public entry point of this unit.
 
-    Devolve (lista ordenada, quadros desenhados, taxas dos ticks do relogio).
-    Cada quadro e (textos, posicoes destacadas, largura, altura).
+    Returns (sorted list, frames drawn, clock tick rates).
+    Each frame is (texts, highlighted positions, width, height).
     """
-    arr = list(valores)
-    textos = [_Texto(str(x)) for x in arr]
-    tela = _Tela()
+    arr = list(values)
+    texts = [_Text(str(x)) for x in arr]
+    screen = _Screen()
     clock.ticks.clear()
-    simulate_quicksort(arr, textos, tela, 40, 100)
-    return arr, tela.quadros, list(clock.ticks)
+    simulate_quicksort(arr, texts, screen, 40, 100)
+    return arr, screen.frames, list(clock.ticks)

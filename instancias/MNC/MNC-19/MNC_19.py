@@ -1,23 +1,22 @@
-"""Mapa tridimensional de um jogo de aventura: consulta de uma posicao.
+"""Three-dimensional map of an adventure game: looking up a position.
 
-Ponto de entrada publico: executar(x, y, z). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(x, y, z). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 
 class Location:
-    """Uma casa do mapa, identificada pelas coordenadas."""
+    """A map cell, identified by its coordinates."""
 
     def __init__(self, x, y, z):
         self.location = (x, y, z)
 
 
 class World:
-    def __init__(self, tamanho_x, tamanho_y, tamanho_z):
-        self.world_map_size_x = tamanho_x
-        self.world_map_size_y = tamanho_y
-        self.world_map_size_z = tamanho_z
+    def __init__(self, size_x, size_y, size_z):
+        self.world_map_size_x = size_x
+        self.world_map_size_y = size_y
+        self.world_map_size_z = size_z
         self.generate_world_map()
 
     def generate_world_map(self):
@@ -27,7 +26,7 @@ class World:
         return self.world_map[x][y][z]
 
 
-def executar(x, y, z):
-    """Devolve as coordenadas da casa achada em (x, y, z) num mapa 2 x 3 x 4.
-    Ponto de entrada publico desta unidade."""
+def run(x, y, z):
+    """Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.
+    Public entry point of this unit."""
     return World(2, 3, 4).get_location(x, y, z).location

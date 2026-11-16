@@ -1,56 +1,56 @@
-"""Testes da instancia MNC-06: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-06: they pin the observable behavior of run().
 
-So executar() e importado. O teste roda numa pasta temporaria, onde o banco
-Trivia.sqlite e criado. A refatoracao pode reorganizar o laco e o acesso aos
-dicionarios; o que nao pode mudar e o que fica gravado (pergunta e o resto
-dos dados em JSON, sem type e difficulty, na ordem de entrada) e o erro
-diante de pergunta sem os campos esperados.
+Only run() is imported. The test runs in a temporary folder, where the
+Trivia.sqlite database is created. The refactoring may reorganize the loop
+and the access to the dictionaries; what must not change is what gets stored
+(the question and the rest of the data as JSON, without type and difficulty,
+in input order) and the error on a question without the expected fields.
 
-Os testes fixam o comportamento como ele e, inclusive o defeito do original:
-na pergunta, &#039; vira duas aspas simples, nao uma.
+The tests pin the behavior as it is, including the defect of the original:
+in the question, &#039; becomes two single quotes, not one.
 """
 
 import pytest
 
-from MNC_06 import executar
+from MNC_06 import run
 
 
-def pergunta(texto, resposta):
+def question(text, answer):
     return {
         "type": "multiple",
         "difficulty": "easy",
         "category": "Geo",
-        "question": texto,
-        "correct_answer": resposta,
+        "question": text,
+        "correct_answer": answer,
     }
 
 
-def test_tipico_perguntas_gravadas_sem_tipo_e_dificuldade(tmp_path, monkeypatch):
+def test_typical_questions_stored_without_type_and_difficulty(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    data = {"results": [pergunta("Capital da Noruega?", "Oslo"), pergunta("Maior planeta?", "Jupiter")]}
+    data = {"results": [question("Capital of Norway?", "Oslo"), question("Largest planet?", "Jupiter")]}
 
-    assert executar(data) == [
-        (1, "Capital da Noruega?", '{"category": "Geo", "correct_answer": "Oslo"}'),
-        (2, "Maior planeta?", '{"category": "Geo", "correct_answer": "Jupiter"}'),
+    assert run(data) == [
+        (1, "Capital of Norway?", '{"category": "Geo", "correct_answer": "Oslo"}'),
+        (2, "Largest planet?", '{"category": "Geo", "correct_answer": "Jupiter"}'),
     ]
 
 
-def test_borda_entidades_aspas_e_banco_ja_existente(tmp_path, monkeypatch):
+def test_edge_entities_quotes_and_existing_database(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    executar({"results": [pergunta("Primeira?", "Sim")]})
+    run({"results": [question("First?", "Yes")]})
 
-    linhas = executar({"results": [pergunta("Quem disse &quot;eu&quot; e &#039;tu&#039;?", 'O "autor"')]})
+    rows = run({"results": [question("Who said &quot;I&quot; and &#039;you&#039;?", 'The "author"')]})
 
-    assert linhas[1] == (
+    assert rows[1] == (
         2,
-        "Quem disse \"eu\" e ''tu''?",
-        '{"category": "Geo", "correct_answer": "O \\"autor\\""}',
+        "Who said \"I\" and ''you''?",
+        '{"category": "Geo", "correct_answer": "The \\"author\\""}',
     )
-    assert executar({"results": []}) == linhas  # lista vazia nao grava nada
+    assert run({"results": []}) == rows  # an empty list stores nothing
 
 
-def test_invalido_pergunta_sem_tipo(tmp_path, monkeypatch):
+def test_invalid_question_without_type(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
     with pytest.raises(KeyError):
-        executar({"results": [{"difficulty": "easy", "question": "Sem tipo?"}]})
+        run({"results": [{"difficulty": "easy", "question": "No type?"}]})

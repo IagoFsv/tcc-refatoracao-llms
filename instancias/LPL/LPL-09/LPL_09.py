@@ -1,10 +1,9 @@
-"""Desenho de um segmento numa imagem em tons de cinza.
+"""Drawing of a segment on a grayscale image.
 
-Ponto de entrada publico: executar(tamanho, segmento). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(size, segment). Do not change its name or signature;
+the rest of the file may be freely reorganized.
 
-A imagem comeca toda em zero; o segmento e marcado com 1.
+The image starts all zeros; the segment is marked with 1.
 """
 
 import skimage
@@ -39,9 +38,9 @@ class Image:
         return self
 
 
-def executar(tamanho, segmento):
-    """tamanho: (linhas, colunas). segmento: (y0, x0, y1, x1)."""
-    imagem = Image(np.zeros(tamanho))
-    y0, x0, y1, x1 = segmento
-    resultado = imagem.draw_line(y0, x0, y1, x1)
-    return resultado.image
+def run(size, segment):
+    """size: (rows, columns). segment: (y0, x0, y1, x1). Public entry point of this unit."""
+    image = Image(np.zeros(size))
+    y0, x0, y1, x1 = segment
+    result = image.draw_line(y0, x0, y1, x1)
+    return result.image

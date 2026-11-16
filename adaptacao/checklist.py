@@ -5,12 +5,12 @@ Para cada instancia, confere:
                 identico, uma unica vez, na unidade;
   pysmell       as deteccoes dos 4 smells do estudo dentro do trecho sao as
                 mesmas do original, e nao ha nenhuma fora dele (andaime);
-  pytest        exatamente 3 testes (tipico, borda, invalido), todos passando;
+  pytest        exatamente 3 testes (typical, edge, invalid), todos passando;
   mutacao       mutantes gerados por regras fixas, so dentro do trecho; pelo
                 menos um tem que ser morto pelos testes;
   neutralidade  fora do trecho, a unidade nao cita estudo, smell, metrica nem
                 origem do codigo;
-  contrato      executar() existe, a docstring declara o contrato e o
+  contrato      run() existe, a docstring declara o contrato e o
                 origem.json tem os campos obrigatorios.
 
 Uso:
@@ -52,15 +52,15 @@ TABELA = INSTANCIAS / "checklist.csv"
 PACOTES = ("pytest", "pandas", "tqdm", "numpy", "scikit-image", "scipy", "requests", "toml", "invoke",
            "beautifulsoup4", "termcolor")
 TIMEOUT_MUTANTE = 30  # segundos; mutante que estoura o tempo conta como morto
-PREFIXOS_TESTE = ("test_tipico_", "test_borda_", "test_invalido_")
-CONTRATO = ("Ponto de entrada publico: executar(", "Nao altere o nome nem a assinatura")
+PREFIXOS_TESTE = ("test_typical_", "test_edge_", "test_invalid_")
+CONTRATO = ("Public entry point: run(", "Do not change its name or signature")
 CAMPOS_ORIGEM = ("id", "smell", "arquivo", "ponto_de_entrada",
                  "comportamento_fixado", "validacao_da_adaptacao")
 # Palavras que, fora do trecho, dariam pista ao modelo sobre o estudo ou a
 # origem do codigo. Casam no inicio da palavra ("refator" pega "refatorar").
 PISTAS = re.compile(
     r"\b(smell|refator|refactor|pysmell|metrica|estudo|tcc|copilot|chatgpt|"
-    r"gpt|llm|limiar|zhang)", re.IGNORECASE)
+    r"gpt|llm|limiar|zhang|metric|study|threshold)", re.IGNORECASE)
 
 COLUNAS = ["id", "smell", "aprovada", "diff", "pysmell", "pytest", "mutacao",
            "mutantes", "neutralidade", "contrato", "mutantes_vivos",
@@ -326,8 +326,8 @@ def _contrato(inst, unidade, origem_json):
     arvore = _parse(unidade.read_text(encoding="utf-8"))
     doc = " ".join((ast.get_docstring(arvore) or "").split())  # ignora quebra de linha
     problemas += [f"docstring sem '{frase}'" for frase in CONTRATO if frase not in doc]
-    if not any(isinstance(n, ast.FunctionDef) and n.name == "executar" for n in arvore.body):
-        problemas.append("sem executar() no nivel do modulo")
+    if not any(isinstance(n, ast.FunctionDef) and n.name == "run" for n in arvore.body):
+        problemas.append("sem run() no nivel do modulo")
     if not origem_json.exists():
         return problemas + ["sem origem.json"]
     origem = json.loads(origem_json.read_text(encoding="utf-8"))

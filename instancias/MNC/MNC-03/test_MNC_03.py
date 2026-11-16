@@ -1,18 +1,19 @@
-"""Testes da instancia MNC-03: fixam o comportamento observavel de executar().
+"""Tests for instance MNC-03: they pin the observable behavior of run().
 
-So executar() e importado. O servico de completar texto e imitado na
-unidade: executar recebe as escolhas que o servico devolveria e devolve o
-resumo e os pedidos feitos (chave usada e parametros). A refatoracao pode
-reorganizar o acesso a resposta; o que nao pode mudar e o pedido (chave lida
-de OPENAI_API_KEY, modelo e parametros), o resumo (primeira escolha, sem
-espacos e quebras de linha nas pontas) e o erro quando nao vem escolha.
+Only run() is imported. The text completion service is imitated in the
+unit: run receives the choices the service would return and returns the
+summary and the requests made (key used and parameters). The refactoring may
+reorganize the access to the response; what must not change is the request
+(key read from OPENAI_API_KEY, model and parameters), the summary (first
+choice, without spaces and line breaks at the ends) and the error when no
+choice comes back.
 """
 
 import pytest
 
-from MNC_03 import executar
+from MNC_03 import run
 
-PARAMETROS = {
+PARAMETERS = {
     "model": "text-davinci-002",
     "temperature": 0.7,
     "max_tokens": 256,
@@ -22,26 +23,26 @@ PARAMETROS = {
 }
 
 
-def test_tipico_primeira_escolha_sem_espacos_nas_pontas(monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "chave-teste")
+def test_typical_first_choice_without_spaces_at_the_ends(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
 
-    resumo, pedidos = executar("Texto longo sobre clima.", ["\n\nResumo curto.\n", "Outra escolha"])
+    summary, requests_made = run("Long text about the weather.", ["\n\nShort summary.\n", "Another choice"])
 
-    assert resumo == "Resumo curto."
-    assert pedidos == [("chave-teste", dict(PARAMETROS, prompt="Texto longo sobre clima."))]
+    assert summary == "Short summary."
+    assert requests_made == [("test-key", dict(PARAMETERS, prompt="Long text about the weather."))]
 
 
-def test_borda_tab_preservado_e_chave_ausente(monkeypatch):
+def test_edge_tab_kept_and_missing_key(monkeypatch):
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
-    resumo, pedidos = executar("", [" \n\tResumo\t \n "])
+    summary, requests_made = run("", [" \n\tSummary\t \n "])
 
-    assert resumo == "\tResumo\t"  # so espaco e quebra de linha saem das pontas
-    assert pedidos == [(None, dict(PARAMETROS, prompt=""))]
+    assert summary == "\tSummary\t"  # only spaces and line breaks leave the ends
+    assert requests_made == [(None, dict(PARAMETERS, prompt=""))]
 
 
-def test_invalido_resposta_sem_escolhas(monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "chave-teste")
+def test_invalid_response_without_choices(monkeypatch):
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
 
     with pytest.raises(IndexError):
-        executar("Texto", [])
+        run("Text", [])

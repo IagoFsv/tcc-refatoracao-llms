@@ -1,43 +1,44 @@
-"""Testes da instancia LPL-11: fixam o comportamento observavel de executar().
+"""Tests for instance LPL-11: they pin the observable behavior of run().
 
-So executar() e importado. A refatoracao pode agrupar o centro, o raio e a
-cor de draw_circle num objeto, mudar a assinatura ou dividir o metodo,
-desde que atualize a chamada dentro da unidade; o que nao pode mudar sao os
-pixels pintados na imagem devolvida, a cor padrao (preto), o recorte na
-borda e o erro diante de uma cor com numero errado de canais.
+Only run() is imported. The refactoring may group the center, the radius and
+the color of draw_circle into an object, change the signature or split the
+method, as long as it updates the call inside the unit; what must not change
+are the pixels painted in the returned image, the default color (black), the
+clipping at the border and the error on a color with the wrong number of
+channels.
 
-O centro e dado como (x, y): x e a coluna, y e a linha. Pixels esperados:
-os que skimage.draw.disk (scikit-image 0.26.0) devolve; com raio 2, o disco
-e o quadrado 3x3 em volta do centro.
+The center is given as (x, y): x is the column, y is the row. Expected
+pixels: the ones skimage.draw.disk (scikit-image 0.26.0) returns; with radius
+2, the disk is the 3x3 square around the center.
 """
 
 import numpy as np
 import pytest
 
-from LPL_11 import executar
+from LPL_11 import run
 
 
-def _esperado(tamanho, pixels, cor):
-    imagem = np.full((*tamanho, 3), 255, dtype=np.uint8)
-    for linha, coluna in pixels:
-        imagem[linha, coluna] = cor
-    return imagem
+def _expected(size, pixels, color):
+    image = np.full((*size, 3), 255, dtype=np.uint8)
+    for row, column in pixels:
+        image[row, column] = color
+    return image
 
 
-def test_tipico_disco_azul_no_meio():
-    imagem = executar((7, 7), (4, 2, 2), (0, 0, 255))
+def test_typical_blue_disk_in_the_middle():
+    image = run((7, 7), (4, 2, 2), (0, 0, 255))
 
-    pixels = [(l, c) for l in (1, 2, 3) for c in (3, 4, 5)]
-    assert np.array_equal(imagem, _esperado((7, 7), pixels, (0, 0, 255)))
-
-
-def test_borda_disco_recortado_no_canto_sem_cor_pinta_de_preto():
-    imagem = executar((4, 5), (1, 0, 2))
-
-    pixels = [(l, c) for l in (0, 1) for c in (0, 1, 2)]
-    assert np.array_equal(imagem, _esperado((4, 5), pixels, (0, 0, 0)))
+    pixels = [(r, c) for r in (1, 2, 3) for c in (3, 4, 5)]
+    assert np.array_equal(image, _expected((7, 7), pixels, (0, 0, 255)))
 
 
-def test_invalido_cor_com_dois_canais():
+def test_edge_disk_clipped_at_the_corner_no_color_paints_black():
+    image = run((4, 5), (1, 0, 2))
+
+    pixels = [(r, c) for r in (0, 1) for c in (0, 1, 2)]
+    assert np.array_equal(image, _expected((4, 5), pixels, (0, 0, 0)))
+
+
+def test_invalid_color_with_two_channels():
     with pytest.raises(ValueError):
-        executar((7, 7), (4, 2, 2), (0, 255))
+        run((7, 7), (4, 2, 2), (0, 255))

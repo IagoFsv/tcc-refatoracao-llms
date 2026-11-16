@@ -1,8 +1,7 @@
-"""Clima atual de uma cidade, impresso no terminal.
+"""Current weather of a city, printed on the terminal.
 
-Ponto de entrada publico: executar(weather). Nao altere o nome nem a
-assinatura dessa funcao; o restante do arquivo pode ser reorganizado
-livremente.
+Public entry point: run(weather). Do not change its name or signature; the
+rest of the file may be freely reorganized.
 """
 
 def print_weather(weather):
@@ -12,6 +11,6 @@ def print_weather(weather):
         print("Error: Could not get weather")
 
 
-def executar(weather):
-    """Imprime o clima recebido da API. Ponto de entrada publico desta unidade."""
+def run(weather):
+    """Prints the weather received from the API. Public entry point of this unit."""
     print_weather(weather)

@@ -1,7 +1,7 @@
-"""Guardian Ranks do Destiny 2 a partir da resposta da API da Bungie.
+"""Destiny 2 Guardian Ranks from the Bungie API response.
 
-Ponto de entrada publico: executar(data). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(data). Do not change its name or signature; the rest
+of the file may be freely reorganized.
 """
 
 import json
@@ -9,50 +9,49 @@ from types import SimpleNamespace
 from datetime import datetime
 
 
-def _no(hash_, nome, descricao, filhos=(), registros=(), conclusao=None):
-    """Monta uma definicao de no de apresentacao no formato do manifesto."""
-    filhos = [{"presentationNodeHash": h} for h in filhos]
-    registros = [{"recordHash": h} for h in registros]
+def _node(hash_, name, description, children=(), records=(), completion=None):
+    """Builds a presentation node definition in the manifest format."""
+    children = [{"presentationNodeHash": h} for h in children]
+    records = [{"recordHash": h} for h in records]
     return {
         "hash": hash_,
-        "displayProperties": {"name": nome, "description": descricao},
-        "children": {"presentationNodes": filhos, "records": registros},
-        "completionRecordHash": conclusao,
+        "displayProperties": {"name": name, "description": description},
+        "children": {"presentationNodes": children, "records": records},
+        "completionRecordHash": completion,
     }
 
 
-def _registro(hash_, nome, descricao):
-    """Monta uma definicao de registro no formato do manifesto."""
-    return {"hash": hash_, "displayProperties": {"name": nome, "description": descricao}}
+def _record(hash_, name, description):
+    """Builds a record definition in the manifest format."""
+    return {"hash": hash_, "displayProperties": {"name": name, "description": description}}
 
 
-# Recorte fixo do manifesto do Destiny: dois ranks, um conjunto de registros
-# em cada.
-_NOS = {
-    "3741753466": _no("3741753466", "Guardian Ranks", "", filhos=("11", "12")),
-    "11": _no("11", "Novato", "Primeiro rank", filhos=("501",), conclusao="9001"),
-    "12": _no("12", "Veterano", "Segundo rank", filhos=("502",), conclusao="9002"),
-    "501": _no("501", "Combate", "Registros de combate", registros=("1001", "1002")),
-    "502": _no("502", "Colecao", "Registros de colecao", registros=("1003",)),
+# Fixed excerpt of the Destiny manifest: two ranks, one record set in each.
+_NODES = {
+    "3741753466": _node("3741753466", "Guardian Ranks", "", children=("11", "12")),
+    "11": _node("11", "Rookie", "First rank", children=("501",), completion="9001"),
+    "12": _node("12", "Veteran", "Second rank", children=("502",), completion="9002"),
+    "501": _node("501", "Combat", "Combat records", records=("1001", "1002")),
+    "502": _node("502", "Collection", "Collection records", records=("1003",)),
 }
-_REGISTROS = {
-    "1001": _registro("1001", "Vitorias", "Venca 10 partidas"),
-    "1002": _registro("1002", "Pontos", "Junte {var:111} pontos"),
-    "1003": _registro("1003", "Itens", "Colete {var:111} de {var:222} itens"),
+_RECORDS = {
+    "1001": _record("1001", "Victories", "Win 10 matches"),
+    "1002": _record("1002", "Points", "Earn {var:111} points"),
+    "1003": _record("1003", "Items", "Collect {var:111} of {var:222} items"),
 }
 
-_DEFINICOES = SimpleNamespace(
-    DestinyPresentationNodeDefinition=SimpleNamespace(get=_NOS.__getitem__),
-    DestinyRecordDefinition=SimpleNamespace(get=_REGISTROS.__getitem__),
+_DEFINITIONS = SimpleNamespace(
+    DestinyPresentationNodeDefinition=SimpleNamespace(get=_NODES.__getitem__),
+    DestinyRecordDefinition=SimpleNamespace(get=_RECORDS.__getitem__),
 )
 SharkBot = SimpleNamespace(
-    Destiny=SimpleNamespace(Definitions=_DEFINICOES),
+    Destiny=SimpleNamespace(Definitions=_DEFINITIONS),
     Utils=SimpleNamespace(JSON=SimpleNamespace(dumps=json.dumps)),
 )
 
 
 class BungieData:
-    """Base comum dos coletores de dados da API."""
+    """Common base of the API data collectors."""
 
 
 root_node = SharkBot.Destiny.Definitions.DestinyPresentationNodeDefinition.get("3741753466")
@@ -139,6 +138,6 @@ class GuardianRanks(BungieData):
         return output
 
 
-def executar(data):
-    """Processa a resposta da API. Ponto de entrada publico desta unidade."""
+def run(data):
+    """Processes the API response. Public entry point of this unit."""
     return GuardianRanks._process_data(data)

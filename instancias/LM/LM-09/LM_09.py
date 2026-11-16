@@ -1,7 +1,7 @@
-"""Sistema bancario simples com cartoes guardados em SQLite.
+"""Simple banking system with cards stored in SQLite.
 
-Ponto de entrada publico: executar(). Nao altere o nome nem a assinatura
-dessa funcao; o restante do arquivo pode ser reorganizado livremente.
+Public entry point: run(). Do not change its name or signature; the rest of
+the file may be freely reorganized.
 """
 
 import random
@@ -146,10 +146,10 @@ def main():
             exit()
 
 
-def executar():
-    """Roda o menu do banco. Ponto de entrada publico desta unidade."""
+def run():
+    """Runs the bank menu. Public entry point of this unit."""
     return main()
 
 
 if __name__ == "__main__":
-    executar()
+    run()
