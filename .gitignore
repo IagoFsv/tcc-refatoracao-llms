@@ -28,6 +28,10 @@ artigo/
 # Descompacte em dados/dataset_zhang/ (ver dados/pysmell/README.md).
 dados/dataset_zhang/
 
+# PyExamine corpus (third-party code, Zenodo 10.5281/zenodo.14066039): only
+# the .py files, rebuilt with python -m dados.pyexamine.extract_py.
+dados/dataset_pyexamine/
+
 # Lixo do Windows/OneDrive
 desktop.ini
 Thumbs.db
