@@ -1,0 +1,66 @@
+{
+  "id": "LLF-05",
+  "files": {
+    "unit": "LLF_05.py",
+    "tests": "test_LLF_05.py"
+  },
+  "smell": "LLF",
+  "smell_name": "Long Lambda Function",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "set_config_dict_dict_dict_dict_float",
+  "class": "Config (line 1255 of the original)",
+  "function_line": 1397,
+  "lines": [
+    1398
+  ],
+  "occurrences": 1,
+  "snippet": "whole method set_config_dict_dict_dict_dict_float, lines 1397 to 1399 of the original",
+  "verbatim": true,
+  "copy_of": {
+    "instance": "LLF-04",
+    "detail": "The body of the method is identical to that of set_config_dict_dict_dict_dict_int (LLF-04); only the method name changes. By the structural rule (no textual deduplication), they stay two instances; same unit and tests, except for the method name and the imported module. Recorded as a limitation."
+  },
+  "sample": "One of the 10 instances (LLF-02 to 11) that are methods of the same class Config (line 1255 of argos_ai_adventure.py), in two patterns: 4 setters that serialize nested lists with ','.join(map(lambda ...)) and 6 getters that undo it with split(','). By the function rule, each method is an instance; recorded as a limitation.",
+  "metrics": {
+    "original": "1398:NOC=82;PAR=1;NOO=23",
+    "unit": "16:NOC=82;PAR=1;NOO=23",
+    "tuning_threshold": "NOC >= 73 and (PAR >= 4 or NOO >= 15)"
+  },
+  "entry_point": "run(value)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 1255: class Config(object):",
+    "lines 1256 and 1257: __init__ (the unit adds one line, see scaffolding)",
+    "lines 1397 to 1399: set_config_dict_dict_dict_dict_float"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 3, module docstring: names the game and is not used by the snippet.",
+    "lines 5 to 13, imports argparse, sys, pathlib, time, random, math, json and importlib: not used by the snippet.",
+    "the other methods of the Config class (load_config, save_config, persist_config, the other get_config_* and set_config_*): outside the snippet. Taking the whole class would put in the scaffolding the other 9 LLF detections of the class, which are instances of their own.",
+    "the other classes (GameData, Node, World, Player, Logger etc.), the __main__ block and main(): outside the snippet; GameData also reads game_data.json from disk when the module is imported."
+  ],
+  "scaffolding": [
+    "__init__ of the original (self.config = {}) plus self.logger = logging.getLogger(__name__), with import logging. In the original, self.logger is never assigned anywhere in the file and logging is not even imported: the method would raise AttributeError right after storing. logging.Logger, from the standard library, has the info method the snippet calls.",
+    "run(value): creates Config, creates the empty 'world' section, calls the method with the key 'regions' and returns the stored text. In the original config starts empty, and it would be filled by load_config, which uses configparser, which the file does not import.",
+    "Checked: Pysmell only flags the method; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: four levels of numbers (integers and floats mixed) become one flat comma-separated list ('1,2.5,3,-4,0.1,6'); the structure is lost. The log records 'Config: ' followed by the whole dictionary.",
+    "edge: every item at the last level goes through str (True, None), text at the last level is split digit by digit ('12' becomes '1,2'), an empty level leaves an extra comma, empty input stores '', tuples are accepted.",
+    "invalid: a last level that is not a sequence (a bare number) raises TypeError."
+  ],
+  "not_pinned_on_purpose": [
+    "Exact name and level of the logger: the test pins the message, captured at level INFO or above.",
+    "State of the configuration when storing fails: in the original the join finishes before the assignment, so nothing is stored, but the test only checks the exception.",
+    "Single-use iterator (generator) as input: the test uses lists and tuples."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6 (standard library only)",
+    "snippet_diff": "identical to the original (lines 1397 to 1399 against 15 to 17 of the unit)",
+    "pysmell": "1 LLF detection, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 3/3 mutants killed (removes the assignment, removes the log, swaps + for - in the log). The snippet is one line (plus the log, in the setters), so there are few mutation points."
+  }
+}

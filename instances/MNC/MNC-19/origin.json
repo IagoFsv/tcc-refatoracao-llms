@@ -1,0 +1,53 @@
+{
+  "id": "MNC-19",
+  "files": {
+    "unit": "MNC_19.py",
+    "tests": "test_MNC_19.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "get_location",
+  "function_line": 814,
+  "lines": [
+    815
+  ],
+  "occurrences": 1,
+  "snippet": "whole function get_location, lines 814 to 815 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "815:LEC=3",
+    "unit": "26:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(x, y, z)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 811 and 812: generate_world_map of World",
+    "lines 814 and 815: get_location"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "all the rest of the file, including the rest of World (player, monsters, zombie): outside the snippet; GameData reads game_data.json from disk when the module is imported."
+  ],
+  "scaffolding": [
+    "Minimal Location: only the coordinates.",
+    "Minimal World: size by parameter (in the original it is fixed at 10 x 10 x 10) and generate_world_map copied.",
+    "run(x, y, z): 2 x 3 x 4 map; returns the coordinates of the cell found.",
+    "Checked: Pysmell only flags line 815; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: returns the cell at the requested position.",
+    "edge: origin; negative indices count from the end.",
+    "invalid: a position outside the map raises IndexError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 814 to 815 against 25 to 26 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 1/1 mutants killed"
+  }
+}

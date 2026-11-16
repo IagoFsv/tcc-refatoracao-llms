@@ -1,0 +1,69 @@
+{
+  "id": "LPL-18",
+  "files": {
+    "unit": "LPL_18.py",
+    "tests": "test_LPL_18.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/network.py",
+  "function": "__init__",
+  "class": "DQNAgent",
+  "function_line": 105,
+  "lines": [
+    105
+  ],
+  "occurrences": 1,
+  "snippet": "whole __init__ method of DQNAgent, lines 105 to 122 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-17"
+  ],
+  "metrics": {
+    "original": "105:PAR=9",
+    "unit": "50:PAR=9",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(configuration)",
+  "external_dependencies": [
+    "torch: does not appear in the snippet; the DQN class of the same file, which the snippet builds and which uses torch, became a stub."
+  ],
+  "copied_verbatim": [
+    "line 3: import random",
+    "lines 85 to 100: class ReplayMemory (scaffolding)",
+    "line 104: class DQNAgent:",
+    "lines 105 to 122: __init__"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: short comments by the author ('define the hyperparameters', 'create the replay memory' etc.). They do not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 and 2, imports of torch and numpy: not used by the snippet or the scaffolding.",
+    "lines 6 to 81, class DQN: replaced by a stub. The real __init__ (PAR=5) would trigger LPL in the scaffolding, and the rest of the class depends on real tensors.",
+    "lines 84 and 103, header comments of the classes: outside the snippet.",
+    "lines 124 to 138, the other methods of DQNAgent (update, get_action, push): outside the snippet."
+  ],
+  "scaffolding": [
+    "ReplayMemory copied from the original unchanged (lines 85 to 100): the snippet builds it with capacity=1000.",
+    "Minimal DQN: __init__(self, *dimensions) receives the 4 dimensions in the same order as the original (input_size, n_actions, hidden_size, gamma), stores them and creates its own set of weights; state_dict returns a copy of the weights and load_state_dict replaces the weights, as in the original. Raises RuntimeError for a negative size, as the original would when creating the linear layer. *dimensions counts as a single parameter in PAR.",
+    "run(configuration): receives a dictionary with the 8 hyperparameters, builds the agent and returns a summary: stored hyperparameters, capacity and size of the memory, dimensions of the two networks, whether they are distinct objects and whether the target network has the weights of the main one.",
+    "Checked: Pysmell only flags the __init__ of the snippet (PAR=9); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: 4 inputs, 2 actions, hidden 24, gamma 0.95, batch 32, epsilon 1.0 down to 0.01 with decay 0.995; the 8 values stored, empty memory with capacity 1000, two distinct networks with the same dimensions and the target synchronized with the main one.",
+    "edge: sizes 1, batch 1, epsilon already equal to the minimum and decay 1.0.",
+    "invalid: a negative hidden layer raises RuntimeError (it comes from the network)."
+  ],
+  "not_pinned_on_purpose": [
+    "Message of the RuntimeError: it comes from the stub; the test only pins the type."
+  ],
+  "notes": [
+    "The 8 hyperparameters, memory, dqn and target_dqn are pinned by name because they are public attributes that the other methods of the original class use (update, get_action, push)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 105 to 122 against 50 to 67 of the unit)",
+    "pysmell": "1 LPL detection, PAR=9, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 13/13 mutants killed"
+  }
+}

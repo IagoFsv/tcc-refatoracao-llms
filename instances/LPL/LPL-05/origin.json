@@ -1,0 +1,71 @@
+{
+  "id": "LPL-05",
+  "files": {
+    "unit": "LPL_05.py",
+    "tests": "test_LPL_05.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/main-5.py",
+  "function": "__init__",
+  "class": "BasicLSTM",
+  "function_line": 11,
+  "lines": [
+    11
+  ],
+  "occurrences": 1,
+  "snippet": "whole __init__ method of BasicLSTM, lines 11 to 28 of the original",
+  "verbatim": true,
+  "indentation": "tabs, as in the original; the class line also uses a tab in the body, so the block does not mix tabs and spaces",
+  "metrics": {
+    "original": "11:PAR=5",
+    "unit": "59:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(dimensions)",
+  "external_dependencies": [
+    "torch: local stub inside the unit, same criterion as LPL-01"
+  ],
+  "copied_verbatim": [
+    "line 10: class BasicLSTM(nn.Module):",
+    "lines 11 to 28: __init__"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet). They include two comments that reveal the origin of the code ('# github copilot suggestion' on line 12 and 'this one wasn't suggested by copilot' on line 27) and commented-out lines (19, 21 and 22). Same criterion as LPL-01: recorded as a limitation.",
+  "removed_from_original": [
+    "lines 1 to 4, imports of numpy, matplotlib, torch and torch.nn: numpy and matplotlib are not used by the snippet; torch.nn replaced by the stub (see scaffolding).",
+    "line 6, device: only used in fwd, outside the snippet.",
+    "line 8, comment '# EOS char => #': outside the snippet.",
+    "lines 30 to 47, method fwd: outside the snippet; depends on real tensors (zeros, view, numerical LSTM).",
+    "lines 50 to 216, get_names_from_file, alphas, name_to_vector_repr, main and the call main(): outside the snippet; they depend on names.txt on disk, real torch and training."
+  ],
+  "scaffolding": [
+    "Pure-Python stub of torch.nn, with only what the snippet touches: Module, LSTM, Linear and ReLU, exposed in the nn namespace.",
+    "Module registers each sublayer assigned as an attribute, by name, and raises AttributeError if the sublayer is assigned before Module.__init__, like real torch. So the super().__init__ of the snippet has an observable effect.",
+    "LSTM, Linear and ReLU store the configuration received, with the same parameter order and the same default values as real torch (LSTM: input_size, hidden_size, num_layers=1, bias=True, batch_first=False; Linear: in_features, out_features, bias=True; ReLU: inplace=False), so that positional or keyword calls give the same configuration.",
+    "LSTM validates like real torch (RNNBase.__init__, checked in github.com/pytorch/pytorch, torch/nn/modules/rnn.py): TypeError if hidden_size is not an int, ValueError if hidden_size <= 0, ValueError if num_layers <= 0.",
+    "Parameters with a default value in the stubs do not count in the Pysmell PAR, so the scaffolding does not trigger LPL.",
+    "run(dimensions): receives a dictionary with num_classes, input_size, hidden_size and num_layers, builds BasicLSTM and returns (hyperparameters stored in the model, configuration of each registered sublayer).",
+    "Checked: Pysmell only flags __init__ (PAR=5); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: 27 classes, input 27, hidden 64, 2 layers; the model stores the 4 dimensions and registers lstm (27, 64, 2 layers, bias, batch_first), fc_1 (64 -> 32), fc_2 (32 -> 27) and relu.",
+    "edge: all dimensions equal to 1, the smallest valid ones; fc_1 keeps its fixed 32 outputs.",
+    "invalid: hidden size zero raises ValueError (it comes from the LSTM)."
+  ],
+  "not_pinned_on_purpose": [
+    "Order in which the sublayers are registered: it changes the order of the state_dict keys, but not its content or how it is loaded.",
+    "Message of the ValueError: it comes from the stub, not from the snippet; the test only pins the type.",
+    "Identity of the layer objects: the test checks the configuration, not the concrete class."
+  ],
+  "notes": [
+    "The names of the sublayers (lstm, fc_1, fc_2, relu) and the 4 hyperparameters are pinned because they are public attributes of the model: the sublayers become the keys of the state_dict, which the original main() saves to disk (torch.save(ltsm.state_dict(), ...), line 199), and fwd uses num_layers and hidden_size."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 11 to 28 against 59 to 76 of the unit), tabs included",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 12/12 mutants killed"
+  }
+}

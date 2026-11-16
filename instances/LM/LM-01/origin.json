@@ -1,0 +1,48 @@
+{
+  "id": "LM-01",
+  "files": {
+    "unit": "LM_01.py",
+    "tests": "test_LM_01.py",
+    "note": "name derived from the id (hyphen becomes underscore) so that all instance folders can run in a single pytest without module collisions"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/batch_process.py",
+  "line": 7,
+  "occurrences": 1,
+  "snippet": "function main, lines 7 to 126 of the original file",
+  "verbatim": true,
+  "metrics": {
+    "original": "MLOC=76",
+    "unit": "11:MLOC=76",
+    "tuning_threshold": "MLOC > 52",
+    "line_in_unit": 11
+  },
+  "entry_point": "run()",
+  "external_dependencies": [],
+  "adaptations": [
+    "The whole function main was copied, without any change to its body.",
+    "The imports os and pathlib.Path, which the snippet uses, were kept.",
+    "Neutral module docstring at the top, only to state the contract of the entry point. It does not mention the study, the smell or the metrics, so as not to give the model a hint.",
+    "Added run(), which only calls main(). It is a stable name for the tests, since the refactoring may split or rename main.",
+    "The __main__ guard now calls run() instead of main(), so the unit is still an executable script."
+  ],
+  "side_effects": {
+    "description": "The snippet is interactive (input/print) and calls ffmpeg through os.system. None of this was changed in the unit.",
+    "handling": "The doubles of input() and os.system() live in test_LM_01.py, through monkeypatch. So the code under evaluation stays identical to the original."
+  },
+  "pinned_behavior": [
+    "typical: converts each file of the input folder, one ffmpeg command per file, with -ss and -crf in the correct positions; creates the output folder; prints nothing.",
+    "edge: no flag given, prints 'No flags specified', does not call ffmpeg and does not create the output folder.",
+    "invalid: non-numeric crop parameters, prints 'Invalid crop parameters', aborts before converting.",
+    "the three cases also pin the exact order of the questions asked to the user."
+  ],
+  "adaptation_check": {
+    "pysmell": "LM detected, MLOC=76, same as the original",
+    "pytest": "3 passed",
+    "mutation": "removing the -y from the ffmpeg command makes the typical test fail. adaptation/checklist.py: 53/96 mutants killed",
+    "snippet_diff": "identical to the original (lines 7 to 126 against 11 to 130 of the unit)",
+    "environment": ".venv, Python 3.14.6"
+  }
+}

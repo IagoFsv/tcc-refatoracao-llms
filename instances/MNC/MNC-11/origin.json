@@ -1,0 +1,59 @@
+{
+  "id": "MNC-11",
+  "files": {
+    "unit": "MNC_11.py",
+    "tests": "test_MNC_11.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/AiShell-master/tasks.py",
+  "function": "release",
+  "function_line": 77,
+  "lines": [
+    87
+  ],
+  "occurrences": 1,
+  "snippet": "whole function release, lines 76 to 107 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "87:LEC=3",
+    "unit": "44:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(version, fail_publish)",
+  "external_dependencies": [
+    "toml==0.10.2 (installed for real, pinned in requirements.txt)",
+    "invoke==3.0.3 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "lines 4 to 6: imports of toml, invoke and UnexpectedExit",
+    "lines 76 to 107: release, with the @task decorator"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: '# load pyproject', '# change version to today datetime', '# build & publish', '# recover to original'.",
+  "removed_from_original": [
+    "lines 1 and 2, '# type: ignore' and import shutil: not used by the snippet.",
+    "get_pep8_compliant_name, get_project_path and the other tasks: outside the snippet."
+  ],
+  "scaffolding": [
+    "BuildContext: subclass of invoke.Context whose run does not execute the command; it records the command, the arguments and the version written to pyproject.toml at that moment and, if asked, raises UnexpectedExit with exit code 1, as a failed build or publication would. So the test checks the effect without running poetry.",
+    "run(version, fail_publish=False): calls release(BuildContext(), version) and returns the recorded commands.",
+    "Checked: Pysmell only flags line 87; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: one command (the exact text of poetry build and publish, with pty=True), run with the new version written; at the end pyproject.toml goes back to the original text.",
+    "edge: a failure in the publication passes UnexpectedExit on and pyproject.toml also goes back to the original text.",
+    "invalid: a pyproject.toml without [tool.poetry] raises KeyError and the file is not changed."
+  ],
+  "not_pinned_on_purpose": [
+    "Formatting of pyproject.toml during the build (done by toml.dump): the test only reads the version written.",
+    "Initial pyproject_string = '': dead code; the mutant that removes it survives."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 76 to 107 against 33 to 64 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 10/11 mutants killed; survivors: L82:4 removes Assign"
+  }
+}

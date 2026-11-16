@@ -1,0 +1,64 @@
+{
+  "id": "LLF-11",
+  "files": {
+    "unit": "LLF_11.py",
+    "tests": "test_LLF_11.py"
+  },
+  "smell": "LLF",
+  "smell_name": "Long Lambda Function",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "get_config_section_key_dict_dict_dict_list",
+  "class": "Config (line 1255 of the original)",
+  "function_line": 1472,
+  "lines": [
+    1473
+  ],
+  "occurrences": 2,
+  "snippet": "whole method get_config_section_key_dict_dict_dict_list, lines 1472 to 1473 of the original",
+  "verbatim": true,
+  "sample": "One of the 10 instances (LLF-02 to 11) that are methods of the same class Config (line 1255 of argos_ai_adventure.py), in two patterns: 4 setters that serialize nested lists with ','.join(map(lambda ...)) and 6 getters that undo it with split(','). By the function rule, each method is an instance; recorded as a limitation.",
+  "occurrences_detail": "Pysmell flags line 1473 twice, once for the outer lambda (NOC=104, NOO=28) and once for an inner one (NOC=76, NOO=20); the Zhang spreadsheet also lists the line twice. It is a single snippet, one instance.",
+  "metrics": {
+    "original": "1473:NOC=104;PAR=1;NOO=28; 1473:NOC=76;PAR=1;NOO=20",
+    "unit": "13:NOC=104;PAR=1;NOO=28; 13:NOC=76;PAR=1;NOO=20",
+    "tuning_threshold": "NOC >= 73 and (PAR >= 4 or NOO >= 15)"
+  },
+  "entry_point": "run(text)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 1255: class Config(object):",
+    "lines 1256 and 1257: __init__",
+    "lines 1472 to 1473: get_config_section_key_dict_dict_dict_list"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 3, module docstring: names the game and is not used by the snippet.",
+    "lines 5 to 13, imports argparse, sys, pathlib, time, random, math, json and importlib: not used by the snippet.",
+    "the other methods of the Config class (load_config, save_config, persist_config, the other get_config_* and set_config_*): outside the snippet. Taking the whole class would put in the scaffolding the other 9 LLF detections of the class, which are instances of their own.",
+    "the other classes (GameData, Node, World, Player, Logger etc.), the __main__ block and main(): outside the snippet; GameData also reads game_data.json from disk when the module is imported."
+  ],
+  "scaffolding": [
+    "__init__ of the original, unchanged.",
+    "run(text): creates Config, stores text in the 'world' section, key 'regions', calls the method and passes the result through _materialize.",
+    "_materialize(value): the method returns nested, lazy map iterators; the scaffolding turns them into lists so the test can compare them. Text stays text, and what is not iterable (number, bool) stays as it is.",
+    "Checked: Pysmell only flags the method; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: the text is only split by comma at the first level; each item comes back wrapped in four one-element lists ('north' becomes [[[['north']]]]).",
+    "edge: empty text gives [[[[['']]]]]; spaces are kept; an extra comma produces an empty item.",
+    "invalid: a stored value that is not text (a number) raises AttributeError (split)."
+  ],
+  "not_pinned_on_purpose": [
+    "Return type: the original returns nested map iterators; since run turns everything into lists, returning lists, tuples or generators also passes.",
+    "When the error happens: in the original, an error inside the inner lambdas only shows up when the result is iterated; run iterates everything, so the test does not tell an error in the call from an error in the consumption.",
+    "Missing section or key (KeyError): run always stores the key before reading it."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6 (standard library only)",
+    "snippet_diff": "identical to the original (lines 1472 to 1473 against 12 to 13 of the unit)",
+    "pysmell": "2 LLF detections on the same line, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 1/1 mutants killed (removes the return). The snippet is one line (plus the log, in the setters), so there are few mutation points."
+  }
+}

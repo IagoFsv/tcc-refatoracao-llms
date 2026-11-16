@@ -1,0 +1,59 @@
+{
+  "id": "MNC-06",
+  "files": {
+    "unit": "MNC_06.py",
+    "tests": "test_MNC_06.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/getQuestion.py",
+  "function": "add_question",
+  "function_line": 15,
+  "lines": [
+    24
+  ],
+  "occurrences": 1,
+  "snippet": "whole function add_question, lines 15 to 33 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "24:LEC=3",
+    "unit": "20:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(data)",
+  "external_dependencies": [
+    "sqlite3 (standard library, real); the database Trivia.sqlite is created in a temporary folder (monkeypatch.chdir)"
+  ],
+  "copied_verbatim": [
+    "lines 3 and 5: import json, import sqlite3",
+    "lines 15 to 33: add_question"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: '# add and id for each question'.",
+  "removed_from_original": [
+    "line 1, comment 'created using github copilot': it would reveal the origin of the code.",
+    "line 4, import requests, and get_question (lines 8 to 13): fetches the questions from the internet; outside the snippet.",
+    "main and the __main__ block (lines 36 to 44): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(data): calls add_question(data) and returns the rows of the questions table (id, question, questionData) in id order.",
+    "Checked: Pysmell only flags line 24; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: two questions stored in order, without type and difficulty; the rest becomes JSON in questionData.",
+    "edge: &quot; becomes a quote and &#039; becomes two single quotes in the question (defect of the original, pinned as it is); quotes in the answer stay escaped in the JSON; an existing database receives the new rows after the old ones; an empty list stores nothing.",
+    "invalid: a question without type raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "The original removes type, difficulty and question from the dictionaries it receives: side effect not pinned.",
+    "Transaction when the error happens in the middle of the loop (the original neither commits nor closes the connection): not pinned.",
+    "Closing the connection: the mutant that removes conn.close() survives, with no observable effect."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 15 to 33 against 11 to 29 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 15/16 mutants killed; survivors: L33:4 removes Expr"
+  }
+}

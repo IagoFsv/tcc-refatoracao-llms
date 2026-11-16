@@ -1,0 +1,50 @@
+{
+  "id": "LM-10",
+  "files": {
+    "unit": "LM_10.py",
+    "tests": "test_LM_10.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/fitness-calculator.py",
+  "function": "calc",
+  "function_line": 32,
+  "lines": [
+    32
+  ],
+  "occurrences": 1,
+  "snippet": "whole function calc, lines 32 to 111 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "32:MLOC=71",
+    "unit": "22:MLOC=71",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run()",
+  "external_dependencies": [],
+  "comments_in_snippet": "The snippet has no comments.",
+  "removed_from_original": [
+    "lines 1 to 16, header with the task statement and the formulas.",
+    "lines 113 and 114, call calc() and print at module level: they would run on import."
+  ],
+  "scaffolding": [
+    "againcalc copied from the original (the snippet calls it, and it calls the snippet back).",
+    "run(): calls calc(); the __main__ guard calls run()."
+  ],
+  "pinned_behavior": [
+    "typical: option 7 with 70 kg, 175 cm, 30 years, activity 2: questions in order and the 6 result lines, then 'n'.",
+    "edge: 'y' restarts the menu and goes through options 1, 2, 4, 5 and 6 up to option 9 (invalid number): exact questions and output.",
+    "invalid: the activity question suggests 1.2, but the answer is read with int(); '1.2' raises ValueError. Defect of the original, pinned as it is."
+  ],
+  "not_pinned_on_purpose": [
+    "Invalid answer in againcalc (outside the snippet)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 125/138 mutants killed",
+    "snippet_diff": "identical to the original (lines 32 to 111 against 22 to 101 of the unit)",
+    "pysmell": "LM detected, MLOC=71, same as the original; nothing in the scaffolding"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "id": "MNC-02",
+  "files": {
+    "unit": "MNC_02.py",
+    "tests": "test_MNC_02.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/bot.py",
+  "function": "weather",
+  "function_line": 1146,
+  "lines": [
+    1155,
+    1156
+  ],
+  "occurrences": 2,
+  "snippet": "whole function weather, lines 1136 to 1174 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "1155:LEC=3; 1156:LEC=3",
+    "unit": "96:LEC=3; 97:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(location)",
+  "external_dependencies": [
+    "requests==2.34.2 (installed for real, pinned in requirements.txt); the test intercepts requests.get with monkeypatch, no network",
+    "discord and discord_slash: local stub, checked against the source of discord.py 1.7.3 (Embed: keyword-only constructor, set_thumbnail(*, url), add_field(*, name, value, inline=True) converting name and value with str, set_footer(*, text, icon_url)) and of discord-py-slash-command 3.0.3 (slash() returns an object with func and an asynchronous invoke that does await func(*args); create_option returns a dict with name, description, type, required and choices)."
+  ],
+  "copied_verbatim": [
+    "line 28: import requests",
+    "lines 1136 to 1174: weather, with the @slash.slash decorator"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: '# Request:', the comment about reading the token from ./tokens/weather.txt and '# Message'.",
+  "removed_from_original": [
+    "lines 1 to 13, introductory comments of the bot and changelog: outside the snippet; they name the bot.",
+    "lines 14 to 27 and 29 to 36, imports of discord, random, asyncio, os, cpuinfo, github, pprint, bs4, logging, pytz, discord_slash, statcord etc.: not used by the snippet or replaced by the stub.",
+    "lines 38 to 47, creation of the client, the SlashCommand and statcord: they depend on a token and the network; slash comes from the stub.",
+    "the other commands and events of the bot: outside the snippet."
+  ],
+  "scaffolding": [
+    "Embed and the discord namespace: only what the snippet touches; stores title, color, thumbnail, fields (as tuples) and footer for the test to read.",
+    "SlashCommand and CommandObject: slash(...) returns an object with func and an asynchronous invoke, like the BaseCommandObject of the library; create_option returns the same dict as the library.",
+    "Context: author with name and avatar_url (discord.py 1.x) and an asynchronous send that stores the card sent.",
+    "run(location): creates the context, runs asyncio.run(weather.invoke(ctx, location)) and returns the cards sent.",
+    "The token is still read from ./tokens/weather.txt; the test creates the file in a temporary folder (monkeypatch.chdir).",
+    "Checked: Pysmell only flags lines 1155 and 1156 of the snippet; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: URL requested with the city and the token; one card with title 'Weather in London, GB', color 0x3f3f3f, icon thumbnail, six fields in order (temperature in Celsius rounded, weather, wind, humidity, pressure, clouds) and a footer with the name and avatar of the requester.",
+    "edge: negative temperature (263.0 K becomes -10°C, rounded).",
+    "invalid: an error response from the API (without main) raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "Name, description and options of the command in the decorator: they only serve to register the command on the chat server; the stub does not check them.",
+    "Token with a trailing line break: the original does not strip it (it would go into the URL); the test writes the token without a line break.",
+    "Rounding of .5 (Python's round rounds to even): not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 1136 to 1174 against 77 to 115 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 34/36 mutants killed; survivors: L1142:29 3->4 | L1143:26 True->False"
+  }
+}

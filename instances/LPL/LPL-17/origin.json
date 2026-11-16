@@ -1,0 +1,67 @@
+{
+  "id": "LPL-17",
+  "files": {
+    "unit": "LPL_17.py",
+    "tests": "test_LPL_17.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/network.py",
+  "function": "__init__",
+  "class": "DQN",
+  "function_line": 8,
+  "lines": [
+    8
+  ],
+  "occurrences": 1,
+  "snippet": "whole __init__ method of DQN, lines 8 to 21 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-18"
+  ],
+  "metrics": {
+    "original": "8:PAR=5",
+    "unit": "72:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(dimensions)",
+  "external_dependencies": [
+    "torch: local stub inside the unit (same criterion as LPL-01 and LPL-05). Checked in the PyTorch source (github.com/pytorch/pytorch): Linear creates weight with shape (out_features, in_features) and bias with (out_features,) (torch/nn/modules/linear.py); Sequential registers the positional layers with the keys '0', '1', '2' (torch/nn/modules/container.py). A negative size raises RuntimeError ('Trying to create tensor with negative dimension'), according to discuss.pytorch.org/t/109007."
+  ],
+  "copied_verbatim": [
+    "line 7: class DQN:",
+    "lines 8 to 21: __init__"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: short comments by the author ('define the neural network', 'define the optimizer' etc.). They do not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 to 3, imports of torch, numpy and random: torch replaced by the stub; numpy and random not used by the snippet.",
+    "line 6, header comment of the class: outside the snippet.",
+    "lines 23 to 81, the other methods of DQN (state_dict, forward, load_state_dict, update, get_action): outside the snippet; they depend on real tensors.",
+    "lines 84 to 138, classes ReplayMemory and DQNAgent: outside the snippet."
+  ],
+  "scaffolding": [
+    "Pure-Python stub of torch, with only what the snippet touches: nn.Sequential, nn.Linear, nn.ReLU, nn.MSELoss and optim.Adam, with the same parameters and default values as the real version (Linear: bias=True; ReLU: inplace=False; Adam: lr=0.001; MSELoss: reduction='mean').",
+    "Linear creates weights and bias with the shapes of the real version and raises RuntimeError for a negative size; Sequential keeps the layers in order and returns their parameters in parameters(); Adam keeps the parameters received and refuses an empty list, like the real version.",
+    "run(dimensions): receives a dictionary with input_size, n_actions, hidden_size and gamma, builds the network and returns a summary: layers in order, optimizer (shapes of the parameters, rate and whether they are the parameters of the network itself), loss, gamma and n_actions.",
+    "Parameters with a default value in the stubs do not count in PAR; Pysmell only flags the __init__ of the snippet (PAR=5)."
+  ],
+  "pinned_behavior": [
+    "typical: 4 inputs, 2 actions, hidden layer 16, gamma 0.99; Linear(4, 16), ReLU, Linear(16, 2), Adam over the 4 parameters of the network with rate 0.001, MSELoss mean.",
+    "edge: all sizes 1 and gamma 0.",
+    "invalid: a negative hidden layer raises RuntimeError (it comes from Linear)."
+  ],
+  "not_pinned_on_purpose": [
+    "Message of the RuntimeError: it comes from the stub; the test only pins the type."
+  ],
+  "notes": [
+    "model, optimizer, loss_fn, gamma and n_actions are pinned by name because they are public attributes that the other methods of the original class use (forward, state_dict, update, get_action)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 8 to 21 against 72 to 85 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 5/5 mutants killed"
+  }
+}

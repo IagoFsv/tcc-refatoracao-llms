@@ -1,0 +1,59 @@
+{
+  "id": "MNC-16",
+  "files": {
+    "unit": "MNC_16.py",
+    "tests": "test_MNC_16.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/WeatherForecast-master/weatherforecast.py",
+  "function": "parseJSONforCITY",
+  "function_line": 79,
+  "lines": [
+    94,
+    95,
+    97,
+    100,
+    108
+  ],
+  "occurrences": 9,
+  "snippet": "whole function parseJSONforCITY, lines 79 to 114 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "94:LEC=4; 95:LEC=5; 97:LEC=4; 100:LEC=5; 108:LEC=3",
+    "unit": "24:LEC=4; 25:LEC=4; 25:LEC=4; 25:LEC=5; 27:LEC=4; 30:LEC=4; 30:LEC=4; 30:LEC=5; 38:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(response, city, option_flag)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 17: option = '-c'",
+    "lines 79 to 114: parseJSONforCITY"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: docstring, the comment string in the middle of the loop, '#convert to centrigrade...' and '#print other conditions...'. Trailing spaces on line 100 also kept.",
+  "removed_from_original": [
+    "lines 1 to 8, header with the author's name and course: outside the snippet.",
+    "line 9, import requests, sys: not used by the snippet.",
+    "help_message, validateInput, checkValidCity, checkCLIOptions, processCLIOptions and the module-level script (lines 118 to 134, with an API key): outside the snippet; they read sys.argv and call the API."
+  ],
+  "scaffolding": [
+    "option = '-c' as a module variable, as in the original; run(response, city, option_flag) changes option (global) and calls parseJSONforCITY. In the original, checkCLIOptions changes option, from sys.argv.",
+    "Checked: Pysmell flags the same 9 detections as the original (lines 94, 95 three times, 97, 100 three times, 108); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: -f prints the forecast grouped by day (date when the day changes, one line per time), temperature with one decimal place and °C.",
+    "edge: -C prints the current weather in °F and mph, rounded to one decimal place; -F prints the forecast in °F.",
+    "invalid: an unknown option in current weather mode raises KeyError after printing the header."
+  ],
+  "not_pinned_on_purpose": [
+    "Option -h: handled earlier by the original program, it does not get here."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 79 to 114 against 9 to 44 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 76/76 mutants killed"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "LM-06",
+  "files": {
+    "unit": "LM_06.py",
+    "tests": "test_LM_06.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/WindCatcher-main/modules/weather.py",
+  "function": "fmt_cli_resp",
+  "function_line": 105,
+  "lines": [
+    105
+  ],
+  "occurrences": 1,
+  "snippet": "whole function fmt_cli_resp, lines 105 to 216 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "105:MLOC=76",
+    "unit": "16:MLOC=76",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run(data, city, country_code)",
+  "external_dependencies": [
+    "termcolor==3.3.0 (installed for real, pinned in requirements.txt)"
+  ],
+  "comments_in_snippet": "The snippet has no comments.",
+  "removed_from_original": [
+    "get_weather_data, get_city_name, format_weather_link and the imports of requests, .decoder and .errors: not used by the snippet.",
+    "line 219, comment '# @AmarnathCJD' (identifies the author)."
+  ],
+  "scaffolding": [
+    "get_current_date copied from the original.",
+    "run(data, city, country_code): calls fmt_cli_resp with start_time = datetime.now(), so that the entry point has 3 parameters and the elapsed time comes out close to zero."
+  ],
+  "side_effects": {
+    "description": "The snippet only prints. The color depends on the environment (FORCE_COLOR, NO_COLOR, terminal), and termcolor caches that decision.",
+    "handling": "The fixture of the test fixes the environment and clears the cache of termcolor.can_colorize."
+  },
+  "pinned_behavior": [
+    "typical: with color forced, all the exact lines, with the termcolor codes; today's date is computed by the test with the same format.",
+    "edge: without color, an empty dictionary with 6 empty forecasts: everything becomes N/A and index 0 of the forecast is never printed.",
+    "invalid: with 3 forecasts, prints days 1 and 2 and raises IndexError on the third.",
+    "Defect of the original, pinned as it is: the wind loses its first character ([1:]), so 'N 10 km/h' comes out as ' 10 km/h'."
+  ],
+  "not_pinned_on_purpose": [
+    "Value of the elapsed time in the footer: only the format (number with decimal places)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 50/56 mutants killed",
+    "snippet_diff": "identical to the original (lines 105 to 216 against 16 to 127 of the unit)",
+    "pysmell": "LM detected, MLOC=76, same as the original; nothing in the scaffolding"
+  }
+}

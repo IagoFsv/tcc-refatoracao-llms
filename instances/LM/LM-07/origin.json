@@ -1,0 +1,54 @@
+{
+  "id": "LM-07",
+  "files": {
+    "unit": "LM_07.py",
+    "tests": "test_LM_07.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/advanced_password_generator.py",
+  "function": "main",
+  "function_line": 17,
+  "lines": [
+    17
+  ],
+  "occurrences": 1,
+  "snippet": "whole function main, lines 17 to 194 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "17:MLOC=137",
+    "unit": "12:MLOC=137",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run()",
+  "external_dependencies": [],
+  "comments_in_snippet": "Kept, by rule 1. Trailing spaces on the lines of the original also kept.",
+  "removed_from_original": [
+    "lines 1 to 10, header: 'This code is part of the tests that I have been doing with Github Copilot.' and the task statement given to Copilot."
+  ],
+  "scaffolding": [
+    "imports random, string, sys and os, used by the snippet.",
+    "run(): calls main(); the __main__ guard calls run()."
+  ],
+  "side_effects": {
+    "description": "The snippet is interactive (input/print), writes passwords.txt and ends with sys.exit().",
+    "handling": "The test replaces input() with a double, uses a temporary folder and expects SystemExit."
+  },
+  "pinned_behavior": [
+    "typical: length 3, all options 'y', no file: order of the 9 questions, 15 passwords in 5 groups (punctuation, upper case, lower case, digits, punctuation), each with 3 characters from the alphabet of the group, and the surrounding text.",
+    "edge: an invalid length and an invalid answer repeat the question; a nonexistent path is refused; with a file, asks again with input() without text and writes passwords.txt with the printed passwords.",
+    "invalid: 'n' for upper case leaves the variable without a value and the generation raises NameError (UnboundLocalError in the original) after all the questions, without printing a password. Defect of the original, pinned as it is."
+  ],
+  "not_pinned_on_purpose": [
+    "The characters drawn: only the number, length and alphabet of each password, so as not to pin how the draw is made.",
+    "The 'y' branch of generating more passwords (calls main() again, recursively)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 107/121 mutants killed",
+    "snippet_diff": "identical to the original (lines 17 to 194 against 12 to 189 of the unit)",
+    "pysmell": "LM detected, MLOC=137, same as the original; nothing in the scaffolding"
+  }
+}

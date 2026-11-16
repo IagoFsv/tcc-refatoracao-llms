@@ -1,0 +1,71 @@
+{
+  "id": "LPL-07",
+  "files": {
+    "unit": "LPL_07.py",
+    "tests": "test_LPL_07.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/maindb.py",
+  "function": "remove_server",
+  "function_line": 25,
+  "lines": [
+    25
+  ],
+  "occurrences": 1,
+  "snippet": "whole function remove_server, lines 25 to 31 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-06",
+    "LPL-08"
+  ],
+  "metrics": {
+    "original": "25:PAR=5",
+    "unit": "31:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(registered, server)",
+  "external_dependencies": [
+    "none: sqlite3 is in the standard library"
+  ],
+  "copied_verbatim": [
+    "line 8: import sqlite3",
+    "lines 25 to 31: remove_server"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 5, header comments about the use of the file: outside the snippet.",
+    "line 9, from .dbinitalization import init_db: module of the original package, missing from the dataset; the scaffolding creates the table in its place.",
+    "lines 83 and 84, copyright comment that mentions 'GitHub Copilot': outside the snippet, reveals the origin of the code.",
+    "lines 15 to 23, add_server: outside the snippet.",
+    "lines 33 to 39, update_server: outside the snippet.",
+    "lines 11 to 13, 41 to 49 and 51 to 81, initdb, list_servers, add_key, remove_key and list_keys: outside the snippet."
+  ],
+  "scaffolding": [
+    "Real sqlite3 (standard library). The database is the file frSSH.db in the current folder, same name as in the snippet; the tests switch the current folder to a temporary one (monkeypatch.chdir).",
+    "_prepare_database(registered): creates the table servers (ip, port, username, password, keyid) if it does not exist and stores the servers already registered. Columns without a declared type, because the original schema (dbinitalization.py) is not in the dataset; so SQLite stores the values as received.",
+    "_rows(): reads the whole table in insertion order (rowid).",
+    "run(registered, server): prepares the database, unpacks server (tuple of 5) in the call to the function of the snippet and returns the rows of the table.",
+    "Checked: Pysmell only flags the function of the snippet (PAR=5); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: a common IP ('10.0.0.1') raises sqlite3.ProgrammingError, because the DELETE receives (ip), the string itself, and each character becomes a parameter (8 for 1 placeholder); nothing printed and the table stays the same.",
+    "edge: a one-character ip ('a') removes all rows with that ip, ignoring the other 4 arguments, and prints 'Server removed.'.",
+    "invalid: ip None raises sqlite3.ProgrammingError (parameters of an unsupported type); nothing printed and the table stays the same."
+  ],
+  "not_pinned_on_purpose": [
+    "Connection left open when the DELETE fails: accidental side effect, not observable by the caller."
+  ],
+  "notes": [
+    "Defect of the original pinned as it is (refactoring is not fixing bugs): with any real IP the function fails. A refactoring that replaces (ip) with (ip,) changes the behavior and fails the typical test.",
+    "port, username, password and keyid are not used by the snippet; removing these parameters is allowed, as long as run keeps the same signature."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 25 to 31 against 31 to 37 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 5/6 mutants killed. Survivor: removing conn.close() (line 30 of the original), with no observable effect, because the commit has already been made."
+  }
+}

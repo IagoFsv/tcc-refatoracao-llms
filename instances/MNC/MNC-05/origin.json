@@ -1,0 +1,52 @@
+{
+  "id": "MNC-05",
+  "files": {
+    "unit": "MNC_05.py",
+    "tests": "test_MNC_05.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/composegenerator.py",
+  "function": "convertContainersToServices",
+  "function_line": 82,
+  "lines": [
+    86
+  ],
+  "occurrences": 1,
+  "snippet": "whole function convertContainersToServices, lines 82 to 88 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "86:LEC=3",
+    "unit": "12:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(app)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 82 to 88: convertContainersToServices"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 81 and 89 to 123: the other functions, permissions and comments of the file (including the one that attributes the authorship of the functions to a coding assistant): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(app): calls convertContainersToServices(app) and returns the result.",
+    "Checked: Pysmell only flags line 86; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: two containers become services indexed by name, without the name key; containers disappears; the other keys of the app stay.",
+    "edge: a repeated name keeps the last container; an empty list gives empty services.",
+    "invalid: a container without name raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "The original changes the app and the containers it receives (del). The test only checks the returned value, so as not to fail a refactoring that works on a copy."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 82 to 88 against 8 to 14 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 3/3 mutants killed"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "LM-04",
+  "files": {
+    "unit": "LM_04.py",
+    "tests": "test_LM_04.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/text_adventure.py",
+  "function": "play_room",
+  "function_line": 302,
+  "lines": [
+    302
+  ],
+  "occurrences": 1,
+  "snippet": "whole function play_room, lines 302 to 401 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "302:MLOC=54",
+    "unit": "113:MLOC=54",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run(room, previous_message, first_room)",
+  "external_dependencies": [],
+  "comments_in_snippet": "Kept, by rule 1.",
+  "removed_from_original": [
+    "lines 1 to 65, header: author, date, solution of the game and the sentence 'Program written with A LOT OF HELP from Github CoPilot'.",
+    "os.system('') at import time (it only enables ANSI colors in the Windows console): side effect with no role in the tested behavior.",
+    "comments 'by github copilot' above the screen functions (outside the snippet).",
+    "rooms the tests do not use, show_introduction, player_dies, player_wins, play_again and the main loop of the module."
+  ],
+  "scaffolding": [
+    "Index constants, new_line, closet_action and piano_action copied from the original.",
+    "move_cursor, clear_screen, clear_to_end_of_screen, clear_to_end_of_line, colorize, show_error and get_room_data copied from the original.",
+    "room_data with two rooms of the original (basement_dark and upstairs_unlocked), same texts, built with the function _action and one variable per room instead of the nested literal of the original, which would trigger MNC in the scaffolding. A _room with 5 parameters was tried and triggered LPL; discarded.",
+    "run(room, previous_message, first_room): returns play_room(...).",
+    "Checked: Pysmell only flags the LM of the snippet."
+  ],
+  "side_effects": {
+    "description": "The snippet prints with ANSI codes, reads with input(), pauses with time.sleep() and exits with exit() if the room does not exist.",
+    "handling": "The test replaces input() and time.sleep() with doubles through monkeypatch and expects SystemExit; the snippet was not changed."
+  },
+  "pinned_behavior": [
+    "typical: first room, option 4: exact printed text (colors and cursor), pause of 0.5 s, one question, returns ['basement_light', 'The lights are now on.'].",
+    "edge: room without a description and with a previous message (pause of 1 s); 'h' shows the hint, 9 and 'x' are refused, option 2 only shows the message and 'q' returns ['player_quits', ''].",
+    "invalid: a nonexistent room prints the error and raises SystemExit, without asking anything."
+  ],
+  "not_pinned_on_purpose": [
+    "Which of the four opening sentences is drawn in the rooms after the first: the test accepts any of them, without pinning how the draw is made (random.randrange in the original)."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 75/77 mutants killed",
+    "snippet_diff": "identical to the original (lines 302 to 401 against 113 to 212 of the unit)",
+    "pysmell": "LM detected, MLOC=54, same as the original; nothing in the scaffolding"
+  }
+}

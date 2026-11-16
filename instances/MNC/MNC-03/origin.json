@@ -1,0 +1,59 @@
+{
+  "id": "MNC-03",
+  "files": {
+    "unit": "MNC_03.py",
+    "tests": "test_MNC_03.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/build_summarizer.py",
+  "function": "summarize",
+  "function_line": 12,
+  "lines": [
+    25
+  ],
+  "occurrences": 1,
+  "snippet": "whole function summarize, lines 12 to 25 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "25:LEC=3",
+    "unit": "47:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(text, choices)",
+  "external_dependencies": [
+    "openai: local stub. Completion.create was removed in openai 1.0 and the pipeline uses openai 3.4.0; the stub imitates the earlier interface, checked in the source of openai-python 0.28.1 (Completion.create is a classmethod with keyword arguments; api_key is a module attribute; the response is indexable by ['choices'][0]['text'])."
+  ],
+  "copied_verbatim": [
+    "lines 12 to 25: summarize"
+  ],
+  "comments_in_snippet": "No comment in the snippet; the docstring of the function was kept.",
+  "removed_from_original": [
+    "lines 1 to 6, shebang and file header: outside the snippet.",
+    "line 7, import openai: replaced by the stub.",
+    "line 9, import click, the function main (lines 28 to 32) and the __main__ block: command line, outside the snippet.",
+    "line 11, comment above the function ('write a function that...'): outside the snippet; it looks like a request to a coding assistant."
+  ],
+  "scaffolding": [
+    "Completion: create (classmethod) records the key in use (openai.api_key) and the keyword parameters of each request and returns a dict with the prepared choices, built by a helper function so as not to form a nested literal container.",
+    "openai: namespace with api_key and Completion.",
+    "run(text, choices): prepares the choices, calls summarize and returns (summary, requests).",
+    "Checked: Pysmell only flags line 25; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: key read from OPENAI_API_KEY; request with model text-davinci-002 and the parameters of the original; returns the first choice without spaces and line breaks at the ends.",
+    "edge: a tab at the ends is kept (strip(' \\n')); without OPENAI_API_KEY the key is None; an empty prompt is sent.",
+    "invalid: a response without choices raises IndexError."
+  ],
+  "not_pinned_on_purpose": [
+    "Warnings and network errors of the real library: outside the stub."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 12 to 25 against 34 to 47 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 9/9 mutants killed"
+  }
+}

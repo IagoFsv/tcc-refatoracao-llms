@@ -1,0 +1,73 @@
+{
+  "id": "LPL-11",
+  "files": {
+    "unit": "LPL_11.py",
+    "tests": "test_LPL_11.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/my_image.py",
+  "function": "draw_circle",
+  "class": "RGB_Image",
+  "function_line": 356,
+  "lines": [
+    356
+  ],
+  "occurrences": 1,
+  "snippet": "whole draw_circle method of RGB_Image, docstring included, lines 356 to 368 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-09",
+    "LPL-10"
+  ],
+  "metrics": {
+    "original": "356:PAR=6",
+    "unit": "33:PAR=6",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(size, disk, color)",
+  "external_dependencies": [
+    "scikit-image==0.26.0 (installed for real, pinned in requirements.txt)",
+    "numpy==2.5.3 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "lines 10 and 11: import skimage, import numpy as np",
+    "lines 54 to 65: class Image, docstring and __init__",
+    "lines 262 to 265: class RGB_Image(Image) and docstring",
+    "lines 356 to 368: draw_circle"
+  ],
+  "comments_in_snippet": "Only the docstring of the method, kept by rule 1. It does not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 to 8, header comment with author, date and purpose; line 8 says that much of the code was written with GitHub Copilot: outside the snippet, reveals the origin of the code.",
+    "lines 12 to 14, imports of matplotlib, scipy.ndimage and os: not used by the snippet.",
+    "lines 17 to 51, plot_image, new_image_from_array and new_image_from_file: outside the snippet.",
+    "line 390 onwards, class ImageCollection: outside the snippet.",
+    "the other methods of Image (lines 67 to 260): outside the snippet.",
+    "the other methods of RGB_Image (lines 267 to 354 and 370 to 388): outside the snippet."
+  ],
+  "scaffolding": [
+    "Classes Image (header, docstring and __init__) and RGB_Image (header and docstring) copied from the original unchanged; the snippet only uses self.image.",
+    "run(size, disk, color=None): creates a white RGB image (uint8, 255) with the given size, calls draw_circle with (x, y, radius), passing the color only if it is given, and returns the image array the method returns.",
+    "Checked: Pysmell only flags the method of the snippet, with the same metric as the original; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: 7x7 image, center x=4, y=2, radius 2, blue; paints the 3x3 square of rows 1 to 3 and columns 3 to 5 (the disk of skimage.draw.disk with radius 2). Asymmetric center, so that the x/y order makes a difference.",
+    "edge: 4x5 image, center x=1, y=0, radius 2, without a color; the disk is clipped at the border (rows 0 and 1, columns 0 to 2) and painted black, the default color.",
+    "invalid: a color with two channels raises ValueError."
+  ],
+  "not_pinned_on_purpose": [
+    "Whether the drawing is done on the image itself or on a copy: the test checks the image returned by the method.",
+    "Negative radius: skimage.draw.disk does not raise (it returns the center), so it does not work as an invalid case."
+  ],
+  "notes": [
+    "PAR inflated by Pysmell: the signature is split by comma, and color=(0, 0, 0) adds 2 pieces without '='. There are 4 parameters without a default (self, x, y, radius), below the threshold of 5; Pysmell says 6. Kept and recorded as a limitation. Effect: replacing (0, 0, 0) with a constant removes the smell without touching the parameter list."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1, numpy 2.5.3, scikit-image 0.26.0",
+    "snippet_diff": "identical to the original (lines 356 to 368 against 33 to 45 of the unit)",
+    "pysmell": "1 LPL detection, PAR=6, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 6/6 mutants killed"
+  }
+}

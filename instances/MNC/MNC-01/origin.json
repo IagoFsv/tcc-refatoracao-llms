@@ -1,0 +1,68 @@
+{
+  "id": "MNC-01",
+  "files": {
+    "unit": "MNC_01.py",
+    "tests": "test_MNC_01.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/GuardianRanks.py",
+  "function": "GuardianRanks._process_data",
+  "function_line": 56,
+  "lines": [
+    60,
+    61,
+    62,
+    63,
+    68,
+    75,
+    76,
+    77
+  ],
+  "occurrences": 8,
+  "grouping_note": "Counting by line, the 8 detected lines would be 8 instances. By the enclosing-function rule they form a single instance.",
+  "snippet": "whole method _process_data, lines 55 to 91 of the original (decorator included)",
+  "verbatim": true,
+  "metrics": {
+    "original": "60:LEC=4; 61:LEC=3; 62:LEC=3; 63:LEC=4; 68:LEC=4; 75:LEC=4; 76:LEC=4; 77:LEC=4",
+    "unit": "107:LEC=4; 108:LEC=3; 109:LEC=3; 110:LEC=4; 115:LEC=4; 122:LEC=4; 123:LEC=4; 124:LEC=4",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(data)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 2: from datetime import datetime",
+    "lines 7 to 45: root_node, child_nodes, classes Objective, RecordSet and GuardianRank, GUARDIAN_RANKS",
+    "lines 51 to 91: class GuardianRanks with _COMPONENTS, _THUMBNAIL_URL and _process_data"
+  ],
+  "removed_from_original": [
+    "line 1, import discord: only used by _format_embed_data, which was left out.",
+    "line 4, from .BungieData import BungieData: relative import from a package that does not exist outside the bot; replaced by an empty base class.",
+    "line 5, import SharkBot: package of the bot, not available; replaced by scaffolding (see below).",
+    "lines 47 to 49, comment 'The Code in here is terrible. It's the first time I've used GitHub Copilot...': it would give the model a hint about the origin and the quality of the code.",
+    "lines 93 to 140, _format_embed_data and commented-out methods: outside the snippet, they depend on discord."
+  ],
+  "scaffolding": [
+    "SharkBot: SimpleNamespace with only what the code touches. Destiny.Definitions.*.get returns definitions from a fixed catalog (_NODES, _RECORDS); Utils.JSON.dumps is json.dumps.",
+    "Fixed catalog: two ranks (Rookie, Veteran), one record set in each, three objectives, two of them with {var:...} in the description to exercise the extraction of variables.",
+    "The catalog is built by helper functions (_node, _record) instead of nested literals, so that the scaffolding does not trigger MNC on its own. Checked: Pysmell only flags the 8 lines of the snippet.",
+    "BungieData: empty base class.",
+    "run(data): calls GuardianRanks._process_data(data)."
+  ],
+  "pinned_behavior": [
+    "typical: two characters, picks the one with the most recent dateLastPlayed even when it comes later in the dictionary; output dictionary checked field by field, including variables from the profile and from the character; printed JSON equal to the return value.",
+    "edge: a single character, everything complete; ranks and sets marked as complete; combined variables; printed JSON equal to the return value.",
+    "invalid: an objective without a record in the API response raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "The original changes the input dictionary (the |= merge records and profile variables into those of the character). The tests do not check this: it is an accidental side effect, and a refactoring that stops mutating the input should not fail because of it."
+  ],
+  "adaptation_check": {
+    "pysmell": "8 MNC detections, same LEC as the original, none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "reverse=True -> False (picks the wrong character): 2 tests fail. progress -> completionValue: the typical test fails.",
+    "snippet_diff": "identical to the original (lines 55 to 91 against 102 to 138 of the unit)",
+    "environment": ".venv, Python 3.14.6"
+  }
+}

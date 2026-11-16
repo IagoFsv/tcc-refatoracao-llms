@@ -1,0 +1,63 @@
+{
+  "id": "MNC-12",
+  "files": {
+    "unit": "MNC_12.py",
+    "tests": "test_MNC_12.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/GetWeather-main/main.py",
+  "function": "<module>",
+  "function_line": 0,
+  "lines": [
+    40
+  ],
+  "occurrences": 1,
+  "snippet_lines": [
+    25,
+    41
+  ],
+  "snippet": "whole if __name__ == '__main__' block, lines 25 to 41 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "40:LEC=3",
+    "unit": "51:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(city)",
+  "external_dependencies": [
+    "requests==2.34.2 (installed for real, pinned in requirements.txt); the test intercepts requests.get with monkeypatch, no network"
+  ],
+  "copied_verbatim": [
+    "lines 5 and 8: import requests, import argparse",
+    "lines 11 to 22: call_api, without the two comments with old values (see removed)",
+    "lines 25 to 41: __main__ block"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the three comments of the block ('check if city is passed as argument' etc.).",
+  "removed_from_original": [
+    "lines 1, 2, 4 and 7, header and import comments: outside the snippet.",
+    "lines 17 and 19 of call_api, comments with an old API key and URL: dead code in a comment, outside the snippet."
+  ],
+  "scaffolding": [
+    "The snippet is module-level code under the __main__ guard. run(city) runs the file itself with runpy.run_path(__file__, run_name='__main__'), with sys.argv = [file, city], and restores sys.argv. Importing the unit does not execute the snippet. A refactoring that moves the block into a function called under the same guard still passes.",
+    "call_api of the original, reading the config.ini of the current folder (the test creates it in a temporary folder).",
+    "Checked: Pysmell only flags line 40 of the snippet; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: URL built with base_url, key and city from config.ini; prints the weather description.",
+    "edge: a city with spaces goes into the URL without encoding; with several conditions, only the first is printed.",
+    "invalid: a response with cod other than 200 prints 'Invalid city name' and exits with code 1 (SystemExit)."
+  ],
+  "not_pinned_on_purpose": [
+    "Message 'Please provide city name': unreachable, because argparse requires the city.",
+    "Error output of argparse without a city: not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 25 to 41 against 36 to 52 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 14/17 mutants killed; survivors: L31:8 removes Expr | L32:13 1->2 | L32:8 removes Expr"
+  }
+}

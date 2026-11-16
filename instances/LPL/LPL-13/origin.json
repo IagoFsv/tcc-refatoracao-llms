@@ -1,0 +1,56 @@
+{
+  "id": "LPL-13",
+  "files": {
+    "unit": "LPL_13.py",
+    "tests": "test_LPL_13.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/tools.py",
+  "function": "bilinear_interpolation",
+  "function_line": 68,
+  "lines": [
+    68
+  ],
+  "occurrences": 1,
+  "snippet": "whole function bilinear_interpolation, docstring included, lines 68 to 112 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "68:PAR=10",
+    "unit": "8:PAR=10",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(point, corners, values)",
+  "external_dependencies": [
+    "none: the snippet only does arithmetic"
+  ],
+  "copied_verbatim": [
+    "lines 68 to 112: bilinear_interpolation"
+  ],
+  "comments_in_snippet": "Only the docstring, kept by rule 1 (verbatim snippet). It says 'Made with a lot of help from GitHub Copilot.', which reveals the origin of the code, and has a doctest example that imports from rocketpy.tools (pytest does not run doctests by default). Same criterion as LPL-01: recorded as a limitation.",
+  "removed_from_original": [
+    "lines 1 to 8, imports of importlib, re, bisect, pytz, cftime and packaging: not used by the snippet.",
+    "lines 16 to 66, class cached_property and function tuple_handler: outside the snippet.",
+    "lines 115 to 391, find_two_closest_integers, time_num_to_date_string, geopotential_to_height_asl, geopotential_to_height_agl, find_closest, import_optional_dependency and check_requirement_version: outside the snippet."
+  ],
+  "scaffolding": [
+    "run(point, corners, values): receives three tuples, (x, y), (x1, x2, y1, y2) and (z11, z12, z21, z22), unpacks them and calls the function of the snippet.",
+    "Checked: Pysmell only flags the function of the snippet (PAR=10); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: point (1.5, 3) in the rectangle x from 1 to 3, y from 2 to 6, with the four values different; returns 1.8125. Asymmetric point and values and a rectangle away from the origin, so that swapping coordinates, values or signs changes the result.",
+    "edge: a point on a corner returns the value of that corner: (x2, y2) gives z22 and (x2, y1) gives z21.",
+    "invalid: a rectangle without width (x1 == x2) raises ZeroDivisionError."
+  ],
+  "not_pinned_on_purpose": [
+    "Point outside the rectangle: the formula extrapolates without error; it is not a use the docstring foresees."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 68 to 112 against 8 to 52 of the unit)",
+    "pysmell": "1 LPL detection, PAR=10, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 24/24 mutants killed (in a first version, with the rectangle at the origin, 5 sign swaps survived; the rectangle was moved)"
+  }
+}

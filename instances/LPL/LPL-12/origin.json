@@ -1,0 +1,61 @@
+{
+  "id": "LPL-12",
+  "files": {
+    "unit": "LPL_12.py",
+    "tests": "test_LPL_12.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/pandas_dataframe_interpolation_via_scipy_interpolate.py",
+  "function": "interpolate_df_at_fixed_x_intervals",
+  "function_line": 222,
+  "lines": [
+    222
+  ],
+  "occurrences": 1,
+  "snippet": "whole function interpolate_df_at_fixed_x_intervals, lines 222 to 263 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "222:PAR=5",
+    "unit": "12:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(data1, data2, interval)",
+  "external_dependencies": [
+    "pandas==3.0.6, numpy==2.5.3 and scipy==1.18.1 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "lines 129 to 131: import numpy as np, import pandas as pd, from scipy.interpolate import interp1d",
+    "lines 222 to 263: interpolate_df_at_fixed_x_intervals"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet): explanations by the author, a link to the numpy documentation, a TODO/NB note suggesting to compute y_diff earlier and a commented-out block. They do not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 to 128, module docstring: header of the author's repository, pylint instructions and a conversation with GitHub Copilot, with code snippets; reveals the origin of the code.",
+    "lines 129 to 221 other than the imports, interpolate_df and module-level code that builds df1, df2 and prints results; includes the comment on line 217 ('By me, with CoPilot's assistance'): outside the snippet.",
+    "lines 265 to 535, module-level code that calls the function and prints, and the variants interpolate_df_at_fixed_x_intervals_no_extrapolation and interpolate_df_at_fixed_x_intervals_numpy: outside the snippet."
+  ],
+  "scaffolding": [
+    "run(data1, data2, interval): receives two DataFrames with the x column first and the y column second, separates the four series (with the column names, which the snippet uses in the output names) and calls the function of the snippet.",
+    "Checked: Pysmell only flags the function of the snippet (PAR=5); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: the author's own data (x1 from 1 to 5, y1 = 2x) against three points of y2 with different slopes, interval 1.0; columns x1_new, y1_new, y2_new and y_diff, with linear interpolation inside the range and extrapolation by the end segment outside it.",
+    "edge: interval 10, larger than the x range; since the end of the arange is x_max + interval, a second point comes out, x = 11, beyond the largest x, extrapolated.",
+    "invalid: interval zero raises ValueError ('Maximum allowed size exceeded'), because x_min and x_max are numpy scalars; with plain Python numbers numpy would raise ZeroDivisionError."
+  ],
+  "not_pinned_on_purpose": [
+    "Column types (int or float): the test compares values and names, with check_dtype=False.",
+    "RuntimeWarning for division by zero that comes with the invalid case."
+  ],
+  "notes": [
+    "The ported Pysmell also flags LPL on lines 285 and 329 of the original (variants of the same function, PAR=5), but the Zhang et al. spreadsheet only lists line 222. The selection follows the spreadsheet."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1, pandas 3.0.6, numpy 2.5.3, scipy 1.18.1",
+    "snippet_diff": "identical to the original (lines 222 to 263 against 12 to 53 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 15/16 mutants killed. Survivor: removing x_new = pd.Series(x_new) (line 236 of the original), equivalent: the DataFrame comes out the same from the numpy array."
+  }
+}

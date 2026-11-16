@@ -1,0 +1,61 @@
+{
+  "id": "MNC-13",
+  "files": {
+    "unit": "MNC_13.py",
+    "tests": "test_MNC_13.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/Natsar-main/modules/tele.py",
+  "function": "send_request",
+  "function_line": 57,
+  "lines": [
+    75
+  ],
+  "occurrences": 2,
+  "snippet": "whole function send_request, lines 57 to 84 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "75:LEC=3",
+    "unit": "47:LEC=3; 47:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(token, endpoint)",
+  "external_dependencies": [
+    "requests==2.34.2 (installed for real, pinned in requirements.txt); the test intercepts requests.get with monkeypatch, no network"
+  ],
+  "copied_verbatim": [
+    "lines 4 and 9: import requests, import datetime",
+    "lines 17 to 21 and 33 to 43: class TelegramBot with __init__ and remove_duplicates, with their comments",
+    "lines 57 to 84: send_request"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the comments of the method.",
+  "removed_from_original": [
+    "lines 1 and 3, shebang and import comment: outside the snippet.",
+    "lines 5 to 8 and 11 to 14, imports of os, pathlib, dotenv and telethon and the reading of .env: not used by the snippet; telethon needs the network and credentials.",
+    "extract_profile_data, remove_file_duplicates, get_tg_files and the class TelegramUser: outside the snippet."
+  ],
+  "scaffolding": [
+    "TelegramBot with only __init__ and remove_duplicates, copied from the original.",
+    "run(token, endpoint): returns TelegramBot(token).send_request(endpoint).",
+    "users.log is written in the current folder; the test runs in a temporary folder and fixes the clock by replacing datetime.datetime with a subclass whose now() is fixed.",
+    "Checked: Pysmell only flags line 75 (two detections, as in the original); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: getUpdates returns (id, username) without repetition, skipping messages without username or without message; appends one line per user to users.log with date, token, id and username (the id comes first: the loop variables are swapped in the original, pinned as it is).",
+    "edge: getMe returns (username, first_name, id); another endpoint returns None; an existing users.log receives the lines at the end; URL of each request.",
+    "invalid: a status other than 200 raises Exception('Error: <response text>'); getMe without username too."
+  ],
+  "not_pinned_on_purpose": [
+    "Format of the exception beyond the text: the test checks the message, not the exact class (Exception).",
+    "Empty list in getUpdates: creates an empty users.log; not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 57 to 84 against 29 to 56 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 14/14 mutants killed"
+  }
+}

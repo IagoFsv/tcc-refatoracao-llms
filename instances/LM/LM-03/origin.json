@@ -1,0 +1,50 @@
+{
+  "id": "LM-03",
+  "files": {
+    "unit": "LM_03.py",
+    "tests": "test_LM_03.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/pyMX.py",
+  "function": "get_layout_size",
+  "function_line": 54,
+  "lines": [
+    54
+  ],
+  "occurrences": 1,
+  "snippet": "whole function get_layout_size, lines 54 to 109 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "54:MLOC=54",
+    "unit": "10:MLOC=54",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run(elements)",
+  "external_dependencies": [],
+  "comments_in_snippet": "The snippet has no comments.",
+  "removed_from_original": [
+    "lines 50 to 53, comments above the function (outside the snippet): they mention GitHub Copilot and a suggestion error; they reveal the origin of the code.",
+    "the other functions and imports (lxml, drawio_*, pandas etc.): not used by the snippet."
+  ],
+  "scaffolding": [
+    "import math, used by the snippet.",
+    "run(elements): returns get_layout_size(elements)."
+  ],
+  "pinned_behavior": [
+    "typical: each integer from 1 to 91 against the range of the table (21 ranges).",
+    "edge: zero and a negative number give (1, 1); range boundaries (6, 12, 13, 18, 35, 36, 91); above 91, computation by the golden ratio (92, 100, 1000).",
+    "invalid: 12.5 matches no branch and raises ValueError with the message of the original."
+  ],
+  "not_pinned_on_purpose": [
+    "Error type for text or None (TypeError from the comparison): only the fractional case was pinned."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 146/147 mutants killed",
+    "snippet_diff": "identical to the original (lines 54 to 109 against 10 to 65 of the unit)",
+    "pysmell": "LM detected, MLOC=54, same as the original; nothing in the scaffolding"
+  }
+}

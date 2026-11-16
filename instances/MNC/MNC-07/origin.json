@@ -1,0 +1,61 @@
+{
+  "id": "MNC-07",
+  "files": {
+    "unit": "MNC_07.py",
+    "tests": "test_MNC_07.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/lineemup.py",
+  "function": "heuristic_1",
+  "function_line": 46,
+  "lines": [
+    72
+  ],
+  "occurrences": 1,
+  "detections_note": "The ported Pysmell flags line 72 twice (LEC=3 in the two chains convs[0][i][...] and convs[1][i][...]); the Zhang spreadsheet counts one occurrence. The checklist compares with the original run in the same port, which also gives two. It is a single snippet, one instance.",
+  "snippet": "whole function heuristic_1, lines 46 to 73 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "72:LEC=3",
+    "unit": "74:LEC=3; 74:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(rows, s, player)",
+  "external_dependencies": [
+    "numpy==2.5.3 and scipy==1.18.1 (convolve2d), installed for real, pinned in requirements.txt. The original tries cupy (GPU) first; the unit only uses the CPU path."
+  ],
+  "copied_verbatim": [
+    "lines 46 to 73: heuristic_1 (method of Agent)",
+    "lines 335 to 342 and 401 to 408: construct_winstates and convolve_winstates of the Game class"
+  ],
+  "comments_in_snippet": "Kept, by rule 1, including '# this feels like code golf and github copilot had a child, and it's ugly' (line 71), which reveals the origin and quality of the code. Same treatment as the docstring of LPL-01; recorded as a limitation.",
+  "removed_from_original": [
+    "line 1, comment with the origin of the base code (stackabuse): outside the snippet.",
+    "lines 6 to 14, attempt to import cupy with prints: replaced by the imports of numpy and scipy.",
+    "the other methods of Agent (minimax search, heuristic_2 etc.) and of Game, random_blocs, run_experiments, main: outside the snippet."
+  ],
+  "scaffolding": [
+    "Game: __init__ adapted from __init__, initialize_game and place_blocs of the original (matrices X, O and B, blocks), without the player to move or time; construct_winstates and convolve_winstates copied.",
+    "Agent: only __init__ with self.p.",
+    "run(rows, s, player): builds the board from one string per row ('X', 'O', '*' block) and returns Agent(player).heuristic_1(game).",
+    "Checked: Pysmell only flags line 72; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: score 20 for X and -20 for O on a 4x4 board with s=3; 12 with s=4; 24 with pieces in a column. Values obtained by running the original code.",
+    "edge: an empty board gives 0; a win gives +inf and -inf; a block and an opponent in the same window cut the sequence (-48, -16, 28, -28).",
+    "invalid: a nonexistent player raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "Numeric type of the return value (numpy.int64 or int): the comparison is by equality.",
+    "s larger than the board (ValueError from convolve2d): error of the library, not of the snippet."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 46 to 73 against 48 to 75 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 30/31 mutants killed; survivors: L68:33 0->1"
+  }
+}

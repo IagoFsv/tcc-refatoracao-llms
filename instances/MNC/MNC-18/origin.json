@@ -1,0 +1,55 @@
+{
+  "id": "MNC-18",
+  "files": {
+    "unit": "MNC_18.py",
+    "tests": "test_MNC_18.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "generate_terrain",
+  "function_line": 552,
+  "lines": [
+    553
+  ],
+  "occurrences": 1,
+  "snippet": "whole function generate_terrain, lines 552 to 553 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "553:LEC=3",
+    "unit": "31:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(x, y, z)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 513 and 514: generate_terrain of Location (terrain 'grass')",
+    "lines 811 and 812: generate_world_map of World",
+    "lines 552 and 553: generate_terrain (module-level function)"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "all the rest of the file: outside the snippet. GameData reads game_data.json from disk when the module is imported."
+  ],
+  "scaffolding": [
+    "In the original, generate_terrain is a module-level function with a self parameter, which no class uses; it expects an object with world_map and position x, y, z.",
+    "Minimal Location: coordinates and terrain, which starts as None and only exists after generate_terrain (in the original the terrain is already 'grass' when created, which would make the call invisible to the test).",
+    "Minimal World: size by parameter and generate_world_map copied from the original.",
+    "run(x, y, z): 2 x 3 x 4 map, current position (x, y, z), calls generate_terrain(world) and returns the coordinates of the cells with terrain.",
+    "Checked: Pysmell only flags line 553; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: only the cell at the current position receives terrain.",
+    "edge: origin; negative indices count from the end (behavior of Python lists).",
+    "invalid: a position outside the map raises IndexError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 552 to 553 against 30 to 31 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 1/1 mutants killed"
+  }
+}

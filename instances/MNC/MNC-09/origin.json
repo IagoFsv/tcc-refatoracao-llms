@@ -1,0 +1,57 @@
+{
+  "id": "MNC-09",
+  "files": {
+    "unit": "MNC_09.py",
+    "tests": "test_MNC_09.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/AiShell-master/tasks.py",
+  "function": "get_project_path",
+  "function_line": 13,
+  "lines": [
+    16
+  ],
+  "occurrences": 1,
+  "snippet": "whole function get_project_path, lines 13 to 17 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "16:LEC=3",
+    "unit": "17:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run()",
+  "external_dependencies": [
+    "toml==0.10.2 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "line 4: import toml",
+    "lines 9 and 10: get_pep8_compliant_name",
+    "lines 13 to 17: get_project_path"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "line 1, '# type: ignore', and imports of shutil and invoke: not used by the snippet.",
+    "invoke tasks (test, format_code, check, rename_project, release etc.): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(): returns get_project_path(), reading the pyproject.toml of the current folder (the test creates it in a temporary folder).",
+    "Checked: Pysmell only flags line 16; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: name 'ai-shell' becomes 'ai_shell'.",
+    "edge: several hyphens and an underscore mixed; a name without a hyphen; another section with name does not interfere.",
+    "invalid: a pyproject.toml without [tool.poetry] raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "Missing pyproject.toml (FileNotFoundError): not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 13 to 17 against 14 to 18 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 3/3 mutants killed"
+  }
+}

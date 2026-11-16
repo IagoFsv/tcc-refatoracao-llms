@@ -1,0 +1,58 @@
+{
+  "id": "MNC-21",
+  "files": {
+    "unit": "MNC_21.py",
+    "tests": "test_MNC_21.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/ipython-copilot-completer-main/copilot_completer/completer.py",
+  "function": "get_suggestion",
+  "function_line": 100,
+  "lines": [
+    164
+  ],
+  "occurrences": 1,
+  "snippet": "whole function get_suggestion, lines 100 to 166 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "164:LEC=3",
+    "unit": "84:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(prompt, stops, suffix)",
+  "external_dependencies": [
+    "requests==2.34.2 (installed for real, pinned in requirements.txt); the test intercepts requests.post with monkeypatch, no network"
+  ],
+  "copied_verbatim": [
+    "lines 1, 3, 5 and 7: from __future__ import annotations, import json, from contextlib import suppress, import requests",
+    "lines 100 to 166: get_suggestion"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: TODO, comments of the payload and of the reading of the stream. The docstring 'Get a suggestion from GitHub Copilot', the headers and the URL mention Copilot because the code is a client of that API; recorded as a limitation (the model sees the name of the service).",
+  "removed_from_original": [
+    "lines 8 to 17, imports of IPython and settings: not used by the snippet (settings only serves the original get_copilot_token).",
+    "get_copilot_suggestion, copilot_completer, memoize_with_expiry and the original get_copilot_token: outside the snippet; the original fetches the token from the GitHub API."
+  ],
+  "scaffolding": [
+    "get_copilot_token(): stub that returns a fixed token. The name is required by the snippet and was kept; the checklist does not flag it, because the hint search requires the start of a word and the name starts with 'get_'. The original returns the token stored in cache (memoize_with_expiry returns only the value).",
+    "run(prompt, stops, suffix=''): returns get_suggestion(prompt, stops, suffix).",
+    "Checked: Pysmell only flags line 164; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: request with URL, headers (Bearer with the token), JSON body (temperature 0 for a short prompt) and stream=True; returns the chunks joined, ignoring empty lines and '[DONE]'.",
+    "edge: with suffix, the extra stops go in as a single item (a list inside stops; defect of the original, pinned as it is); temperature 0, 0.2, 0.4 and 0.8 according to the number of lines, at the limits; an empty stream returns ''.",
+    "invalid: a JSON chunk without choices raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "The original changes the stops list it receives when there is a suffix (+=): side effect not pinned.",
+    "Exact text of the JSON body (key order): the test compares the JSON read."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 100 to 166 against 20 to 86 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 35/35 mutants killed"
+  }
+}

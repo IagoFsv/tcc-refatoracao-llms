@@ -1,0 +1,60 @@
+{
+  "id": "MNC-10",
+  "files": {
+    "unit": "MNC_10.py",
+    "tests": "test_MNC_10.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/AiShell-master/tasks.py",
+  "function": "rename_project",
+  "function_line": 59,
+  "lines": [
+    70
+  ],
+  "occurrences": 1,
+  "snippet": "whole function rename_project, lines 58 to 73 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "70:LEC=3",
+    "unit": "36:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(project_name)",
+  "external_dependencies": [
+    "toml==0.10.2 (installed for real, pinned in requirements.txt)",
+    "invoke==3.0.3 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "lines 2, 4 and 5: import shutil, import toml, from invoke import Context, task",
+    "lines 9 and 10: get_pep8_compliant_name",
+    "lines 58 to 73: rename_project, with the @task decorator"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the three comments of the method ('Get the current project path' etc.).",
+  "removed_from_original": [
+    "line 1, '# type: ignore', and import of UnexpectedExit: not used by the snippet.",
+    "the other invoke tasks: outside the snippet."
+  ],
+  "scaffolding": [
+    "get_project_path: the snippet calls the function, but the original one is the snippet of MNC-09 and has the smell (data['tool']['poetry']['name']). In the scaffolding it was written with the same behavior without the chain of three indices, so that Pysmell flags nothing outside the snippet (same approach as MNC-01). Recorded: the unit shows the model a version of this function without the smell.",
+    "run(project_name): calls rename_project(Context(), project_name) (the invoke task requires a Context as its first argument).",
+    "Checked: Pysmell only flags line 70; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: the folder my_app becomes new_app with its content; in pyproject.toml, name becomes 'new-app' and the rest stays the same.",
+    "edge: a name without a hyphen becomes a name with several hyphens; the folder uses underscores.",
+    "invalid: a pyproject.toml without [tool.poetry] raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "Exact text of the rewritten pyproject.toml: toml.dump reorders sections and reformats lists; the test compares the content read.",
+    "Missing package folder (error from shutil.move): not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 58 to 73 against 24 to 39 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 5/5 mutants killed"
+  }
+}

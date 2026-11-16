@@ -1,0 +1,54 @@
+{
+  "id": "MNC-17",
+  "files": {
+    "unit": "MNC_17.py",
+    "tests": "test_MNC_17.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/Weather_Copilot-main/main.py",
+  "function": "print_weather",
+  "function_line": 29,
+  "lines": [
+    31
+  ],
+  "occurrences": 1,
+  "snippet": "whole function print_weather, lines 29 to 33 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "31:LEC=3",
+    "unit": "9:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(weather)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 29 to 33: print_weather"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 10, imports (requests, pycountry, dotenv etc.) and reading of the key: not used by the snippet.",
+    "line 28, comment above the function ('write a function that...'): outside the snippet; it looks like a request to a coding assistant.",
+    "the other print_* functions, get_weather, main and the __main__ block: outside the snippet."
+  ],
+  "scaffolding": [
+    "run(weather): calls print_weather(weather).",
+    "Checked: Pysmell only flags line 31; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: prints 'The weather in <city> is <description>'.",
+    "edge: with several conditions, only the first; None prints 'Error: Could not get weather'.",
+    "invalid: an empty list of conditions raises IndexError."
+  ],
+  "not_pinned_on_purpose": [
+    "Comparison weather != None (and not 'is not None'): an empty dict goes to the main branch and raises KeyError; not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 29 to 33 against 7 to 11 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 7/7 mutants killed"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "LPL-09",
+  "files": {
+    "unit": "LPL_09.py",
+    "tests": "test_LPL_09.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/my_image.py",
+  "function": "draw_line",
+  "class": "Image",
+  "function_line": 195,
+  "lines": [
+    195
+  ],
+  "occurrences": 1,
+  "snippet": "whole draw_line method of Image, docstring included, lines 195 to 207 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-10",
+    "LPL-11"
+  ],
+  "metrics": {
+    "original": "195:PAR=5",
+    "unit": "26:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(size, segment)",
+  "external_dependencies": [
+    "scikit-image==0.26.0 (installed for real, pinned in requirements.txt)",
+    "numpy==2.5.3 (installed for real, pinned in requirements.txt)"
+  ],
+  "copied_verbatim": [
+    "lines 10 and 11: import skimage, import numpy as np",
+    "lines 54 to 65: class Image, docstring and __init__",
+    "lines 195 to 207: draw_line"
+  ],
+  "comments_in_snippet": "Only the docstring of the method, kept by rule 1. It does not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 to 8, header comment with author, date and purpose; line 8 says that much of the code was written with GitHub Copilot: outside the snippet, reveals the origin of the code.",
+    "lines 12 to 14, imports of matplotlib, scipy.ndimage and os: not used by the snippet.",
+    "lines 17 to 51, plot_image, new_image_from_array and new_image_from_file: outside the snippet.",
+    "line 390 onwards, class ImageCollection: outside the snippet.",
+    "the other methods of Image (lines 67 to 193 and 209 to 260): outside the snippet.",
+    "lines 262 to 388, class RGB_Image: outside the snippet."
+  ],
+  "scaffolding": [
+    "Class Image reduced to the header, the docstring and the __init__ of the original, copied unchanged (the snippet only uses self.image).",
+    "run(size, segment): creates an image of zeros (float) with the given size, calls draw_line with (y0, x0, y1, x1) and returns the image array the method returns.",
+    "Checked: Pysmell only flags the method of the snippet, with the same metric as the original; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: 3x5 image, segment (0, 0) to (2, 4); marks with 1 the pixels (0,0), (1,1), (1,2), (2,3), (2,4), those of skimage.draw.line.",
+    "edge: a one-point segment, (2, 3) to (2, 3); marks only that pixel.",
+    "invalid: a point outside the 5x5 image (column 9) raises IndexError."
+  ],
+  "not_pinned_on_purpose": [
+    "Whether the drawing is done on the image itself or on a copy: the test checks the image returned by the method, not the array passed to the constructor."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1, numpy 2.5.3, scikit-image 0.26.0",
+    "snippet_diff": "identical to the original (lines 195 to 207 against 26 to 38 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 4/4 mutants killed"
+  }
+}

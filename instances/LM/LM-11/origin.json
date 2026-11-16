@@ -1,0 +1,47 @@
+{
+  "id": "LM-11",
+  "files": {
+    "unit": "LM_11.py",
+    "tests": "test_LM_11.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/hangmanCopilot.py",
+  "function": "print_hangman",
+  "function_line": 17,
+  "lines": [
+    17
+  ],
+  "occurrences": 1,
+  "snippet": "whole function print_hangman, lines 17 to 80 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "17:MLOC=63",
+    "unit": "8:MLOC=63",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run(misses)",
+  "external_dependencies": [],
+  "comments_in_snippet": "The snippet has no comments.",
+  "removed_from_original": [
+    "lines 1 to 3, comments with the link to the video and 'make a hangman game with a copilot'.",
+    "game variables and the main loop of the module (lines 9 to 15 and 82 to 142): they would run on import."
+  ],
+  "scaffolding": [
+    "run(misses): calls print_hangman(misses)."
+  ],
+  "pinned_behavior": [
+    "typical: 3 misses, the exact 8 lines.",
+    "edge: the 7 drawings, from 0 to 6 misses.",
+    "invalid: 7, -1 and '3' print nothing and do not raise."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 70/70 mutants killed",
+    "snippet_diff": "identical to the original (lines 17 to 80 against 8 to 71 of the unit)",
+    "pysmell": "LM detected, MLOC=63, same as the original; nothing in the scaffolding"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "LPL-14",
+  "files": {
+    "unit": "LPL_14.py",
+    "tests": "test_LPL_14.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/2-BouncingBall.py",
+  "function": "simulate_bouncing_ball",
+  "function_line": 7,
+  "lines": [
+    7
+  ],
+  "occurrences": 1,
+  "snippet": "whole function simulate_bouncing_ball, docstring included, lines 7 to 33 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "7:PAR=6",
+    "unit": "8:PAR=6",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(state, time, physics)",
+  "external_dependencies": [
+    "none: the snippet only does arithmetic with lists"
+  ],
+  "copied_verbatim": [
+    "lines 7 to 33: simulate_bouncing_ball"
+  ],
+  "comments_in_snippet": "Only the docstring, kept by rule 1, with the author's '>>>' marker at the start. It does not mention the study or the origin of the code.",
+  "removed_from_original": [
+    "lines 1 to 3, module docstring: outside the snippet.",
+    "line 5, import of matplotlib: only used in the module-level code, outside the snippet.",
+    "lines 35 to 53, module-level code that sets the initial values, calls the function and plots: outside the snippet."
+  ],
+  "scaffolding": [
+    "run(state, time, physics=None): receives (x0, y0, vx0, vy0) and (steps, dt) and, if physics is given, (restitution, gravity); without physics, calls the function without these two arguments, so the defaults apply. A parameter with a default does not count in PAR.",
+    "Checked: Pysmell only flags the function of the snippet (PAR=6); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: ball going down from y=0.3 with vy=-2, restitution 0.5, g=10, 3 steps of 0.1; x advances 0.1 per step; y is [0.3, -0.1, 0, 0.3]: in step 1 the stored y is negative (peculiarity below), in step 2 the ball bounces and in step 3 it goes up.",
+    "edge: ball at rest on the ground, with the default values (restitution 0.2, g 9.83); y = [0, 0, 0, 0.03932], a value that depends on both defaults. Zero steps returns only the initial position.",
+    "invalid: a non-integer number of steps (2.5) raises TypeError (range)."
+  ],
+  "not_pinned_on_purpose": [
+    "Return type (tuple of two lists): the tests only unpack xs and ys. The '-> list' annotation of the original does not match the return value, and fixing it does not fail.",
+    "Unused loop variable i."
+  ],
+  "notes": [
+    "Peculiarity of the original pinned as it is: when the ball does not go past the ground, y receives vy * dt twice in the same step (lines 26 and 31), and the stored y can be negative. A refactoring that removes the duplicated sum changes the positions and fails."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 7 to 33 against 8 to 34 of the unit)",
+    "pysmell": "1 LPL detection, PAR=6, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 31/31 mutants killed"
+  }
+}

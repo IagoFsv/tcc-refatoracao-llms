@@ -51,11 +51,10 @@ INSTANCES = ROOT / "instances"
 TABLE = INSTANCES / "checklist.csv"
 
 # Provenance record of each instance and the keys the checklist reads.
-ORIGIN_FILE = "origem.json"
-ORIGIN_FIELDS = ("id", "smell", "arquivo", "ponto_de_entrada",
-                 "comportamento_fixado", "validacao_da_adaptacao")
-ORIGIN_SAME_AS_SELECTION = {"id": "id", "smell": "smell", "arquivo": "file"}
-ORIGIN_SNIPPET_LINES = "trecho_linhas"
+ORIGIN_FILE = "origin.json"
+ORIGIN_FIELDS = ("id", "smell", "file", "entry_point", "pinned_behavior", "adaptation_check")
+ORIGIN_SAME_AS_SELECTION = {"id": "id", "smell": "smell", "file": "file"}
+ORIGIN_SNIPPET_LINES = "snippet_lines"
 
 PACKAGES = ("pytest", "pandas", "tqdm", "numpy", "scikit-image", "scipy", "requests", "toml", "invoke",
             "beautifulsoup4", "termcolor")

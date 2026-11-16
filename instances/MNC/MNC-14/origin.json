@@ -1,0 +1,60 @@
+{
+  "id": "MNC-14",
+  "files": {
+    "unit": "MNC_14.py",
+    "tests": "test_MNC_14.py"
+  },
+  "smell": "MNC",
+  "smell_name": "Multiply-Nested Container",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/Natsar-main/modules/tele.py",
+  "function": "get_tg_files",
+  "function_line": 85,
+  "lines": [
+    92,
+    98
+  ],
+  "occurrences": 2,
+  "snippet": "whole function get_tg_files, lines 85 to 109 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "92:LEC=4; 98:LEC=3",
+    "unit": "34:LEC=4; 40:LEC=3",
+    "tuning_threshold": "LEC >= 3, or DNC >= 3 and NCT >= 2"
+  },
+  "entry_point": "run(token)",
+  "external_dependencies": [
+    "requests==2.34.2 (installed for real, pinned in requirements.txt); the test intercepts requests.get with monkeypatch, no network"
+  ],
+  "copied_verbatim": [
+    "line 4: import requests",
+    "lines 17 to 21 and 45 to 54: class TelegramBot with __init__ and remove_file_duplicates, with their comments",
+    "lines 85 to 109: get_tg_files"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the comments of the method (including the repeated 'for each update, get the file id if it exists').",
+  "removed_from_original": [
+    "lines 1 and 3, shebang and import comment: outside the snippet.",
+    "lines 5 to 14, imports of os, pathlib, dotenv, telethon and datetime and the reading of .env: not used by the snippet.",
+    "extract_profile_data, remove_duplicates, send_request and the class TelegramUser: outside the snippet."
+  ],
+  "scaffolding": [
+    "TelegramBot with only __init__ and remove_file_duplicates, copied from the original.",
+    "run(token): returns TelegramBot(token).get_tg_files().",
+    "Checked: Pysmell only flags lines 92 and 98; nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: first the documents of replied messages, then the direct documents, without repeating ids; one getFile per id, in order; returns the file_path values.",
+    "edge: without documents (reply without a document, edited message) returns an empty list and only calls getUpdates.",
+    "invalid: getFile without result (invalid id) raises KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "HTTP status: the original does not check it; not exercised."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "identical to the original (lines 85 to 109 against 27 to 51 of the unit)",
+    "pysmell": "same MNC detections as the original inside the snippet; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 9/9 mutants killed"
+  }
+}

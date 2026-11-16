@@ -1,0 +1,53 @@
+{
+  "id": "LM-05",
+  "files": {
+    "unit": "LM_05.py",
+    "tests": "test_LM_05.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/WindCatcher-main/modules/decoder.py",
+  "function": "parse_weather_to_json",
+  "function_line": 25,
+  "lines": [
+    25
+  ],
+  "occurrences": 1,
+  "snippet": "whole function parse_weather_to_json, lines 25 to 103 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "25:MLOC=56",
+    "unit": "10:MLOC=56",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run(current_html, forecast_html)",
+  "external_dependencies": [
+    "beautifulsoup4==4.15.0 (installed for real, pinned in requirements.txt): the test builds the HTML, no network"
+  ],
+  "comments_in_snippet": "Kept, by rule 1.",
+  "removed_from_original": [
+    "get_soup and the import of requests: the original downloads the page; here the HTML comes from the test.",
+    "line 113, comment '# @AmarnathCJD' (identifies the author)."
+  ],
+  "scaffolding": [
+    "from bs4 import BeautifulSoup, used in the annotations of the snippet.",
+    "remove_special_chars copied from the original (it comes after the snippet, as in the original).",
+    "run(current_html, forecast_html): makes the BeautifulSoup of both pages with html.parser and returns parse_weather_to_json."
+  ],
+  "pinned_behavior": [
+    "typical: complete dictionary of current, day, night and forecast for pages with the class structure being searched; a detail with a single div is ignored; a literal '\\\\n' is removed.",
+    "edge: 'Tonight' goes to the night and 'Today' to the day; the forecast takes the panels of the last half-day card (defect of the original, pinned as it is); an empty forecast page gives an empty list.",
+    "invalid: a page without current-weather-card raises AttributeError."
+  ],
+  "not_pinned_on_purpose": [
+    "Order of the dictionary keys: the comparison is by dict equality."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 36/38 mutants killed",
+    "snippet_diff": "identical to the original (lines 25 to 103 against 10 to 88 of the unit)",
+    "pysmell": "LM detected, MLOC=56, same as the original; nothing in the scaffolding"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "LM-09",
+  "files": {
+    "unit": "LM_09.py",
+    "tests": "test_LM_09.py"
+  },
+  "smell": "LM",
+  "smell_name": "Long Method",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/banking.py",
+  "function": "main",
+  "function_line": 46,
+  "lines": [
+    46
+  ],
+  "occurrences": 1,
+  "snippet": "whole function main, lines 46 to 142 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "46:MLOC=84",
+    "unit": "50:MLOC=84",
+    "tuning_threshold": "MLOC > 52"
+  },
+  "entry_point": "run()",
+  "external_dependencies": [
+    "sqlite3 (standard library), real; the database card.s3db is created in the temporary folder of the test"
+  ],
+  "comments_in_snippet": "Kept, by rule 1.",
+  "removed_from_original": [
+    "lines 1 and 2, comments '# Write your code here' and '# Create a simple banking system' (exercise statement)."
+  ],
+  "scaffolding": [
+    "class Bank and check_luhn copied from the original, with their comments.",
+    "run(): calls main(); the __main__ guard calls run()."
+  ],
+  "side_effects": {
+    "description": "The snippet reads with input() without text, writes to card.s3db in the current folder and exits with exit().",
+    "handling": "The test uses a temporary folder (monkeypatch.chdir), replaces input() with a double and random.randint (used by the Bank of the scaffolding) with a fixed sequence, and expects SystemExit."
+  },
+  "pinned_behavior": [
+    "typical: creates an account, logs in, balance 0, deposits 100, balance 100, logs out of the account and exits the program: exact text of the menus and the final record in the database.",
+    "edge: two accounts; transfer to a card with a wrong Luhn digit, to a nonexistent card, above the balance and a correct one; closing of the account; login to a closed account and a wrong PIN refused; final state of the database.",
+    "invalid: a non-numeric menu option raises ValueError, without storing an account."
+  ],
+  "not_pinned_on_purpose": [
+    "The SQLite connection is never closed by the original; the test does not pin this."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 74/89 mutants killed",
+    "snippet_diff": "identical to the original (lines 46 to 142 against 50 to 146 of the unit)",
+    "pysmell": "LM detected, MLOC=84, same as the original; nothing in the scaffolding"
+  }
+}

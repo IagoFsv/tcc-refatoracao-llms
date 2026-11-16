@@ -1,0 +1,64 @@
+{
+  "id": "LPL-01",
+  "files": {
+    "unit": "LPL_01.py",
+    "tests": "test_LPL_01.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/CNN.py",
+  "function": "train",
+  "function_line": 123,
+  "lines": [
+    123
+  ],
+  "occurrences": 1,
+  "snippet": "whole function train, lines 123 to 162 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "123:PAR=5",
+    "unit": "117:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(batches)",
+  "external_dependencies": [
+    "tqdm==4.70.1 (installed for real, pinned in requirements.txt)",
+    "torch: local stub inside the unit"
+  ],
+  "copied_verbatim": [
+    "line 6: from tqdm import tqdm",
+    "lines 123 to 162: train"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet). Includes the docstring 'basic train function generate by github-copilot', which reveals the origin of the code, and the commented-out line 159. Kept and recorded as a limitation, because removing it would break the verbatim rule.",
+  "removed_from_original": [
+    "lines 1 to 3 and 7, imports of torch, torch.nn, torch.optim and DataLoader: replaced by the stub (see scaffolding).",
+    "lines 4, 5 and 8 to 15, imports of torchvision, Quanv2d, matplotlib, os, qiskit, random, itertools, numpy and typing: not used by the snippet.",
+    "line 121, comment '# Define the training function': outside the snippet.",
+    "classes MyQuanv2d and HybridQNN, functions test, Confusion_Matrix, plot_confusion_matrix, Train_Hybrid_QNN and the __main__ block: outside the snippet; they depend on real torch, qiskit, MNIST and disk."
+  ],
+  "scaffolding": [
+    "Pure-Python stub of torch, with only what the snippet touches: _Tensor (to, argmax, view_as, eq, sum, item), _Model (train, call), _Loss (item, backward), _Optimizer (zero_grad, step) and DataLoader (iteration, len, dataset).",
+    "Namespaces torch, nn and optim with device, Module, modules and Optimizer: the annotations in the signature of train are evaluated when the function is defined, so the names must exist.",
+    "The stub does real training, in miniature: the model is one bias per class added to the score of the sample; the loss is the mean of how much the highest score exceeds that of the correct class; backward accumulates the gradient of the bias, zero_grad resets it, step applies it with rate 0.5. So the result depends on zero_grad, backward and step being called correctly in each batch, and the tests check the effect of training instead of the order of the calls.",
+    "run(batches): builds the model, the optimizer and the loader of the stub, calls train and returns (loss, accuracy, final bias, whether the model is in training mode).",
+    "Checked: Pysmell only flags train (PAR=5); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: two batches with hits and misses; loss 0.28125, accuracy 50.0, final bias [0.25, -0.25, 0], model in training mode. Whether the 1st sample of batch 2 is a hit depends on the step of batch 1; the final bias depends on the gradient being reset between batches. Also pins the peculiarity of the original: it sums the mean losses of the batches and divides by the number of samples.",
+    "edge: a single batch, all correct; loss 0, accuracy 100.0, bias unchanged, model in training mode.",
+    "invalid: an empty dataset raises ZeroDivisionError (line 160 of the original)."
+  ],
+  "not_pinned_on_purpose": [
+    "Description of the tqdm progress bar (stderr): cosmetic and mixed with elapsed time.",
+    ".to(device): has no observable effect in the stub.",
+    "Identity of the returned model: the test checks the final state (bias, training mode), not whether it is the same object."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, tqdm 4.70.1",
+    "snippet_diff": "identical to the original (lines 123 to 162 against 117 to 156 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "without optimizer.zero_grad(): 1 fails. without optimizer.step(): 1 fails. without model.train(): 2 fail. dividing the loss by the number of batches instead of samples: 1 fails. correct -= instead of +=: 2 fail."
+  }
+}

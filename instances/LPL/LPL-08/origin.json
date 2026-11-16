@@ -1,0 +1,70 @@
+{
+  "id": "LPL-08",
+  "files": {
+    "unit": "LPL_08.py",
+    "tests": "test_LPL_08.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/maindb.py",
+  "function": "update_server",
+  "function_line": 33,
+  "lines": [
+    33
+  ],
+  "occurrences": 1,
+  "snippet": "whole function update_server, lines 33 to 39 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-06",
+    "LPL-07"
+  ],
+  "metrics": {
+    "original": "33:PAR=5",
+    "unit": "31:PAR=5",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(registered, server)",
+  "external_dependencies": [
+    "none: sqlite3 is in the standard library"
+  ],
+  "copied_verbatim": [
+    "line 8: import sqlite3",
+    "lines 33 to 39: update_server"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 5, header comments about the use of the file: outside the snippet.",
+    "line 9, from .dbinitalization import init_db: module of the original package, missing from the dataset; the scaffolding creates the table in its place.",
+    "lines 83 and 84, copyright comment that mentions 'GitHub Copilot': outside the snippet, reveals the origin of the code.",
+    "lines 15 to 23, add_server: outside the snippet.",
+    "lines 25 to 31, remove_server: outside the snippet.",
+    "lines 11 to 13, 41 to 49 and 51 to 81, initdb, list_servers, add_key, remove_key and list_keys: outside the snippet."
+  ],
+  "scaffolding": [
+    "Real sqlite3 (standard library). The database is the file frSSH.db in the current folder, same name as in the snippet; the tests switch the current folder to a temporary one (monkeypatch.chdir).",
+    "_prepare_database(registered): creates the table servers (ip, port, username, password, keyid) if it does not exist and stores the servers already registered. Columns without a declared type, because the original schema (dbinitalization.py) is not in the dataset; so SQLite stores the values as received.",
+    "_rows(): reads the whole table in insertion order (rowid).",
+    "run(registered, server): prepares the database, unpacks server (tuple of 5) in the call to the function of the snippet and returns the rows of the table.",
+    "Checked: Pysmell only flags the function of the snippet (PAR=5); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: two servers; updates the one with ip '10.0.0.1' (port, username, password, keyid) and leaves the other unchanged; prints 'Server updated.'.",
+    "edge: an unregistered ip changes nothing, but the message is printed anyway.",
+    "invalid: a password given as a dictionary raises sqlite3.ProgrammingError; nothing printed and the table stays the same."
+  ],
+  "not_pinned_on_purpose": [
+    "Connection left open when the UPDATE fails: accidental side effect, not observable by the caller."
+  ],
+  "notes": [
+    "The new ip is also used in the WHERE, so the function cannot change the ip of a server; pinned as it is."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 33 to 39 against 31 to 37 of the unit)",
+    "pysmell": "1 LPL detection, PAR=5, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 5/6 mutants killed. Survivor: removing conn.close() (line 38 of the original), with no observable effect, because the commit has already been made."
+  }
+}

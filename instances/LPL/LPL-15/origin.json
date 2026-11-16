@@ -1,0 +1,71 @@
+{
+  "id": "LPL-15",
+  "files": {
+    "unit": "LPL_15.py",
+    "tests": "test_LPL_15.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/cryptocurrency.py",
+  "function": "__init__",
+  "class": "Block",
+  "function_line": 140,
+  "lines": [
+    140
+  ],
+  "occurrences": 1,
+  "snippet": "whole __init__ method of Block, lines 140 to 145 of the original",
+  "verbatim": true,
+  "same_file_as": [
+    "LPL-16"
+  ],
+  "metrics": {
+    "original": "140:PAR=7",
+    "unit": "25:PAR=7",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(fields)",
+  "external_dependencies": [
+    "none: the snippet and the scaffolding only use hashlib, from the standard library; rsa and p2pnetwork were left out because the snippet does not touch them"
+  ],
+  "copied_verbatim": [
+    "line 2: import hashlib",
+    "line 139: class Block(object):",
+    "lines 140 to 145: __init__",
+    "lines 163 to 175: property hash and method repr_json of Block (scaffolding, see below)"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 and 3 to 7, imports of unittest, time, json, rsa, random and p2pnetwork: not used by the snippet or the scaffolding.",
+    "lines 9 to 136, class BlockChain: outside the snippet; depends on the network (p2pnetwork) and on rsa.",
+    "lines 210 to 271, class ComplexEncoder, the author's unittest tests and the __main__ block: outside the snippet.",
+    "lines 147 to 161, mine_block, proof_of_work and valid_proof of Block: outside the snippet; they are not needed to observe what __init__ stores.",
+    "lines 178 to 207, class Transaction: outside the snippet; its __init__ (PAR=7) would trigger LPL in the scaffolding. In its place, a minimal helper transaction."
+  ],
+  "scaffolding": [
+    "Property hash and method repr_json of Block, copied from the original unchanged: they are the public methods of the class that read what __init__ stores. So the tests observe index, timestamp, transactions, previous_hash and proof without pinning attribute names.",
+    "_Transaction: minimal transaction with description, hash (sha256 of the description) and repr_json, with only what Block uses from the transactions.",
+    "run(fields): receives a dictionary with index, timestamp, transactions (descriptions), previous_hash and, optionally, proof; builds the helper transactions and the block (without proof when it is not given, so the default applies) and returns block.repr_json().",
+    "Checked: Pysmell only flags the __init__ of the snippet (PAR=7); nothing in the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: block 1 with two transactions, previous_hash and proof 42; repr_json with the sha256 hash of index, timestamp, transaction hashes, previous_hash and proof.",
+    "edge: initial block (index 0, no transactions, previous_hash None) without proof; proof stays None, the default.",
+    "invalid: the snippet validates nothing; data of the wrong type (index as text, negative timestamp, previous_hash as an integer) is accepted and shows up as given."
+  ],
+  "not_pinned_on_purpose": [
+    "Accepting extra arguments (*args, **kwargs): the only caller is run, which the refactoring may adjust; removing *args and **kwargs does not fail.",
+    "Attribute names: the tests observe through repr_json and hash."
+  ],
+  "notes": [
+    "PAR=7 counts *args and **kwargs (each is a piece without '=' in the signature). Without them, there are 5 parameters without a default (self, index, timestamp, transactions, previous_hash), still at the threshold."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 140 to 145 against 25 to 30 of the unit)",
+    "pysmell": "1 LPL detection, PAR=7, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 5/5 mutants killed"
+  }
+}

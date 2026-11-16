@@ -1,0 +1,65 @@
+{
+  "id": "LPL-19",
+  "files": {
+    "unit": "LPL_19.py",
+    "tests": "test_LPL_19.py"
+  },
+  "smell": "LPL",
+  "smell_name": "Long Parameter List",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/tensorflow_usages.py",
+  "function": "create_convolutional_layer",
+  "function_line": 16,
+  "lines": [
+    16
+  ],
+  "occurrences": 1,
+  "snippet": "whole function create_convolutional_layer, lines 16 to 26 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "16:PAR=6",
+    "unit": "91:PAR=6",
+    "tuning_threshold": "PAR >= 5"
+  },
+  "entry_point": "run(layer)",
+  "external_dependencies": [
+    "tensorflow: local stub inside the unit. The snippet uses the TensorFlow 1 API (tf.nn.conv2d with filter=, tf.nn.max_pool with value=; tf.truncated_normal in the helper functions), which does not exist in TensorFlow 2, and TensorFlow 1 does not install on Python 3.14. In TensorFlow 1 these calls do not compute: they build a graph of operations, which only runs later in a session. The stub records that graph (operation, name scope, inputs and arguments), which is the real behavior of the snippet; it does not invent a numerical result."
+  ],
+  "copied_verbatim": [
+    "lines 8 to 13: create_weights and create_biases (scaffolding, see below)",
+    "lines 16 to 26: create_convolutional_layer"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 1 to 4, header comments (one of them in Chinese, 'face recognition with TensorFlow'): outside the snippet.",
+    "line 5, import tensorflow as tf: replaced by the stub, exposed under the same name tf.",
+    "lines 29 to 85, create_flatten_layer, create_fc_layer, create_model, train_neural_network and the module-level code: outside the snippet; they depend on a session, MNIST and global variables that the file does not define."
+  ],
+  "scaffolding": [
+    "create_weights and create_biases copied from the original unchanged: the snippet calls them.",
+    "Pure-Python stub of tensorflow, with only what the snippet and the two helpers touch: Variable, truncated_normal (mean=0.0, stddev=1.0), constant (dtype=None, shape=None), name_scope and nn.conv2d, nn.max_pool, nn.relu, with the parameter names of TensorFlow 1. Each operation returns a node that records the operation, the current name scope, the inputs and the arguments; the sum of two nodes becomes an 'add' node.",
+    "conv2d raises ValueError if the filter does not have 4 dimensions, a documented rule of TensorFlow 1 (the filter is a 4-D tensor [height, width, input channels, output channels]; shape inference fails with 'Shape must be rank 4'). It is the only validation imitated.",
+    "run(layer): receives a dictionary with the shape of the input and the 5 remaining arguments, creates an input node, calls the function of the snippet and returns the description of the final node.",
+    "Parameters with a default value in the stubs do not count in PAR, and no function of the stub goes above 4; Pysmell only flags the function of the snippet (PAR=6)."
+  ],
+  "pinned_behavior": [
+    "typical: first layer for 28x28 images with 1 channel, 32 filters 5x5x1x32, 2x2 pooling (ksize [1, 2, 2, 1]), name layer_conv1; graph relu(max_pool(conv2d(input, weights) + bias)) with strides 1 in the convolution, padding SAME, weights from a truncated normal with deviation 0.05 and constant bias 0.05, all in the layer_conv1 scope.",
+    "edge: one 1x1x3x1 filter and pooling of size 1 (no reduction).",
+    "invalid: a filter with 2 dimensions ([5, 5]) raises ValueError in the convolution."
+  ],
+  "not_pinned_on_purpose": [
+    "Validation of the max_pool ksize and of the input shape: the stub does not imitate it; only the filter rule was imitated.",
+    "Message of the ValueError: it comes from the stub; the test only pins the type."
+  ],
+  "notes": [
+    "num_input_channels is not used by the snippet; removing this parameter is allowed.",
+    "The create_model of the original file itself calls this function with filter_shape=[5, 5] and pool_shape=[2, 2]; in real TensorFlow 1 this would fail in the convolution. The invalid case uses this same shape."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6, pytest 9.1.1",
+    "snippet_diff": "identical to the original (lines 16 to 26 against 91 to 101 of the unit)",
+    "pysmell": "1 LPL detection, PAR=6, same as the original; none in the scaffolding",
+    "pytest": "3 passed",
+    "mutation": "adaptation/checklist.py: 12/12 mutants killed"
+  }
+}

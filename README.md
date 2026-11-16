@@ -62,7 +62,7 @@ pinned in `config.yaml`; the client aborts if the installed model differs.
 | Pilot round                     | `results/pilot/` (frozen, see below)    |
 
 Each instance has `<ID>.py` (the unit, which is what goes into the prompt),
-`test_<ID>.py` (three tests: typical, edge and invalid) and `origem.json`
+`test_<ID>.py` (three tests: typical, edge and invalid) and `origin.json`
 (provenance and adaptations, never sent to the model).
 
 ## Pilot round
