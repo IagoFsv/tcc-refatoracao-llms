@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-19__chain_of_thought__s42",
+  "instance": "MNC-19",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T23:57:37.718487+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.752,
+  "done_reason": "stop",
+  "prompt_eval_count": 544,
+  "eval_count": 585,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code uses a deeply nested list comprehension to generate a three-dimensional map of locations. This deep nesting makes the code difficult to read and understand.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" technique involves breaking down the nested structure into smaller, more manageable parts. This can be achieved by introducing intermediate variables or functions to handle each level of the nested structure separately.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate functions to handle each dimension of the map. This will reduce the depth of the nested structure and make the code easier to read.\n\n### Step 4: Verify the Refactored Code\nAfter refactoring, the code should still return the correct coordinates of the cell found at `(x, y, z)` in a 2 x 3 x 4 map.\n\n### Refactored Code\n```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = self.create_3d_map()\n\n    def create_3d_map(self):\n        map_2d = []\n        for x in range(self.world_map_size_x):\n            map_1d = []\n            for y in range(self.world_map_size_y):\n                map_1d.append(self.create_2d_layer(x, y))\n            map_2d.append(map_1d)\n        return map_2d\n\n    def create_2d_layer(self, x, y):\n        layer = []\n        for z in range(self.world_map_size_z):\n            layer.append(Location(x, y, z))\n        return layer\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n\nThis refactored code maintains the original behavior by providing the same functionality but with a clearer and more maintainable structure.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T23:57:37.7157756Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code uses a deeply nested list comprehension to generate a three-dimensional map of locations. This deep nesting makes the code difficult to read and understand.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" technique involves breaking down the nested structure into smaller, more manageable parts. This can be achieved by introducing intermediate variables or functions to handle each level of the nested structure separately.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate functions to handle each dimension of the map. This will reduce the depth of the nested structure and make the code easier to read.\n\n### Step 4: Verify the Refactored Code\nAfter refactoring, the code should still return the correct coordinates of the cell found at `(x, y, z)` in a 2 x 3 x 4 map.\n\n### Refactored Code\n```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = self.create_3d_map()\n\n    def create_3d_map(self):\n        map_2d = []\n        for x in range(self.world_map_size_x):\n            map_1d = []\n            for y in range(self.world_map_size_y):\n                map_1d.append(self.create_2d_layer(x, y))\n            map_2d.append(map_1d)\n        return map_2d\n\n    def create_2d_layer(self, x, y):\n        layer = []\n        for z in range(self.world_map_size_z):\n            layer.append(Location(x, y, z))\n        return layer\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n\nThis refactored code maintains the original behavior by providing the same functionality but with a clearer and more maintainable structure."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20749883800,
+    "load_duration": 6785667400,
+    "prompt_eval_count": 544,
+    "prompt_eval_duration": 514578000,
+    "eval_count": 585,
+    "eval_duration": 13447075000
+  }
+}

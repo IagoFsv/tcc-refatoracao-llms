@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-11__role__s43",
+  "instance": "LPL-11",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T04:12:47.323984+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Drawing of a colored disk on an RGB image.\n\nPublic entry point: run(size, disk, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white (255 in the three channels). Without a color, the\ndefault color of the drawing applies. The disk is clipped at the image border.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, x, y, radius, color=(0, 0, 0)):\n        \"\"\"\n        Draw a circle on the image.\n\n        @param x: x coordinate of the center\n        @param y: y coordinate of the center\n        @param radius: radius of the circle\n        @param color: color of the circle\n        @return: image with circle drawn on it\n        \"\"\"\n        circle = skimage.draw.disk((y, x), radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\ndef run(size, disk, color=None):\n    \"\"\"size: (rows, columns). disk: (x, y, radius). color: (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    x, y, radius = disk\n    if color is None:\n        result = image.draw_circle(x, y, radius)\n    else:\n        result = image.draw_circle(x, y, radius, color)\n    return result.image\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.651,
+  "done_reason": "stop",
+  "prompt_eval_count": 559,
+  "eval_count": 453,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Drawing of a colored disk on an RGB image.\n\nPublic entry point: run(size, disk, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white (255 in the three channels). Without a color, the\ndefault color of the drawing applies. The disk is clipped at the image border.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, center, radius, color=(0, 0, 0)):\n        \"\"\"\n        Draw a circle on the image.\n\n        @param center: tuple (x, y) representing the center of the circle\n        @param radius: radius of the circle\n        @param color: color of the circle\n        @return: image with circle drawn on it\n        \"\"\"\n        circle = skimage.draw.disk(center, radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\ndef run(size, disk, color=None):\n    \"\"\"size: (rows, columns). disk: (x, y, radius). color: (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    disk_params = DiskParameters(disk[0], disk[1], disk[2], color)\n    result = image.draw_circle((disk_params.x, disk_params.y), disk_params.radius, disk_params.color)\n    return result.image\n\n\nclass DiskParameters:\n    \"\"\"Class to encapsulate disk parameters.\"\"\"\n\n    def __init__(self, x, y, radius, color=None):\n        self.x = x\n        self.y = y\n        self.radius = radius\n        self.color = color if color is not None else (0, 0, 0)\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T04:12:47.3201014Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Drawing of a colored disk on an RGB image.\n\nPublic entry point: run(size, disk, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white (255 in the three channels). Without a color, the\ndefault color of the drawing applies. The disk is clipped at the image border.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_circle(self, center, radius, color=(0, 0, 0)):\n        \"\"\"\n        Draw a circle on the image.\n\n        @param center: tuple (x, y) representing the center of the circle\n        @param radius: radius of the circle\n        @param color: color of the circle\n        @return: image with circle drawn on it\n        \"\"\"\n        circle = skimage.draw.disk(center, radius, shape=self.image.shape)\n        self.image[circle] = color\n        return self\n\n\ndef run(size, disk, color=None):\n    \"\"\"size: (rows, columns). disk: (x, y, radius). color: (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    disk_params = DiskParameters(disk[0], disk[1], disk[2], color)\n    result = image.draw_circle((disk_params.x, disk_params.y), disk_params.radius, disk_params.color)\n    return result.image\n\n\nclass DiskParameters:\n    \"\"\"Class to encapsulate disk parameters.\"\"\"\n\n    def __init__(self, x, y, radius, color=None):\n        self.x = x\n        self.y = y\n        self.radius = radius\n        self.color = color if color is not None else (0, 0, 0)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17636646900,
+    "load_duration": 6796477700,
+    "prompt_eval_count": 559,
+    "prompt_eval_duration": 508733000,
+    "eval_count": 453,
+    "eval_duration": 10328012000
+  }
+}

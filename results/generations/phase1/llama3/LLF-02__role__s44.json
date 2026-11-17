@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-02__role__s44",
+  "instance": "LLF-02",
+  "smell": "LLF",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:45:14.709034+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_list(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 13.257,
+  "done_reason": "stop",
+  "prompt_eval_count": 348,
+  "eval_count": 214,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def _format_regions(self, regions):\n        return [\",\".join([\",\".join([\",\".join(region)]) for region in region_list]) for region_list in regions]\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = self._format_regions(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_list(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:45:14.7063409Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def _format_regions(self, regions):\n        return [\",\".join([\",\".join([\",\".join(region)]) for region in region_list]) for region_list in regions]\n\n    def set_config_dict_dict_dict_list(self, section, key, value):\n        self.config[section][key] = self._format_regions(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_list(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 13235785600,
+    "load_duration": 7815923000,
+    "prompt_eval_count": 348,
+    "prompt_eval_duration": 389153000,
+    "eval_count": 214,
+    "eval_duration": 5029154000
+  }
+}

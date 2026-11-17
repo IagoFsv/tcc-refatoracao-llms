@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-04__few_shot__s43",
+  "instance": "MNC-04",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T04:29:10.163565+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.335,
+  "done_reason": "stop",
+  "prompt_eval_count": 836,
+  "eval_count": 597,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nclass ServicePermission:\n    def __init__(self, env, volumes):\n        self.env = env\n        self.volumes = volumes\n\nclass EnvVars:\n    def __init__(self, LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK):\n        self.LND_IP = LND_IP\n        self.LND_GRPC_PORT = LND_GRPC_PORT\n        self.LND_REST_PORT = LND_REST_PORT\n        self.BITCOIN_NETWORK = BITCOIN_NETWORK\n\nclass BitcoindEnvVars(EnvVars):\n    def __init__(self, LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK, BITCOIN_IP, BITCOIN_P2P_PORT, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS, BITCOIN_RPC_AUTH):\n        super().__init__(LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK)\n        self.BITCOIN_IP = BITCOIN_IP\n        self.BITCOIN_P2P_PORT = BITCOIN_P2P_PORT\n        self.BITCOIN_RPC_PORT = BITCOIN_RPC_PORT\n        self.BITCOIN_RPC_USER = BITCOIN_RPC_USER\n        self.BITCOIN_RPC_PASS = BITCOIN_RPC_PASS\n        self.BITCOIN_RPC_AUTH = BITCOIN_RPC_AUTH\n\npermissions = {\n    \"lnd\": ServicePermission(\n        env=EnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\"\n        ),\n        volumes=[\"${LND_DATA_DIR}:/lnd:ro\"]\n    ),\n    \"bitcoind\": ServicePermission(\n        env=BitcoindEnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\",\n            BITCOIN_IP=\"${BITCOIN_IP}\",\n            BITCOIN_P2P_PORT=\"${BITCOIN_P2P_PORT}\",\n            BITCOIN_RPC_PORT=\"${BITCOIN_RPC_PORT}\",\n            BITCOIN_RPC_USER=\"${BITCOIN_RPC_USER}\",\n            BITCOIN_RPC_PASS=\"${BITCOIN_RPC_PASS}\",\n            BITCOIN_RPC_AUTH=\"${BITCOIN_RPC_AUTH}\"\n        ),\n        volumes=[]\n    )\n}\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T04:29:10.1504943Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nclass ServicePermission:\n    def __init__(self, env, volumes):\n        self.env = env\n        self.volumes = volumes\n\nclass EnvVars:\n    def __init__(self, LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK):\n        self.LND_IP = LND_IP\n        self.LND_GRPC_PORT = LND_GRPC_PORT\n        self.LND_REST_PORT = LND_REST_PORT\n        self.BITCOIN_NETWORK = BITCOIN_NETWORK\n\nclass BitcoindEnvVars(EnvVars):\n    def __init__(self, LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK, BITCOIN_IP, BITCOIN_P2P_PORT, BITCOIN_RPC_PORT, BITCOIN_RPC_USER, BITCOIN_RPC_PASS, BITCOIN_RPC_AUTH):\n        super().__init__(LND_IP, LND_GRPC_PORT, LND_REST_PORT, BITCOIN_NETWORK)\n        self.BITCOIN_IP = BITCOIN_IP\n        self.BITCOIN_P2P_PORT = BITCOIN_P2P_PORT\n        self.BITCOIN_RPC_PORT = BITCOIN_RPC_PORT\n        self.BITCOIN_RPC_USER = BITCOIN_RPC_USER\n        self.BITCOIN_RPC_PASS = BITCOIN_RPC_PASS\n        self.BITCOIN_RPC_AUTH = BITCOIN_RPC_AUTH\n\npermissions = {\n    \"lnd\": ServicePermission(\n        env=EnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\"\n        ),\n        volumes=[\"${LND_DATA_DIR}:/lnd:ro\"]\n    ),\n    \"bitcoind\": ServicePermission(\n        env=BitcoindEnvVars(\n            LND_IP=\"${LND_IP}\",\n            LND_GRPC_PORT=\"${LND_GRPC_PORT}\",\n            LND_REST_PORT=\"${LND_REST_PORT}\",\n            BITCOIN_NETWORK=\"${BITCOIN_NETWORK}\",\n            BITCOIN_IP=\"${BITCOIN_IP}\",\n            BITCOIN_P2P_PORT=\"${BITCOIN_P2P_PORT}\",\n            BITCOIN_RPC_PORT=\"${BITCOIN_RPC_PORT}\",\n            BITCOIN_RPC_USER=\"${BITCOIN_RPC_USER}\",\n            BITCOIN_RPC_PASS=\"${BITCOIN_RPC_PASS}\",\n            BITCOIN_RPC_AUTH=\"${BITCOIN_RPC_AUTH}\"\n        ),\n        volumes=[]\n    )\n}\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21318627100,
+    "load_duration": 6790858000,
+    "prompt_eval_count": 836,
+    "prompt_eval_duration": 793955000,
+    "eval_count": 597,
+    "eval_duration": 13728530000
+  }
+}

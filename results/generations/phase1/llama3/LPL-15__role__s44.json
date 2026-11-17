@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-15__role__s44",
+  "instance": "LPL-15",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:30:47.806576+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block(object):\n    def __init__(self, index, timestamp, transactions, previous_hash, proof=None, *args, **kwargs):\n        self.index = index\n        self.timestamp = timestamp\n        self.transactions = transactions\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: index, timestamp, transactions (descriptions), previous_hash and,\n    optionally, proof. Returns the dictionary representation of the block.\n    \"\"\"\n    transactions = [_Transaction(description) for description in fields[\"transactions\"]]\n    if \"proof\" in fields:\n        block = Block(fields[\"index\"], fields[\"timestamp\"], transactions,\n                      fields[\"previous_hash\"], fields[\"proof\"])\n    else:\n        block = Block(fields[\"index\"], fields[\"timestamp\"], transactions,\n                      fields[\"previous_hash\"])\n    return block.repr_json()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.795,
+  "done_reason": "stop",
+  "prompt_eval_count": 574,
+  "eval_count": 395,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block(object):\n    def __init__(self, block_data):\n        self.index = block_data[\"index\"]\n        self.timestamp = block_data[\"timestamp\"]\n        self.transactions = [ _Transaction(description) for description in block_data[\"transactions\"] ]\n        self.previous_hash = block_data[\"previous_hash\"]\n        if \"proof\" in block_data:\n            self.proof = block_data[\"proof\"]\n        else:\n            self.proof = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(block_data):\n    \"\"\"Public entry point of this unit.\n\n    block_data: dictionary with index, timestamp, transactions (descriptions),\n    previous_hash and, optionally, proof. Returns the dictionary representation\n    of the block.\n    \"\"\"\n    return Block(block_data).repr_json()\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:30:47.7785746Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block(object):\n    def __init__(self, block_data):\n        self.index = block_data[\"index\"]\n        self.timestamp = block_data[\"timestamp\"]\n        self.transactions = [ _Transaction(description) for description in block_data[\"transactions\"] ]\n        self.previous_hash = block_data[\"previous_hash\"]\n        if \"proof\" in block_data:\n            self.proof = block_data[\"proof\"]\n        else:\n            self.proof = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(block_data):\n    \"\"\"Public entry point of this unit.\n\n    block_data: dictionary with index, timestamp, transactions (descriptions),\n    previous_hash and, optionally, proof. Returns the dictionary representation\n    of the block.\n    \"\"\"\n    return Block(block_data).repr_json()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17792786500,
+    "load_duration": 7819810400,
+    "prompt_eval_count": 574,
+    "prompt_eval_duration": 557449000,
+    "eval_count": 395,
+    "eval_duration": 9413673000
+  }
+}

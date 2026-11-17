@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-06__chain_of_thought__s42",
+  "instance": "MNC-06",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T01:51:16.402399+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Storing the questions of a trivia game in a local database.\n\nPublic entry point: run(data). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef run(data):\n    \"\"\"Stores the questions in data and returns the database rows. Public entry point of this unit.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    rows = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return rows\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 32.12,
+  "done_reason": "stop",
+  "prompt_eval_count": 797,
+  "eval_count": 576,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code smell is \"Multiply-Nested Container\" because it uses a long chain of elements by the bracket operator to access objects in a deeply nested container (e.g., data['a']['b']['c']). It also uses the replace method multiple times to manipulate strings, which could be a code smell of \"Long Method\" as well.\n\nTo refactor this, we can apply the \"Decompose Container\" refactoring technique. This technique involves breaking down a complex container into simpler ones. In this case, we can break down the data['results'][i] into a separate variable before popping the elements and replacing the strings. This will make the code cleaner and easier to read.\n\nHere is the refactored code:\n\n```python\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        question_data = data['results'][i]\n        question_data.pop('type')\n        question_data.pop('difficulty')\n        question = question_data['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        question_data.pop('question')\n        question_data = json.dumps(question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + question_data + \"\\\")\")\n    conn.commit()\n    conn.close()\n\n\ndef run(data):\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    rows = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return rows\n```\n\nIn this refactored code, we have decomposed the 'data['results'][i]' into a separate variable 'question_data' before popping the elements and replacing the strings. This makes the code cleaner and easier to read. The original behavior of the code is preserved.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T01:51:16.3996565Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code smell is \"Multiply-Nested Container\" because it uses a long chain of elements by the bracket operator to access objects in a deeply nested container (e.g., data['a']['b']['c']). It also uses the replace method multiple times to manipulate strings, which could be a code smell of \"Long Method\" as well.\n\nTo refactor this, we can apply the \"Decompose Container\" refactoring technique. This technique involves breaking down a complex container into simpler ones. In this case, we can break down the data['results'][i] into a separate variable before popping the elements and replacing the strings. This will make the code cleaner and easier to read.\n\nHere is the refactored code:\n\n```python\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        question_data = data['results'][i]\n        question_data.pop('type')\n        question_data.pop('difficulty')\n        question = question_data['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        question_data.pop('question')\n        question_data = json.dumps(question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\")\n        c.execute(\n            \"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + question_data + \"\\\")\")\n    conn.commit()\n    conn.close()\n\n\ndef run(data):\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    rows = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return rows\n```\n\nIn this refactored code, we have decomposed the 'data['results'][i]' into a separate variable 'question_data' before popping the elements and replacing the strings. This makes the code cleaner and easier to read. The original behavior of the code is preserved.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 32118278200,
+    "load_duration": 6776115000,
+    "prompt_eval_count": 797,
+    "prompt_eval_duration": 922295000,
+    "eval_count": 576,
+    "eval_duration": 24416172000
+  }
+}

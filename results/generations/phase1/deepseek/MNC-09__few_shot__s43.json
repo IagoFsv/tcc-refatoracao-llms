@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-09__few_shot__s43",
+  "instance": "MNC-09",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T06:42:08.026294+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_path()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.815,
+  "done_reason": "stop",
+  "prompt_eval_count": 942,
+  "eval_count": 225,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_info():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef get_project_name():\n    data = get_project_info()\n    return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_name()\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T06:42:08.0112876Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_info():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef get_project_name():\n    data = get_project_info()\n    return get_pep8_compliant_name(data['tool']['poetry']['name'])\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_name()\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17812465500,
+    "load_duration": 7276648300,
+    "prompt_eval_count": 942,
+    "prompt_eval_duration": 1025215999,
+    "eval_count": 225,
+    "eval_duration": 9506790000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-09__role__s42",
+  "instance": "LPL-09",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T02:56:32.395957+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Drawing of a segment on a grayscale image.\n\nPublic entry point: run(size, segment). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe image starts all zeros; the segment is marked with 1.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n    def draw_line(self, y0, x0, y1, x1):\n        \"\"\"\n        Draw a line on the image.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = 1\n        return self\n\n\ndef run(size, segment):\n    \"\"\"size: (rows, columns). segment: (y0, x0, y1, x1). Public entry point of this unit.\"\"\"\n    image = Image(np.zeros(size))\n    y0, x0, y1, x1 = segment\n    result = image.draw_line(y0, x0, y1, x1)\n    return result.image\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.179,
+  "done_reason": "stop",
+  "prompt_eval_count": 473,
+  "eval_count": 413,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Drawing of a segment on a grayscale image.\n\nPublic entry point: run. Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe image starts all zeros; the segment is marked with 1.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n    def draw_line(self, coordinates):\n        \"\"\"\n        Draw a line on the image.\n\n        @param coordinates: a tuple of (y0, x0, y1, x1) coordinates\n        @return: image with line drawn on it\n        \"\"\"\n        y0, x0, y1, x1 = coordinates\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = 1\n        return self\n\n\nclass Segment:\n    \"\"\"\n    A class to represent a segment.\n    \"\"\"\n\n    def __init__(self, y0, x0, y1, x1):\n        \"\"\"\n        Create a Segment object from coordinates.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        \"\"\"\n        self.y0 = y0\n        self.x0 = x0\n        self.y1 = y1\n        self.x1 = x1\n\n\ndef run(size, segment):\n    \"\"\"size: (rows, columns). segment: a Segment object. Public entry point of this unit.\"\"\"\n    image = Image(np.zeros(size))\n    result = image.draw_line((segment.y0, segment.x0, segment.y1, segment.x1).tuple())\n    return result.image\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T02:56:32.3811367Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Drawing of a segment on a grayscale image.\n\nPublic entry point: run. Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe image starts all zeros; the segment is marked with 1.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n    def draw_line(self, coordinates):\n        \"\"\"\n        Draw a line on the image.\n\n        @param coordinates: a tuple of (y0, x0, y1, x1) coordinates\n        @return: image with line drawn on it\n        \"\"\"\n        y0, x0, y1, x1 = coordinates\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = 1\n        return self\n\n\nclass Segment:\n    \"\"\"\n    A class to represent a segment.\n    \"\"\"\n\n    def __init__(self, y0, x0, y1, x1):\n        \"\"\"\n        Create a Segment object from coordinates.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        \"\"\"\n        self.y0 = y0\n        self.x0 = x0\n        self.y1 = y1\n        self.x1 = x1\n\n\ndef run(size, segment):\n    \"\"\"size: (rows, columns). segment: a Segment object. Public entry point of this unit.\"\"\"\n    image = Image(np.zeros(size))\n    result = image.draw_line((segment.y0, segment.x0, segment.y1, segment.x1).tuple())\n    return result.image\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18154381000,
+    "load_duration": 7798629600,
+    "prompt_eval_count": 473,
+    "prompt_eval_duration": 487027000,
+    "eval_count": 413,
+    "eval_duration": 9866583000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-06__few_shot__s44",
+  "instance": "MNC-06",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:16:16.852978+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Storing the questions of a trivia game in a local database.\n\nPublic entry point: run(data). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport json\nimport sqlite3\n\n\ndef add_question(data):\n    conn = sqlite3.connect('Trivia.sqlite')\n    c = conn.cursor()\n    # add and id for each question\n    c.execute(\n        \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n        question = data['results'][i]['question'].replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                          \"\\'\\'\")\n        data['results'][i].pop('question')\n        questionData = json.dumps(data['results'][i]).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\",\n                                                                                                              \"\\'\")\n        c.execute(\n            \"INSERT INTO questions (question, questionData)\" + \" VALUES(\\\"\" + question + \"\\\", \\\"\" + questionData + \"\\\")\")\n\n    conn.commit()\n    conn.close()\n\n\ndef run(data):\n    \"\"\"Stores the questions in data and returns the database rows. Public entry point of this unit.\"\"\"\n    add_question(data)\n    conn = sqlite3.connect('Trivia.sqlite')\n    rows = conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n    conn.close()\n    return rows\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 39.856,
+  "done_reason": "stop",
+  "prompt_eval_count": 1189,
+  "eval_count": 616,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Storing the questions of a trivia game in a local database.\n\nPublic entry point: run(data). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport json\nimport sqlite3\nfrom typing import Dict, List\n\n\nclass Question:\n    def __init__(self, question: str, question_data: Dict):\n        self.question = question\n        self.question_data = question_data\n\n\nclass Database:\n    def __init__(self, db_name: str):\n        self.conn = sqlite3.connect(db_name)\n        self.c = self.conn.cursor()\n\n    def create_questions_table(self):\n        self.c.execute(\n            \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n\n    def add_question(self, question: Question):\n        question_str = question.question.replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        question_data_str = json.dumps(question.question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\n            \"&#039;\", \"\\'\")\n        self.c.execute(\n            \"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question_str + \"\\\", \\\"\" + question_data_str + \"\\\")\")\n        self.conn.commit()\n\n    def get_questions(self) -> List[Dict[str, str]]:\n        rows = self.conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n        return rows\n\n    def close(self):\n        self.conn.close()\n\n\ndef run(data: Dict) -> List[Dict[str, str]]:\n    \"\"\"Stores the questions in data and returns the database rows. Public entry point of this unit.\"\"\"\n    db = Database('Trivia.sqlite')\n    db.create_questions_table()\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n    for question_data in data['results']:\n        question = question_data.pop('question')\n        db.add_question(Question(question, question_data))\n    rows = db.get_questions()\n    db.close()\n    return rows\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:16:16.8495251Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Storing the questions of a trivia game in a local database.\n\nPublic entry point: run(data). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport json\nimport sqlite3\nfrom typing import Dict, List\n\n\nclass Question:\n    def __init__(self, question: str, question_data: Dict):\n        self.question = question\n        self.question_data = question_data\n\n\nclass Database:\n    def __init__(self, db_name: str):\n        self.conn = sqlite3.connect(db_name)\n        self.c = self.conn.cursor()\n\n    def create_questions_table(self):\n        self.c.execute(\n            \"CREATE TABLE IF NOT EXISTS questions(id INTEGER PRIMARY KEY AUTOINCREMENT, question text, questionData text)\")\n\n    def add_question(self, question: Question):\n        question_str = question.question.replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\"&#039;\", \"\\'\\'\")\n        question_data_str = json.dumps(question.question_data).replace(\"\\\"\", \"\\\"\\\"\").replace(\"&quot;\", \"\\\"\\\"\").replace(\n            \"&#039;\", \"\\'\")\n        self.c.execute(\n            \"INSERT INTO questions  (question, questionData)\" + \" VALUES(\\\"\" + question_str + \"\\\", \\\"\" + question_data_str + \"\\\")\")\n        self.conn.commit()\n\n    def get_questions(self) -> List[Dict[str, str]]:\n        rows = self.conn.execute(\"SELECT id, question, questionData FROM questions ORDER BY id\").fetchall()\n        return rows\n\n    def close(self):\n        self.conn.close()\n\n\ndef run(data: Dict) -> List[Dict[str, str]]:\n    \"\"\"Stores the questions in data and returns the database rows. Public entry point of this unit.\"\"\"\n    db = Database('Trivia.sqlite')\n    db.create_questions_table()\n    for i in range(len(data['results'])):\n        data['results'][i].pop('type')\n        data['results'][i].pop('difficulty')\n    for question_data in data['results']:\n        question = question_data.pop('question')\n        db.add_question(Question(question, question_data))\n    rows = db.get_questions()\n    db.close()\n    return rows\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 39853314700,
+    "load_duration": 6512637200,
+    "prompt_eval_count": 1189,
+    "prompt_eval_duration": 4002815000,
+    "eval_count": 616,
+    "eval_duration": 29333503000
+  }
+}

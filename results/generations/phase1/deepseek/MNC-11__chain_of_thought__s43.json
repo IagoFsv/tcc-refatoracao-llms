@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-11__chain_of_thought__s43",
+  "instance": "MNC-11",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T06:46:11.618122+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Maintenance tasks of a Python project: building and publishing a release.\n\nPublic entry point: run(version, fail_publish=False). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\n\nclass BuildContext(Context):\n    \"\"\"Context that does not run commands for real.\n\n    Each call to run records the command, the arguments and the version\n    written to pyproject.toml at that moment. With fail on, the command ends\n    with exit code 1, as a failed build or publication would.\n    \"\"\"\n\n    commands = []\n    fail = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as file:\n            poetry = toml.load(file)['tool']['poetry']\n        BuildContext.commands.append((command, kwargs, poetry['version']))\n        if BuildContext.fail:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n\n@task\ndef release(context: Context, version: str) -> None:\n    '''Build & Publish to PyPI.'''\n\n    # load pyproject\n    pyproject_path = 'pyproject.toml'\n    pyproject_string = ''\n    with open(pyproject_path, 'r', encoding='utf-8') as pyproject_file:\n        pyproject_string = pyproject_file.read()\n    pyproject = toml.loads(pyproject_string)\n    # change version to today datetime\n    pyproject['tool']['poetry']['version'] = version\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    # build & publish\n    try:\n        context.run(\n            '''\n                poetry build --no-interaction\n                poetry publish --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n            pyproject_file.write(pyproject_string)\n        raise exception from exception\n\n    # recover to original\n    with open(pyproject_path, 'w', encoding='utf-8') as pyproject_file:\n        pyproject_file.write(pyproject_string)\n\n\ndef run(version, fail_publish=False):\n    \"\"\"Runs the release of the version; returns the recorded commands. Public entry point of this unit.\"\"\"\n    BuildContext.commands = []\n    BuildContext.fail = fail_publish\n    release(BuildContext(), version)\n    return BuildContext.commands\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 44.641,
+  "done_reason": "stop",
+  "prompt_eval_count": 1062,
+  "eval_count": 821,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code smell in this case is the Multiply-Nested Container. This is because the code uses a deeply nested container (specifically, the dictionary) to store data and then accesses this data through a long chain of keys. This can make the code hard to read, understand, and maintain.\n\nThe refactoring technique Decompose Container can be applied here. This technique involves breaking down the container into smaller containers, each representing a single piece of data.\n\nHere is the refactored code:\n\n```python\n\"\"\"Maintenance tasks of a Python project: building and publishing a release.\n\nPublic entry point: run(version, fail_publish=False). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\n\nclass BuildContext(Context):\n    \"\"\"Context that does not run commands for real.\n\n    Each call to run records the command, the arguments and the version\n    written to pyproject.toml at that moment. With fail on, the command ends\n    with exit code 1, as a failed build or publication would.\n    \"\"\"\n\n    commands = []\n    fail = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as file:\n            poetry = toml.load(file)['tool']['poetry']\n        BuildContext.commands.append((command, kwargs, poetry['version']))\n        if BuildContext.fail:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n\n@task\ndef release(context: Context, version: str) -> None:\n    '''Build & Publish to PyPI.'''\n\n    # load pyproject\n    pyproject = toml.load('pyproject.toml')\n    poetry = pyproject['tool']['poetry']\n    # change version to today datetime\n    poetry['version'] = version\n    with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    # build & publish\n    try:\n        context.run(\n            '''\n            poetry build  --no-interaction\n            poetry publish  --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n            toml.dump(pyproject, pyproject_file)\n        raise exception from exception\n\n    # recover to original\n    with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n\ndef run(version, fail_publish=False):\n    \"\"\"Runs the release of the version; returns the recorded commands. Public entry point of this unit.\"\"\"\n    BuildContext.commands = []\n    BuildContext.fail = fail_publish\n    release(BuildContext(), version)\n    return BuildContext.commands\n```\n\nIn the refactored code, the dictionary is decomposed into two smaller dictionaries: `pyproject` and `poetry`. Each of these dictionaries only contains a single piece of data, which makes the code easier to read and maintain.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T06:46:11.6152546Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code smell in this case is the Multiply-Nested Container. This is because the code uses a deeply nested container (specifically, the dictionary) to store data and then accesses this data through a long chain of keys. This can make the code hard to read, understand, and maintain.\n\nThe refactoring technique Decompose Container can be applied here. This technique involves breaking down the container into smaller containers, each representing a single piece of data.\n\nHere is the refactored code:\n\n```python\n\"\"\"Maintenance tasks of a Python project: building and publishing a release.\n\nPublic entry point: run(version, fail_publish=False). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport toml\nfrom invoke import Context, task\nfrom invoke.exceptions import UnexpectedExit\nfrom invoke.runners import Result\n\n\nclass BuildContext(Context):\n    \"\"\"Context that does not run commands for real.\n\n    Each call to run records the command, the arguments and the version\n    written to pyproject.toml at that moment. With fail on, the command ends\n    with exit code 1, as a failed build or publication would.\n    \"\"\"\n\n    commands = []\n    fail = False\n\n    def run(self, command, **kwargs):\n        with open('pyproject.toml', encoding='utf-8') as file:\n            poetry = toml.load(file)['tool']['poetry']\n        BuildContext.commands.append((command, kwargs, poetry['version']))\n        if BuildContext.fail:\n            raise UnexpectedExit(Result(command=command, exited=1))\n        return Result(command=command, exited=0)\n\n\n@task\ndef release(context: Context, version: str) -> None:\n    '''Build & Publish to PyPI.'''\n\n    # load pyproject\n    pyproject = toml.load('pyproject.toml')\n    poetry = pyproject['tool']['poetry']\n    # change version to today datetime\n    poetry['version'] = version\n    with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n    # build & publish\n    try:\n        context.run(\n            '''\n            poetry build  --no-interaction\n            poetry publish  --no-interaction\n            ''',\n            pty=True,\n        )\n    except UnexpectedExit as exception:\n        with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n            toml.dump(pyproject, pyproject_file)\n        raise exception from exception\n\n    # recover to original\n    with open('pyproject.toml', 'w', encoding='utf-8') as pyproject_file:\n        toml.dump(pyproject, pyproject_file)\n\n\ndef run(version, fail_publish=False):\n    \"\"\"Runs the release of the version; returns the recorded commands. Public entry point of this unit.\"\"\"\n    BuildContext.commands = []\n    BuildContext.fail = fail_publish\n    release(BuildContext(), version)\n    return BuildContext.commands\n```\n\nIn the refactored code, the dictionary is decomposed into two smaller dictionaries: `pyproject` and `poetry`. Each of these dictionaries only contains a single piece of data, which makes the code easier to read and maintain.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 44615238100,
+    "load_duration": 7016494800,
+    "prompt_eval_count": 1062,
+    "prompt_eval_duration": 1230341000,
+    "eval_count": 821,
+    "eval_duration": 36364187000
+  }
+}

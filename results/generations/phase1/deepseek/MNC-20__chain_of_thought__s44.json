@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-20__chain_of_thought__s44",
+  "instance": "MNC-20",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:41:51.147718+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: drawing the scene on the terminal.\n\nPublic entry point: run(descriptions). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = [[[Location(text) for text in row] for row in plane] for plane in descriptions]\n        first_plane = descriptions[0]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(first_plane)\n        self.world_map_size_z = len(first_plane[0])\n\n    def get_location(self, x, y, z):\n        plane = self.world_map[x]\n        return plane[y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 37.722,
+  "done_reason": "stop",
+  "prompt_eval_count": 950,
+  "eval_count": 693,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code smell in the provided Python code is a Multiply-Nested Container, which is evident in the usage of deep nested containers like `descriptions` in the `World` class initialization. This can make the code hard to read and understand, especially when accessing elements in the container.\n\nRefactoring technique: Decompose Container\n\nTo refactor, we can decompose the nested container into separate classes. This will help to make the code more readable and maintainable.\n\nHere is the refactored code:\n\n```python\n\"\"\"Three-dimensional map of an adventure game: drawing the scene on the terminal.\n\nPublic entry point: run(descriptions). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\nclass Plane:\n    \"\"\"A plane of locations.\"\"\"\n\n    def __init__(self, descriptions):\n        self.plane = [Location(text) for text in descriptions]\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = [Plane(descriptions[x]) for x in range(len(descriptions))]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(descriptions[0])\n        self.world_map_size_z = len(descriptions[0][0])\n\n    def get_location(self, x, y, z):\n        plane = self.world_map[x]\n        return plane.plane[y].get_description()\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            print(world.get_location(x, y, 0), end=\"\")\n        print(\"\")\n    print(\"\")\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```\n\nIn this refactored code, we have decomposed the nested container into separate classes `Location`, `Plane`, and `World`. Each class has a single responsibility, making the code more modular and easier to understand. The `run` function remains the same, but now the `World` class is handling the creation of the world map and retrieval of location descriptions.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:41:51.1450246Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code smell in the provided Python code is a Multiply-Nested Container, which is evident in the usage of deep nested containers like `descriptions` in the `World` class initialization. This can make the code hard to read and understand, especially when accessing elements in the container.\n\nRefactoring technique: Decompose Container\n\nTo refactor, we can decompose the nested container into separate classes. This will help to make the code more readable and maintainable.\n\nHere is the refactored code:\n\n```python\n\"\"\"Three-dimensional map of an adventure game: drawing the scene on the terminal.\n\nPublic entry point: run(descriptions). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\nclass Plane:\n    \"\"\"A plane of locations.\"\"\"\n\n    def __init__(self, descriptions):\n        self.plane = [Location(text) for text in descriptions]\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = [Plane(descriptions[x]) for x in range(len(descriptions))]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(descriptions[0])\n        self.world_map_size_z = len(descriptions[0][0])\n\n    def get_location(self, x, y, z):\n        plane = self.world_map[x]\n        return plane.plane[y].get_description()\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            print(world.get_location(x, y, 0), end=\"\")\n        print(\"\")\n    print(\"\")\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```\n\nIn this refactored code, we have decomposed the nested container into separate classes `Location`, `Plane`, and `World`. Each class has a single responsibility, making the code more modular and easier to understand. The `run` function remains the same, but now the `World` class is handling the creation of the world map and retrieval of location descriptions.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 37705171000,
+    "load_duration": 6529204300,
+    "prompt_eval_count": 950,
+    "prompt_eval_duration": 1020492000,
+    "eval_count": 693,
+    "eval_duration": 30151686000
+  }
+}

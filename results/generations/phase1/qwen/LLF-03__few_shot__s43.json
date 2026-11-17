@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-03__few_shot__s43",
+  "instance": "LLF-03",
+  "smell": "LLF",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T03:37:21.268757+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\nsort_items = lambda items, key, reverse_order, threshold: sorted(\n    [i for i in items if i[key] > threshold],\n    key=lambda x: x[key],\n    reverse=reverse_order\n)\n```\nRefactored code:\n```python\ndef sort_items(items, key, reverse_order, threshold):\n    filtered_items = [i for i in items if i[key] > threshold]\n    return sorted(filtered_items, key=lambda x: x[key], reverse=reverse_order)\n```\n\nNow refactor the following file.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n        self.logger.info(\"Config: \" + str(self.config))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_dict(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 12.046,
+  "done_reason": "stop",
+  "prompt_eval_count": 495,
+  "eval_count": 223,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = self._join_nested_values(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def _join_nested_values(self, value):\n        return \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_dict(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T03:37:21.2459333Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Stores nested values in the game configuration, as text.\n\nPublic entry point: run(value). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport logging\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n        self.logger = logging.getLogger(__name__)\n\n    def set_config_dict_dict_dict_dict(self, section, key, value):\n        self.config[section][key] = self._join_nested_values(value)\n        self.logger.info(\"Config: \" + str(self.config))\n\n    def _join_nested_values(self, value):\n        return \",\".join(map(lambda x: \",\".join(map(lambda y: \",\".join(map(lambda z: \",\".join(z), y)), x)), value))\n\n\ndef run(value):\n    \"\"\"Stores value in the configuration and returns the stored text. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {}\n    config.set_config_dict_dict_dict_dict(\"world\", \"regions\", value)\n    return config.config[\"world\"][\"regions\"]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 12033680400,
+    "load_duration": 6538147500,
+    "prompt_eval_count": 495,
+    "prompt_eval_duration": 457614000,
+    "eval_count": 223,
+    "eval_duration": 5034967000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-10__role__s42",
+  "instance": "MNC-10",
+  "smell": "MNC",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T03:23:00.581261+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.011,
+  "done_reason": "stop",
+  "prompt_eval_count": 515,
+  "eval_count": 359,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    project_data = load_project_data()\n    project_data['tool']['poetry']['name'] = project_name\n\n    update_project_data(project_data)\n\n\ndef load_project_data():\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef update_project_data(data):\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T03:23:00.5658921Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    project_data = load_project_data()\n    project_data['tool']['poetry']['name'] = project_name\n\n    update_project_data(project_data)\n\n\ndef load_project_data():\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        return toml.load(file)\n\n\ndef update_project_data(data):\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17008853500,
+    "load_duration": 8055463600,
+    "prompt_eval_count": 515,
+    "prompt_eval_duration": 526576000,
+    "eval_count": 359,
+    "eval_duration": 8424971000
+  }
+}

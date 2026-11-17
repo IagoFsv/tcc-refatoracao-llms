@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-17__few_shot__s43",
+  "instance": "LPL-17",
+  "smell": "LPL",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T07:49:33.678478+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\ndef register_product(name, price, quantity, category, supplier, discount):\n    product = {\n        'name': name,\n        'price': price,\n        'quantity': quantity,\n        'category': category,\n        'supplier': supplier,\n        'discount': discount\n    }\n    database.save(product)\n    return product\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Product:\n    name: str\n    price: float\n    quantity: int\n    category: str\n    supplier: str\n    discount: float\n\ndef register_product(product: Product):\n    database.save(asdict(product))\n    return product\n```\n\nNow refactor the following file.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Deep Q-network: layers, optimizer and loss function.\n\nPublic entry point: run(dimensions). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\nThe network pieces (linear layer, ReLU, sequence, Adam optimizer, squared\nloss) are minimal versions that only keep the configuration they receive.\nThe linear layer creates the weights with shape (outputs, inputs) and the\nbias with (outputs,), and refuses a negative size, like the real version.\n\"\"\"\n\nfrom types import SimpleNamespace\n\n\nclass _Parameter:\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef _empty(*shape):\n    if any(dimension < 0 for dimension in shape):\n        raise RuntimeError(f\"Trying to create tensor with negative dimension: {list(shape)}\")\n    return _Parameter(shape)\n\n\nclass _Linear:\n    def __init__(self, in_features, out_features, bias=True):\n        self.description = (\"Linear\", in_features, out_features, bias)\n        self.weight = _empty(out_features, in_features)\n        self.bias = _empty(out_features) if bias else None\n\n    def own_parameters(self):\n        return [p for p in (self.weight, self.bias) if p is not None]\n\n\nclass _ReLU:\n    def __init__(self, inplace=False):\n        self.description = (\"ReLU\", inplace)\n\n    def own_parameters(self):\n        return []\n\n\nclass _Sequential:\n    def __init__(self, *layers):\n        self.layers = layers\n\n    def parameters(self):\n        return iter([p for layer in self.layers for p in layer.own_parameters()])\n\n\nclass _Adam:\n    def __init__(self, params, lr=0.001):\n        self.params = list(params)\n        if not self.params:\n            raise ValueError(\"optimizer got an empty parameter list\")\n        self.lr = lr\n\n\nclass _MSELoss:\n    def __init__(self, reduction=\"mean\"):\n        self.reduction = reduction\n\n\ntorch = SimpleNamespace(\n    nn=SimpleNamespace(Sequential=_Sequential, Linear=_Linear, ReLU=_ReLU, MSELoss=_MSELoss),\n    optim=SimpleNamespace(Adam=_Adam),\n)\n\n\nclass DQN:\n    def __init__(self, input_size, n_actions, hidden_size, gamma):\n        # define the neural network\n        self.model = torch.nn.Sequential(\n            torch.nn.Linear(input_size, hidden_size),\n            torch.nn.ReLU(),\n            torch.nn.Linear(hidden_size, n_actions)\n        )\n        # define the optimizer\n        self.optimizer = torch.optim.Adam(self.model.parameters())\n        # define the loss function\n        self.loss_fn = torch.nn.MSELoss()\n        # define the discount factor\n        self.gamma = gamma\n        self.n_actions = n_actions\n\n\ndef _summary(network):\n    \"\"\"Layers in order, optimizer, loss and the two stored values.\"\"\"\n    parameters = list(network.model.parameters())\n    optimizer = network.optimizer\n    same = len(optimizer.params) == len(parameters) and all(\n        a is b for a, b in zip(optimizer.params, parameters))\n    return {\n        \"layers\": [layer.description for layer in network.model.layers],\n        \"optimizer\": (\"Adam\", [p.shape for p in optimizer.params], optimizer.lr, same),\n        \"loss\": (\"MSELoss\", network.loss_fn.reduction),\n        \"gamma\": network.gamma,\n        \"n_actions\": network.n_actions,\n    }\n\n\ndef run(dimensions):\n    \"\"\"dimensions: input_size, n_actions, hidden_size and gamma. Public entry point of this unit.\"\"\"\n    network = DQN(dimensions[\"input_size\"], dimensions[\"n_actions\"],\n                  dimensions[\"hidden_size\"], dimensions[\"gamma\"])\n    return _summary(network)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.871,
+  "done_reason": "stop",
+  "prompt_eval_count": 1082,
+  "eval_count": 544,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\nfrom types import SimpleNamespace\nfrom dataclasses import dataclass, asdict\n\n\n@dataclass\nclass NetworkConfig:\n    input_size: int\n    n_actions: int\n    hidden_size: int\n    gamma: float\n\n\n@dataclass\nclass Layer:\n    description: str\n    shape: tuple\n\n\n@dataclass\nclass Linear(Layer):\n    in_features: int\n    out_features: int\n    bias: bool = True\n\n    def own_parameters(self):\n        return [self] if self.bias else []\n\n\n@dataclass\nclass ReLU(Layer):\n    inplace: bool = False\n\n    def own_parameters(self):\n        return []\n\n\n@dataclass\nclass Sequential:\n    layers: list\n\n    def parameters(self):\n        return iter([p for layer in self.layers for p in layer.own_parameters()])\n\n\n@dataclass\nclass Adam:\n    params: list\n    lr: float = 0.001\n\n\n@dataclass\nclass MSELoss:\n    reduction: str = \"mean\"\n\n\ntorch = SimpleNamespace(\n    nn=SimpleNamespace(Sequential=Sequential, Linear=Linear, ReLU=ReLU, MSELoss=MSELoss),\n    optim=SimpleNamespace(Adam=Adam),\n)\n\n\nclass DQN:\n    def __init__(self, config: NetworkConfig):\n        # define the neural network\n        self.model = torch.nn.Sequential(\n            torch.nn.Linear(config.input_size, config.hidden_size),\n            torch.nn.ReLU(),\n            torch.nn.Linear(config.hidden_size, config.n_actions)\n        )\n        # define the optimizer\n        self.optimizer = torch.optim.Adam(self.model.parameters())\n        # define the loss function\n        self.loss_fn = torch.nn.MSELoss()\n        # define the discount factor\n        self.gamma = config.gamma\n        self.n_actions = config.n_actions\n\n\ndef _summary(network):\n    \"\"\"Layers in order, optimizer, loss and the two stored values.\"\"\"\n    parameters = list(network.model.parameters())\n    optimizer = network.optimizer\n    same = len(optimizer.params) == len(parameters) and all(\n        a is b for a, b in zip(optimizer.params, parameters))\n    return {\n        \"layers\": [layer.description for layer in network.model.layers],\n        \"optimizer\": (\"Adam\", [p.shape for p in optimizer.params], optimizer.lr, same),\n        \"loss\": (\"MSELoss\", network.loss_fn.reduction),\n        \"gamma\": network.gamma,\n        \"n_actions\": network.n_actions,\n   }\n\n\ndef run(config):\n    \"\"\"Public entry point of this unit.\"\"\"\n    network = DQN(config)\n    return _summary(network)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T07:49:33.6755645Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\nfrom types import SimpleNamespace\nfrom dataclasses import dataclass, asdict\n\n\n@dataclass\nclass NetworkConfig:\n    input_size: int\n    n_actions: int\n    hidden_size: int\n    gamma: float\n\n\n@dataclass\nclass Layer:\n    description: str\n    shape: tuple\n\n\n@dataclass\nclass Linear(Layer):\n    in_features: int\n    out_features: int\n    bias: bool = True\n\n    def own_parameters(self):\n        return [self] if self.bias else []\n\n\n@dataclass\nclass ReLU(Layer):\n    inplace: bool = False\n\n    def own_parameters(self):\n        return []\n\n\n@dataclass\nclass Sequential:\n    layers: list\n\n    def parameters(self):\n        return iter([p for layer in self.layers for p in layer.own_parameters()])\n\n\n@dataclass\nclass Adam:\n    params: list\n    lr: float = 0.001\n\n\n@dataclass\nclass MSELoss:\n    reduction: str = \"mean\"\n\n\ntorch = SimpleNamespace(\n    nn=SimpleNamespace(Sequential=Sequential, Linear=Linear, ReLU=ReLU, MSELoss=MSELoss),\n    optim=SimpleNamespace(Adam=Adam),\n)\n\n\nclass DQN:\n    def __init__(self, config: NetworkConfig):\n        # define the neural network\n        self.model = torch.nn.Sequential(\n            torch.nn.Linear(config.input_size, config.hidden_size),\n            torch.nn.ReLU(),\n            torch.nn.Linear(config.hidden_size, config.n_actions)\n        )\n        # define the optimizer\n        self.optimizer = torch.optim.Adam(self.model.parameters())\n        # define the loss function\n        self.loss_fn = torch.nn.MSELoss()\n        # define the discount factor\n        self.gamma = config.gamma\n        self.n_actions = config.n_actions\n\n\ndef _summary(network):\n    \"\"\"Layers in order, optimizer, loss and the two stored values.\"\"\"\n    parameters = list(network.model.parameters())\n    optimizer = network.optimizer\n    same = len(optimizer.params) == len(parameters) and all(\n        a is b for a, b in zip(optimizer.params, parameters))\n    return {\n        \"layers\": [layer.description for layer in network.model.layers],\n        \"optimizer\": (\"Adam\", [p.shape for p in optimizer.params], optimizer.lr, same),\n        \"loss\": (\"MSELoss\", network.loss_fn.reduction),\n        \"gamma\": network.gamma,\n        \"n_actions\": network.n_actions,\n   }\n\n\ndef run(config):\n    \"\"\"Public entry point of this unit.\"\"\"\n    network = DQN(config)\n    return _summary(network)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21868665100,
+    "load_duration": 7903003200,
+    "prompt_eval_count": 1082,
+    "prompt_eval_duration": 954623000,
+    "eval_count": 544,
+    "eval_duration": 13008403000
+  }
+}

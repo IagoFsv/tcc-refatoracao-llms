@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-10__chain_of_thought__s44",
+  "instance": "MNC-10",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:50:13.804907+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n\n    data['tool']['poetry']['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 26.805,
+  "done_reason": "stop",
+  "prompt_eval_count": 574,
+  "eval_count": 763,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the step-by-step reasoning:\n\n**1. Identify why the code exhibits the indicated code smell.**\n\nThe code exhibits the \"Multiply-Nested Container\" code smell because of the deeply nested dictionary access `data['tool']['poetry']['name']`. This is a long chain of elements accessed by the bracket operator, which can make the code harder to read and maintain.\n\n**2. Explain how the indicated refactoring technique applies to the code.**\n\nThe refactoring technique \"Decompose Container\" suggests breaking down the complex container (in this case, the deeply nested dictionary) into smaller, more manageable parts. This can be done by extracting the relevant data into separate variables or functions.\n\n**3. Apply the refactoring.**\n\nWe can refactor the code by extracting the relevant data from the `data` dictionary into separate variables. This will break down the deeply nested dictionary access into smaller, more readable parts.\n\nHere is the refactored code:\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        current_name = poetry['name']\n\n    poetry['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n```\n**4. Verify that the refactored code preserves the original behavior.**\n\nThe refactored code still renames the project directory and updates the project name in `pyproject.toml` correctly. The original behavior of the code is preserved.\n\nHere is the complete refactored file:\n```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        current_name = poetry['name']\n\n    poetry['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:50:13.8020129Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the step-by-step reasoning:\n\n**1. Identify why the code exhibits the indicated code smell.**\n\nThe code exhibits the \"Multiply-Nested Container\" code smell because of the deeply nested dictionary access `data['tool']['poetry']['name']`. This is a long chain of elements accessed by the bracket operator, which can make the code harder to read and maintain.\n\n**2. Explain how the indicated refactoring technique applies to the code.**\n\nThe refactoring technique \"Decompose Container\" suggests breaking down the complex container (in this case, the deeply nested dictionary) into smaller, more manageable parts. This can be done by extracting the relevant data into separate variables or functions.\n\n**3. Apply the refactoring.**\n\nWe can refactor the code by extracting the relevant data from the `data` dictionary into separate variables. This will break down the deeply nested dictionary access into smaller, more readable parts.\n\nHere is the refactored code:\n```python\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        current_name = poetry['name']\n\n    poetry['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n```\n**4. Verify that the refactored code preserves the original behavior.**\n\nThe refactored code still renames the project directory and updates the project name in `pyproject.toml` correctly. The original behavior of the code is preserved.\n\nHere is the complete refactored file:\n```python\n\"\"\"Maintenance tasks of a Python project: renaming the project.\n\nPublic entry point: run(project_name). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport shutil\n\nimport toml\nfrom invoke import Context, task\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    \"\"\"Package name (with _ instead of -) read from pyproject.toml in the current folder.\"\"\"\n    with open('pyproject.toml', encoding='utf-8') as file:\n        poetry = toml.load(file)['tool']['poetry']\n        return get_pep8_compliant_name(poetry['name'])\n\n\n@task\ndef rename_project(_context: Context, project_name: str):\n    # Get the current project path\n    current_project_path = get_project_path()\n\n    # Rename the directory\n    shutil.move(get_pep8_compliant_name(current_project_path), get_pep8_compliant_name(project_name))\n\n    # Update the project name in pyproject.toml\n    with open('pyproject.toml', 'r', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        current_name = poetry['name']\n\n    poetry['name'] = project_name\n\n    with open('pyproject.toml', 'w', encoding='utf-8') as file:\n        toml.dump(data, file)\n\n\ndef run(project_name):\n    \"\"\"Renames the project in the current folder. Public entry point of this unit.\"\"\"\n    rename_project(Context(), project_name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26788330700,
+    "load_duration": 7959093100,
+    "prompt_eval_count": 574,
+    "prompt_eval_duration": 561910000,
+    "eval_count": 763,
+    "eval_duration": 18265413000
+  }
+}

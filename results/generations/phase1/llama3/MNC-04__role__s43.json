@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-04__role__s43",
+  "instance": "MNC-04",
+  "smell": "MNC",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T07:59:00.640804+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.509,
+  "done_reason": "stop",
+  "prompt_eval_count": 465,
+  "eval_count": 352,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\"env\": {}, \"volumes\": []},\n    \"bitcoind\": {\"env\": {}, \"volumes\": []}\n}\n\nlnd_env = {\n    \"LND_IP\": \"${LND_IP}\",\n    \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n    \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n    \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n}\n\nlnd_volumes = [\n    '${LND_DATA_DIR}:/lnd:ro'\n]\n\nbitcoind_env = {\n    \"BITCOIN_IP\": \"${BITCOIN_IP}\",\n    \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\",\n    \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n    \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n    \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n    \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n    \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n}\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    if name == \"lnd\":\n        return {\"env\": lnd_env, \"volumes\": lnd_volumes}\n    elif name == \"bitcoind\":\n        return {\"env\": bitcoind_env, \"volumes\": []}\n    else:\n        raise ValueError(f\"Unknown service {name}\")\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T07:59:00.6379647Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\"env\": {}, \"volumes\": []},\n    \"bitcoind\": {\"env\": {}, \"volumes\": []}\n}\n\nlnd_env = {\n    \"LND_IP\": \"${LND_IP}\",\n    \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n    \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n    \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n}\n\nlnd_volumes = [\n    '${LND_DATA_DIR}:/lnd:ro'\n]\n\nbitcoind_env = {\n    \"BITCOIN_IP\": \"${BITCOIN_IP}\",\n    \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\",\n    \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n    \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n    \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n    \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n    \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n}\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    if name == \"lnd\":\n        return {\"env\": lnd_env, \"volumes\": lnd_volumes}\n    elif name == \"bitcoind\":\n        return {\"env\": bitcoind_env, \"volumes\": []}\n    else:\n        raise ValueError(f\"Unknown service {name}\")\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17486429300,
+    "load_duration": 8562036500,
+    "prompt_eval_count": 465,
+    "prompt_eval_duration": 485841000,
+    "eval_count": 352,
+    "eval_duration": 8436575000
+  }
+}

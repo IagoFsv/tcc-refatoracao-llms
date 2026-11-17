@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-05__role__s44",
+  "instance": "MNC-05",
+  "smell": "MNC",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:43:46.385332+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Conversion of an app's container list into named services.\n\nPublic entry point: run(app). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n\ndef convertContainersToServices(app: dict):\n    app['services'] = {}\n    for container in app['containers']:\n        app['services'][container['name']] = container\n        del app['services'][container['name']]['name']\n    del app['containers']\n    return app\n\n\ndef run(app):\n    \"\"\"Converts the containers of app into services. Public entry point of this unit.\"\"\"\n    return convertContainersToServices(app)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 11.743,
+  "done_reason": "stop",
+  "prompt_eval_count": 315,
+  "eval_count": 141,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Conversion of an app's container list into named services.\n\nPublic entry point: run(app). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n\ndef convert_containers_to_services(app: dict):\n    app_services = {}\n    for container in app['containers']:\n        service = {**container}\n        del service['name']\n        app_services[container['name']] = service\n    del app['containers']\n    app['services'] = app_services\n    return app\n\n\ndef run(app):\n    \"\"\"Converts the containers of app into services. Public entry point of this unit.\"\"\"\n    return convert_containers_to_services(app)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:43:46.3635619Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Conversion of an app's container list into named services.\n\nPublic entry point: run(app). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n\ndef convert_containers_to_services(app: dict):\n    app_services = {}\n    for container in app['containers']:\n        service = {**container}\n        del service['name']\n        app_services[container['name']] = service\n    del app['containers']\n    app['services'] = app_services\n    return app\n\n\ndef run(app):\n    \"\"\"Converts the containers of app into services. Public entry point of this unit.\"\"\"\n    return convert_containers_to_services(app)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 11730268500,
+    "load_duration": 8050194900,
+    "prompt_eval_count": 315,
+    "prompt_eval_duration": 358174000,
+    "eval_count": 141,
+    "eval_duration": 3319970000
+  }
+}

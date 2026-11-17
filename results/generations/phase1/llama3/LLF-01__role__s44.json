@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-01__role__s44",
+  "instance": "LLF-01",
+  "smell": "LLF",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:44:10.192385+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"City column from the description of bank transactions.\n\nPublic entry point: run(descriptions, cities). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport pandas as pd\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = [city.lower() for city in city_list]\n    # split the description column and get the last word\n    df['City'] = df['Description'].str.lower().str.split().apply(lambda x: x[-1])\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(lambda x: x if x in city_list else 'Unknown')\n    # TODO: this check for city looks like its only checking second last word (see: Abu Dhabi)\n    # check the last 2 words in the descirption if the city columns is unknown. Compare the 2 words to the city list for a match. If there is a match, add the city name to the city column\n    # df['City'] = df['City'].apply(lambda x: x if x != 'Unknown' else df['Description'].str.lower().str.split().apply(lambda x: x[-2]) if df['Description'].str.lower().str.split().apply(lambda x: x[-2]) in city_list else 'Unknown')\n    df['City'] = df.apply(lambda x: x['Description'].split()[-2].lower() if x['City'] == 'Unknown' and x['Description'].split()[-2].lower() in city_list else x['City'], axis=1)\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef run(descriptions, cities):\n    \"\"\"Classifies the descriptions. Public entry point of this unit.\"\"\"\n    df = pd.DataFrame({\"Description\": descriptions})\n    df = update_city_column(df, cities)\n    return df[\"City\"].tolist()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.896,
+  "done_reason": "stop",
+  "prompt_eval_count": 589,
+  "eval_count": 428,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"City column from the description of bank transactions.\n\nPublic entry point: run(descriptions, cities). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport pandas as pd\n\n\ndef convert_all_text_to_lower(text_list):\n    \"\"\"Convert all text in the list to lower case\"\"\"\n    return [city.lower() for city in text_list]\n\n\ndef get_last_word(description):\n    \"\"\"Split the description column and get the last word\"\"\"\n    return description.lower().split()[-1]\n\n\ndef get_city_from_description(description, city_list):\n    \"\"\"Get the city from the description\"\"\"\n    last_word = get_last_word(description)\n    return last_word if last_word in city_list else 'Unknown'\n\n\ndef get_city_from_description_with_fallback(description, city_list):\n    \"\"\"Get the city from the description, with fallback to second last word if first is not found\"\"\"\n    last_word = get_last_word(description)\n    if last_word == 'Unknown':\n        second_last_word = description.lower().split()[-2]\n        return second_last_word.lower() if second_last_word in city_list else 'Unknown'\n    return last_word\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = convert_all_text_to_lower(city_list)\n    # split the description column and get the last word\n    df['City'] = df['Description'].apply(get_last_word)\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(get_city_from_description, args=(city_list,))\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef run(descriptions, cities):\n    \"\"\"Classifies the descriptions. Public entry point of this unit.\"\"\"\n    df = pd.DataFrame({\"Description\": descriptions})\n    df = update_city_column(df, cities)\n    return df[\"City\"].tolist()\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:44:10.1763402Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"City column from the description of bank transactions.\n\nPublic entry point: run(descriptions, cities). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport pandas as pd\n\n\ndef convert_all_text_to_lower(text_list):\n    \"\"\"Convert all text in the list to lower case\"\"\"\n    return [city.lower() for city in text_list]\n\n\ndef get_last_word(description):\n    \"\"\"Split the description column and get the last word\"\"\"\n    return description.lower().split()[-1]\n\n\ndef get_city_from_description(description, city_list):\n    \"\"\"Get the city from the description\"\"\"\n    last_word = get_last_word(description)\n    return last_word if last_word in city_list else 'Unknown'\n\n\ndef get_city_from_description_with_fallback(description, city_list):\n    \"\"\"Get the city from the description, with fallback to second last word if first is not found\"\"\"\n    last_word = get_last_word(description)\n    if last_word == 'Unknown':\n        second_last_word = description.lower().split()[-2]\n        return second_last_word.lower() if second_last_word in city_list else 'Unknown'\n    return last_word\n\n\ndef update_city_column(df, city_list):\n    \"\"\"Create a new column called city and populate it with the city of the transaction\"\"\"\n    # convert all text in city_list to lower case\n    city_list = convert_all_text_to_lower(city_list)\n    # split the description column and get the last word\n    df['City'] = df['Description'].apply(get_last_word)\n    # check if the last word in the description is in the city list\n    df['City'] = df['City'].apply(get_city_from_description, args=(city_list,))\n    # make city title case\n    df['City'] = df['City'].str.title()\n    return df\n\n\ndef run(descriptions, cities):\n    \"\"\"Classifies the descriptions. Public entry point of this unit.\"\"\"\n    df = pd.DataFrame({\"Description\": descriptions})\n    df = update_city_column(df, cities)\n    return df[\"City\"].tolist()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18875678300,
+    "load_duration": 8086169700,
+    "prompt_eval_count": 589,
+    "prompt_eval_duration": 587964000,
+    "eval_count": 428,
+    "eval_duration": 10198449000
+  }
+}

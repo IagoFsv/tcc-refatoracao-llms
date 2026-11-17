@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-07__chain_of_thought__s44",
+  "instance": "LPL-07",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:22:00.437990+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    ip, port, username, password, keyid = server\n    remove_server(ip, port, username, password, keyid)\n    return _rows()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 26.886,
+  "done_reason": "stop",
+  "prompt_eval_count": 555,
+  "eval_count": 773,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the step-by-step reasoning:\n\n**1. Identify why the code exhibits the indicated code smell.**\n\nThe `remove_server` function has five parameters: `ip`, `port`, `username`, `password`, and `keyid`. This is an example of a Long Parameter List, as it has a large number of parameters that are related to the same concept (server information).\n\n**2. Explain how the indicated refactoring technique applies to the code.**\n\nThe refactoring technique suggested is to Introduce a Parameter Object. This means creating a new class or structure to hold the related parameters together, rather than passing them as separate arguments. In this case, we can create a `Server` class to hold the server information.\n\n**3. Apply the refactoring.**\n\nWe can create a `Server` class to hold the server information:\n```python\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```\nThen, we can modify the `remove_server` function to take a `Server` object as an argument:\n```python\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n```\n**4. Verify that the refactored code preserves the original behavior.**\n\nThe original behavior of the `remove_server` function is to remove a server from the database based on its IP address. The refactored code achieves the same behavior by passing a `Server` object with the IP address and other information. The `remove_server` function can access the IP address of the server using the `server.ip` attribute.\n\nHere is the complete refactored code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    remove_server(server)\n    return _rows()\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:22:00.4183339Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the step-by-step reasoning:\n\n**1. Identify why the code exhibits the indicated code smell.**\n\nThe `remove_server` function has five parameters: `ip`, `port`, `username`, `password`, and `keyid`. This is an example of a Long Parameter List, as it has a large number of parameters that are related to the same concept (server information).\n\n**2. Explain how the indicated refactoring technique applies to the code.**\n\nThe refactoring technique suggested is to Introduce a Parameter Object. This means creating a new class or structure to hold the related parameters together, rather than passing them as separate arguments. In this case, we can create a `Server` class to hold the server information.\n\n**3. Apply the refactoring.**\n\nWe can create a `Server` class to hold the server information:\n```python\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```\nThen, we can modify the `remove_server` function to take a `Server` object as an argument:\n```python\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n```\n**4. Verify that the refactored code preserves the original behavior.**\n\nThe original behavior of the `remove_server` function is to remove a server from the database based on its IP address. The refactored code achieves the same behavior by passing a `Server` object with the IP address and other information. The `remove_server` function can access the IP address of the server using the `server.ip` attribute.\n\nHere is the complete refactored code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    remove_server(server)\n    return _rows()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26868487600,
+    "load_duration": 7812571500,
+    "prompt_eval_count": 555,
+    "prompt_eval_duration": 544458000,
+    "eval_count": 773,
+    "eval_duration": 18509479000
+  }
+}

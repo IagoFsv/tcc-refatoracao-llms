@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-07__role__s42",
+  "instance": "LPL-07",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T23:23:21.028774+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    ip, port, username, password, keyid = server\n    remove_server(ip, port, username, password, keyid)\n    return _rows()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 15.731,
+  "done_reason": "stop",
+  "prompt_eval_count": 515,
+  "eval_count": 373,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    remove_server(server)\n    return _rows()\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T23:23:21.0259635Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    remove_server(server)\n    return _rows()\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15708819200,
+    "load_duration": 6527014700,
+    "prompt_eval_count": 515,
+    "prompt_eval_duration": 711164000,
+    "eval_count": 373,
+    "eval_duration": 8467280000
+  }
+}

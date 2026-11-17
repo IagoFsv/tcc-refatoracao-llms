@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-13__chain_of_thought__s44",
+  "instance": "LPL-13",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T10:47:05.661037+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\ndef bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    x : float\n        x coordinate to which the value will be interpolated.\n    y : float\n        y coordinate to which the value will be interpolated.\n    x1 : float\n        x coordinate of the first point.\n    x2 : float\n        x coordinate of the second point.\n    y1 : float\n        y coordinate of the first point.\n    y2 : float\n        y coordinate of the second point.\n    z11 : float\n        Value at the first point.\n    z12 : float\n        Value at the second point.\n    z21 : float\n        Value at the third point.\n    z22 : float\n        Value at the fourth point.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation\n    >>> bilinear_interpolation(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)\n    0.5\n    \"\"\"\n    return (\n        z11 * (x2 - x) * (y2 - y)\n        + z21 * (x - x1) * (y2 - y)\n        + z12 * (x2 - x) * (y - y1)\n        + z22 * (x - x1) * (y - y1)\n    ) / ((x2 - x1) * (y2 - y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point: (x, y). corners: (x1, x2, y1, y2). values: (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    x, y = point\n    x1, x2, y1, y2 = corners\n    z11, z12, z21, z22 = values\n    return bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 47.418,
+  "done_reason": "stop",
+  "prompt_eval_count": 992,
+  "eval_count": 855,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code exhibits the Long Parameter List code smell because the `bilinear_interpolation` function has ten parameters. This can make the function harder to understand and use, as it requires more information to call it.\n\nThe Introduce Parameter Object refactoring technique applies here because it allows us to group the parameters of the `bilinear_interpolation` function into a single object, making the function more understandable.\n\nHere is the refactored code:\n\n```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nclass Params:\n    def __init__(self, x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n        self.x = x\n        self.y = y\n        self.x1 = x1\n        self.x2 = x2\n        self.y1 = y1\n        self.y2 = y2\n        self.z11 = z11\n        self.z12 = z12\n        self.z21 = z21\n        self.z22 = z22\n\ndef bilinear_interpolation(params):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    params : Params\n        Parameters to use in the interpolation.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation, Params\n    >>> params = Params(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)\n    >>> bilinear_interpolation(params)\n    0.5\n    \"\"\"\n    x, y, x1, x2, y1, y2, z11, z12, z21, z22 = params.x, params.y, params.x1, params.x2, params.y1, params.y2, params.z11, params.z12, params.z21, params.z22\n    return  (\n        z11 * (x2 - x) * (y2 - y)\n        + z21 * (x - x1) * (y2 - y)\n        + z12 * (x2 - x) * (y - y1)\n        + z22 * (x - x1) * (y - y1)\n    ) / ((x2 - x1) * (y2 - y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point:  (x, y). corners:  (x1, x2, y1, y2). values:  (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    params = Params(*point, *corners, *values)\n    return bilinear_interpolation(params)\n```\n\nThe refactored code preserves the original behavior because it groups the parameters into a single object and passes that object to the `bilinear_interpolation` function. This means that the `bilinear_interpolation` function no longer has to know about the individual parameters, making it easier to read and understand.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T10:47:05.6582501Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code exhibits the Long Parameter List code smell because the `bilinear_interpolation` function has ten parameters. This can make the function harder to understand and use, as it requires more information to call it.\n\nThe Introduce Parameter Object refactoring technique applies here because it allows us to group the parameters of the `bilinear_interpolation` function into a single object, making the function more understandable.\n\nHere is the refactored code:\n\n```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nclass Params:\n    def __init__(self, x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n        self.x = x\n        self.y = y\n        self.x1 = x1\n        self.x2 = x2\n        self.y1 = y1\n        self.y2 = y2\n        self.z11 = z11\n        self.z12 = z12\n        self.z21 = z21\n        self.z22 = z22\n\ndef bilinear_interpolation(params):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    params : Params\n        Parameters to use in the interpolation.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation, Params\n    >>> params = Params(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)\n    >>> bilinear_interpolation(params)\n    0.5\n    \"\"\"\n    x, y, x1, x2, y1, y2, z11, z12, z21, z22 = params.x, params.y, params.x1, params.x2, params.y1, params.y2, params.z11, params.z12, params.z21, params.z22\n    return  (\n        z11 * (x2 - x) * (y2 - y)\n        + z21 * (x - x1) * (y2 - y)\n        + z12 * (x2 - x) * (y - y1)\n        + z22 * (x - x1) * (y - y1)\n    ) / ((x2 - x1) * (y2 - y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point:  (x, y). corners:  (x1, x2, y1, y2). values:  (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    params = Params(*point, *corners, *values)\n    return bilinear_interpolation(params)\n```\n\nThe refactored code preserves the original behavior because it groups the parameters into a single object and passes that object to the `bilinear_interpolation` function. This means that the `bilinear_interpolation` function no longer has to know about the individual parameters, making it easier to read and understand.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 47405926400,
+    "load_duration": 6815092000,
+    "prompt_eval_count": 992,
+    "prompt_eval_duration": 1080207000,
+    "eval_count": 855,
+    "eval_duration": 39505589000
+  }
+}

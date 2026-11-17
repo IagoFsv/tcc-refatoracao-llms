@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-07__role__s42",
+  "instance": "LLF-07",
+  "smell": "LLF",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T22:53:22.229814+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"Reads nested values stored as text in the game configuration.\n\nPublic entry point: run(text). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: z.split(\",\"), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict(\"world\", \"regions\"))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 12.508,
+  "done_reason": "stop",
+  "prompt_eval_count": 395,
+  "eval_count": 245,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Reads nested values stored as text in the game configuration.\n\nPublic entry point: run(text). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\ndef split_and_map(value, delimiter):\n    return map(lambda x: split_and_map(x, delimiter), value.split(delimiter)) if isinstance(value, str) else value\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict(self, section, key):\n        return split_and_map(self.config[section][key], \",\")\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict(\"world\", \"regions\"))\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T22:53:22.2028077Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Reads nested values stored as text in the game configuration.\n\nPublic entry point: run(text). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\ndef split_and_map(value, delimiter):\n    return map(lambda x: split_and_map(x, delimiter), value.split(delimiter)) if isinstance(value, str) else value\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict(self, section, key):\n        return split_and_map(self.config[section][key], \",\")\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict(\"world\", \"regions\"))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 12506283800,
+    "load_duration": 6533762000,
+    "prompt_eval_count": 395,
+    "prompt_eval_duration": 412966000,
+    "eval_count": 245,
+    "eval_duration": 5556939000
+  }
+}

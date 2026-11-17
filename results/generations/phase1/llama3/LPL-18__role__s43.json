@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-18__role__s43",
+  "instance": "LPL-18",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T07:50:34.428803+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Reinforcement learning agent with an experience replay memory.\n\nPublic entry point: run(configuration). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe Q-network is a minimal version: it keeps the dimensions it receives and\nits own set of weights, which can be copied from another network; it refuses\na negative size, like the real version.\n\"\"\"\n\nimport random\n\n\nclass DQN:\n    \"\"\"Minimal network: received dimensions and copyable weights.\"\"\"\n\n    def __init__(self, *dimensions):\n        input_size, n_actions, hidden_size, gamma = dimensions\n        if min(input_size, n_actions, hidden_size) < 0:\n            raise RuntimeError(\"Trying to create tensor with negative dimension\")\n        self.dimensions = dimensions\n        self.weights = {\"weights\": object()}\n\n    def state_dict(self):\n        return dict(self.weights)\n\n    def load_state_dict(self, state_dict):\n        self.weights = dict(state_dict)\n\n\nclass ReplayMemory:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.memory = []\n\n    def push(self, *args):\n        self.memory.append(args)\n        if len(self.memory) > self.capacity:\n            del self.memory[0]\n\n    def sample(self, batch_size):\n        # debug\n        return zip(*random.sample(self.memory, batch_size))\n    \n    def len(self):\n        return len(self.memory)\n\n\nclass DQNAgent:\n    def __init__(self, input_size, n_actions, hidden_size, gamma, batch_size, epsilon, epsilon_min, epsilon_decay):\n        # define the hyperparameters\n        self.input_size = input_size\n        self.n_actions = n_actions\n        self.hidden_size = hidden_size\n        self.gamma = gamma\n        self.batch_size = batch_size\n        self.epsilon = epsilon\n        self.epsilon_min = epsilon_min\n        self.epsilon_decay = epsilon_decay\n        # create the replay memory\n        self.memory = ReplayMemory(capacity=1000)\n        # create the DQN\n        self.dqn = DQN(input_size, n_actions, hidden_size, gamma)\n        # create the target DQN\n        self.target_dqn = DQN(input_size, n_actions, hidden_size, gamma)\n        # initialize the target DQN\n        self.target_dqn.load_state_dict(self.dqn.state_dict())\n\n\ndef _summary(agent):\n    \"\"\"Stored hyperparameters, memory, both networks and whether they are in sync.\"\"\"\n    names = (\"input_size\", \"n_actions\", \"hidden_size\", \"gamma\",\n             \"batch_size\", \"epsilon\", \"epsilon_min\", \"epsilon_decay\")\n    return {\n        \"hyperparameters\": {name: getattr(agent, name) for name in names},\n        \"memory\": (agent.memory.capacity, agent.memory.len()),\n        \"networks\": (agent.dqn.dimensions, agent.target_dqn.dimensions),\n        \"distinct_networks\": agent.dqn is not agent.target_dqn,\n        \"target_in_sync\": agent.target_dqn.state_dict()[\"weights\"] is agent.dqn.state_dict()[\"weights\"],\n    }\n\n\ndef run(configuration):\n    \"\"\"Public entry point of this unit.\n\n    configuration: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min and epsilon_decay.\n    \"\"\"\n    c = configuration\n    agent = DQNAgent(c[\"input_size\"], c[\"n_actions\"], c[\"hidden_size\"], c[\"gamma\"],\n                     c[\"batch_size\"], c[\"epsilon\"], c[\"epsilon_min\"], c[\"epsilon_decay\"])\n    return _summary(agent)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 26.325,
+  "done_reason": "stop",
+  "prompt_eval_count": 881,
+  "eval_count": 707,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Reinforcement learning agent with an experience replay memory.\n\nPublic entry point: run(configuration). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe Q-network is a minimal version: it keeps the dimensions it receives and\nits own set of weights, which can be copied from another network; it refuses\na negative size, like the real version.\n\"\"\"\n\nimport random\n\n\nclass DQN:\n    \"\"\"Minimal network: received dimensions and copyable weights.\"\"\"\n\n    def __init__(self, dimensions):\n        input_size, n_actions, hidden_size, gamma = dimensions\n        if min(input_size, n_actions, hidden_size) < 0:\n            raise RuntimeError(\"Trying to create tensor with negative dimension\")\n        self.dimensions = dimensions\n        self.weights = {\"weights\": object()}\n\n    def state_dict(self):\n        return dict(self.weights)\n\n    def load_state_dict(self, state_dict):\n        self.weights = dict(state_dict)\n\n\nclass ReplayMemory:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.memory = []\n\n    def push(self, *args):\n        self.memory.append(args)\n        if len(self.memory) > self.capacity:\n            del self.memory[0]\n\n    def sample(self, batch_size):\n        # debug\n        return zip(*random.sample(self.memory, batch_size))\n    \n    def len(self):\n        return len(self.memory)\n\n\nclass DQNAgentConfig:\n    def __init__(self, input_size, n_actions, hidden_size, gamma, batch_size, epsilon, epsilon_min, epsilon_decay):\n        self.input_size = input_size\n        self.n_actions = n_actions\n        self.hidden_size = hidden_size\n        self.gamma = gamma\n        self.batch_size = batch_size\n        self.epsilon = epsilon\n        self.epsilon_min = epsilon_min\n        self.epsilon_decay = epsilon_decay\n\n\nclass DQNAgent:\n    def __init__(self, config):\n        self.config = config\n        self.memory = ReplayMemory(capacity=1000)\n        self.dqn = DQN((self.config.input_size, self.config.n_actions, self.config.hidden_size, self.config.gamma))\n        self.target_dqn = DQN((self.config.input_size, self.config.n_actions, self.config.hidden_size, self.config.gamma))\n        self.target_dqn.load_state_dict(self.dqn.state_dict())\n\n\ndef _summary(agent):\n    \"\"\"Stored hyperparameters, memory, both networks and whether they are in sync.\"\"\"\n    names = (\"input_size\", \"n_actions\", \"hidden_size\", \"gamma\",\n             \"batch_size\", \"epsilon\", \"epsilon_min\", \"epsilon_decay\")\n    return {\n        \"hyperparameters\": {name: getattr(agent.config, name) for name in names},\n        \"memory\": (agent.memory.capacity, agent.memory.len()),\n        \"networks\": (agent.dqn.dimensions, agent.target_dqn.dimensions),\n        \"distinct_networks\": agent.dqn is not agent.target_dqn,\n        \"target_in_sync\": agent.target_dqn.state_dict()[\"weights\"] is agent.dqn.state_dict()[\"weights\"],\n   }\n\n\ndef run(configuration):\n    \"\"\"Public entry point of this unit.\n\n    configuration: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min and epsilon_decay.\n    \"\"\"\n    config = DQNAgentConfig(**configuration)\n    agent = DQNAgent(config)\n    return _summary(agent)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T07:50:34.4250858Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Reinforcement learning agent with an experience replay memory.\n\nPublic entry point: run(configuration). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\nThe Q-network is a minimal version: it keeps the dimensions it receives and\nits own set of weights, which can be copied from another network; it refuses\na negative size, like the real version.\n\"\"\"\n\nimport random\n\n\nclass DQN:\n    \"\"\"Minimal network: received dimensions and copyable weights.\"\"\"\n\n    def __init__(self, dimensions):\n        input_size, n_actions, hidden_size, gamma = dimensions\n        if min(input_size, n_actions, hidden_size) < 0:\n            raise RuntimeError(\"Trying to create tensor with negative dimension\")\n        self.dimensions = dimensions\n        self.weights = {\"weights\": object()}\n\n    def state_dict(self):\n        return dict(self.weights)\n\n    def load_state_dict(self, state_dict):\n        self.weights = dict(state_dict)\n\n\nclass ReplayMemory:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.memory = []\n\n    def push(self, *args):\n        self.memory.append(args)\n        if len(self.memory) > self.capacity:\n            del self.memory[0]\n\n    def sample(self, batch_size):\n        # debug\n        return zip(*random.sample(self.memory, batch_size))\n    \n    def len(self):\n        return len(self.memory)\n\n\nclass DQNAgentConfig:\n    def __init__(self, input_size, n_actions, hidden_size, gamma, batch_size, epsilon, epsilon_min, epsilon_decay):\n        self.input_size = input_size\n        self.n_actions = n_actions\n        self.hidden_size = hidden_size\n        self.gamma = gamma\n        self.batch_size = batch_size\n        self.epsilon = epsilon\n        self.epsilon_min = epsilon_min\n        self.epsilon_decay = epsilon_decay\n\n\nclass DQNAgent:\n    def __init__(self, config):\n        self.config = config\n        self.memory = ReplayMemory(capacity=1000)\n        self.dqn = DQN((self.config.input_size, self.config.n_actions, self.config.hidden_size, self.config.gamma))\n        self.target_dqn = DQN((self.config.input_size, self.config.n_actions, self.config.hidden_size, self.config.gamma))\n        self.target_dqn.load_state_dict(self.dqn.state_dict())\n\n\ndef _summary(agent):\n    \"\"\"Stored hyperparameters, memory, both networks and whether they are in sync.\"\"\"\n    names = (\"input_size\", \"n_actions\", \"hidden_size\", \"gamma\",\n             \"batch_size\", \"epsilon\", \"epsilon_min\", \"epsilon_decay\")\n    return {\n        \"hyperparameters\": {name: getattr(agent.config, name) for name in names},\n        \"memory\": (agent.memory.capacity, agent.memory.len()),\n        \"networks\": (agent.dqn.dimensions, agent.target_dqn.dimensions),\n        \"distinct_networks\": agent.dqn is not agent.target_dqn,\n        \"target_in_sync\": agent.target_dqn.state_dict()[\"weights\"] is agent.dqn.state_dict()[\"weights\"],\n   }\n\n\ndef run(configuration):\n    \"\"\"Public entry point of this unit.\n\n    configuration: input_size, n_actions, hidden_size, gamma, batch_size,\n    epsilon, epsilon_min and epsilon_decay.\n    \"\"\"\n    config = DQNAgentConfig(**configuration)\n    agent = DQNAgent(config)\n    return _summary(agent)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26312830700,
+    "load_duration": 8559595700,
+    "prompt_eval_count": 881,
+    "prompt_eval_duration": 791626000,
+    "eval_count": 707,
+    "eval_duration": 16959520000
+  }
+}

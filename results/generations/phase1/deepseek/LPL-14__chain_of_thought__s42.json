@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-14__chain_of_thought__s42",
+  "instance": "LPL-14",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T01:26:16.028653+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Simulation of a bouncing ball, step by step.\n\nPublic entry point: run(state, time, physics=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\ndef simulate_bouncing_ball (x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution = 0.2, g = 9.83) -> list:\n    \"\"\">>>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param x0: initial x position\n    :param y0: initial y position\n    :param vx0: initial x velocity\n    :param vy0: initial y velocity\n    :param steps: number of steps\n    :param dt: time step\n    :param g: gravity constant\n    :param coefficient_of_restitution: coefficient of restitution of each bounce\n    :return: list of positions\n    \"\"\"\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef run(state, time, physics=None):\n    \"\"\"state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    if physics is None:\n        return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt)\n    coefficient_of_restitution, g = physics\n    return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution, g)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 42.503,
+  "done_reason": "stop",
+  "prompt_eval_count": 917,
+  "eval_count": 801,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code exhibits the Long Parameter List code smell as the `simulate_bouncing_ball` function has eight parameters, which makes it difficult to understand and work with. \n\nThe refactoring technique that can be applied here is the Introduce Parameter Object. This technique involves creating a new class that encapsulates the parameters of the function. This way, instead of passing eight parameters to the function, we can pass one parameter that is an instance of this new class. This makes the code more readable and easier to work with.\n\nHere's how the refactoring can be done:\n\n```python\nclass Physics:\n    def __init__(self, coefficient_of_restitution=0.2, g=9.83):\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\nclass State:\n    def __init__(self, x0, y0, vx0, vy0):\n        self.x0 = x0\n        self.y0 = y0\n        self.vx0 = vx0\n        self.vy0 = vy0\n\nclass Time:\n    def __init__(self, steps, dt):\n        self.steps = steps\n        self.dt = dt\n\ndef simulate_bouncing_ball(state: State, time: Time, physics: Physics = None) -> list:\n    \"\"\"\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param state: initial state\n    :param time: time parameters\n    :param physics: physics parameters\n    :return: list of positions\n    \"\"\"\n    x0, y0, vx0, vy0 = state.x0, state.y0, state.vx0, state.vy0\n    steps, dt = time.steps, time.dt\n    if physics is None:\n        physics = Physics()\n    coefficient_of_restitution, g = physics.coefficient_of_restitution, physics.g\n\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef run(state: State, time: Time, physics: Physics = None):\n    \"\"\"\n    state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    return simulate_bouncing_ball(state, time, physics)\n```\n\nIn this refactored code, the `Physics`, `State` and `Time` classes encapsulate the parameters of the `simulate_bouncing_ball` and `run` functions respectively. This makes the code more readable and easier to work with.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T01:26:16.0259703Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code exhibits the Long Parameter List code smell as the `simulate_bouncing_ball` function has eight parameters, which makes it difficult to understand and work with. \n\nThe refactoring technique that can be applied here is the Introduce Parameter Object. This technique involves creating a new class that encapsulates the parameters of the function. This way, instead of passing eight parameters to the function, we can pass one parameter that is an instance of this new class. This makes the code more readable and easier to work with.\n\nHere's how the refactoring can be done:\n\n```python\nclass Physics:\n    def __init__(self, coefficient_of_restitution=0.2, g=9.83):\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\nclass State:\n    def __init__(self, x0, y0, vx0, vy0):\n        self.x0 = x0\n        self.y0 = y0\n        self.vx0 = vx0\n        self.vy0 = vy0\n\nclass Time:\n    def __init__(self, steps, dt):\n        self.steps = steps\n        self.dt = dt\n\ndef simulate_bouncing_ball(state: State, time: Time, physics: Physics = None) -> list:\n    \"\"\"\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param state: initial state\n    :param time: time parameters\n    :param physics: physics parameters\n    :return: list of positions\n    \"\"\"\n    x0, y0, vx0, vy0 = state.x0, state.y0, state.vx0, state.vy0\n    steps, dt = time.steps, time.dt\n    if physics is None:\n        physics = Physics()\n    coefficient_of_restitution, g = physics.coefficient_of_restitution, physics.g\n\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef run(state: State, time: Time, physics: Physics = None):\n    \"\"\"\n    state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    return simulate_bouncing_ball(state, time, physics)\n```\n\nIn this refactored code, the `Physics`, `State` and `Time` classes encapsulate the parameters of the `simulate_bouncing_ball` and `run` functions respectively. This makes the code more readable and easier to work with.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 42500881000,
+    "load_duration": 6523855500,
+    "prompt_eval_count": 917,
+    "prompt_eval_duration": 1100227000,
+    "eval_count": 801,
+    "eval_duration": 34870195000
+  }
+}

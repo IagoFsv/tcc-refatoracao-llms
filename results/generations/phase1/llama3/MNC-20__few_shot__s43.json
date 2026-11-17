@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-20__few_shot__s43",
+  "instance": "MNC-20",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T08:15:44.984326+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: drawing the scene on the terminal.\n\nPublic entry point: run(descriptions). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = [[[Location(text) for text in row] for row in plane] for plane in descriptions]\n        first_plane = descriptions[0]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(first_plane)\n        self.world_map_size_z = len(first_plane[0])\n\n    def get_location(self, x, y, z):\n        plane = self.world_map[x]\n        return plane[y][z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n\n    # Print out the world map\n    scene = [[[\"\" for z in range(world.world_map_size_z)] for y in range(world.world_map_size_y)] for x in range(world.world_map_size_x)]\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                scene[x][y][z] = world.get_location(x, y, z).get_description()\n\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(scene[x][y][z], end=\"\")\n            print(\"\")\n    print(\"\")\n\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 17.448,
+  "done_reason": "stop",
+  "prompt_eval_count": 966,
+  "eval_count": 367,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored file:\n\n```python\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    \"\"\"A map plane, with its own set of locations.\"\"\"\n\n    def __init__(self, locations):\n        self.locations = locations\n\n    def get_location(self, z):\n        return self.locations[z]\n\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = []\n        first_plane = descriptions[0]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(first_plane)\n        for plane in descriptions:\n            self.world_map.append(Plane([Location(text) for text in plane]))\n        self.world_map_size_z = len(first_plane[0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].locations[y].locations[z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(world.get_location(x, y, z).get_description(), end=\"\")\n            print(\"\")\n    print()\n\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T08:15:44.9815875Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored file:\n\n```python\nclass Location:\n    \"\"\"A map cell, with the description that appears in the scene.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    def get_description(self):\n        return self.description\n\n\nclass Plane:\n    \"\"\"A map plane, with its own set of locations.\"\"\"\n\n    def __init__(self, locations):\n        self.locations = locations\n\n    def get_location(self, z):\n        return self.locations[z]\n\n\nclass World:\n    \"\"\"Map built from the descriptions: descriptions[x][y][z].\n\n    The size on each axis comes from the first element; if the rows have\n    different sizes, the map is irregular.\n    \"\"\"\n\n    def __init__(self, descriptions):\n        self.world_map = []\n        first_plane = descriptions[0]\n        self.world_map_size_x = len(descriptions)\n        self.world_map_size_y = len(first_plane)\n        for plane in descriptions:\n            self.world_map.append(Plane([Location(text) for text in plane]))\n        self.world_map_size_z = len(first_plane[0])\n\n    def get_location(self, x, y, z):\n        return self.world_map[x].locations[y].locations[z]\n\n\ndef render_scene(world):\n    \"\"\"Render the current scene.\"\"\"\n    print(\"\\n\" * 100)\n\n    # Print out the world map\n    for x in range(world.world_map_size_x):\n        for y in range(world.world_map_size_y):\n            for z in range(world.world_map_size_z):\n                print(world.get_location(x, y, z).get_description(), end=\"\")\n            print(\"\")\n    print()\n\n\ndef run(descriptions):\n    \"\"\"Draws the scene of the described map. Public entry point of this unit.\"\"\"\n    render_scene(World(descriptions))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 17421750500,
+    "load_duration": 7798588700,
+    "prompt_eval_count": 966,
+    "prompt_eval_duration": 878869000,
+    "eval_count": 367,
+    "eval_duration": 8741638000
+  }
+}

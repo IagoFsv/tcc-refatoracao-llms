@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-07__few_shot__s42",
+  "instance": "LPL-07",
+  "smell": "LPL",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T02:54:42.867605+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\ndef register_product(name, price, quantity, category, supplier, discount):\n    product = {\n        'name': name,\n        'price': price,\n        'quantity': quantity,\n        'category': category,\n        'supplier': supplier,\n        'discount': discount\n    }\n    database.save(product)\n    return product\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Product:\n    name: str\n    price: float\n    quantity: int\n    category: str\n    supplier: str\n    discount: float\n\ndef register_product(product: Product):\n    database.save(asdict(product))\n    return product\n```\n\nNow refactor the following file.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (ip))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    ip, port, username, password, keyid = server\n    remove_server(ip, port, username, password, keyid)\n    return _rows()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.714,
+  "done_reason": "stop",
+  "prompt_eval_count": 665,
+  "eval_count": 399,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n\ndef _prepare_database(registered_servers):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", [(server.ip, server.port, server.username, server.password, server.keyid) for server in registered_servers])\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered_servers, server):\n    \"\"\"registered_servers: list of Server objects. Public entry point of this unit.\"\"\"\n    _prepare_database([server] + registered_servers)\n    remove_server(server)\n    return _rows()\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T02:54:42.8647125Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, removes a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\nclass Server:\n    def __init__(self, ip, port, username, password, keyid):\n        self.ip = ip\n        self.port = port\n        self.username = username\n        self.password = password\n        self.keyid = keyid\n\n\ndef _prepare_database(registered_servers):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", [(server.ip, server.port, server.username, server.password, server.keyid) for server in registered_servers])\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef remove_server(server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"DELETE FROM servers WHERE ip=?\", (server.ip,))\n    conn.commit()\n    conn.close()\n    print(\"Server removed.\")\n\n\ndef run(registered_servers, server):\n    \"\"\"registered_servers: list of Server objects. Public entry point of this unit.\"\"\"\n    _prepare_database([server] + registered_servers)\n    remove_server(server)\n    return _rows()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18690858700,
+    "load_duration": 8555688800,
+    "prompt_eval_count": 665,
+    "prompt_eval_duration": 648038000,
+    "eval_count": 399,
+    "eval_duration": 9485220000
+  }
+}

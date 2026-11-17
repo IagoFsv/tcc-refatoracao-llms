@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-16__few_shot__s43",
+  "instance": "MNC-16",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T08:11:47.049448+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Weather forecast of a city, printed on the terminal.\n\nPublic entry point: run(response, city, option_flag). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\noption = '-c'\n\ndef parseJSONforCITY(response, CITY):\n    '''\n    print only for key = main, key = wind speed and key = weather[main] in a pretty format\n    '''\n\n    met = {'-f': ('°C','m/s'), '-F': ('°F','mph'), '-c': ('°C','m/s'), '-C': ('°F','mph')}\n\n    if option == '-f' or option == '-F':\n        print(\"5-day Forecast for \" + CITY)\n        \"\"\"check for date field\n           if the day is same, print the content in the same line\n           if the day is different, print the content in the next line\n        \"\"\"\n        day = \"\"\n        for i in range(0, len(response['list'])):\n            if day == response['list'][i]['dt_txt'][0:10]:\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])\n            else:\n                day = response['list'][i]['dt_txt'][0:10]\n                print(\"-------------------------------------------------------\")\n                print(\"Date: \" + day)\n                print(\"Time: \" + response['list'][i]['dt_txt'][11:16] + \" Temperature: \" + str('%.1f' % (response['list'][i]['main']['temp'])) + met[option][0] + \" Weather: \" + response['list'][i]['weather'][0]['main'])             \n\n    else:\n        print(\"-------------------------------------------------------\")\n        print(\"Current Weather for \" + CITY)\n        #convert to centrigrade and set precision 1\n        print(\"Temperature: \" + str('%.1f' % (response['main']['temp'])) + met[option][0])\n        print(\"Wind Speed: \" + str('%.1f' % (response['wind']['speed'])) + met[option][1])\n        print(\"Weather: \" + response['weather'][0]['main'])\n        #print other conditions including feels like,humidity, temp_min, temp_max\n        print(\"Feels Like: \" + str('%.1f' % (response['main']['feels_like'])) + met[option][0])\n        print(\"Humidity: \" + str(response['main']['humidity']) + \"%\")\n        print(\"Minimum Temperature: \" + str('%.1f' %  (response['main']['temp_min'])) + met[option][0])\n        print(\"Maximum Temperature: \" + str('%.1f' %  (response['main']['temp_max'])) + met[option][0])\n        print(\"-------------------------------------------------------\")\n\n\ndef run(response, city, option_flag):\n    \"\"\"Prints the weather with the given command-line option. Public entry point of this unit.\"\"\"\n    global option\n    option = option_flag\n    parseJSONforCITY(response, city)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 22.895,
+  "done_reason": "stop",
+  "prompt_eval_count": 1219,
+  "eval_count": 564,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Weather:\n    main: str\n\n@dataclass\nclass Wind:\n    speed: float\n\n@dataclass\nclass CurrentWeather:\n    temp: float\n    feels_like: float\n    humidity: int\n    temp_min: float\n    temp_max: float\n\n@dataclass\nclass Forecast:\n    dt_txt: str\n    main: dict\n    weather: List[Weather]\n\n@dataclass\nclass CityWeather:\n    city: str\n    current_weather: CurrentWeather\n    forecast: List[Forecast]\n\ndef parse_json_for_city(response, city):\n    \"\"\"Prints the weather with the given command-line option.\"\"\"\n    if option == '-f' or option == '-F':\n        print(f\"5-day Forecast for {city}\")\n        day = \"\"\n        for forecast in response['list']:\n            if day == forecast['dt_txt'][:10]:\n                print(f\"Time: {forecast['dt_txt'][11:16]} Temperature: {response['main']['temp']:.1f}{met[option][0]} Weather: {forecast['weather'][0]['main']}\")\n            else:\n                day = forecast['dt_txt'][:10]\n                print(\"-------------------------------------------------------\")\n                print(f\"Date: {day}\")\n                print(f\"Time: {forecast['dt_txt'][11:16]} Temperature: {response['main']['temp']:.1f}{met[option][0]} Weather: {forecast['weather'][0]['main']}\")\n    else:\n        print(\"-------------------------------------------------------\")\n        print(f\"Current Weather for {city}\")\n        print(f\"Temperature: {response['main']['temp']:.1f}{met[option][0]}\")\n        print(f\"Wind Speed: {response['wind']['speed']:.1f}{met[option][1]}\")\n        print(f\"Weather: {response['weather'][0]['main']}\")\n        print(f\"Feels Like: {response['main']['feels_like']:.1f}{met[option][0]}\")\n        print(f\"Humidity: {response['main']['humidity']}%\")\n        print(f\"Minimum Temperature: {response['main']['temp_min']:.1f}{met[option][0]}\")\n        print(f\"Maximum Temperature: {response['main']['temp_max']:.1f}{met[option][0]}\")\n        print(\"-------------------------------------------------------\")\n\n\ndef run(response, city, option_flag):\n    \"\"\"Prints the weather with the given command-line option. Public entry point of this unit.\"\"\"\n    global option\n    option = option_flag\n    parse_json_for_city(response, city)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T08:11:47.0452686Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Weather:\n    main: str\n\n@dataclass\nclass Wind:\n    speed: float\n\n@dataclass\nclass CurrentWeather:\n    temp: float\n    feels_like: float\n    humidity: int\n    temp_min: float\n    temp_max: float\n\n@dataclass\nclass Forecast:\n    dt_txt: str\n    main: dict\n    weather: List[Weather]\n\n@dataclass\nclass CityWeather:\n    city: str\n    current_weather: CurrentWeather\n    forecast: List[Forecast]\n\ndef parse_json_for_city(response, city):\n    \"\"\"Prints the weather with the given command-line option.\"\"\"\n    if option == '-f' or option == '-F':\n        print(f\"5-day Forecast for {city}\")\n        day = \"\"\n        for forecast in response['list']:\n            if day == forecast['dt_txt'][:10]:\n                print(f\"Time: {forecast['dt_txt'][11:16]} Temperature: {response['main']['temp']:.1f}{met[option][0]} Weather: {forecast['weather'][0]['main']}\")\n            else:\n                day = forecast['dt_txt'][:10]\n                print(\"-------------------------------------------------------\")\n                print(f\"Date: {day}\")\n                print(f\"Time: {forecast['dt_txt'][11:16]} Temperature: {response['main']['temp']:.1f}{met[option][0]} Weather: {forecast['weather'][0]['main']}\")\n    else:\n        print(\"-------------------------------------------------------\")\n        print(f\"Current Weather for {city}\")\n        print(f\"Temperature: {response['main']['temp']:.1f}{met[option][0]}\")\n        print(f\"Wind Speed: {response['wind']['speed']:.1f}{met[option][1]}\")\n        print(f\"Weather: {response['weather'][0]['main']}\")\n        print(f\"Feels Like: {response['main']['feels_like']:.1f}{met[option][0]}\")\n        print(f\"Humidity: {response['main']['humidity']}%\")\n        print(f\"Minimum Temperature: {response['main']['temp_min']:.1f}{met[option][0]}\")\n        print(f\"Maximum Temperature: {response['main']['temp_max']:.1f}{met[option][0]}\")\n        print(\"-------------------------------------------------------\")\n\n\ndef run(response, city, option_flag):\n    \"\"\"Prints the weather with the given command-line option. Public entry point of this unit.\"\"\"\n    global option\n    option = option_flag\n    parse_json_for_city(response, city)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22871791300,
+    "load_duration": 8296946800,
+    "prompt_eval_count": 1219,
+    "prompt_eval_duration": 1068851000,
+    "eval_count": 564,
+    "eval_duration": 13503423000
+  }
+}

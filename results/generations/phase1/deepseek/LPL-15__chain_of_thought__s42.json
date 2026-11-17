@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-15__chain_of_thought__s42",
+  "instance": "LPL-15",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T01:28:07.022266+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block(object):\n    def __init__(self, index, timestamp, transactions, previous_hash, proof=None, *args, **kwargs):\n        self.index = index\n        self.timestamp = timestamp\n        self.transactions = transactions\n        self.previous_hash = previous_hash\n        self.proof = proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) + \"\".join(list(map(lambda x: x.hash, self.transactions))) + str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: index, timestamp, transactions (descriptions), previous_hash and,\n    optionally, proof. Returns the dictionary representation of the block.\n    \"\"\"\n    transactions = [_Transaction(description) for description in fields[\"transactions\"]]\n    if \"proof\" in fields:\n        block = Block(fields[\"index\"], fields[\"timestamp\"], transactions,\n                      fields[\"previous_hash\"], fields[\"proof\"])\n    else:\n        block = Block(fields[\"index\"], fields[\"timestamp\"], transactions,\n                      fields[\"previous_hash\"])\n    return block.repr_json()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 45.679,
+  "done_reason": "stop",
+  "prompt_eval_count": 878,
+  "eval_count": 869,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code smell here is a long parameter list in the `Block` class's `__init__` method. This is a violation of the Single Responsibility Principle, as the `Block` class is responsible for more than one thing: it is responsible for holding data about a block and its transactions, and it is also responsible for calculating the hash of the block.\n\nTo refactor this, we can apply the Introduce Parameter Object refactoring technique. This technique involves creating a new class to hold all the parameters of the method that has a long parameter list. This new class, which we'll call `BlockData`, will hold the data that the `Block` class currently has, and the `Block` class will be updated to take an instance of `BlockData` as its `__init__` method's parameter.\n\nHere's the refactored code:\n\n```python\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\nfrom collections import namedtuple\n\nBlockData = namedtuple('BlockData', 'index timestamp transactions previous_hash proof')\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block:\n    def __init__(self, block_data: BlockData):\n        self.index = block_data.index\n        self.timestamp = block_data.timestamp\n        self.transactions = block_data.transactions\n        self.previous_hash = block_data.previous_hash\n        self.proof = block_data.proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) +\n                               \"\".join(list(map(lambda x: x.hash, self.transactions))) +\n                               str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: index, timestamp, transactions  (descriptions), previous_hash and,\n    optionally, proof. Returns the dictionary representation of the block.\n    \"\"\"\n    transactions = [_Transaction(description) for description in fields[\"transactions\"]]\n    block_data = BlockData(fields[\"index\"], fields[\"timestamp\"], transactions,\n                           fields[\"previous_hash\"], fields.get(\"proof\", None))\n    block = Block(block_data)\n    return block.repr_json()\n```\n\nIn this refactored code, the `Block` class only has one responsibility: to hold and calculate the hash of a block. The `run` function still works as before, but now it creates an instance of `BlockData` and passes it to the `Block` constructor. This refactoring makes the code more readable and easier to maintain, as the `Block` class is less cluttered and its responsibilities are more clearly defined.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T01:28:07.0196058Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code smell here is a long parameter list in the `Block` class's `__init__` method. This is a violation of the Single Responsibility Principle, as the `Block` class is responsible for more than one thing: it is responsible for holding data about a block and its transactions, and it is also responsible for calculating the hash of the block.\n\nTo refactor this, we can apply the Introduce Parameter Object refactoring technique. This technique involves creating a new class to hold all the parameters of the method that has a long parameter list. This new class, which we'll call `BlockData`, will hold the data that the `Block` class currently has, and the `Block` class will be updated to take an instance of `BlockData` as its `__init__` method's parameter.\n\nHere's the refactored code:\n\n```python\n\"\"\"Block of a blockchain: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\nfrom collections import namedtuple\n\nBlockData = namedtuple('BlockData', 'index timestamp transactions previous_hash proof')\n\n\nclass _Transaction:\n    \"\"\"Minimal transaction, with only what the block uses: hash and repr_json.\"\"\"\n\n    def __init__(self, description):\n        self.description = description\n\n    @property\n    def hash(self):\n        return hashlib.sha256(self.description.encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\"description\": self.description}\n\n\nclass Block:\n    def __init__(self, block_data: BlockData):\n        self.index = block_data.index\n        self.timestamp = block_data.timestamp\n        self.transactions = block_data.transactions\n        self.previous_hash = block_data.previous_hash\n        self.proof = block_data.proof\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.index) + str(self.timestamp) +\n                               \"\".join(list(map(lambda x: x.hash, self.transactions))) +\n                               str(self.previous_hash) + str(self.proof)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"hash\": self.hash,\n            \"index\": self.index,\n            \"timestamp\": self.timestamp,\n            \"transactions\": list(map(lambda x: x.repr_json(), self.transactions)),\n            \"previous_hash\": self.previous_hash,\n            \"proof\": self.proof\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: index, timestamp, transactions  (descriptions), previous_hash and,\n    optionally, proof. Returns the dictionary representation of the block.\n    \"\"\"\n    transactions = [_Transaction(description) for description in fields[\"transactions\"]]\n    block_data = BlockData(fields[\"index\"], fields[\"timestamp\"], transactions,\n                           fields[\"previous_hash\"], fields.get(\"proof\", None))\n    block = Block(block_data)\n    return block.repr_json()\n```\n\nIn this refactored code, the `Block` class only has one responsibility: to hold and calculate the hash of a block. The `run` function still works as before, but now it creates an instance of `BlockData` and passes it to the `Block` constructor. This refactoring makes the code more readable and easier to maintain, as the `Block` class is less cluttered and its responsibilities are more clearly defined.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 45659334800,
+    "load_duration": 6755729700,
+    "prompt_eval_count": 878,
+    "prompt_eval_duration": 975168000,
+    "eval_count": 869,
+    "eval_duration": 37924818000
+  }
+}

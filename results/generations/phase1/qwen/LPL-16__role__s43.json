@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-16__role__s43",
+  "instance": "LPL-16",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T04:18:40.993557+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction = Transaction(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"],\n                              fields[\"timestamp\"])\n    return transaction.repr_json()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 14.298,
+  "done_reason": "stop",
+  "prompt_eval_count": 429,
+  "eval_count": 310,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, data):\n        self.sender = data.sender\n        self.receiver = data.receiver\n        self.amount = data.amount\n        self.timestamp = data.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\nclass TransactionData(object):\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction_data = TransactionData(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"],\n                                       fields[\"timestamp\"])\n    transaction = Transaction(transaction_data)\n    return transaction.repr_json()\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T04:18:40.9661963Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, data):\n        self.sender = data.sender\n        self.receiver = data.receiver\n        self.amount = data.amount\n        self.timestamp = data.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\nclass TransactionData(object):\n    def __init__(self, sender, receiver, amount, timestamp):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction_data = TransactionData(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"],\n                                       fields[\"timestamp\"])\n    transaction = Transaction(transaction_data)\n    return transaction.repr_json()\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14295250600,
+    "load_duration": 6787635100,
+    "prompt_eval_count": 429,
+    "prompt_eval_duration": 461123000,
+    "eval_count": 310,
+    "eval_duration": 7043246000
+  }
+}

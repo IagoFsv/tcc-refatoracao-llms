@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-04__chain_of_thought__s42",
+  "instance": "MNC-04",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T23:43:53.992559+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\npermissions = {\n    \"lnd\": {\n        \"env\": {\n            \"LND_IP\": \"${LND_IP}\",\n            \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n            \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n            \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n        },\n        \"volumes\": [\n            '${LND_DATA_DIR}:/lnd:ro'\n        ]\n    },\n    \"bitcoind\": {\n        \"env\": {\n            \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n            \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n            \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n            \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n            \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n            \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n            \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n        }\n    }\n}\n\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 19.505,
+  "done_reason": "stop",
+  "prompt_eval_count": 543,
+  "eval_count": 532,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe original code exhibits the \"Multiply-Nested Container\" code smell because the `permissions` dictionary is deeply nested. This makes the code difficult to read and maintain, as accessing elements requires navigating through multiple levels of nested dictionaries and lists.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the deeply nested container into smaller, more manageable containers. This makes the code easier to read and maintain by reducing the complexity of each nested level.\n\n### Step 3: Apply the Refactoring\nWe will decompose the `permissions` dictionary into smaller, more focused dictionaries. Here's how we can do it:\n\n1. Create a separate dictionary for each service.\n2. Move the nested dictionaries into these service dictionaries.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, the code should still return the same permissions when called with the appropriate service name.\n\n### Refactored Code\n```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nlnd_permissions = {\n    \"env\": {\n        \"LND_IP\": \"${LND_IP}\",\n        \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n        \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n        \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n    },\n    \"volumes\": [\n        '${LND_DATA_DIR}:/lnd:ro'\n    ]\n}\n\nbitcoind_permissions = {\n    \"env\": {\n        \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n        \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n        \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n        \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n        \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n        \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n        \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n    }\n}\n\npermissions = {\n    \"lnd\": lnd_permissions,\n    \"bitcoind\": bitcoind_permissions\n}\n\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```\n\nThis refactored code maintains the original behavior of the code while decomposing the deeply nested container into smaller, more manageable dictionaries.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T23:43:53.9788244Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe original code exhibits the \"Multiply-Nested Container\" code smell because the `permissions` dictionary is deeply nested. This makes the code difficult to read and maintain, as accessing elements requires navigating through multiple levels of nested dictionaries and lists.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the deeply nested container into smaller, more manageable containers. This makes the code easier to read and maintain by reducing the complexity of each nested level.\n\n### Step 3: Apply the Refactoring\nWe will decompose the `permissions` dictionary into smaller, more focused dictionaries. Here's how we can do it:\n\n1. Create a separate dictionary for each service.\n2. Move the nested dictionaries into these service dictionaries.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, the code should still return the same permissions when called with the appropriate service name.\n\n### Refactored Code\n```python\n\"\"\"Service permissions used to generate container composition files.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nlnd_permissions = {\n    \"env\": {\n        \"LND_IP\": \"${LND_IP}\",\n        \"LND_GRPC_PORT\": \"${LND_GRPC_PORT}\",\n        \"LND_REST_PORT\": \"${LND_REST_PORT}\",\n        \"BITCOIN_NETWORK\": \"${BITCOIN_NETWORK}\"\n    },\n    \"volumes\": [\n        '${LND_DATA_DIR}:/lnd:ro'\n    ]\n}\n\nbitcoind_permissions = {\n    \"env\": {\n        \"BITCOIN_IP\":       \"${BITCOIN_IP}\",\n        \"BITCOIN_NETWORK\":  \"${BITCOIN_NETWORK}\",\n        \"BITCOIN_P2P_PORT\": \"${BITCOIN_P2P_PORT}\",\n        \"BITCOIN_RPC_PORT\": \"${BITCOIN_RPC_PORT}\",\n        \"BITCOIN_RPC_USER\": \"${BITCOIN_RPC_USER}\",\n        \"BITCOIN_RPC_PASS\": \"${BITCOIN_RPC_PASS}\",\n        \"BITCOIN_RPC_AUTH\": \"${BITCOIN_RPC_AUTH}\"\n    }\n}\n\npermissions = {\n    \"lnd\": lnd_permissions,\n    \"bitcoind\": bitcoind_permissions\n}\n\n\ndef run(name):\n    \"\"\"Returns the permission of a service. Public entry point of this unit.\"\"\"\n    return permissions[name]\n```\n\nThis refactored code maintains the original behavior of the code while decomposing the deeply nested container into smaller, more manageable dictionaries."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19480566800,
+    "load_duration": 6786153800,
+    "prompt_eval_count": 543,
+    "prompt_eval_duration": 518063000,
+    "eval_count": 532,
+    "eval_duration": 12173795000
+  }
+}

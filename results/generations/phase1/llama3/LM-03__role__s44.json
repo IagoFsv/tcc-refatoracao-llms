@@ -1,0 +1,66 @@
+{
+  "identifier": "LM-03__role__s44",
+  "instance": "LM-03",
+  "smell": "LM",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:56:10.644338+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Method\nDefinition: A method or function that exceeds a considerable length.\nRefactoring technique: Extract Method\nOriginal code:\n```python\n\"\"\"Grid of columns and rows to lay out elements in landscape.\n\nPublic entry point: run(elements). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport math\n\n\ndef get_layout_size(elements):\n    if elements <= 1:\n        return 1, 1\n    elif elements == 2:\n        return 2, 1\n    elif elements == 3:\n        return 3, 1\n    elif elements == 4:\n        return 4, 1\n    elif elements == 5:\n        return 5, 1\n    elif elements == 6:\n        return 6, 1\n    elif elements == 7:\n        return 4, 2\n    elif elements == 8:\n        return 4, 2\n    elif elements == 9:\n        return 5, 2\n    elif elements == 10:\n        return 5, 2\n    elif elements == 11:\n        return 6, 2\n    elif elements == 12:\n        return 6, 2\n    elif elements in range(13, 19):\n        return 6, 3\n    elif elements in range(19, 25):\n        return 6, 4\n    elif elements in range(25, 31):\n        return 6, 5\n    elif elements in range(31, 36):\n        return 7, 5\n    elif elements in range(36, 43):\n        return 7, 6\n    elif elements in range(43, 50):\n        return 7, 7\n    elif elements in range(50, 57):\n        return 7, 8\n    elif elements in range(57, 64):\n        return 7, 9\n    elif elements in range(64, 71):\n        return 7, 10\n    elif elements in range(71, 78):\n        return 7, 11\n    elif elements in range(78, 85):\n        return 7, 12\n    elif elements in range(85, 92):\n        return 7, 13\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        long_edge = math.ceil(elements / short_edge)\n        return short_edge, long_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef run(elements):\n    \"\"\"Returns (columns, rows) for the number of elements. Public entry point of this unit.\"\"\"\n    return get_layout_size(elements)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 22.36,
+  "done_reason": "stop",
+  "prompt_eval_count": 710,
+  "eval_count": 583,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Grid of columns and rows to lay out elements in landscape.\n\nPublic entry point: run(elements). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport math\n\n\ndef get_columns(elements):\n    if elements <= 1:\n        return 1\n    elif elements == 2:\n        return 2\n    elif elements in range(3, 7):\n        return 3\n    elif elements in range(8, 13):\n        return 4\n    elif elements in range(14, 25):\n        return 5\n    elif elements in range(26, 36):\n        return 6\n    elif elements in range(37, 50):\n        return 7\n    elif elements in range(51, 64):\n        return 7\n    elif elements in range(65, 78):\n        return 7\n    elif elements in range(79, 92):\n        return 7\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        return short_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef get_rows(elements):\n    if elements <= 1:\n        return 1\n    elif elements in range(2, 4):\n        return 2\n    elif elements in range(5, 7):\n        return 2\n    elif elements in range(8, 12):\n        return 3\n    elif elements in range(13, 19):\n        return 3\n    elif elements in range(20, 25):\n        return 4\n    elif elements in range(26, 31):\n        return 5\n    elif elements in range(32, 36):\n        return 5\n    elif elements in range(37, 43):\n        return 6\n    elif elements in range(44, 50):\n        return 7\n    elif elements in range(51, 57):\n        return 8\n    elif elements in range(58, 64):\n        return 9\n    elif elements in range(65, 71):\n        return 10\n    elif elements in range(72, 78):\n        return 11\n    elif elements in range(79, 85):\n        return 12\n    elif elements in range(86, 92):\n        return 13\n    elif elements > 91:\n        return 7\n\n\ndef get_layout_size(elements):\n    return get_columns(elements), get_rows(elements)\n\n\ndef run(elements):\n    \"\"\"Returns (columns, rows) for the number of elements. Public entry point of this unit.\"\"\"\n    return get_layout_size(elements)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:56:10.6414223Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Grid of columns and rows to lay out elements in landscape.\n\nPublic entry point: run(elements). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport math\n\n\ndef get_columns(elements):\n    if elements <= 1:\n        return 1\n    elif elements == 2:\n        return 2\n    elif elements in range(3, 7):\n        return 3\n    elif elements in range(8, 13):\n        return 4\n    elif elements in range(14, 25):\n        return 5\n    elif elements in range(26, 36):\n        return 6\n    elif elements in range(37, 50):\n        return 7\n    elif elements in range(51, 64):\n        return 7\n    elif elements in range(65, 78):\n        return 7\n    elif elements in range(79, 92):\n        return 7\n    elif elements > 91:\n        phi = (1 + math.sqrt(5)) / 2\n        short_edge = math.floor((math.sqrt(elements * phi)) / phi)\n        return short_edge\n    else:\n        raise ValueError(f'Unsupported number of elements: {elements}')\n\n\ndef get_rows(elements):\n    if elements <= 1:\n        return 1\n    elif elements in range(2, 4):\n        return 2\n    elif elements in range(5, 7):\n        return 2\n    elif elements in range(8, 12):\n        return 3\n    elif elements in range(13, 19):\n        return 3\n    elif elements in range(20, 25):\n        return 4\n    elif elements in range(26, 31):\n        return 5\n    elif elements in range(32, 36):\n        return 5\n    elif elements in range(37, 43):\n        return 6\n    elif elements in range(44, 50):\n        return 7\n    elif elements in range(51, 57):\n        return 8\n    elif elements in range(58, 64):\n        return 9\n    elif elements in range(65, 71):\n        return 10\n    elif elements in range(72, 78):\n        return 11\n    elif elements in range(79, 85):\n        return 12\n    elif elements in range(86, 92):\n        return 13\n    elif elements > 91:\n        return 7\n\n\ndef get_layout_size(elements):\n    return get_columns(elements), get_rows(elements)\n\n\ndef run(elements):\n    \"\"\"Returns (columns, rows) for the number of elements. Public entry point of this unit.\"\"\"\n    return get_layout_size(elements)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22357932200,
+    "load_duration": 7804553600,
+    "prompt_eval_count": 710,
+    "prompt_eval_duration": 669920000,
+    "eval_count": 583,
+    "eval_duration": 13881932000
+  }
+}

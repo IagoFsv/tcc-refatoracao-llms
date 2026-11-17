@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-12__few_shot__s42",
+  "instance": "MNC-12",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T03:25:40.414398+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Command-line program that shows the weather of a city.\n\nPublic entry point: run(city). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport runpy\nimport sys\n\nimport requests\nimport argparse\n\n\ndef call_api(city):\n    # fetch the key from a config file\n    import configparser\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    api_key = config['openweathermap']['api_key']\n    base_url = config['openweathermap']['base_url']\n    complete_url = base_url + \"appid=\" + api_key + \"&q=\" + city\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\n\ndef run(city):\n    \"\"\"Runs this file as a program, with the city on the command line. Public entry point of this unit.\"\"\"\n    previous_argv = sys.argv\n    sys.argv = [__file__, city]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = previous_argv\n\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    # check if city is passed as argument\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n\n    response = call_api(args.city)\n    # check if valid city name is passed\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    # get the weather from the response\n    weather = response['weather'][0]['description']\n    print(weather)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.695,
+  "done_reason": "stop",
+  "prompt_eval_count": 881,
+  "eval_count": 482,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\n\"\"\"Command-line program that shows the weather of a city.\n\nPublic entry point: run(city). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport runpy\nimport sys\nimport argparse\nimport requests\nimport configparser\n\nimport dataclasses\n\n@dataclasses.dataclass\nclass WeatherResponse:\n    cod: int\n    weather: list\n\n@dataclasses.dataclass\nclass Weather:\n    description: str\n\n@dataclasses.dataclass\nclass CityWeather:\n    city: str\n    weather: Weather\n\n@dataclasses.dataclass\nclass OpenWeatherMapConfig:\n    api_key: str\n    base_url: str\n\ndef call_api(city: str, config: OpenWeatherMapConfig) -> WeatherResponse:\n    complete_url = config.base_url + \"appid=\" + config.api_key + \"&q=\" + city\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\ndef run(city: str):\n    \"\"\"Runs this file as a program, with the city on the command line. Public entry point of this unit.\"\"\"\n    previous_argv = sys.argv\n    sys.argv = [__file__, city]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = previous_argv\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    # check if city is passed as argument\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    config_data = config['openweathermap']\n    config = OpenWeatherMapConfig(api_key=config_data['api_key'], base_url=config_data['base_url'])\n\n    response = call_api(args.city, config)\n    # check if valid city name is passed\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    # get the weather from the response\n    weather = Weather(description=response['weather'][0]['description'])\n    city_weather = CityWeather(city=args.city, weather=weather)\n    print(city_weather.weather.description)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T03:25:40.4117326Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\n\"\"\"Command-line program that shows the weather of a city.\n\nPublic entry point: run(city). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport runpy\nimport sys\nimport argparse\nimport requests\nimport configparser\n\nimport dataclasses\n\n@dataclasses.dataclass\nclass WeatherResponse:\n    cod: int\n    weather: list\n\n@dataclasses.dataclass\nclass Weather:\n    description: str\n\n@dataclasses.dataclass\nclass CityWeather:\n    city: str\n    weather: Weather\n\n@dataclasses.dataclass\nclass OpenWeatherMapConfig:\n    api_key: str\n    base_url: str\n\ndef call_api(city: str, config: OpenWeatherMapConfig) -> WeatherResponse:\n    complete_url = config.base_url + \"appid=\" + config.api_key + \"&q=\" + city\n    response_from_api = requests.get(complete_url)\n    return response_from_api.json()\n\ndef run(city: str):\n    \"\"\"Runs this file as a program, with the city on the command line. Public entry point of this unit.\"\"\"\n    previous_argv = sys.argv\n    sys.argv = [__file__, city]\n    try:\n        runpy.run_path(__file__, run_name='__main__')\n    finally:\n        sys.argv = previous_argv\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"city\", help=\"City name to get weather data\")\n    args = parser.parse_args()\n    # check if city is passed as argument\n    if args.city is None:\n        print(\"Please provide city name\")\n        exit(1)\n\n    config = configparser.ConfigParser()\n    config.read('config.ini')\n    config_data = config['openweathermap']\n    config = OpenWeatherMapConfig(api_key=config_data['api_key'], base_url=config_data['base_url'])\n\n    response = call_api(args.city, config)\n    # check if valid city name is passed\n    if response['cod'] != 200:\n        print(\"Invalid city name\")\n        exit(1)\n    # get the weather from the response\n    weather = Weather(description=response['weather'][0]['description'])\n    city_weather = CityWeather(city=args.city, weather=weather)\n    print(city_weather.weather.description)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20669422400,
+    "load_duration": 8289687500,
+    "prompt_eval_count": 881,
+    "prompt_eval_duration": 810261000,
+    "eval_count": 482,
+    "eval_duration": 11567458000
+  }
+}

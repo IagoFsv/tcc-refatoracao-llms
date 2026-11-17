@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-08__chain_of_thought__s42",
+  "instance": "MNC-08",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T23:47:59.984517+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Question answered by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )[\"choices\"][0][\"text\"].strip(\" \\n\")\n    return result\n\n\ndef run(text, choices):\n    \"\"\"Submits the question; returns the answer and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    answer = submit_question(text)\n    return answer, Completion.requests_made\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.076,
+  "done_reason": "stop",
+  "prompt_eval_count": 617,
+  "eval_count": 600,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code has a multiply-nested container in the `run` function when accessing elements from the `result` dictionary. Specifically, the line `result[\"choices\"][0][\"text\"].strip(\" \\n\")` demonstrates this smell.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down a deeply nested container into smaller, more manageable parts. This can be done by introducing intermediate variables to hold intermediate results, thus reducing the complexity and improving readability.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate variables to hold the nested elements, making the code easier to read and maintain.\n\n### Step 4: Verify the Refactored Code\nThe refactored code should preserve the original behavior, ensuring that the `submit_question` function correctly processes the input text and returns the expected result.\n\n### Refactored Code\n```python\n\"\"\"Question answered by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )\n\n    # Decompose the nested container\n    choices = result[\"choices\"]\n    choice = choices[0]\n    text = choice[\"text\"]\n    stripped_text = text.strip(\" \\n\")\n\n    return stripped_text\n\n\ndef run(text, choices):\n    \"\"\"Submits the question; returns the answer and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    answer = submit_question(text)\n    return answer, Completion.requests_made\n```\n\nThis refactored code maintains the original behavior while reducing the complexity of accessing nested elements by introducing intermediate variables.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T23:47:59.9678721Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code has a multiply-nested container in the `run` function when accessing elements from the `result` dictionary. Specifically, the line `result[\"choices\"][0][\"text\"].strip(\" \\n\")` demonstrates this smell.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down a deeply nested container into smaller, more manageable parts. This can be done by introducing intermediate variables to hold intermediate results, thus reducing the complexity and improving readability.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate variables to hold the nested elements, making the code easier to read and maintain.\n\n### Step 4: Verify the Refactored Code\nThe refactored code should preserve the original behavior, ensuring that the `submit_question` function correctly processes the input text and returns the expected result.\n\n### Refactored Code\n```python\n\"\"\"Question answered by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef submit_question(text):\n    \"\"\"This submits a question to the OpenAI API\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n    prompt = text\n\n    result = openai.Completion.create(\n        prompt=prompt,\n        temperature=0,\n        max_tokens=300,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n        model=\"text-davinci-003\",\n    )\n\n    # Decompose the nested container\n    choices = result[\"choices\"]\n    choice = choices[0]\n    text = choice[\"text\"]\n    stripped_text = text.strip(\" \\n\")\n\n    return stripped_text\n\n\ndef run(text, choices):\n    \"\"\"Submits the question; returns the answer and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    answer = submit_question(text)\n    return answer, Completion.requests_made\n```\n\nThis refactored code maintains the original behavior while reducing the complexity of accessing nested elements by introducing intermediate variables."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21073736600,
+    "load_duration": 6786416800,
+    "prompt_eval_count": 617,
+    "prompt_eval_duration": 563802000,
+    "eval_count": 600,
+    "eval_duration": 13720358000
+  }
+}

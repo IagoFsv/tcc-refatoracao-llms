@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-10__chain_of_thought__s42",
+  "instance": "LLF-10",
+  "smell": "LLF",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T00:14:05.212858+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"Reads nested values stored as text in the game configuration.\n\nPublic entry point: run(text). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(bool, z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_bool(\"world\", \"regions\"))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 49.364,
+  "done_reason": "stop",
+  "prompt_eval_count": 616,
+  "eval_count": 995,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "Reasoning:\n\n1. The code exhibits the Long Lambda Function code smell as the lambda function `get_config_section_key_dict_dict_dict_bool` is quite long. It's a lambda function that splits the string by commas and applies `bool` function to each element.\n\n2. The refactoring technique Replace Lambda with Named Function applies here as we can replace the long lambda function with a named function that does the same thing. This will make the code easier to read and understand.\n\n3. Apply the refactoring:\n\n```python\nclass Config(object):\n    def  __init__(self):\n        self.config  = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(self._split_and_convert, self.config[section][key].split(\",\"))\n\n    def _split_and_convert(self, value):\n        return map(self._split_and_convert, value.split(\",\"))\n\n    def _split_and_convert_2(self, value):\n        return map(self._split_and_convert_3, value.split(\",\"))\n\n    def _split_and_convert_3(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items  = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config  = Config()\n    config.config[\"world\"]  = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_bool(\"world\", \"regions\"))\n```\n\n4. Verify that the refactored code preserves the original behavior:\n\n```python\ndef test_run():\n    text = \"1,2,3\"\n    assert run(text) == [[[['1', '2', '3']]]]\n\ntest_run()\n```\n\nThe test_run function tests the run function with a simple input. It checks if the output is as expected. If the output matches the expected result, the test passes. If not, the test fails.\n\nThe test_run function should pass if the refactored code is correct.\n\nComplete refactored file:\n\n```python\nclass Config(object):\n    def  __init__(self):\n        self.config  = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(self._split_and_convert, self.config[section][key].split(\",\"))\n\n    def _split_and_convert(self, value):\n        return map(self._split_and_convert_2, value.split(\",\"))\n\n    def _split_and_convert_2(self, value):\n        return map(self._split_and_convert_3, value.split(\",\"))\n\n    def _split_and_convert_3(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items  = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config  = Config()\n    config.config[\"world\"]  = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_bool(\"world\", \"regions\"))\n\n\ndef test_run():\n    text = \"1,2,3\"\n    assert run(text) == [[[['1', '2', '3']]]]\n\ntest_run()\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T00:14:05.2100489Z",
+    "message": {
+      "role": "assistant",
+      "content": "Reasoning:\n\n1. The code exhibits the Long Lambda Function code smell as the lambda function `get_config_section_key_dict_dict_dict_bool` is quite long. It's a lambda function that splits the string by commas and applies `bool` function to each element.\n\n2. The refactoring technique Replace Lambda with Named Function applies here as we can replace the long lambda function with a named function that does the same thing. This will make the code easier to read and understand.\n\n3. Apply the refactoring:\n\n```python\nclass Config(object):\n    def  __init__(self):\n        self.config  = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(self._split_and_convert, self.config[section][key].split(\",\"))\n\n    def _split_and_convert(self, value):\n        return map(self._split_and_convert, value.split(\",\"))\n\n    def _split_and_convert_2(self, value):\n        return map(self._split_and_convert_3, value.split(\",\"))\n\n    def _split_and_convert_3(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items  = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config  = Config()\n    config.config[\"world\"]  = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_bool(\"world\", \"regions\"))\n```\n\n4. Verify that the refactored code preserves the original behavior:\n\n```python\ndef test_run():\n    text = \"1,2,3\"\n    assert run(text) == [[[['1', '2', '3']]]]\n\ntest_run()\n```\n\nThe test_run function tests the run function with a simple input. It checks if the output is as expected. If the output matches the expected result, the test passes. If not, the test fails.\n\nThe test_run function should pass if the refactored code is correct.\n\nComplete refactored file:\n\n```python\nclass Config(object):\n    def  __init__(self):\n        self.config  = {}\n\n    def get_config_section_key_dict_dict_dict_bool(self, section, key):\n        return map(self._split_and_convert, self.config[section][key].split(\",\"))\n\n    def _split_and_convert(self, value):\n        return map(self._split_and_convert_2, value.split(\",\"))\n\n    def _split_and_convert_2(self, value):\n        return map(self._split_and_convert_3, value.split(\",\"))\n\n    def _split_and_convert_3(self, value):\n        return map(bool, value.split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items  = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config  = Config()\n    config.config[\"world\"]  = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_bool(\"world\", \"regions\"))\n\n\ndef test_run():\n    text = \"1,2,3\"\n    assert run(text) == [[[['1', '2', '3']]]]\n\ntest_run()\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 49336936900,
+    "load_duration": 6523646600,
+    "prompt_eval_count": 616,
+    "prompt_eval_duration": 773957000,
+    "eval_count": 995,
+    "eval_duration": 42035561000
+  }
+}

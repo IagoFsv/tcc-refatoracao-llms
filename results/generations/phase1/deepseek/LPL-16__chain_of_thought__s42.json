@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-16__chain_of_thought__s42",
+  "instance": "LPL-16",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T01:29:30.129589+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass Transaction(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction = Transaction(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"],\n                              fields[\"timestamp\"])\n    return transaction.repr_json()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 33.925,
+  "done_reason": "stop",
+  "prompt_eval_count": 647,
+  "eval_count": 626,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "In the original code, the `Transaction` class has a lot of parameters in its `__init__` method. This is a clear sign of the Long Parameter List code smell.\n\nThe refactoring technique that can be applied to this situation is the Introduce Parameter Object. This technique involves creating a new class to hold all the parameters, and then passing an instance of this new class to the `__init__` method of the `Transaction` class.\n\nHere's how the refactored code would look like:\n\n```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass TransactionFields(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\nclass Transaction(object):\n    def __init__(self, transaction_fields: TransactionFields):\n        self.sender = transaction_fields.sender\n        self.receiver = transaction_fields.receiver\n        self.amount = transaction_fields.amount\n        self.timestamp = transaction_fields.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction_fields = TransactionFields(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"], fields[\"timestamp\"])\n    transaction = Transaction(transaction_fields)\n    return transaction.repr_json()\n```\n\nIn the refactored code, we have created a new class `TransactionFields` to hold all the parameters. We then pass an instance of this class to the `__init__` method of the `Transaction` class. This change preserves the original behavior of the code, as the `Transaction` class is now only responsible for creating a transaction and not managing the fields.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T01:29:30.126862Z",
+    "message": {
+      "role": "assistant",
+      "content": "In the original code, the `Transaction` class has a lot of parameters in its `__init__` method. This is a clear sign of the Long Parameter List code smell.\n\nThe refactoring technique that can be applied to this situation is the Introduce Parameter Object. This technique involves creating a new class to hold all the parameters, and then passing an instance of this new class to the `__init__` method of the `Transaction` class.\n\nHere's how the refactored code would look like:\n\n```python\n\"\"\"Transaction between two parties: data, hash and dictionary representation.\n\nPublic entry point: run(fields). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport hashlib\n\n\nclass TransactionFields(object):\n    def __init__(self, sender, receiver, amount, timestamp, *args, **kwargs):\n        self.sender = sender\n        self.receiver = receiver\n        self.amount = amount\n        self.timestamp = timestamp\n\n\nclass Transaction(object):\n    def __init__(self, transaction_fields: TransactionFields):\n        self.sender = transaction_fields.sender\n        self.receiver = transaction_fields.receiver\n        self.amount = transaction_fields.amount\n        self.timestamp = transaction_fields.timestamp\n        self.public_key = None\n        self.signature = None\n\n    @property\n    def hash(self):\n        return hashlib.sha256((str(self.sender) + str(self.receiver) + str(self.amount) + str(self.timestamp)).encode('utf-8')).hexdigest()\n\n    def repr_json(self):\n        return {\n            \"sender\": self.sender,\n            \"receiver\": self.receiver,\n            \"amount\": self.amount,\n            \"timestamp\": self.timestamp,\n            \"hash\": self.hash\n        }\n\n\ndef run(fields):\n    \"\"\"Public entry point of this unit.\n\n    fields: sender, receiver, amount and timestamp. Returns the dictionary\n    representation of the transaction.\n    \"\"\"\n    transaction_fields = TransactionFields(fields[\"sender\"], fields[\"receiver\"], fields[\"amount\"], fields[\"timestamp\"])\n    transaction = Transaction(transaction_fields)\n    return transaction.repr_json()\n```\n\nIn the refactored code, we have created a new class `TransactionFields` to hold all the parameters. We then pass an instance of this class to the `__init__` method of the `Transaction` class. This change preserves the original behavior of the code, as the `Transaction` class is now only responsible for creating a transaction and not managing the fields.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 33898444900,
+    "load_duration": 6978154200,
+    "prompt_eval_count": 647,
+    "prompt_eval_duration": 855091000,
+    "eval_count": 626,
+    "eval_duration": 26061064000
+  }
+}

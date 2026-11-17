@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-10__chain_of_thought__s42",
+  "instance": "LPL-10",
+  "smell": "LPL",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T01:18:21.981054+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Drawing of a colored segment on an RGB image.\n\nPublic entry point: run(size, segment, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white (255 in the three channels). Without a color, the\ndefault color of the drawing applies.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    def draw_line(self, y0, x0, y1, x1, color=(0, 0, 0)):\n        \"\"\"\n        Draw a line on the image.\n\n        @param y0: y coordinate of the first point\n        @param x0: x coordinate of the first point\n        @param y1: y coordinate of the second point\n        @param x1: x coordinate of the second point\n        @param color: color of the line\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(y0, x0, y1, x1)\n        self.image[line] = color\n        return self\n\n\ndef run(size, segment, color=None):\n    \"\"\"size: (rows, columns). segment: (y0, x0, y1, x1). color: (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segment\n    if color is None:\n        result = image.draw_line(y0, x0, y1, x1)\n    else:\n        result = image.draw_line(y0, x0, y1, x1, color)\n    return result.image\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 44.231,
+  "done_reason": "stop",
+  "prompt_eval_count": 813,
+  "eval_count": 833,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code exhibits the Long Parameter List code smell as the `draw_line` function in the `RGB_Image` class has a lot of parameters. To refactor the code, we can apply the Introduce Parameter Object refactoring technique. \n\nIntroduce Parameter Object applies when a method or function has too many parameters, and these parameters could be grouped into a single parameter object. This object can contain all the parameters of the original method or function.\n\nHere's the refactored code:\n\n```python\n\"\"\"Drawing of a colored segment on an RGB image.\n\nPublic entry point: run(size, segment, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white  (255 in the three channels). Without a color, the\ndefault color of the drawing applies.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    class Line:\n        \"\"\"\n        Class to represent a line.\n        \"\"\"\n        def __init__(self, y0, x0, y1, x1, color=(0, 0, 0)):\n            \"\"\"\n            Create a Line object.\n\n            @param y0: y coordinate of the first point\n            @param x0: x coordinate of the first point\n            @param y1: y coordinate of the second point\n            @param x1: x coordinate of the second point\n            @param color: color of the line\n            \"\"\"\n            self.y0 = y0\n            self.x0 = x0\n            self.y1 = y1\n            self.x1 = x1\n            self.color = color\n\n    def draw_line(self, line):\n        \"\"\"\n        Draw a line on the image.\n\n        @param line: Line object\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(line.y0, line.x0, line.y1, line.x1)\n        self.image[line] = line.color\n        return self\n\n\ndef run(size, segment, color=None):\n    \"\"\"size:  (rows, columns). segment:  (y0, x0, y1, x1). color:  (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segment\n    if color is None:\n        result = image.draw_line(RGB_Image.Line(y0, x0, y1, x1))\n    else:\n        result = image.draw_line(RGB_Image.Line(y0, x0, y1, x1, color))\n    return result.image\n```\n\nIn the refactored code, I introduced a new class `Line` which encapsulates the parameters of the `draw_line` method. This change reduces the number of parameters in the `draw_line` method, making it more readable and maintainable. The `run` function has also been updated to create an instance of the `Line` class instead of passing multiple parameters.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T01:18:21.9783302Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code exhibits the Long Parameter List code smell as the `draw_line` function in the `RGB_Image` class has a lot of parameters. To refactor the code, we can apply the Introduce Parameter Object refactoring technique. \n\nIntroduce Parameter Object applies when a method or function has too many parameters, and these parameters could be grouped into a single parameter object. This object can contain all the parameters of the original method or function.\n\nHere's the refactored code:\n\n```python\n\"\"\"Drawing of a colored segment on an RGB image.\n\nPublic entry point: run(size, segment, color=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe image starts all white  (255 in the three channels). Without a color, the\ndefault color of the drawing applies.\n\"\"\"\n\nimport skimage\nimport numpy as np\n\n\nclass Image:\n    \"\"\"\n    A class to represent an image.\n    \"\"\"\n\n    def __init__(self, array):\n        \"\"\"\n        Create an Image object from a numpy array.\n\n        @param array: numpy array representing the image\n        \"\"\"\n        self.image = array\n\n\nclass RGB_Image(Image):\n    \"\"\"\n    RGB_Image class.\n    \"\"\"\n\n    class Line:\n        \"\"\"\n        Class to represent a line.\n        \"\"\"\n        def __init__(self, y0, x0, y1, x1, color=(0, 0, 0)):\n            \"\"\"\n            Create a Line object.\n\n            @param y0: y coordinate of the first point\n            @param x0: x coordinate of the first point\n            @param y1: y coordinate of the second point\n            @param x1: x coordinate of the second point\n            @param color: color of the line\n            \"\"\"\n            self.y0 = y0\n            self.x0 = x0\n            self.y1 = y1\n            self.x1 = x1\n            self.color = color\n\n    def draw_line(self, line):\n        \"\"\"\n        Draw a line on the image.\n\n        @param line: Line object\n        @return: image with line drawn on it\n        \"\"\"\n        line = skimage.draw.line(line.y0, line.x0, line.y1, line.x1)\n        self.image[line] = line.color\n        return self\n\n\ndef run(size, segment, color=None):\n    \"\"\"size:  (rows, columns). segment:  (y0, x0, y1, x1). color:  (r, g, b). Public entry point of this unit.\"\"\"\n    image = RGB_Image(np.full((*size, 3), 255, dtype=np.uint8))\n    y0, x0, y1, x1 = segment\n    if color is None:\n        result = image.draw_line(RGB_Image.Line(y0, x0, y1, x1))\n    else:\n        result = image.draw_line(RGB_Image.Line(y0, x0, y1, x1, color))\n    return result.image\n```\n\nIn the refactored code, I introduced a new class `Line` which encapsulates the parameters of the `draw_line` method. This change reduces the number of parameters in the `draw_line` method, making it more readable and maintainable. The `run` function has also been updated to create an instance of the `Line` class instead of passing multiple parameters.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 44214992900,
+    "load_duration": 7532749300,
+    "prompt_eval_count": 813,
+    "prompt_eval_duration": 936249000,
+    "eval_count": 833,
+    "eval_duration": 35742536000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-17__few_shot__s44",
+  "instance": "MNC-17",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T11:36:53.923507+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Current weather of a city, printed on the terminal.\n\nPublic entry point: run(weather). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\ndef print_weather(weather):\n    if weather != None:\n        print(\"The weather in \" + weather[\"name\"] + \" is \" + weather[\"weather\"][0][\"description\"])\n    else:\n        print(\"Error: Could not get weather\")\n\n\ndef run(weather):\n    \"\"\"Prints the weather received from the API. Public entry point of this unit.\"\"\"\n    print_weather(weather)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 14.695,
+  "done_reason": "stop",
+  "prompt_eval_count": 878,
+  "eval_count": 175,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "Refactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Weather:\n    name: str\n    weather: List[dict] = field(default_factory=list)\n\ndef print_weather(weather):\n    if weather is not None:\n        print(f\"The weather in {weather.name} is {weather.weather[0]['description']}\")\n    else:\n        print(\"Error: Could not get weather\")\n\ndef run(weather):\n    \"\"\"Prints the weather received from the API. Public entry point of this unit.\"\"\"\n    weather = Weather(name=weather[\"name\"], weather=weather[\"weather\"])\n    print_weather(weather)\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T11:36:53.9206754Z",
+    "message": {
+      "role": "assistant",
+      "content": "Refactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Weather:\n    name: str\n    weather: List[dict] = field(default_factory=list)\n\ndef print_weather(weather):\n    if weather is not None:\n        print(f\"The weather in {weather.name} is {weather.weather[0]['description']}\")\n    else:\n        print(\"Error: Could not get weather\")\n\ndef run(weather):\n    \"\"\"Prints the weather received from the API. Public entry point of this unit.\"\"\"\n    weather = Weather(name=weather[\"name\"], weather=weather[\"weather\"])\n    print_weather(weather)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14693422600,
+    "load_duration": 6508472600,
+    "prompt_eval_count": 878,
+    "prompt_eval_duration": 971440000,
+    "eval_count": 175,
+    "eval_duration": 7209891000
+  }
+}

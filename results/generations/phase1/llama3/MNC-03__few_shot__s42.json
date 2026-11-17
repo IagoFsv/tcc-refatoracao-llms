@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-03__few_shot__s42",
+  "instance": "MNC-03",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T03:15:32.639164+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef summarize(text):\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n\n    response = openai.Completion.create(\n        model=\"text-davinci-002\",\n        prompt=text,\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n    return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    summary = summarize(text)\n    return summary, Completion.requests_made\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 19.776,
+  "done_reason": "stop",
+  "prompt_eval_count": 874,
+  "eval_count": 468,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, text, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text)]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\nclass Summary:\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n\n    def __init__(self, model, temperature, max_tokens, top_p, frequency_penalty, presence_penalty):\n        self.model = model\n        self.temperature = temperature\n        self.max_tokens = max_tokens\n        self.top_p = top_p\n        self.frequency_penalty = frequency_penalty\n        self.presence_penalty = presence_penalty\n\n    def summarize(self, text):\n        openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n        response = openai.Completion.create(\n            model=self.model,\n            prompt=text,\n            temperature=self.temperature,\n            max_tokens=self.max_tokens,\n            top_p=self.top_p,\n            frequency_penalty=self.frequency_penalty,\n            presence_penalty=self.presence_penalty,\n        )\n        return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    completion = Summary(\n        model=\"text-davinci-002\",\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n    completion.prepared_choices = list(choices)\n    summary = completion.summarize(text)\n    return summary, completion.requests_made\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T03:15:32.6218591Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, text, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text)]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\nclass Summary:\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n\n    def __init__(self, model, temperature, max_tokens, top_p, frequency_penalty, presence_penalty):\n        self.model = model\n        self.temperature = temperature\n        self.max_tokens = max_tokens\n        self.top_p = top_p\n        self.frequency_penalty = frequency_penalty\n        self.presence_penalty = presence_penalty\n\n    def summarize(self, text):\n        openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n        response = openai.Completion.create(\n            model=self.model,\n            prompt=text,\n            temperature=self.temperature,\n            max_tokens=self.max_tokens,\n            top_p=self.top_p,\n            frequency_penalty=self.frequency_penalty,\n            presence_penalty=self.presence_penalty,\n        )\n        return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    completion = Summary(\n        model=\"text-davinci-002\",\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n    completion.prepared_choices = list(choices)\n    summary = completion.summarize(text)\n    return summary, completion.requests_made\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19761484800,
+    "load_duration": 7800098800,
+    "prompt_eval_count": 874,
+    "prompt_eval_duration": 802361000,
+    "eval_count": 468,
+    "eval_duration": 11156304000
+  }
+}

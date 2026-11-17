@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-19__chain_of_thought__s44",
+  "instance": "MNC-19",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:59:25.227468+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.212,
+  "done_reason": "stop",
+  "prompt_eval_count": 525,
+  "eval_count": 539,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here's the step-by-step reasoning:\n\n1. Identify why the code exhibits the indicated code smell:\nThe code smell is Multiply-Nested Container, specifically in the `World` class's `generate_world_map` method and `get_location` method. These methods use a deeply nested list comprehension to create a 3D map, and then access elements in this map using multiple indexing operations (`self.world_map[x][y][z]`).\n\n2. Explain how the indicated refactoring technique applies to the code:\nThe Decompose Container refactoring technique suggests breaking down complex containers (in this case, the 3D map) into simpler, more manageable components. This can be achieved by creating separate methods or classes for each level of nesting, rather than having a single, deeply nested data structure.\n\n3. Apply the refactoring:\nTo apply the refactoring, we'll break down the 3D map into separate 2D maps for each level of z-coordinates. We'll create a new `Layer` class to represent each 2D map, and then create a `World` class that contains a list of these layers. Here's the refactored code:\n\n```python\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass Layer:\n    \"\"\"A 2D map of a specific z-coordinate.\"\"\"\n\n    def __init__(self, size_x, size_y):\n        self.layer_map = [[Location(x, y, z) for y in range(size_y)] for x in range(size_x)]\n\n    def get_location(self, x, y):\n        return self.layer_map[x][y]\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_layers = [Layer(size_x, size_y) for _ in range(size_z)]\n\n    def get_location(self, x, y, z):\n        return self.world_layers[z].get_location(x, y)\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n\n4. Verify that the refactored code preserves the original behavior:\nThe refactored code should produce the same output as the original code. We can test this by calling the `run` function with different inputs and verifying that the output is the same.",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:59:25.2020426Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here's the step-by-step reasoning:\n\n1. Identify why the code exhibits the indicated code smell:\nThe code smell is Multiply-Nested Container, specifically in the `World` class's `generate_world_map` method and `get_location` method. These methods use a deeply nested list comprehension to create a 3D map, and then access elements in this map using multiple indexing operations (`self.world_map[x][y][z]`).\n\n2. Explain how the indicated refactoring technique applies to the code:\nThe Decompose Container refactoring technique suggests breaking down complex containers (in this case, the 3D map) into simpler, more manageable components. This can be achieved by creating separate methods or classes for each level of nesting, rather than having a single, deeply nested data structure.\n\n3. Apply the refactoring:\nTo apply the refactoring, we'll break down the 3D map into separate 2D maps for each level of z-coordinates. We'll create a new `Layer` class to represent each 2D map, and then create a `World` class that contains a list of these layers. Here's the refactored code:\n\n```python\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass Layer:\n    \"\"\"A 2D map of a specific z-coordinate.\"\"\"\n\n    def __init__(self, size_x, size_y):\n        self.layer_map = [[Location(x, y, z) for y in range(size_y)] for x in range(size_x)]\n\n    def get_location(self, x, y):\n        return self.layer_map[x][y]\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_layers = [Layer(size_x, size_y) for _ in range(size_z)]\n\n    def get_location(self, x, y, z):\n        return self.world_layers[z].get_location(x, y)\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n\n4. Verify that the refactored code preserves the original behavior:\nThe refactored code should produce the same output as the original code. We can test this by calling the `run` function with different inputs and verifying that the output is the same."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21200607700,
+    "load_duration": 7795291300,
+    "prompt_eval_count": 525,
+    "prompt_eval_duration": 581844000,
+    "eval_count": 539,
+    "eval_duration": 12821081000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "LM-11__role__s44",
+  "instance": "LM-11",
+  "smell": "LM",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T10:16:49.566703+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Method\nDefinition: A method or function that exceeds a considerable length.\nRefactoring technique: Extract Method\nOriginal code:\n```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman(misses)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 22.922,
+  "done_reason": "stop",
+  "prompt_eval_count": 792,
+  "eval_count": 374,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print_gallows(0)\n    elif guessCount == 1:\n        print_gallows(1)\n    elif guessCount == 2:\n        print_gallows(2)\n    elif guessCount == 3:\n        print_gallows(3)\n    elif guessCount == 4:\n        print_gallows(4)\n    elif guessCount == 5:\n        print_gallows(5)\n    elif guessCount == 6:\n        print_gallows(6)\n\n\ndef print_gallows(guessCount):\n    print('_________')\n    print('|       |  ')\n    if guessCount >= 1:\n        print('|       O  ')\n    if guessCount >= 2:\n        print('|       |')\n    if guessCount >= 3:\n        print('|      /|')\n    if guessCount >= 4:\n        print('|      /|\\\\')\n    if guessCount >= 5:\n        print('|      /')\n    if guessCount == 6:\n        print('|')\n    print('|')\n    print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman(misses)\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T10:16:49.5638442Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print_gallows(0)\n    elif guessCount == 1:\n        print_gallows(1)\n    elif guessCount == 2:\n        print_gallows(2)\n    elif guessCount == 3:\n        print_gallows(3)\n    elif guessCount == 4:\n        print_gallows(4)\n    elif guessCount == 5:\n        print_gallows(5)\n    elif guessCount == 6:\n        print_gallows(6)\n\n\ndef print_gallows(guessCount):\n    print('_________')\n    print('|       |  ')\n    if guessCount >= 1:\n        print('|       O  ')\n    if guessCount >= 2:\n        print('|       |')\n    if guessCount >= 3:\n        print('|      /|')\n    if guessCount >= 4:\n        print('|      /|\\\\')\n    if guessCount >= 5:\n        print('|      /')\n    if guessCount == 6:\n        print('|')\n    print('|')\n    print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman(misses)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22910388900,
+    "load_duration": 6524985500,
+    "prompt_eval_count": 792,
+    "prompt_eval_duration": 907929000,
+    "eval_count": 374,
+    "eval_duration": 15474218000
+  }
+}

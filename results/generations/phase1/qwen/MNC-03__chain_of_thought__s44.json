@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-03__chain_of_thought__s44",
+  "instance": "MNC-03",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T09:10:15.987764+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef summarize(text):\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n\n    response = openai.Completion.create(\n        model=\"text-davinci-002\",\n        prompt=text,\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n    return response[\"choices\"][0][\"text\"].strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    summary = summarize(text)\n    return summary, Completion.requests_made\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.689,
+  "done_reason": "stop",
+  "prompt_eval_count": 614,
+  "eval_count": 584,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Multiply-Nested Container\" code smell because it accesses elements through a long chain of nested dictionary accesses, such as `response[\"choices\"][0][\"text\"]`. This makes the code difficult to read and maintain.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the nested access into multiple steps. This makes the code more readable and easier to manage. We will extract each nested access into a separate variable.\n\n### Step 3: Apply the Refactoring\nWe will refactor the `summarize` function to use temporary variables for each nested access.\n\n### Step 4: Verify the Refactored Code\nWe will ensure that the refactored code preserves the original behavior by comparing the output of the original and refactored functions.\n\n### Refactored Code\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef summarize(text):\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n\n    response = openai.Completion.create(\n        model=\"text-davinci-002\",\n        prompt=text,\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n\n    choices = response[\"choices\"]\n    choice = choices[0]\n    text = choice[\"text\"]\n\n    return text.strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    summary = summarize(text)\n    return summary, Completion.requests_made\n```\n\nThis refactored code removes the multiply-nested container by breaking down the nested access into multiple steps, making the code more readable and easier to maintain.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T09:10:15.9588871Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Multiply-Nested Container\" code smell because it accesses elements through a long chain of nested dictionary accesses, such as `response[\"choices\"][0][\"text\"]`. This makes the code difficult to read and maintain.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the nested access into multiple steps. This makes the code more readable and easier to manage. We will extract each nested access into a separate variable.\n\n### Step 3: Apply the Refactoring\nWe will refactor the `summarize` function to use temporary variables for each nested access.\n\n### Step 4: Verify the Refactored Code\nWe will ensure that the refactored code preserves the original behavior by comparing the output of the original and refactored functions.\n\n### Refactored Code\n```python\n\"\"\"Text summary by a text completion service.\n\nPublic entry point: run(text, choices). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom types import SimpleNamespace\n\n\nclass Completion:\n    \"\"\"Same interface as openai.Completion (openai library before 1.0).\n\n    create records the key and the parameters of each request and returns the\n    choices prepared in `prepared_choices`.\n    \"\"\"\n\n    requests_made = []\n    prepared_choices = []\n\n    @classmethod\n    def create(cls, **kwargs):\n        cls.requests_made.append((openai.api_key, kwargs))\n        return {\"choices\": [cls._choice(text) for text in cls.prepared_choices]}\n\n    @staticmethod\n    def _choice(text):\n        return {\"text\": text}\n\n\nopenai = SimpleNamespace(api_key=None, Completion=Completion)\n\n\ndef summarize(text):\n    \"\"\"Summarize a text string and return a summary of the text\"\"\"\n    openai.api_key = os.getenv(\"OPENAI_API_KEY\")\n\n    response = openai.Completion.create(\n        model=\"text-davinci-002\",\n        prompt=text,\n        temperature=0.7,\n        max_tokens=256,\n        top_p=1,\n        frequency_penalty=0,\n        presence_penalty=0,\n    )\n\n    choices = response[\"choices\"]\n    choice = choices[0]\n    text = choice[\"text\"]\n\n    return text.strip(\" \\n\")\n\n\ndef run(text, choices):\n    \"\"\"Summarizes text; returns the summary and the requests made. Public entry point of this unit.\"\"\"\n    Completion.requests_made = []\n    Completion.prepared_choices = list(choices)\n    summary = summarize(text)\n    return summary, Completion.requests_made\n```\n\nThis refactored code removes the multiply-nested container by breaking down the nested access into multiple steps, making the code more readable and easier to maintain."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20662853700,
+    "load_duration": 6794215400,
+    "prompt_eval_count": 614,
+    "prompt_eval_duration": 564024000,
+    "eval_count": 584,
+    "eval_duration": 13301279000
+  }
+}

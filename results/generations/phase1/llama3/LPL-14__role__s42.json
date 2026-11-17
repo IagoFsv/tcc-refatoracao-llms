@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-14__role__s42",
+  "instance": "LPL-14",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T03:02:33.366804+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Simulation of a bouncing ball, step by step.\n\nPublic entry point: run(state, time, physics=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\ndef simulate_bouncing_ball (x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution = 0.2, g = 9.83) -> list:\n    \"\"\">>>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it its the floor on the y axis, it bounces back\n    :param x0: initial x position\n    :param y0: initial y position\n    :param vx0: initial x velocity\n    :param vy0: initial y velocity\n    :param steps: number of steps\n    :param dt: time step\n    :param g: gravity constant\n    :param coefficient_of_restitution: coefficient of restitution of each bounce\n    :return: list of positions\n    \"\"\"\n    x_positions = [x0]\n    y_positions = [y0]\n    vx = vx0\n    vy = vy0\n    for i in range(steps):\n        x_positions.append(x_positions[-1] + vx * dt)\n        y_positions.append(y_positions[-1] + vy * dt)\n        if y_positions[-1] < 0:\n            vy = -vy * coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * dt\n            vy = vy - g * dt\n    return x_positions, y_positions\n\n\ndef run(state, time, physics=None):\n    \"\"\"state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    if physics is None:\n        return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt)\n    coefficient_of_restitution, g = physics\n    return simulate_bouncing_ball(x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution, g)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.919,
+  "done_reason": "stop",
+  "prompt_eval_count": 646,
+  "eval_count": 524,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Simulation of a bouncing ball, step by step.\n\nPublic entry point: run(state, time, physics=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass SimulationConfig:\n    def __init__(self, x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution=0.2, g=9.83):\n        self.x0 = x0\n        self.y0 = y0\n        self.vx0 = vx0\n        self.vy0 = vy0\n        self.steps = steps\n        self.dt = dt\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\n\ndef simulate_bouncing_ball(config: SimulationConfig) -> tuple:\n    \"\"\">>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it hits the floor on the y axis, it bounces back\n    :param config: simulation configuration\n    :return: list of positions\n    \"\"\"\n    x_positions = [config.x0]\n    y_positions = [config.y0]\n    vx = config.vx0\n    vy = config.vy0\n    for i in range(config.steps):\n        x_positions.append(x_positions[-1] + vx * config.dt)\n        y_positions.append(y_positions[-1] + vy * config.dt)\n        if y_positions[-1] < 0:\n            vy = -vy * config.coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * config.dt\n            vy = vy - config.g * config.dt\n    return x_positions, y_positions\n\n\ndef run(state, time, physics=None):\n    \"\"\"state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    config = SimulationConfig(x0, y0, vx0, vy0, steps, dt)\n    if physics is None:\n        return simulate_bouncing_ball(config)\n    coefficient_of_restitution, g = physics\n    config.coefficient_of_restitution = coefficient_of_restitution\n    config.g = g\n    return simulate_bouncing_ball(config)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T03:02:33.3487405Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Simulation of a bouncing ball, step by step.\n\nPublic entry point: run(state, time, physics=None). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass SimulationConfig:\n    def __init__(self, x0, y0, vx0, vy0, steps, dt, coefficient_of_restitution=0.2, g=9.83):\n        self.x0 = x0\n        self.y0 = y0\n        self.vx0 = vx0\n        self.vy0 = vy0\n        self.steps = steps\n        self.dt = dt\n        self.coefficient_of_restitution = coefficient_of_restitution\n        self.g = g\n\n\ndef simulate_bouncing_ball(config: SimulationConfig) -> tuple:\n    \"\"\">>\n    Simulate the bouncing ball. Gravity affects the y coordinate only. When it hits the floor on the y axis, it bounces back\n    :param config: simulation configuration\n    :return: list of positions\n    \"\"\"\n    x_positions = [config.x0]\n    y_positions = [config.y0]\n    vx = config.vx0\n    vy = config.vy0\n    for i in range(config.steps):\n        x_positions.append(x_positions[-1] + vx * config.dt)\n        y_positions.append(y_positions[-1] + vy * config.dt)\n        if y_positions[-1] < 0:\n            vy = -vy * config.coefficient_of_restitution\n            y_positions[-1] = 0\n        else:\n            y_positions[-1] = y_positions[-1] + vy * config.dt\n            vy = vy - config.g * config.dt\n    return x_positions, y_positions\n\n\ndef run(state, time, physics=None):\n    \"\"\"state: (x0, y0, vx0, vy0). time: (steps, dt). Public entry point of this unit.\n\n    physics: (coefficient of restitution, gravity); without it, the default\n    values of the simulation apply.\n    \"\"\"\n    x0, y0, vx0, vy0 = state\n    steps, dt = time\n    config = SimulationConfig(x0, y0, vx0, vy0, steps, dt)\n    if physics is None:\n        return simulate_bouncing_ball(config)\n    coefficient_of_restitution, g = physics\n    config.coefficient_of_restitution = coefficient_of_restitution\n    config.g = g\n    return simulate_bouncing_ball(config)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20898163200,
+    "load_duration": 7790601200,
+    "prompt_eval_count": 646,
+    "prompt_eval_duration": 648103000,
+    "eval_count": 524,
+    "eval_duration": 12457023000
+  }
+}

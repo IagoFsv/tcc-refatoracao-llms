@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-09__chain_of_thought__s42",
+  "instance": "MNC-09",
+  "smell": "MNC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-16T23:48:41.255578+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        project_name = get_pep8_compliant_name(data['tool']['poetry']['name'])\n        return project_name\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_path()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 16.854,
+  "done_reason": "stop",
+  "prompt_eval_count": 426,
+  "eval_count": 424,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe original code exhibits the \"Multiply-Nested Container\" code smell. Specifically, the `get_project_path` function accesses nested data in the `pyproject.toml` file using multiple levels of bracket operators: `data['tool']['poetry']['name']`.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the nested structure into smaller, more manageable parts. This can be done by introducing intermediate variables to hold intermediate results, reducing the depth of the nested access.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate variables to hold the nested data, thus reducing the depth of the bracket operator access.\n\n### Step 4: Verify the Refactored Code\nThe refactored code should preserve the original behavior of reading the package name from `pyproject.toml` and returning it in a PEP 8 compliant format.\n\n### Refactored Code\n```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        project_name = get_pep8_compliant_name(poetry['name'])\n        return project_name\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_path()\n```\n\nThis refactored code maintains the original behavior of reading the package name from `pyproject.toml` and returning it in a PEP 8 compliant format, but it decomposes the nested container access by introducing intermediate variables `poetry`.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-16T23:48:41.2521779Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe original code exhibits the \"Multiply-Nested Container\" code smell. Specifically, the `get_project_path` function accesses nested data in the `pyproject.toml` file using multiple levels of bracket operators: `data['tool']['poetry']['name']`.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Decompose Container\" refactoring technique involves breaking down the nested structure into smaller, more manageable parts. This can be done by introducing intermediate variables to hold intermediate results, reducing the depth of the nested access.\n\n### Step 3: Apply the Refactoring\nWe will introduce intermediate variables to hold the nested data, thus reducing the depth of the bracket operator access.\n\n### Step 4: Verify the Refactored Code\nThe refactored code should preserve the original behavior of reading the package name from `pyproject.toml` and returning it in a PEP 8 compliant format.\n\n### Refactored Code\n```python\n\"\"\"Maintenance tasks of a Python project: package name from pyproject.toml.\n\nPublic entry point: run(). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nimport toml\n\n\ndef get_pep8_compliant_name(project_name: str) -> str:\n    return project_name.replace('-', '_')\n\n\ndef get_project_path():\n    with open('pyproject.toml', encoding='utf-8') as file:\n        data = toml.load(file)\n        poetry = data['tool']['poetry']\n        project_name = get_pep8_compliant_name(poetry['name'])\n        return project_name\n\n\ndef run():\n    \"\"\"Reads pyproject.toml in the current folder and returns the package name. Public entry point of this unit.\"\"\"\n    return get_project_path()\n```\n\nThis refactored code maintains the original behavior of reading the package name from `pyproject.toml` and returning it in a PEP 8 compliant format, but it decomposes the nested container access by introducing intermediate variables `poetry`."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 16851395100,
+    "load_duration": 6792741000,
+    "prompt_eval_count": 426,
+    "prompt_eval_duration": 418795000,
+    "eval_count": 424,
+    "eval_duration": 9636655000
+  }
+}

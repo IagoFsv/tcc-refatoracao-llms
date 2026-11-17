@@ -1,0 +1,66 @@
+{
+  "identifier": "LM-11__role__s44",
+  "instance": "LM-11",
+  "smell": "LM",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T08:41:28.460297+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Method\nDefinition: A method or function that exceeds a considerable length.\nRefactoring technique: Extract Method\nOriginal code:\n```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman(misses)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.339,
+  "done_reason": "stop",
+  "prompt_eval_count": 597,
+  "eval_count": 431,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\ndef print_hangman_stage(stage):\n    if stage == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman_stage(misses)\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T08:41:28.4337749Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\ndef print_hangman_stage(stage):\n    if stage == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif stage == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman_stage(misses)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18336953200,
+    "load_duration": 7950263300,
+    "prompt_eval_count": 597,
+    "prompt_eval_duration": 557179000,
+    "eval_count": 431,
+    "eval_duration": 9826884000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "MNC-19__few_shot__s43",
+  "instance": "MNC-19",
+  "smell": "MNC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T04:43:12.497421+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\ndata = {\n    'orders': [\n        {\n            'customer': {\n                'name': 'Ana',\n                'address': {'city': 'Fortaleza', 'zip_code': '60000-000'}\n            },\n            'items': [\n                {'product': 'pen', 'qty': 2},\n                {'product': 'notebook', 'qty': 1}\n            ]\n        }\n    ]\n}\n\ndef first_order_city(data):\n    return data['orders'][0]['customer']['address']['city']\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Address:\n    city: str\n    zip_code: str\n\n@dataclass\nclass Customer:\n    name: str\n    address: Address\n\n@dataclass\nclass Item:\n    product: str\n    qty: int\n\n@dataclass\nclass Order:\n    customer: Customer\n    items: List[Item] = field(default_factory=list)\n\ndata = [\n    Order(\n        customer=Customer(\n            name='Ana',\n            address=Address(city='Fortaleza', zip_code='60000-000')\n        ),\n        items=[Item('pen', 2), Item('notebook', 1)]\n    )\n]\n\ndef first_order_city(data):\n    return data[0].customer.address.city\n```\n\nNow refactor the following file.\n\nCode smell: Multiply-Nested Container\nDefinition: A container (i.e., set, list, tuple, and dict) with deep nesting, or an expression that accesses an object through a long chain of elements by the bracket operator, such as data['a']['b']['c'].\nRefactoring technique: Decompose Container\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 14.658,
+  "done_reason": "stop",
+  "prompt_eval_count": 837,
+  "eval_count": 313,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        world_map = []\n        for x in range(self.world_map_size_x):\n            layer = []\n            for y in range(self.world_map_size_y):\n                row = [Location(x, y, z) for z in range(self.world_map_size_z)]\n                layer.append(row)\n            world_map.append(layer)\n        return world_map\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T04:43:12.4759848Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Three-dimensional map of an adventure game: looking up a position.\n\nPublic entry point: run(x, y, z). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.world_map = self.generate_world_map()\n\n    def generate_world_map(self):\n        world_map = []\n        for x in range(self.world_map_size_x):\n            layer = []\n            for y in range(self.world_map_size_y):\n                row = [Location(x, y, z) for z in range(self.world_map_size_z)]\n                layer.append(row)\n            world_map.append(layer)\n        return world_map\n\n    def get_location(self, x, y, z):\n        return self.world_map[x][y][z]\n\n\ndef run(x, y, z):\n    \"\"\"Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.\n    Public entry point of this unit.\"\"\"\n    return World(2, 3, 4).get_location(x, y, z).location\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14640921500,
+    "load_duration": 6783360400,
+    "prompt_eval_count": 837,
+    "prompt_eval_duration": 755500000,
+    "eval_count": 313,
+    "eval_duration": 7099193000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-13__role__s43",
+  "instance": "LPL-13",
+  "smell": "LPL",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T04:15:18.007155+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\ndef bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    x : float\n        x coordinate to which the value will be interpolated.\n    y : float\n        y coordinate to which the value will be interpolated.\n    x1 : float\n        x coordinate of the first point.\n    x2 : float\n        x coordinate of the second point.\n    y1 : float\n        y coordinate of the first point.\n    y2 : float\n        y coordinate of the second point.\n    z11 : float\n        Value at the first point.\n    z12 : float\n        Value at the second point.\n    z21 : float\n        Value at the third point.\n    z22 : float\n        Value at the fourth point.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation\n    >>> bilinear_interpolation(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0)\n    0.5\n    \"\"\"\n    return (\n        z11 * (x2 - x) * (y2 - y)\n        + z21 * (x - x1) * (y2 - y)\n        + z12 * (x2 - x) * (y - y1)\n        + z22 * (x - x1) * (y - y1)\n    ) / ((x2 - x1) * (y2 - y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point: (x, y). corners: (x1, x2, y1, y2). values: (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    x, y = point\n    x1, x2, y1, y2 = corners\n    z11, z12, z21, z22 = values\n    return bilinear_interpolation(x, y, x1, x2, y1, y2, z11, z12, z21, z22)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.343,
+  "done_reason": "stop",
+  "prompt_eval_count": 750,
+  "eval_count": 560,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nclass InterpolationParameters:\n    def __init__(self, x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n        self.x = x\n        self.y = y\n        self.x1 = x1\n        self.x2 = x2\n        self.y1 = y1\n        self.y2 = y2\n        self.z11 = z11\n        self.z12 = z12\n        self.z21 = z21\n        self.z22 = z22\n\n\ndef bilinear_interpolation(params):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    params : InterpolationParameters\n        Object containing all the parameters needed for interpolation.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation\n    >>> bilinear_interpolation(InterpolationParameters(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0))\n    0.5\n    \"\"\"\n    return (\n        params.z11 * (params.x2 - params.x) * (params.y2 - params.y)\n        + params.z21 * (params.x - params.x1) * (params.y2 - params.y)\n        + params.z12 * (params.x2 - params.x) * (params.y - params.y1)\n        + params.z22 * (params.x - params.x1) * (params.y - params.y1)\n    ) / ((params.x2 - params.x1) * (params.y2 - params.y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point: (x, y). corners: (x1, x2, y1, y2). values: (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    params = InterpolationParameters(point[0], point[1], corners[0], corners[1], corners[2], corners[3], values[0], values[1], values[2], values[3])\n    return bilinear_interpolation(params)\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T04:15:18.0043926Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Bilinear interpolation of a point inside a rectangle.\n\nPublic entry point: run(point, corners, values). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nclass InterpolationParameters:\n    def __init__(self, x, y, x1, x2, y1, y2, z11, z12, z21, z22):\n        self.x = x\n        self.y = y\n        self.x1 = x1\n        self.x2 = x2\n        self.y1 = y1\n        self.y2 = y2\n        self.z11 = z11\n        self.z12 = z12\n        self.z21 = z21\n        self.z22 = z22\n\n\ndef bilinear_interpolation(params):\n    \"\"\"Bilinear interpolation. It considers the values of the four points\n    around the point to be interpolated and returns the interpolated value.\n    Made with a lot of help from GitHub Copilot.\n\n    Parameters\n    ----------\n    params : InterpolationParameters\n        Object containing all the parameters needed for interpolation.\n\n    Returns\n    -------\n    float\n        Interpolated value.\n\n    Examples\n    --------\n    >>> from rocketpy.tools import bilinear_interpolation\n    >>> bilinear_interpolation(InterpolationParameters(0.5, 0.5, 0, 1, 0, 1, 0, 1, 1, 0))\n    0.5\n    \"\"\"\n    return (\n        params.z11 * (params.x2 - params.x) * (params.y2 - params.y)\n        + params.z21 * (params.x - params.x1) * (params.y2 - params.y)\n        + params.z12 * (params.x2 - params.x) * (params.y - params.y1)\n        + params.z22 * (params.x - params.x1) * (params.y - params.y1)\n    ) / ((params.x2 - params.x1) * (params.y2 - params.y1))\n\n\ndef run(point, corners, values):\n    \"\"\"point: (x, y). corners: (x1, x2, y1, y2). values: (z11, z12, z21, z22). Public entry point of this unit.\"\"\"\n    params = InterpolationParameters(point[0], point[1], corners[0], corners[1], corners[2], corners[3], values[0], values[1], values[2], values[3])\n    return bilinear_interpolation(params)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20341257500,
+    "load_duration": 6794432500,
+    "prompt_eval_count": 750,
+    "prompt_eval_duration": 658672000,
+    "eval_count": 560,
+    "eval_duration": 12885500000
+  }
+}

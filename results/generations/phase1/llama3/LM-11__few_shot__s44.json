@@ -1,0 +1,66 @@
+{
+  "identifier": "LM-11__few_shot__s44",
+  "instance": "LM-11",
+  "smell": "LM",
+  "technique": "few_shot",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T12:10:53.618203+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Method\nDefinition: A method or function that exceeds a considerable length.\nRefactoring technique: Extract Method\nOriginal code:\n```python\ndef process_order(order):\n    for item in order['items']:\n        if item['quantity'] <= 0:\n            raise ValueError(f\"Invalid quantity: {item['name']}\")\n        if item['price'] <= 0:\n            raise ValueError(f\"Invalid price: {item['name']}\")\n    subtotal = 0\n    for item in order['items']:\n        subtotal += item['quantity'] * item['price']\n    discount = 0\n    if order['customer']['type'] == 'premium':\n        discount = subtotal * 0.15\n    elif order['customer']['type'] == 'regular':\n        discount = subtotal * 0.05\n    total = subtotal - discount\n    summary = f\"Customer: {order['customer']['name']}\\n\"\n    summary += f\"Subtotal: $ {subtotal:.2f}\\n\"\n    summary += f\"Discount: $ {discount:.2f}\\n\"\n    summary += f\"Total: $ {total:.2f}\\n\"\n    return summary\n```\nRefactored code:\n```python\ndef _validate_items(items):\n    for item in items:\n        if item['quantity'] <= 0:\n            raise ValueError(f\"Invalid quantity: {item['name']}\")\n        if item['price'] <= 0:\n            raise ValueError(f\"Invalid price: {item['name']}\")\n\ndef _compute_subtotal(items):\n    return sum(item['quantity'] * item['price'] for item in items)\n\ndef _compute_discount(subtotal, customer_type):\n    if customer_type == 'premium':\n        return subtotal * 0.15\n    elif customer_type == 'regular':\n        return subtotal * 0.05\n    return 0\n\ndef _build_summary(customer, subtotal, discount):\n    total = subtotal - discount\n    summary = f\"Customer: {customer['name']}\\n\"\n    summary += f\"Subtotal: $ {subtotal:.2f}\\n\"\n    summary += f\"Discount: $ {discount:.2f}\\n\"\n    summary += f\"Total: $ {total:.2f}\\n\"\n    return summary\n\ndef process_order(order):\n    _validate_items(order['items'])\n    subtotal = _compute_subtotal(order['items'])\n    discount = _compute_discount(subtotal, order['customer']['type'])\n    return _build_summary(order['customer'], subtotal, discount)\n```\n\nNow refactor the following file.\n\nCode smell: Long Method\nDefinition: A method or function that exceeds a considerable length.\nRefactoring technique: Extract Method\nOriginal code:\n```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef print_hangman(guessCount):\n    if guessCount == 0:\n        print('_________')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 1:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 2:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|       |')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 3:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 4:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 5:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n        print('|')\n        print('|')\n        print('|')\n    elif guessCount == 6:\n        print('_________')\n        print('|       |')\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n        print('|')\n        print('|')\n        print('|')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    return print_hangman(misses)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 15.648,
+  "done_reason": "stop",
+  "prompt_eval_count": 1096,
+  "eval_count": 287,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef _print_head():\n    print('_________')\n    print('|       |')\n\n\ndef _print_body(guessCount):\n    if guessCount == 1:\n        print('|       O')\n    elif guessCount == 2:\n        print('|       O')\n    elif guessCount == 3:\n        print('|       O')\n        print('|      /|')\n    elif guessCount == 4:\n        print('|       O')\n        print('|      /|\\\\')\n    elif guessCount == 5:\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n    elif guessCount == 6:\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n\n\ndef _print_legs(guessCount):\n    if guessCount >= 3:\n        print('|      /')\n        print('|      / \\\\')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    _print_head()\n    _print_body(misses)\n    _print_legs(misses)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-17T12:10:53.6153706Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\n\"\"\"Drawing of the gallows in a hangman game, according to the number of misses.\n\nPublic entry point: run(misses). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\ndef _print_head():\n    print('_________')\n    print('|       |')\n\n\ndef _print_body(guessCount):\n    if guessCount == 1:\n        print('|       O')\n    elif guessCount == 2:\n        print('|       O')\n    elif guessCount == 3:\n        print('|       O')\n        print('|      /|')\n    elif guessCount == 4:\n        print('|       O')\n        print('|      /|\\\\')\n    elif guessCount == 5:\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      /')\n    elif guessCount == 6:\n        print('|       O')\n        print('|      /|\\\\')\n        print('|      / \\\\')\n\n\ndef _print_legs(guessCount):\n    if guessCount >= 3:\n        print('|      /')\n        print('|      / \\\\')\n\n\ndef run(misses):\n    \"\"\"Prints the gallows for the number of misses. Public entry point of this unit.\"\"\"\n    _print_head()\n    _print_body(misses)\n    _print_legs(misses)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 15624584000,
+    "load_duration": 7818982000,
+    "prompt_eval_count": 1096,
+    "prompt_eval_duration": 975594000,
+    "eval_count": 287,
+    "eval_duration": 6827311000
+  }
+}

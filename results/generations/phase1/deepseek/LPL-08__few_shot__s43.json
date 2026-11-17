@@ -1,0 +1,66 @@
+{
+  "identifier": "LPL-08__few_shot__s43",
+  "instance": "LPL-08",
+  "smell": "LPL",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T05:59:33.267759+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\ndef register_product(name, price, quantity, category, supplier, discount):\n    product = {\n        'name': name,\n        'price': price,\n        'quantity': quantity,\n        'category': category,\n        'supplier': supplier,\n        'discount': discount\n    }\n    database.save(product)\n    return product\n```\nRefactored code:\n```python\nfrom dataclasses import dataclass, asdict\n\n@dataclass\nclass Product:\n    name: str\n    price: float\n    quantity: int\n    category: str\n    supplier: str\n    discount: float\n\ndef register_product(product: Product):\n    database.save(asdict(product))\n    return product\n```\n\nNow refactor the following file.\n\nCode smell: Long Parameter List\nDefinition: A method or function with an extensive list of parameters.\nRefactoring technique: Introduce Parameter Object\nOriginal code:\n```python\n\"\"\"Registry of SSH servers in an SQLite database.\n\nPublic entry point: run(registered, server). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\nThe database is the file frSSH.db in the current folder. run creates the\nservers table, stores the already registered servers, updates a server and\nreturns the rows of the table, in insertion order.\n\"\"\"\n\nimport sqlite3\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers ({_COLUMNS}) VALUES (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\n\ndef update_server(ip, port, username, password, keyid):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", (ip, port, username, password, keyid, ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\n\ndef run(registered, server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    ip, port, username, password, keyid = server\n    update_server(ip, port, username, password, keyid)\n    return _rows()\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 25.028,
+  "done_reason": "stop",
+  "prompt_eval_count": 923,
+  "eval_count": 396,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\nimport sqlite3\nfrom dataclasses import dataclass, asdict\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n@dataclass\nclass Server:\n    ip: str\n    port: int\n    username: str\n    password: str\n    keyid: str\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers  ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers  ({_COLUMNS}) VALUES  (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\ndef update_server(server: Server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", (asdict(server), server.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\ndef run(registered, server: Server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    update_server(server)\n    return _rows()\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T05:59:33.2649458Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nimport sqlite3\nfrom dataclasses import dataclass, asdict\n\n_COLUMNS = \"ip, port, username, password, keyid\"\n\n@dataclass\nclass Server:\n    ip: str\n    port: int\n    username: str\n    password: str\n    keyid: str\n\ndef _prepare_database(registered):\n    conn = sqlite3.connect('frSSH.db')\n    conn.execute(f\"CREATE TABLE IF NOT EXISTS servers  ({_COLUMNS})\")\n    conn.executemany(f\"INSERT INTO servers  ({_COLUMNS}) VALUES  (?, ?, ?, ?, ?)\", registered)\n    conn.commit()\n    conn.close()\n\ndef _rows():\n    conn = sqlite3.connect('frSSH.db')\n    rows = conn.execute(f\"SELECT {_COLUMNS} FROM servers ORDER BY rowid\").fetchall()\n    conn.close()\n    return rows\n\ndef update_server(server: Server):\n    conn = sqlite3.connect('frSSH.db')\n    c = conn.cursor()\n    c.execute(\"UPDATE servers SET ip=?, port=?, username=?, password=?, keyid=? WHERE ip=?\", (asdict(server), server.ip))\n    conn.commit()\n    conn.close()\n    print(\"Server updated.\")\n\ndef run(registered, server: Server):\n    \"\"\"registered: list of tuples (ip, port, username, password, keyid). Public entry point of this unit.\"\"\"\n    _prepare_database(registered)\n    update_server(server)\n    return _rows()\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 25005793300,
+    "load_duration": 7283815600,
+    "prompt_eval_count": 923,
+    "prompt_eval_duration": 1021268000,
+    "eval_count": 396,
+    "eval_duration": 16696987000
+  }
+}

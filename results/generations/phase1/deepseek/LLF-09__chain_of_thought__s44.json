@@ -1,0 +1,66 @@
+{
+  "identifier": "LLF-09__chain_of_thought__s44",
+  "instance": "LLF-09",
+  "smell": "LLF",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "896cfe9c7775d52bc2d2d713ad2a207d5268b5c3",
+  "session": "20261116T194806",
+  "timestamp_utc": "2026-11-17T09:38:40.208219+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Lambda Function\nDefinition: A lambda function that exceeds a considerable length.\nRefactoring technique: Replace Lambda with Named Function\nOriginal code:\n```python\n\"\"\"Reads nested values stored as text in the game configuration.\n\nPublic entry point: run(text). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return map(lambda x: map(lambda y: map(lambda z: map(float, z.split(\",\")), y.split(\",\")), x.split(\",\")), self.config[section][key].split(\",\"))\n\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_float(\"world\", \"regions\"))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 30.885,
+  "done_reason": "stop",
+  "prompt_eval_count": 616,
+  "eval_count": 569,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code smell in the original code is long lambda functions. Lambda functions are anonymous functions in Python that are used for simple, short functions that are not needed elsewhere in the code. They are often used in situations where a function is required for a short period of time and is not needed elsewhere in the code.\n\nThe refactoring technique that can be applied here is \"Replace Lambda with Named Function\". This technique involves defining a named function with a clear and descriptive name, rather than using a lambda function. This makes the code easier to read and understand.\n\nThe refactoring can be applied to the `get_config_section_key_dict_dict_dict_float` method in the `Config` class. Here's the refactored code:\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return self.map_values(self.config[section][key])\n\n    def map_values(self, value):\n        return map(self.map_values, value.split(\",\"))\n\n    def map_values_2(self, value):\n        return map(self.map_values_2, value.split(\",\"))\n\n    def map_values_3(self, value):\n        return map(self.map_values_3, value.split(\",\"))\n\n    def map_values_4(self, value):\n        return map(float, value.split(\",\"))\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_float(\"world\", \"regions\"))\n```\n\nPlease note that this refactoring technique is applicable if the lambda function is used only in a single place in the code and is not used elsewhere. If the lambda function is used elsewhere, it might be better to leave it as it is.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-17T09:38:40.20549Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code smell in the original code is long lambda functions. Lambda functions are anonymous functions in Python that are used for simple, short functions that are not needed elsewhere in the code. They are often used in situations where a function is required for a short period of time and is not needed elsewhere in the code.\n\nThe refactoring technique that can be applied here is \"Replace Lambda with Named Function\". This technique involves defining a named function with a clear and descriptive name, rather than using a lambda function. This makes the code easier to read and understand.\n\nThe refactoring can be applied to the `get_config_section_key_dict_dict_dict_float` method in the `Config` class. Here's the refactored code:\n\n```python\nclass Config(object):\n    def __init__(self):\n        self.config = {}\n\n    def get_config_section_key_dict_dict_dict_float(self, section, key):\n        return self.map_values(self.config[section][key])\n\n    def map_values(self, value):\n        return map(self.map_values, value.split(\",\"))\n\n    def map_values_2(self, value):\n        return map(self.map_values_2, value.split(\",\"))\n\n    def map_values_3(self, value):\n        return map(self.map_values_3, value.split(\",\"))\n\n    def map_values_4(self, value):\n        return map(float, value.split(\",\"))\n\ndef _materialize(value):\n    \"\"\"Converts nested sequences  (including iterators) into lists.\"\"\"\n    if isinstance(value, str):\n        return value\n    try:\n        items = iter(value)\n    except TypeError:\n        return value\n    return [_materialize(item) for item in items]\n\n\ndef run(text):\n    \"\"\"Reads the stored text from the configuration, as lists. Public entry point of this unit.\"\"\"\n    config = Config()\n    config.config[\"world\"] = {\"regions\": text}\n    return _materialize(config.get_config_section_key_dict_dict_dict_float(\"world\", \"regions\"))\n```\n\nPlease note that this refactoring technique is applicable if the lambda function is used only in a single place in the code and is not used elsewhere. If the lambda function is used elsewhere, it might be better to leave it as it is.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 30862586900,
+    "load_duration": 6524488700,
+    "prompt_eval_count": 616,
+    "prompt_eval_duration": 773860000,
+    "eval_count": 569,
+    "eval_duration": 23560240000
+  }
+}
