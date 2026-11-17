@@ -1,0 +1,37 @@
+"""Three-dimensional map of an adventure game: looking up a position.
+
+Public entry point: run(x, y, z). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+"""
+
+class Location:
+    """A map cell, identified by its coordinates."""
+
+    def __init__(self, x, y, z):
+        self.location = (x, y, z)
+
+
+class World:
+    def __init__(self, size_x, size_y, size_z):
+        self.world_map_size_x = size_x
+        self.world_map_size_y = size_y
+        self.world_map_size_z = size_z
+        self.generate_world_map()
+
+    def generate_world_map(self):
+        self.world_map = self._create_3d_list(size_x=self.world_map_size_x, size_y=self.world_map_size_y, size_z=self.world_map_size_z, default_factory=Location)
+
+    def _create_3d_list(self, size_x, size_y, size_z, default_factory):
+        return [[[_create_2d_list(size_y, size_z, default_factory) for _ in range(size_x)] for _ in range(size_y)] for _ in range(size_x)]
+
+    def _create_2d_list(self, size_y, size_z, default_factory):
+        return [[default_factory(x, y, z) for z in range(size_z)] for y in range(size_y)]
+
+    def get_location(self, x, y, z):
+        return self.world_map[x][y][z]
+
+
+def run(x, y, z):
+    """Returns the coordinates of the cell found at (x, y, z) in a 2 x 3 x 4 map.
+    Public entry point of this unit."""
+    return World(2, 3, 4).get_location(x, y, z).location

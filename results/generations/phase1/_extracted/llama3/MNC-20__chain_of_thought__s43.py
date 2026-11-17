@@ -1,0 +1,54 @@
+"""Three-dimensional map of an adventure game: drawing the scene on the terminal.
+
+Public entry point: run(descriptions). Do not change its name or signature;
+the rest of the file may be freely reorganized.
+"""
+
+
+class Location:
+    """A map cell, with the description that appears in the scene."""
+
+    def __init__(self, description):
+        self.description = description
+
+    def get_description(self):
+        return self.description
+
+
+class World:
+    """Map built from the descriptions: descriptions[x][y][z].
+
+    The size on each axis comes from the first element; if the rows have
+    different sizes, the map is irregular.
+    """
+
+    def __init__(self, descriptions):
+        self.world_map_size_x = len(descriptions)
+        self.world_map_size_y = len(descriptions[0])
+        self.world_map_size_z = len(descriptions[0][0])
+
+        self.x_planes = [[Location(text) for text in row] for row in descriptions]
+        self.y_locations = [[plane for plane in plane_row] for plane_row in self.x_planes]
+        self.z_cells = [[location for location in location_row] for location_row in self.y_locations]
+
+    def get_location(self, x, y, z):
+        return self.z_cells[x][y][z].get_description()
+
+
+def render_scene(world):
+    """Render the current scene."""
+    print("\n" * 100)
+
+
+    # Print out the world map
+    for x in range(world.world_map_size_x):
+        for y in range(world.world_map_size_y):
+            for z in range(world.world_map_size_z):
+                print(world.get_location(x, y, z), end="")
+            print("")
+    print("")
+
+
+def run(descriptions):
+    """Draws the scene of the described map. Public entry point of this unit."""
+    render_scene(World(descriptions))

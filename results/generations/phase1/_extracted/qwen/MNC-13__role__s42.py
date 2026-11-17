@@ -1,0 +1,61 @@
+"""Client of the bot API of a messaging app.
+
+Public entry point: run(token, endpoint). Do not change its name or
+signature; the rest of the file may be freely reorganized.
+"""
+
+import requests
+import datetime
+
+
+class TelegramBot:
+    # function to initialize the class
+    def __init__(self, token):
+        # set the token
+        self.token = token
+
+    # function to remove duplicates from a list
+    def remove_duplicates(self, users):
+        # create a set to store unique users
+        unique_users = set()
+        # loop through the list
+        for user in users:
+            # add the user to the set
+            unique_users.add(user)
+        # return the list of unique users
+        return list(unique_users)
+
+    def send_request(self, endpoint):
+        # send a request to the telegram bot api
+        response = requests.get('https://api.telegram.org/bot{}/{}'.format(self.token, endpoint))
+        # if the response is not 200, raise an exception
+        if response.status_code != 200:
+            raise Exception('Error: {}'.format(response.text))
+        if endpoint == 'getMe':
+            # Try to return the bot username, first name, username, and id
+            try:
+                result = response.json()['result']
+                return result['username'], result['first_name'], result['id']
+            except KeyError:
+                raise Exception('Error: {}'.format(response.text))
+        elif endpoint == 'getUpdates':
+            # append the user id and username to a list
+            users = []
+            for item in response.json()['result']:
+                try:
+                    message = item['message']
+                    users.append((message['from']['id'], message['from']['username']))
+                except KeyError:
+                    pass
+            # call a function to remove duplicates
+            users = self.remove_duplicates(users)
+            now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            with open('users.log', 'a') as f:
+                for username, user_id in users:
+                    f.write(f'{now}, {self.token}, {username}, {user_id}\n')
+            return users
+
+
+def run(token, endpoint):
+    """Sends the request to the endpoint and returns the result. Public entry point of this unit."""
+    return TelegramBot(token).send_request(endpoint)

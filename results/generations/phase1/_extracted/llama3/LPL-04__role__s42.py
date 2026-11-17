@@ -1,0 +1,122 @@
+"""Animation of a sort, frame by frame.
+
+Public entry point: run(values). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+
+The screen and the clock are minimal versions. The screen keeps every frame
+drawn (texts in the current order, highlighted positions, reference width
+and height); the clock keeps the rate requested at each tick.
+"""
+
+FREQUENCY_CLOCK = 3
+
+
+class _Text:
+    """Already rendered text of an element."""
+
+    def __init__(self, value):
+        self.value = value
+
+
+class _Screen:
+    """Keeps the frames instead of drawing them."""
+
+    def __init__(self):
+        self.frames = []
+
+
+class _Clock:
+    """Keeps the rate of each tick instead of waiting."""
+
+    def __init__(self):
+        self.ticks = []
+
+    def tick(self, framerate):
+        self.ticks.append(framerate)
+
+
+clock = _Clock()
+
+
+class AnimationParameters:
+    """Container for animation parameters."""
+
+    def __init__(self, width_reference, height_reference):
+        self.width_reference = width_reference
+        self.height_reference = height_reference
+
+
+def draw_array(display, arrTexts, parameters):
+    texts = tuple(text.value for text in arrTexts)
+    display.frames.append((texts, tuple(), parameters.width_reference, parameters.height_reference))
+
+
+def swap_elements(arr, arrText, i, j):
+    arr[i], arr[j] = arr[j], arr[i]
+    arrText[i], arrText[j] = arrText[j], arrText[i]
+
+
+def compare_elements(display, arrTexts, parameters, *args):
+    width_reference, height_reference, arr, i, j = args
+    draw_array(display, arrTexts, parameters)
+    clock.tick(FREQUENCY_CLOCK)
+    draw_array(display, arrTexts, parameters, [i, j])
+    clock.tick(FREQUENCY_CLOCK)
+    if (arr[i] > arr[j] and i < j) or (arr[i] < arr[j] and i > j):
+        return False
+    return True
+
+
+def compare_and_swap(display, arrTexts, parameters, *args):
+    width_reference, height_reference, arr, i, j = args
+    swapped = False
+    draw_array(display, arrTexts, parameters)
+    clock.tick(FREQUENCY_CLOCK)
+    draw_array(display, arrTexts, parameters, [i, j])
+    clock.tick(FREQUENCY_CLOCK)
+    if (arr[i] > arr[j] and i < j) or (arr[i] < arr[j] and i > j):
+        swap_elements(arr, arrTexts, i, j)
+        draw_array(display, arrTexts, parameters, [i, j])
+        clock.tick(FREQUENCY_CLOCK)
+        swapped = True
+    draw_array(display, arrTexts, parameters)
+    clock.tick(FREQUENCY_CLOCK)
+    return swapped
+
+
+def simulate_quicksort(arr, arrTexts, display, parameters):
+    def partition(arr, arrTexts, display, low, high):
+        i = low - 1
+        for j in range(low, high):
+            if compare_elements(display, arrTexts, parameters, arr, j, high):
+                i += 1
+                if i != j:
+                    compare_and_swap(display, arrTexts, parameters, arr, i, j)
+        if i + 1 != high:
+            compare_and_swap(display, arrTexts, parameters, arr, i + 1, high)
+        return i + 1
+
+    def quicksort(arr, arrTexts, display, low, high):
+        if low < high:
+            pi = partition(arr, arrTexts, display, low, high)
+            quicksort(arr, arrTexts, display, low, pi - 1)
+            quicksort(arr, arrTexts, display, pi + 1, high)
+
+    quicksort(arr, arrTexts, display, 0, len(arr) - 1)
+    draw_array(display, arrTexts, parameters)
+    clock.tick(FREQUENCY_CLOCK)
+
+
+def run(values):
+    """Sorts a copy of values, animating each step. Public entry point of this unit.
+
+    Returns (sorted list, frames drawn, clock tick rates).
+    Each frame is (texts, highlighted positions, width, height).
+    """
+    arr = list(values)
+    texts = [_Text(str(x)) for x in arr]
+    screen = _Screen()
+    clock.ticks.clear()
+    parameters = AnimationParameters(40, 100)
+    simulate_quicksort(arr, texts, screen, parameters)
+    return arr, screen.frames, list(clock.ticks)

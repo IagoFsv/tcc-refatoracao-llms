@@ -1,0 +1,29 @@
+class Location:
+    """A map cell, identified by its coordinates."""
+
+    def __init__(self, x, y, z):
+        self.location = (x, y, z)
+
+
+class World:
+    def __init__(self, size_x, size_y, size_z):
+        self.world_map_size_x = size_x
+        self.world_map_size_y = size_y
+        self.world_map_size_z = size_z
+        self.generate_world_map()
+
+    def generate_world_map(self):
+        self.world_map = self.create_world_map()
+
+    def create_world_map(self):
+        return [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]
+
+    def get_location(self, x, y, z):
+        return self.world_map[x][y][z]
+
+
+def run(x, y, z):
+    """Returns the coordinates of the cell found at  (x, y, z) in a 2 x 3 x 4 map.
+    Public entry point of this unit."""
+    world = World(2, 3, 4)
+    return world.get_location(x, y, z).location

@@ -1,0 +1,66 @@
+"""Client of the bot API of a messaging app: received files.
+
+Public entry point: run(token). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+"""
+
+import requests
+from typing import List
+from dataclasses import dataclass, field
+
+@dataclass
+class Message:
+    document: dict
+
+@dataclass
+class Update:
+    message: Message
+    reply_to_message: Message = None
+
+@dataclass
+class TelegramBot:
+    # function to initialize the class
+    def __init__(self, token):
+        # set the token
+        self.token = token
+
+    def remove_file_duplicates(self, files: List[str]) -> List[str]:
+        # create an empty list
+        new_files: List[str] = []
+        # loop through the list
+        for i in files:
+            # if the user is not in the new list, append it
+            if i not in new_files:
+                new_files.append(i)
+        # return the new list
+        return new_files
+
+    def get_tg_files(self) -> List[str]:
+        # get the telegram bot updates
+        response = requests.get('https://api.telegram.org/bot{}/getUpdates'.format(self.token))
+        # for each update, get the file id if it exists
+        files: List[str] = []
+        for i in response.json()['result']:
+            update = Update(**i)
+            try:
+                files.append(update.message.document['file_id'])
+            except (KeyError, TypeError):
+                pass
+            try:
+                files.append(update.reply_to_message.document['file_id'])
+            except (KeyError, TypeError):
+                pass
+        # call the remove_file_duplicates function to remove duplicate ids
+        files = self.remove_file_duplicates(files)
+        # for each file id, send a request to the telegram bot api to get the file path and store it in a list
+        file_paths: List[str] = []
+        for i in files:
+            response = requests.get('https://api.telegram.org/bot{}/getFile?file_id={}'.format(self.token, i))
+            file_paths.append(response.json()['result']['file_path'])
+        # return the file paths
+        return file_paths
+
+
+def run(token: str) -> List[str]:
+    """Returns the paths of the files received by the bot. Public entry point of this unit."""
+    return TelegramBot(token).get_tg_files()

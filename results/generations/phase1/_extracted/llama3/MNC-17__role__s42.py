@@ -1,0 +1,21 @@
+"""Current weather of a city, printed on the terminal.
+
+Public entry point: run(weather). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+"""
+
+def print_weather(weather):
+    if weather is not None:
+        weather_info = weather_info_from_weather(weather)
+        print("The weather in " + weather_info["name"] + " is " + weather_info["description"])
+    else:
+        print("Error: Could not get weather")
+
+
+def weather_info_from_weather(weather):
+    return {"name": weather["name"], "description": weather["weather"][0]["description"]}
+
+
+def run(weather):
+    """Prints the weather received from the API. Public entry point of this unit."""
+    print_weather(weather)

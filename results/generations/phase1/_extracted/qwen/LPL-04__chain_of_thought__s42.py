@@ -1,0 +1,122 @@
+"""Animation of a sort, frame by frame.
+
+Public entry point: run(values). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+
+The screen and the clock are minimal versions. The screen keeps every frame
+drawn (texts in the current order, highlighted positions, reference width
+and height); the clock keeps the rate requested at each tick.
+"""
+
+FREQUENCY_CLOCK = 3
+
+
+class _Text:
+    """Already rendered text of an element."""
+
+    def __init__(self, value):
+        self.value = value
+
+
+class _Screen:
+    """Keeps the frames instead of drawing them."""
+
+    def __init__(self):
+        self.frames = []
+
+
+class _Clock:
+    """Keeps the rate of each tick instead of waiting."""
+
+    def __init__(self):
+        self.ticks = []
+
+    def tick(self, framerate):
+        self.ticks.append(framerate)
+
+
+class SortContext:
+    def __init__(self, display, arrTexts, width_rectangle, height_reference, poses_elevated=()):
+        self.display = display
+        self.arrTexts = arrTexts
+        self.width_rectangle = width_rectangle
+        self.height_reference = height_reference
+        self.poses_elevated = poses_elevated
+
+
+clock = _Clock()
+
+
+def draw_array(context):
+    texts = tuple(text.value for text in context.arrTexts)
+    context.display.frames.append((texts, tuple(context.poses_elevated), context.width_rectangle, context.height_reference))
+
+
+def swap_elements(arr, arrText, i, j):
+    arr[i], arr[j] = arr[j], arr[i]
+    arrText[i], arrText[j] = arrText[j], arrText[i]
+
+
+def compare_elements(context, i, j):
+    draw_array(context)
+    clock.tick(FREQUENCY_CLOCK)
+    draw_array(context, poses_elevated=[i, j])
+    clock.tick(FREQUENCY_CLOCK)
+    if (context.arr[i] > context.arr[j] and i < j) or (context.arr[i] < context.arr[j] and i > j):
+        return False
+    return True
+
+
+def compare_and_swap(context, i, j):
+    swapped = False
+    draw_array(context)
+    clock.tick(FREQUENCY_CLOCK)
+    draw_array(context, poses_elevated=[i, j])
+    clock.tick(FREQUENCY_CLOCK)
+    if (context.arr[i] > context.arr[j] and i < j) or (context.arr[i] < context.arr[j] and i > j):
+        swap_elements(context.arr, context.arrTexts, i, j)
+        draw_array(context, poses_elevated=[i, j])
+        clock.tick(FREQUENCY_CLOCK)
+        swapped = True
+    draw_array(context)
+    clock.tick(FREQUENCY_CLOCK)
+    return swapped
+
+
+def partition(arr, arrTexts, display, width_rectangle, height_reference, low, high):
+    i = low - 1
+    for j in range(low, high):
+        if compare_elements(SortContext(display, arrTexts, width_rectangle, height_reference), j, high):
+            i += 1
+            if i != j:
+                compare_and_swap(SortContext(display, arrTexts, width_rectangle, height_reference), i, j)
+    if i + 1 != high:
+        compare_and_swap(SortContext(display, arrTexts, width_rectangle, height_reference), i + 1, high)
+    return i + 1
+
+
+def quicksort(arr, arrTexts, display, width_rectangle, height_reference, low, high):
+    if low < high:
+        pi = partition(arr, arrTexts, display, width_rectangle, height_reference, low, high)
+        quicksort(arr, arrTexts, display, width_reference, height_reference, low, pi - 1)
+        quicksort(arr, arrTexts, display, width_reference, height_reference, pi + 1, high)
+
+
+def simulate_quicksort(arr, arrTexts, display, width_rectangle, height_reference):
+    quicksort(arr, arrTexts, display, width_rectangle, height_reference, 0, len(arr) - 1)
+    draw_array(SortContext(display, arrTexts, width_rectangle, height_reference))
+    clock.tick(FREQUENCY_CLOCK)
+
+
+def run(values):
+    """Sorts a copy of values, animating each step. Public entry point of this unit.
+
+    Returns (sorted list, frames drawn, clock tick rates).
+    Each frame is (texts, highlighted positions, width, height).
+    """
+    arr = list(values)
+    texts = [_Text(str(x)) for x in arr]
+    screen = _Screen()
+    clock.ticks.clear()
+    simulate_quicksort(arr, texts, screen, 40, 100)
+    return arr, screen.frames, list(clock.ticks)

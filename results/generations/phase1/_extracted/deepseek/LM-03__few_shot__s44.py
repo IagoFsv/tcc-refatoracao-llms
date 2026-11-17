@@ -1,0 +1,71 @@
+"""Grid of columns and rows to lay out elements in landscape.
+
+Public entry point: run(elements). Do not change its name or signature; the
+rest of the file may be freely reorganized.
+"""
+
+import math
+
+
+def _get_layout_size_for_small_numbers(elements):
+    if elements <= 1:
+        return 1, 1
+    elif elements == 2:
+        return 2, 1
+    elif elements == 3:
+        return 3, 1
+    elif elements == 4:
+        return 4, 1
+    elif elements == 5:
+        return 5, 1
+    elif elements == 6:
+        return 6, 1
+    else:
+        raise ValueError(f'Unsupported number of elements:  {elements}')
+
+
+def _get_layout_size_for_medium_numbers(elements):
+    if elements in range(7, 13):
+        return 4, 2
+    elif elements in range(13, 19):
+        return 6, 3
+    elif elements in range(19, 25):
+        return 6, 4
+    elif elements in range(25, 31):
+        return 6, 5
+    else:
+        raise ValueError(f'Unsupported number of elements:  {elements}')
+
+
+def _get_layout_size_for_large_numbers(elements):
+    if elements in range(31, 36):
+        return 7, 5
+    elif elements in range(36, 43):
+        return 7, 6
+    elif elements in range(43, 50):
+        return 7, 7
+    elif elements in range(50, 57):
+        return 7, 8
+    elif elements in range(57, 64):
+        return 7, 9
+    elif elements in range(64, 71):
+        return 7, 10
+    elif elements in range(71, 78):
+        return 7, 11
+    elif elements in range(78, 85):
+        return 7, 12
+    elif elements in range(85, 92):
+        return 7, 13
+    else:
+        raise ValueError(f'Unsupported number of elements:  {elements}')
+
+
+def run(elements):
+    """Returns  (columns, rows) for the number of elements.
+    Public entry point of this unit."""
+    if elements <= 6:
+        return _get_layout_size_for_small_numbers(elements)
+    elif elements <= 30:
+        return _get_layout_size_for_medium_numbers(elements)
+    else:
+        return _get_layout_size_for_large_numbers(elements)
