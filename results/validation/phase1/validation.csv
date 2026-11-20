@@ -1,0 +1,1594 @@
+identifier,model,instance,smell,technique,run,seed,extraction,preserved,reason,tests,removed,remaining,others,seconds
+LLF-01__chain_of_thought__s42,deepseek,LLF-01,LLF,chain_of_thought,1,42,block,1,,3 passed in 2.28s,1,,,3.3
+LLF-01__chain_of_thought__s43,deepseek,LLF-01,LLF,chain_of_thought,2,43,block,1,,3 passed in 2.28s,1,,,3.3
+LLF-01__chain_of_thought__s44,deepseek,LLF-01,LLF,chain_of_thought,3,44,block,1,,3 passed in 2.28s,0,LLF L18 NOC=141;PAR=1;NOO=32,,3.3
+LLF-01__few_shot__s42,deepseek,LLF-01,LLF,few_shot,1,42,block,1,,3 passed in 2.28s,0,LLF L19 NOC=141;PAR=1;NOO=32,,3.3
+LLF-01__few_shot__s43,deepseek,LLF-01,LLF,few_shot,2,43,block,1,,3 passed in 0.56s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.5
+LLF-01__few_shot__s44,deepseek,LLF-01,LLF,few_shot,3,44,block,1,,3 passed in 0.55s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.5
+LLF-01__role__s42,deepseek,LLF-01,LLF,role,1,42,block,1,,3 passed in 0.56s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.5
+LLF-01__role__s43,deepseek,LLF-01,LLF,role,2,43,block,1,,3 passed in 0.56s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.5
+LLF-01__role__s44,deepseek,LLF-01,LLF,role,3,44,block,1,,3 passed in 0.56s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.5
+LLF-02__chain_of_thought__s42,deepseek,LLF-02,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L11 NOC=84;PAR=1;NOO=20,,0.9
+LLF-02__chain_of_thought__s43,deepseek,LLF-02,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-02__chain_of_thought__s44,deepseek,LLF-02,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-02__few_shot__s42,deepseek,LLF-02,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-02__few_shot__s43,deepseek,LLF-02,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-02__few_shot__s44,deepseek,LLF-02,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.8
+LLF-02__role__s42,deepseek,LLF-02,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-02__role__s43,deepseek,LLF-02,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-02__role__s44,deepseek,LLF-02,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-03__chain_of_thought__s42,deepseek,LLF-03,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-03__chain_of_thought__s43,deepseek,LLF-03,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-03__chain_of_thought__s44,deepseek,LLF-03,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-03__few_shot__s42,deepseek,LLF-03,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.8
+LLF-03__few_shot__s43,deepseek,LLF-03,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-03__few_shot__s44,deepseek,LLF-03,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-03__role__s42,deepseek,LLF-03,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.8
+LLF-03__role__s43,deepseek,LLF-03,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-03__role__s44,deepseek,LLF-03,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-04__chain_of_thought__s42,deepseek,LLF-04,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LLF L11 NOC=82;PAR=1;NOO=23,,0.8
+LLF-04__chain_of_thought__s43,deepseek,LLF-04,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-04__chain_of_thought__s44,deepseek,LLF-04,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-04__few_shot__s42,deepseek,LLF-04,LLF,few_shot,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-04__few_shot__s43,deepseek,LLF-04,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.12s",1,,,0.9
+LLF-04__few_shot__s44,deepseek,LLF-04,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.15s",1,,,1.0
+LLF-04__role__s42,deepseek,LLF-04,LLF,role,1,42,block,1,,3 passed in 0.03s,1,,,0.9
+LLF-04__role__s43,deepseek,LLF-04,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LLF-04__role__s44,deepseek,LLF-04,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-05__chain_of_thought__s42,deepseek,LLF-05,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L11 NOC=82;PAR=1;NOO=23,,0.8
+LLF-05__chain_of_thought__s43,deepseek,LLF-05,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-05__chain_of_thought__s44,deepseek,LLF-05,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-05__few_shot__s42,deepseek,LLF-05,LLF,few_shot,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-05__few_shot__s43,deepseek,LLF-05,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-05__few_shot__s44,deepseek,LLF-05,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-05__role__s42,deepseek,LLF-05,LLF,role,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-05__role__s43,deepseek,LLF-05,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-05__role__s44,deepseek,LLF-05,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-06__chain_of_thought__s42,deepseek,LLF-06,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-06__chain_of_thought__s43,deepseek,LLF-06,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LLF L16 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__chain_of_thought__s44,deepseek,LLF-06,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.07s",1,,,0.8
+LLF-06__few_shot__s42,deepseek,LLF-06,LLF,few_shot,1,42,block,1,,3 passed in 0.01s,0,LLF L13 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__few_shot__s43,deepseek,LLF-06,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 1.19s",1,,,1.9
+LLF-06__few_shot__s44,deepseek,LLF-06,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__role__s42,deepseek,LLF-06,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 1.22s",1,,,2.0
+LLF-06__role__s43,deepseek,LLF-06,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 1.31s",1,,,2.1
+LLF-06__role__s44,deepseek,LLF-06,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-07__chain_of_thought__s42,deepseek,LLF-07,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L13 NOC=76;PAR=1;NOO=20,,0.8
+LLF-07__chain_of_thought__s43,deepseek,LLF-07,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-07__chain_of_thought__s44,deepseek,LLF-07,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,0.9
+LLF-07__few_shot__s42,deepseek,LLF-07,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=76;PAR=1;NOO=20,,0.9
+LLF-07__few_shot__s43,deepseek,LLF-07,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 1.48s",1,,,2.3
+LLF-07__few_shot__s44,deepseek,LLF-07,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=76;PAR=1;NOO=20,,0.9
+LLF-07__role__s42,deepseek,LLF-07,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-07__role__s43,deepseek,LLF-07,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 1.48s",1,,,2.3
+LLF-07__role__s44,deepseek,LLF-07,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-08__chain_of_thought__s42,deepseek,LLF-08,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LLF-08__chain_of_thought__s43,deepseek,LLF-08,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.11s,1,,,1.0
+LLF-08__chain_of_thought__s44,deepseek,LLF-08,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,1.0
+LLF-08__few_shot__s42,deepseek,LLF-08,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=85;PAR=1;NOO=23,,0.9
+LLF-08__few_shot__s43,deepseek,LLF-08,LLF,few_shot,2,43,block,0,tests,3 failed in 0.09s,0,LLF L13 NOC=85;PAR=1;NOO=23 | LLF L28 NOC=85;PAR=1;NOO=23,,0.9
+LLF-08__few_shot__s44,deepseek,LLF-08,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L13 NOC=85;PAR=1;NOO=23,,0.8
+LLF-08__role__s42,deepseek,LLF-08,LLF,role,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+LLF-08__role__s43,deepseek,LLF-08,LLF,role,2,43,block,0,tests,3 failed in 1.89s,1,,,2.7
+LLF-08__role__s44,deepseek,LLF-08,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,1.0
+LLF-09__chain_of_thought__s42,deepseek,LLF-09,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LLF L13 NOC=87;PAR=1;NOO=23,,0.9
+LLF-09__chain_of_thought__s43,deepseek,LLF-09,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.11s,1,,,1.0
+LLF-09__chain_of_thought__s44,deepseek,LLF-09,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 1.98s,1,,,2.8
+LLF-09__few_shot__s42,deepseek,LLF-09,LLF,few_shot,1,42,block,1,,3 passed in 0.02s,0,LLF L13 NOC=87;PAR=1;NOO=23,,0.8
+LLF-09__few_shot__s43,deepseek,LLF-09,LLF,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.8
+LLF-09__few_shot__s44,deepseek,LLF-09,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=87;PAR=1;NOO=23,,0.9
+LLF-09__role__s42,deepseek,LLF-09,LLF,role,1,42,block,0,tests,3 failed in 0.08s,1,,,0.9
+LLF-09__role__s43,deepseek,LLF-09,LLF,role,2,43,block,0,tests,3 failed in 1.78s,1,,,2.6
+LLF-09__role__s44,deepseek,LLF-09,LLF,role,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-10__chain_of_thought__s42,deepseek,LLF-10,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.19s,1,,,1.0
+LLF-10__chain_of_thought__s43,deepseek,LLF-10,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-10__chain_of_thought__s44,deepseek,LLF-10,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 1.27s",1,,,2.1
+LLF-10__few_shot__s42,deepseek,LLF-10,LLF,few_shot,1,42,block,1,,3 passed in 0.01s,0,LLF L13 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__few_shot__s43,deepseek,LLF-10,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L13 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__few_shot__s44,deepseek,LLF-10,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L13 NOC=86;PAR=1;NOO=23,,0.9
+LLF-10__role__s42,deepseek,LLF-10,LLF,role,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-10__role__s43,deepseek,LLF-10,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 1.19s",1,,,2.0
+LLF-10__role__s44,deepseek,LLF-10,LLF,role,3,44,block,1,,3 passed in 0.02s,0,LLF L13 NOC=86;PAR=1;NOO=23,,0.9
+LLF-11__chain_of_thought__s42,deepseek,LLF-11,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 1.37s",1,,,2.1
+LLF-11__chain_of_thought__s43,deepseek,LLF-11,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-11__chain_of_thought__s44,deepseek,LLF-11,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LLF L16 NOC=103;PAR=1;NOO=28 | LLF L16 NOC=75;PAR=1;NOO=20,,0.8
+LLF-11__few_shot__s42,deepseek,LLF-11,LLF,few_shot,1,42,block,1,,3 passed in 0.02s,0,LLF L13 NOC=104;PAR=1;NOO=28 | LLF L13 NOC=76;PAR=1;NOO=20,,0.8
+LLF-11__few_shot__s43,deepseek,LLF-11,LLF,few_shot,2,43,block,1,,3 passed in 0.01s,0,LLF L13 NOC=104;PAR=1;NOO=28 | LLF L13 NOC=76;PAR=1;NOO=20,,0.8
+LLF-11__few_shot__s44,deepseek,LLF-11,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L13 NOC=104;PAR=1;NOO=28 | LLF L13 NOC=76;PAR=1;NOO=20,,0.9
+LLF-11__role__s42,deepseek,LLF-11,LLF,role,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-11__role__s43,deepseek,LLF-11,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-11__role__s44,deepseek,LLF-11,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 1.20s",1,,,2.0
+LM-01__chain_of_thought__s42,deepseek,LM-01,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.11s,1,,LPL L63 PAR=6,0.9
+LM-01__chain_of_thought__s43,deepseek,LM-01,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.11s,1,,,0.8
+LM-01__chain_of_thought__s44,deepseek,LM-01,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.14s,1,,LPL L124 PAR=7,0.9
+LM-01__few_shot__s42,deepseek,LM-01,LM,few_shot,1,42,block,0,tests,3 failed in 0.14s,1,,LPL L111 PAR=7,0.9
+LM-01__few_shot__s43,deepseek,LM-01,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",0,LM L11 MLOC=72,,0.8
+LM-01__few_shot__s44,deepseek,LM-01,LM,few_shot,3,44,block,0,tests,3 failed in 0.14s,1,,LPL L109 PAR=7,0.9
+LM-01__role__s42,deepseek,LM-01,LM,role,1,42,block,0,tests,"1 failed, 2 passed in 0.11s",0,LM L11 MLOC=65,,0.9
+LM-01__role__s43,deepseek,LM-01,LM,role,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L135 PAR=5,0.9
+LM-01__role__s44,deepseek,LM-01,LM,role,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L119 PAR=5,0.9
+LM-03__chain_of_thought__s42,deepseek,LM-03,LM,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LM L10 MLOC=54,,0.8
+LM-03__chain_of_thought__s43,deepseek,LM-03,LM,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",0,LM L10 MLOC=54,,0.9
+LM-03__chain_of_thought__s44,deepseek,LM-03,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-03__few_shot__s42,deepseek,LM-03,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",0,LM L10 MLOC=54,,0.9
+LM-03__few_shot__s43,deepseek,LM-03,LM,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,0.9
+LM-03__few_shot__s44,deepseek,LM-03,LM,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LM-03__role__s42,deepseek,LM-03,LM,role,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,LM L10 MLOC=54,,0.9
+LM-03__role__s43,deepseek,LM-03,LM,role,2,43,block,1,,3 passed in 0.02s,0,LM L10 MLOC=54,,0.8
+LM-03__role__s44,deepseek,LM-03,LM,role,3,44,block,1,,3 passed in 0.02s,0,LM L10 MLOC=54,,0.8
+LM-04__chain_of_thought__s42,deepseek,LM-04,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.12s,1,,,0.9
+LM-04__chain_of_thought__s43,deepseek,LM-04,LM,chain_of_thought,2,43,block,0,syntax,,,,,0
+LM-04__chain_of_thought__s44,deepseek,LM-04,LM,chain_of_thought,3,44,block,0,tests,1 error in 0.18s,1,,,0.9
+LM-04__few_shot__s42,deepseek,LM-04,LM,few_shot,1,42,block,0,syntax,,,,,0
+LM-04__few_shot__s43,deepseek,LM-04,LM,few_shot,2,43,block,0,syntax,,,,,0
+LM-04__few_shot__s44,deepseek,LM-04,LM,few_shot,3,44,block,0,syntax,,,,,0
+LM-04__role__s42,deepseek,LM-04,LM,role,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,LM L115 MLOC=54,,0.9
+LM-04__role__s43,deepseek,LM-04,LM,role,2,43,block,0,tests,"1 failed, 2 passed in 0.08s",0,LM L115 MLOC=55,,0.9
+LM-04__role__s44,deepseek,LM-04,LM,role,3,44,block,0,syntax,,,,,0
+LM-05__chain_of_thought__s42,deepseek,LM-05,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__chain_of_thought__s43,deepseek,LM-05,LM,chain_of_thought,2,43,block,0,tests,1 error in 0.14s,1,,,0.9
+LM-05__chain_of_thought__s44,deepseek,LM-05,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.15s",1,,,0.9
+LM-05__few_shot__s42,deepseek,LM-05,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.0
+LM-05__few_shot__s43,deepseek,LM-05,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,0.9
+LM-05__few_shot__s44,deepseek,LM-05,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__role__s42,deepseek,LM-05,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,0.9
+LM-05__role__s43,deepseek,LM-05,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.15s",1,,,0.9
+LM-05__role__s44,deepseek,LM-05,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.14s",1,,,0.9
+LM-06__chain_of_thought__s42,deepseek,LM-06,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.11s,1,,,0.9
+LM-06__chain_of_thought__s43,deepseek,LM-06,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,1,,,0.9
+LM-06__chain_of_thought__s44,deepseek,LM-06,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.11s,0,LM L41 MLOC=62,,0.9
+LM-06__few_shot__s42,deepseek,LM-06,LM,few_shot,1,42,block,0,syntax,,,,,0
+LM-06__few_shot__s43,deepseek,LM-06,LM,few_shot,2,43,block,0,tests,3 failed in 0.12s,1,,,1.0
+LM-06__few_shot__s44,deepseek,LM-06,LM,few_shot,3,44,block,0,tests,3 failed in 0.12s,1,,,1.0
+LM-06__role__s42,deepseek,LM-06,LM,role,1,42,block,0,tests,3 failed in 0.12s,1,,,1.0
+LM-06__role__s43,deepseek,LM-06,LM,role,2,43,block,0,tests,3 failed in 0.10s,1,,,1.0
+LM-06__role__s44,deepseek,LM-06,LM,role,3,44,block,0,tests,3 failed in 0.13s,1,,,1.1
+LM-07__chain_of_thought__s42,deepseek,LM-07,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.14s,1,,LPL L20 PAR=6,1.1
+LM-07__chain_of_thought__s43,deepseek,LM-07,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,,1.1
+LM-07__chain_of_thought__s44,deepseek,LM-07,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.12s,1,,LPL L23 PAR=6,1.1
+LM-07__few_shot__s42,deepseek,LM-07,LM,few_shot,1,42,block,0,tests,3 failed in 0.14s,1,,LPL L120 PAR=6,1.0
+LM-07__few_shot__s43,deepseek,LM-07,LM,few_shot,2,43,block,0,tests,3 failed in 0.14s,1,,LPL L123 PAR=6,0.9
+LM-07__few_shot__s44,deepseek,LM-07,LM,few_shot,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L91 PAR=6,0.9
+LM-07__role__s42,deepseek,LM-07,LM,role,1,42,block,0,tests,3 failed in 0.12s,1,,LPL L20 PAR=6,1.0
+LM-07__role__s43,deepseek,LM-07,LM,role,2,43,block,0,tests,3 failed in 0.11s,0,LM L12 MLOC=53,LPL L86 PAR=6,0.9
+LM-07__role__s44,deepseek,LM-07,LM,role,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L133 PAR=6,0.9
+LM-09__chain_of_thought__s42,deepseek,LM-09,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.24s",1,,,1.1
+LM-09__chain_of_thought__s43,deepseek,LM-09,LM,chain_of_thought,2,43,block,0,tests,1 error in 0.16s,1,,,0.9
+LM-09__chain_of_thought__s44,deepseek,LM-09,LM,chain_of_thought,3,44,block,0,tests,1 error in 0.28s,1,,,1.1
+LM-09__few_shot__s42,deepseek,LM-09,LM,few_shot,1,42,block,1,,3 passed in 0.23s,0,LM L50 MLOC=84,,1.0
+LM-09__few_shot__s43,deepseek,LM-09,LM,few_shot,2,43,block,1,,3 passed in 0.09s,0,LM L49 MLOC=83,,1.0
+LM-09__few_shot__s44,deepseek,LM-09,LM,few_shot,3,44,block,1,,3 passed in 0.08s,0,LM L50 MLOC=83,,1.0
+LM-09__role__s42,deepseek,LM-09,LM,role,1,42,block,1,,3 passed in 0.09s,0,LM L51 MLOC=84,,1.0
+LM-09__role__s43,deepseek,LM-09,LM,role,2,43,block,1,,3 passed in 0.23s,0,LM L54 MLOC=84,,1.0
+LM-09__role__s44,deepseek,LM-09,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.18s",0,LM L40 MLOC=84,,1.1
+LM-10__chain_of_thought__s42,deepseek,LM-10,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.11s,1,,,1.1
+LM-10__chain_of_thought__s43,deepseek,LM-10,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,1,,,1.0
+LM-10__chain_of_thought__s44,deepseek,LM-10,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L24 PAR=5,1.0
+LM-10__few_shot__s42,deepseek,LM-10,LM,few_shot,1,42,block,0,tests,3 failed in 0.12s,0,LM L22 MLOC=71,,1.0
+LM-10__few_shot__s43,deepseek,LM-10,LM,few_shot,2,43,block,0,tests,3 failed in 0.11s,0,LM L22 MLOC=71,,1.0
+LM-10__few_shot__s44,deepseek,LM-10,LM,few_shot,3,44,block,0,tests,3 failed in 0.11s,0,LM L22 MLOC=71,,1.1
+LM-10__role__s42,deepseek,LM-10,LM,role,1,42,block,0,tests,3 failed in 0.15s,1,,,1.1
+LM-10__role__s43,deepseek,LM-10,LM,role,2,43,block,1,,3 passed in 0.04s,1,,,1.0
+LM-10__role__s44,deepseek,LM-10,LM,role,3,44,block,0,syntax,,,,,0
+LM-11__chain_of_thought__s42,deepseek,LM-11,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.15s,1,,,1.2
+LM-11__chain_of_thought__s43,deepseek,LM-11,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,,1.2
+LM-11__chain_of_thought__s44,deepseek,LM-11,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,1,,,1.2
+LM-11__few_shot__s42,deepseek,LM-11,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",0,LM L8 MLOC=63,,1.1
+LM-11__few_shot__s43,deepseek,LM-11,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",0,LM L8 MLOC=63,,1.1
+LM-11__few_shot__s44,deepseek,LM-11,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LM L8 MLOC=63,,1.0
+LM-11__role__s42,deepseek,LM-11,LM,role,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LM-11__role__s43,deepseek,LM-11,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LM-11__role__s44,deepseek,LM-11,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LPL-01__chain_of_thought__s42,deepseek,LPL-01,LPL,chain_of_thought,1,42,block,0,syntax,,,,,0
+LPL-01__chain_of_thought__s43,deepseek,LPL-01,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.15s,0,LPL L8 PAR=5,,1.0
+LPL-01__chain_of_thought__s44,deepseek,LPL-01,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=6,,0.9
+LPL-01__few_shot__s42,deepseek,LPL-01,LPL,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.26s",0,LPL L105 PAR=5,,1.1
+LPL-01__few_shot__s43,deepseek,LPL-01,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.18s",0,LPL L78 PAR=5,,1.0
+LPL-01__few_shot__s44,deepseek,LPL-01,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.15s",0,LPL L105 PAR=5,,0.9
+LPL-01__role__s42,deepseek,LPL-01,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.15s",0,LPL L120 PAR=5,,0.9
+LPL-01__role__s43,deepseek,LPL-01,LPL,role,2,43,block,1,,3 passed in 0.07s,0,LPL L96 PAR=5,,0.8
+LPL-01__role__s44,deepseek,LPL-01,LPL,role,3,44,block,1,,3 passed in 0.07s,0,LPL L88 PAR=5,,0.8
+LPL-02__chain_of_thought__s42,deepseek,LPL-02,LPL,chain_of_thought,1,42,block,0,syntax,,,,,0
+LPL-02__chain_of_thought__s43,deepseek,LPL-02,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,0,LPL L8 PAR=5,,1.0
+LPL-02__chain_of_thought__s44,deepseek,LPL-02,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=6,,0.9
+LPL-02__few_shot__s42,deepseek,LPL-02,LPL,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.17s",0,LPL L105 PAR=5,,1.0
+LPL-02__few_shot__s43,deepseek,LPL-02,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.20s",0,LPL L78 PAR=5,,1.1
+LPL-02__few_shot__s44,deepseek,LPL-02,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.19s",0,LPL L105 PAR=5,,1.2
+LPL-02__role__s42,deepseek,LPL-02,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.18s",0,LPL L120 PAR=5,,1.1
+LPL-02__role__s43,deepseek,LPL-02,LPL,role,2,43,block,1,,3 passed in 0.09s,0,LPL L96 PAR=5,,1.1
+LPL-02__role__s44,deepseek,LPL-02,LPL,role,3,44,block,1,,3 passed in 0.07s,0,LPL L88 PAR=5,,1.0
+LPL-03__chain_of_thought__s42,deepseek,LPL-03,LPL,chain_of_thought,1,42,block,0,syntax,,,,,0
+LPL-03__chain_of_thought__s43,deepseek,LPL-03,LPL,chain_of_thought,2,43,block,0,tests,1 error in 0.18s,0,LPL L2 PAR=8 | LPL L13 PAR=5 | LPL L42 PAR=8 | LPL L65 PAR=5,,1.1
+LPL-03__chain_of_thought__s44,deepseek,LPL-03,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.10s",0,LPL L69 PAR=5 | LPL L70 PAR=6,,1.0
+LPL-03__few_shot__s42,deepseek,LPL-03,LPL,few_shot,1,42,block,1,,3 passed in 0.01s,0,LPL L51 PAR=7 | LPL L61 PAR=5 | LPL L63 PAR=7,,0.8
+LPL-03__few_shot__s43,deepseek,LPL-03,LPL,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.16s",0,LPL L57 PAR=5,,1.1
+LPL-03__few_shot__s44,deepseek,LPL-03,LPL,few_shot,3,44,block,0,tests,3 failed in 0.16s,0,LPL L66 PAR=5,,1.3
+LPL-03__role__s42,deepseek,LPL-03,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L51 PAR=7 | LPL L61 PAR=5 | LPL L63 PAR=7,,1.1
+LPL-03__role__s43,deepseek,LPL-03,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.15s",0,LPL L51 PAR=7 | LPL L61 PAR=5 | LPL L62 PAR=7,,1.3
+LPL-03__role__s44,deepseek,LPL-03,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.14s",0,LPL L51 PAR=7 | LPL L61 PAR=5 | LPL L63 PAR=7,,1.3
+LPL-04__chain_of_thought__s42,deepseek,LPL-04,LPL,chain_of_thought,1,42,block,0,tests,1 error in 0.21s,0,LPL L2 PAR=6,,1.4
+LPL-04__chain_of_thought__s43,deepseek,LPL-04,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.03s,0,LPL L51 PAR=7 | LPL L61 PAR=7 | LPL L78 PAR=6,,1.2
+LPL-04__chain_of_thought__s44,deepseek,LPL-04,LPL,chain_of_thought,3,44,block,0,tests,1 error in 0.19s,0,LPL L2 PAR=6,,1.3
+LPL-04__few_shot__s42,deepseek,LPL-04,LPL,few_shot,1,42,block,1,,3 passed in 0.03s,0,LPL L51 PAR=7 | LPL L61 PAR=7 | LPL L77 PAR=5 | LPL L79 PAR=7 | LPL L90 PAR=7,,1.2
+LPL-04__few_shot__s43,deepseek,LPL-04,LPL,few_shot,2,43,block,1,,3 passed in 0.03s,0,LPL L51 PAR=7 | LPL L61 PAR=7 | LPL L77 PAR=5 | LPL L78 PAR=7 | LPL L89 PAR=7,,1.0
+LPL-04__few_shot__s44,deepseek,LPL-04,LPL,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.10s",0,LPL L79 PAR=5 | LPL L81 PAR=7 | LPL L94 PAR=7,,1.1
+LPL-04__role__s42,deepseek,LPL-04,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L51 PAR=7 | LPL L61 PAR=7 | LPL L77 PAR=5 | LPL L78 PAR=7 | LPL L89 PAR=7,,1.0
+LPL-04__role__s43,deepseek,LPL-04,LPL,role,2,43,block,0,tests,3 failed in 0.11s,0,LPL L42 PAR=8 | LPL L91 PAR=5,,1.1
+LPL-04__role__s44,deepseek,LPL-04,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.13s",0,LPL L79 PAR=5 | LPL L81 PAR=7 | LPL L93 PAR=7,,1.1
+LPL-05__chain_of_thought__s42,deepseek,LPL-05,LPL,chain_of_thought,1,42,block,0,tests,1 error in 0.17s,0,LPL L2 PAR=5,,1.2
+LPL-05__chain_of_thought__s43,deepseek,LPL-05,LPL,chain_of_thought,2,43,block,0,tests,1 error in 0.19s,0,LPL L2 PAR=5,,1.2
+LPL-05__chain_of_thought__s44,deepseek,LPL-05,LPL,chain_of_thought,3,44,block,0,tests,1 error in 0.21s,0,LPL L2 PAR=5,,1.2
+LPL-05__few_shot__s42,deepseek,LPL-05,LPL,few_shot,1,42,block,0,tests,3 failed in 0.11s,0,LPL L58 PAR=5,,1.1
+LPL-05__few_shot__s43,deepseek,LPL-05,LPL,few_shot,2,43,block,0,tests,3 failed in 0.11s,0,LPL L59 PAR=5,,1.1
+LPL-05__few_shot__s44,deepseek,LPL-05,LPL,few_shot,3,44,block,0,tests,3 failed in 0.12s,1,,,1.1
+LPL-05__role__s42,deepseek,LPL-05,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L44 PAR=5 | LPL L57 PAR=5,,1.0
+LPL-05__role__s43,deepseek,LPL-05,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L44 PAR=5 | LPL L57 PAR=5,,1.0
+LPL-05__role__s44,deepseek,LPL-05,LPL,role,3,44,block,0,tests,3 failed in 0.11s,1,,,1.1
+LPL-06__chain_of_thought__s42,deepseek,LPL-06,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.10s,0,LPL L7 PAR=6,,1.1
+LPL-06__chain_of_thought__s43,deepseek,LPL-06,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.10s,0,LPL L16 PAR=6,,1.1
+LPL-06__chain_of_thought__s44,deepseek,LPL-06,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.17s,0,LPL L6 PAR=6,,1.2
+LPL-06__few_shot__s42,deepseek,LPL-06,LPL,few_shot,1,42,block,0,tests,3 failed in 0.16s,1,,,1.1
+LPL-06__few_shot__s43,deepseek,LPL-06,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.1
+LPL-06__few_shot__s44,deepseek,LPL-06,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.1
+LPL-06__role__s42,deepseek,LPL-06,LPL,role,1,42,block,1,,3 passed in 0.15s,0,LPL L17 PAR=6,,1.2
+LPL-06__role__s43,deepseek,LPL-06,LPL,role,2,43,block,1,,3 passed in 0.13s,0,LPL L17 PAR=6,,1.2
+LPL-06__role__s44,deepseek,LPL-06,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.19s",0,LPL L17 PAR=6,,1.3
+LPL-07__chain_of_thought__s42,deepseek,LPL-07,LPL,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.22s",0,LPL L22 PAR=6,,1.3
+LPL-07__chain_of_thought__s43,deepseek,LPL-07,LPL,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.19s",0,LPL L16 PAR=6,,1.1
+LPL-07__chain_of_thought__s44,deepseek,LPL-07,LPL,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.22s",0,LPL L7 PAR=6,,1.1
+LPL-07__few_shot__s42,deepseek,LPL-07,LPL,few_shot,1,42,block,0,tests,3 failed in 0.15s,1,,,1.1
+LPL-07__few_shot__s43,deepseek,LPL-07,LPL,few_shot,2,43,block,0,tests,3 failed in 0.20s,1,,,1.1
+LPL-07__few_shot__s44,deepseek,LPL-07,LPL,few_shot,3,44,block,0,tests,3 failed in 0.23s,1,,,1.2
+LPL-07__role__s42,deepseek,LPL-07,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.24s",0,LPL L32 PAR=6,,1.1
+LPL-07__role__s43,deepseek,LPL-07,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.24s",0,LPL L17 PAR=6,,1.1
+LPL-07__role__s44,deepseek,LPL-07,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.24s",0,LPL L16 PAR=6,,1.1
+LPL-08__chain_of_thought__s42,deepseek,LPL-08,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.11s,0,LPL L2 PAR=6,,1.0
+LPL-08__chain_of_thought__s43,deepseek,LPL-08,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.08s,0,LPL L6 PAR=6,,1.0
+LPL-08__chain_of_thought__s44,deepseek,LPL-08,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.09s,0,LPL L7 PAR=6,,1.0
+LPL-08__few_shot__s42,deepseek,LPL-08,LPL,few_shot,1,42,block,0,tests,3 failed in 0.14s,1,,,1.0
+LPL-08__few_shot__s43,deepseek,LPL-08,LPL,few_shot,2,43,block,0,tests,3 failed in 0.23s,1,,,1.1
+LPL-08__few_shot__s44,deepseek,LPL-08,LPL,few_shot,3,44,block,0,tests,3 failed in 0.21s,1,,,1.1
+LPL-08__role__s42,deepseek,LPL-08,LPL,role,1,42,block,1,,3 passed in 0.13s,0,LPL L32 PAR=6,,1.0
+LPL-08__role__s43,deepseek,LPL-08,LPL,role,2,43,block,1,,3 passed in 0.10s,0,LPL L17 PAR=6,,1.0
+LPL-08__role__s44,deepseek,LPL-08,LPL,role,3,44,block,1,,3 passed in 0.15s,0,LPL L16 PAR=6,,1.0
+LPL-09__chain_of_thought__s42,deepseek,LPL-09,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.39s,0,LPL L18 PAR=5,,1.3
+LPL-09__chain_of_thought__s43,deepseek,LPL-09,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.40s,0,LPL L43 PAR=5,,1.3
+LPL-09__chain_of_thought__s44,deepseek,LPL-09,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.30s,0,LPL L42 PAR=5,,1.2
+LPL-09__few_shot__s42,deepseek,LPL-09,LPL,few_shot,1,42,block,0,tests,3 failed in 0.27s,1,,,1.1
+LPL-09__few_shot__s43,deepseek,LPL-09,LPL,few_shot,2,43,block,0,tests,3 failed in 0.25s,1,,,1.1
+LPL-09__few_shot__s44,deepseek,LPL-09,LPL,few_shot,3,44,block,0,tests,1 error in 0.30s,1,,,1.1
+LPL-09__role__s42,deepseek,LPL-09,LPL,role,1,42,block,1,,3 passed in 0.15s,0,LPL L43 PAR=5,,1.0
+LPL-09__role__s43,deepseek,LPL-09,LPL,role,2,43,block,1,,3 passed in 0.16s,0,LPL L43 PAR=5,,1.0
+LPL-09__role__s44,deepseek,LPL-09,LPL,role,3,44,block,1,,3 passed in 0.14s,0,LPL L43 PAR=5,,0.9
+LPL-10__chain_of_thought__s42,deepseek,LPL-10,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.26s,0,LPL L37 PAR=7,,1.1
+LPL-10__chain_of_thought__s43,deepseek,LPL-10,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.22s,0,LPL L33 PAR=7,,1.0
+LPL-10__chain_of_thought__s44,deepseek,LPL-10,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.16s,0,LPL L41 PAR=7,,0.9
+LPL-10__few_shot__s42,deepseek,LPL-10,LPL,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.25s",0,LPL L33 PAR=7 | LPL L54 PAR=5,,1.1
+LPL-10__few_shot__s43,deepseek,LPL-10,LPL,few_shot,2,43,block,0,tests,3 failed in 0.26s,1,,,1.1
+LPL-10__few_shot__s44,deepseek,LPL-10,LPL,few_shot,3,44,block,0,tests,3 failed in 0.21s,1,,,1.0
+LPL-10__role__s42,deepseek,LPL-10,LPL,role,1,42,block,0,tests,3 failed in 0.27s,0,LPL L50 PAR=7,,1.1
+LPL-10__role__s43,deepseek,LPL-10,LPL,role,2,43,block,1,,3 passed in 0.15s,1,,,1.0
+LPL-10__role__s44,deepseek,LPL-10,LPL,role,3,44,block,0,tests,3 failed in 0.28s,1,,,1.2
+LPL-11__chain_of_thought__s42,deepseek,LPL-11,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.29s,0,LPL L24 PAR=6,,1.2
+LPL-11__chain_of_thought__s43,deepseek,LPL-11,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.17s,0,LPL L24 PAR=6,,1.1
+LPL-11__chain_of_thought__s44,deepseek,LPL-11,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.26s",0,LPL L33 PAR=6,,1.2
+LPL-11__few_shot__s42,deepseek,LPL-11,LPL,few_shot,1,42,block,0,tests,3 failed in 0.23s,1,,,1.1
+LPL-11__few_shot__s43,deepseek,LPL-11,LPL,few_shot,2,43,block,1,,3 passed in 0.17s,0,LPL L12 PAR=6,,1.1
+LPL-11__few_shot__s44,deepseek,LPL-11,LPL,few_shot,3,44,block,0,tests,3 failed in 0.33s,1,,,1.2
+LPL-11__role__s42,deepseek,LPL-11,LPL,role,1,42,block,0,tests,"1 failed, 2 passed in 0.26s",0,LPL L51 PAR=6,,1.1
+LPL-11__role__s43,deepseek,LPL-11,LPL,role,2,43,block,1,,3 passed in 0.16s,1,,,1.1
+LPL-11__role__s44,deepseek,LPL-11,LPL,role,3,44,block,1,,3 passed in 0.16s,0,LPL L33 PAR=6,,1.1
+LPL-12__chain_of_thought__s42,deepseek,LPL-12,LPL,chain_of_thought,1,42,block,1,,"3 passed, 1 warning in 3.96s",0,LPL L7 PAR=6,,5.0
+LPL-12__chain_of_thought__s43,deepseek,LPL-12,LPL,chain_of_thought,2,43,block,1,,"3 passed, 1 warning in 3.37s",0,LPL L13 PAR=6,,4.4
+LPL-12__chain_of_thought__s44,deepseek,LPL-12,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.68s,1,,,1.5
+LPL-12__few_shot__s42,deepseek,LPL-12,LPL,few_shot,1,42,block,0,tests,3 failed in 3.81s,1,,,4.8
+LPL-12__few_shot__s43,deepseek,LPL-12,LPL,few_shot,2,43,block,0,tests,3 failed in 2.36s,1,,,3.2
+LPL-12__few_shot__s44,deepseek,LPL-12,LPL,few_shot,3,44,block,0,tests,3 failed in 1.68s,1,,,2.7
+LPL-12__role__s42,deepseek,LPL-12,LPL,role,1,42,block,1,,"3 passed, 1 warning in 1.17s",1,,,2.1
+LPL-12__role__s43,deepseek,LPL-12,LPL,role,2,43,block,1,,"3 passed, 1 warning in 1.22s",0,LPL L13 PAR=6,,2.2
+LPL-12__role__s44,deepseek,LPL-12,LPL,role,3,44,block,1,,"3 passed, 1 warning in 1.23s",1,,,2.2
+LPL-13__chain_of_thought__s42,deepseek,LPL-13,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L11 PAR=11,,0.9
+LPL-13__chain_of_thought__s43,deepseek,LPL-13,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L13 PAR=5 | LPL L20 PAR=5,,0.8
+LPL-13__chain_of_thought__s44,deepseek,LPL-13,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,LPL L8 PAR=11,,0.8
+LPL-13__few_shot__s42,deepseek,LPL-13,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,1,,,0.8
+LPL-13__few_shot__s43,deepseek,LPL-13,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.8
+LPL-13__few_shot__s44,deepseek,LPL-13,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-13__role__s42,deepseek,LPL-13,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L11 PAR=5 | LPL L34 PAR=5,,0.7
+LPL-13__role__s43,deepseek,LPL-13,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L11 PAR=11,,0.8
+LPL-13__role__s44,deepseek,LPL-13,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L9 PAR=5 | LPL L18 PAR=5,,0.8
+LPL-14__chain_of_thought__s42,deepseek,LPL-14,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.09s,0,LPL L7 PAR=5,,0.9
+LPL-14__chain_of_thought__s43,deepseek,LPL-14,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,0,LPL L7 PAR=5,,0.9
+LPL-14__chain_of_thought__s44,deepseek,LPL-14,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L12 PAR=7,,0.8
+LPL-14__few_shot__s42,deepseek,LPL-14,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,1,,,0.9
+LPL-14__few_shot__s43,deepseek,LPL-14,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,1.0
+LPL-14__few_shot__s44,deepseek,LPL-14,LPL,few_shot,3,44,block,0,tests,3 failed in 0.10s,1,,,0.9
+LPL-14__role__s42,deepseek,LPL-14,LPL,role,1,42,block,0,tests,3 failed in 0.09s,0,LPL L13 PAR=5,,0.9
+LPL-14__role__s43,deepseek,LPL-14,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L13 PAR=5,,0.9
+LPL-14__role__s44,deepseek,LPL-14,LPL,role,3,44,block,0,tests,3 failed in 0.09s,0,LPL L13 PAR=5,,0.8
+LPL-15__chain_of_thought__s42,deepseek,LPL-15,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-15__chain_of_thought__s43,deepseek,LPL-15,LPL,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L25 PAR=5,,0.8
+LPL-15__chain_of_thought__s44,deepseek,LPL-15,LPL,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L17 PAR=5,,0.9
+LPL-15__few_shot__s42,deepseek,LPL-15,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-15__few_shot__s43,deepseek,LPL-15,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-15__few_shot__s44,deepseek,LPL-15,LPL,few_shot,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+LPL-15__role__s42,deepseek,LPL-15,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L25 PAR=5,,0.8
+LPL-15__role__s43,deepseek,LPL-15,LPL,role,2,43,block,1,,3 passed in 0.03s,0,LPL L27 PAR=5,,0.8
+LPL-15__role__s44,deepseek,LPL-15,LPL,role,3,44,block,1,,3 passed in 0.03s,0,LPL L24 PAR=5,,0.8
+LPL-16__chain_of_thought__s42,deepseek,LPL-16,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LPL L11 PAR=7,,0.8
+LPL-16__chain_of_thought__s43,deepseek,LPL-16,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.9
+LPL-16__chain_of_thought__s44,deepseek,LPL-16,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.9
+LPL-16__few_shot__s42,deepseek,LPL-16,LPL,few_shot,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+LPL-16__few_shot__s43,deepseek,LPL-16,LPL,few_shot,2,43,block,0,tests,3 failed in 0.09s,0,LPL L18 PAR=5,,1.0
+LPL-16__few_shot__s44,deepseek,LPL-16,LPL,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,1.0
+LPL-16__role__s42,deepseek,LPL-16,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-16__role__s43,deepseek,LPL-16,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.8
+LPL-16__role__s44,deepseek,LPL-16,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L10 PAR=5,,0.8
+LPL-17__chain_of_thought__s42,deepseek,LPL-17,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=5,,0.9
+LPL-17__chain_of_thought__s43,deepseek,LPL-17,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.11s,0,LPL L61 PAR=5,,1.0
+LPL-17__chain_of_thought__s44,deepseek,LPL-17,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=5,,1.0
+LPL-17__few_shot__s42,deepseek,LPL-17,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,LPL L48 PAR=5,,1.0
+LPL-17__few_shot__s43,deepseek,LPL-17,LPL,few_shot,2,43,block,1,,3 passed in 0.01s,0,LPL L61 PAR=5,,0.9
+LPL-17__few_shot__s44,deepseek,LPL-17,LPL,few_shot,3,44,block,1,,3 passed in 0.02s,0,LPL L61 PAR=5,,0.9
+LPL-17__role__s42,deepseek,LPL-17,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L72 PAR=5 | LPL L89 PAR=5,,0.8
+LPL-17__role__s43,deepseek,LPL-17,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L61 PAR=5,,0.9
+LPL-17__role__s44,deepseek,LPL-17,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L61 PAR=5,,0.9
+LPL-18__chain_of_thought__s42,deepseek,LPL-18,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=9,,0.9
+LPL-18__chain_of_thought__s43,deepseek,LPL-18,LPL,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L50 PAR=9,,0.9
+LPL-18__chain_of_thought__s44,deepseek,LPL-18,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L2 PAR=9,,0.8
+LPL-18__few_shot__s42,deepseek,LPL-18,LPL,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L63 PAR=9,,0.9
+LPL-18__few_shot__s43,deepseek,LPL-18,LPL,few_shot,2,43,block,0,tests,3 failed in 0.11s,1,,,0.9
+LPL-18__few_shot__s44,deepseek,LPL-18,LPL,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,0.9
+LPL-18__role__s42,deepseek,LPL-18,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",0,LPL L48 PAR=6 | LPL L61 PAR=5,,0.9
+LPL-18__role__s43,deepseek,LPL-18,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L49 PAR=6 | LPL L67 PAR=5,,0.9
+LPL-18__role__s44,deepseek,LPL-18,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L17 PAR=5 | LPL L59 PAR=6,,0.9
+LPL-19__chain_of_thought__s42,deepseek,LPL-19,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L72 PAR=6,,0.9
+LPL-19__chain_of_thought__s43,deepseek,LPL-19,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-19__chain_of_thought__s44,deepseek,LPL-19,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L72 PAR=6,,0.8
+LPL-19__few_shot__s42,deepseek,LPL-19,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-19__few_shot__s43,deepseek,LPL-19,LPL,few_shot,2,43,block,0,tests,3 failed in 0.15s,1,,,1.0
+LPL-19__few_shot__s44,deepseek,LPL-19,LPL,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,0.9
+LPL-19__role__s42,deepseek,LPL-19,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L70 PAR=6,,0.9
+LPL-19__role__s43,deepseek,LPL-19,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L72 PAR=6,,0.8
+LPL-19__role__s44,deepseek,LPL-19,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L72 PAR=7,,0.9
+MNC-01__chain_of_thought__s42,deepseek,MNC-01,MNC,chain_of_thought,1,42,block,0,syntax,,,,,0
+MNC-01__chain_of_thought__s43,deepseek,MNC-01,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.12s",0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.9
+MNC-01__chain_of_thought__s44,deepseek,MNC-01,MNC,chain_of_thought,3,44,block,0,tests,1 error in 0.16s,1,,,1.0
+MNC-01__few_shot__s42,deepseek,MNC-01,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L127 LEC=4 | MNC L128 LEC=3 | MNC L129 LEC=3 | MNC L130 LEC=4 | MNC L135 LEC=4 | MNC L142 LEC=4 | MNC L143 LEC=4 | MNC L144 LEC=4,,0.9
+MNC-01__few_shot__s43,deepseek,MNC-01,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,0,MNC L120 LEC=4 | MNC L121 LEC=3 | MNC L122 LEC=3 | MNC L123 LEC=4 | MNC L128 LEC=4 | MNC L135 LEC=4 | MNC L136 LEC=4 | MNC L137 LEC=4,,0.9
+MNC-01__few_shot__s44,deepseek,MNC-01,MNC,few_shot,3,44,block,0,tests,1 error in 0.15s,0,MNC L127 LEC=4 | MNC L128 LEC=3 | MNC L129 LEC=3 | MNC L130 LEC=4 | MNC L135 LEC=4 | MNC L142 LEC=4 | MNC L143 LEC=4 | MNC L144 LEC=4,,0.9
+MNC-01__role__s42,deepseek,MNC-01,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",0,MNC L109 LEC=4 | MNC L110 LEC=3 | MNC L111 LEC=3 | MNC L112 LEC=4 | MNC L117 LEC=4 | MNC L124 LEC=4 | MNC L125 LEC=4 | MNC L126 LEC=4,,0.8
+MNC-01__role__s43,deepseek,MNC-01,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L100 LEC=4 | MNC L101 LEC=3 | MNC L102 LEC=3 | MNC L103 LEC=4 | MNC L108 LEC=4 | MNC L115 LEC=4 | MNC L116 LEC=4 | MNC L117 LEC=4,,0.8
+MNC-01__role__s44,deepseek,MNC-01,MNC,role,3,44,block,0,tests,1 error in 0.15s,0,MNC L76 LEC=4 | MNC L77 LEC=3 | MNC L78 LEC=3 | MNC L79 LEC=4 | MNC L84 LEC=4 | MNC L91 LEC=4 | MNC L92 LEC=4 | MNC L93 LEC=4,,0.9
+MNC-02__chain_of_thought__s42,deepseek,MNC-02,MNC,chain_of_thought,1,42,block,0,tests,1 error in 0.30s,1,,,1.1
+MNC-02__chain_of_thought__s43,deepseek,MNC-02,MNC,chain_of_thought,2,43,block,0,syntax,,,,,0
+MNC-02__chain_of_thought__s44,deepseek,MNC-02,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.27s",0,MNC L96 LEC=3 | MNC L97 LEC=3,,1.0
+MNC-02__few_shot__s42,deepseek,MNC-02,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L94 LEC=3 | MNC L95 LEC=3,,1.0
+MNC-02__few_shot__s43,deepseek,MNC-02,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.26s",0,MNC L79 LEC=3 | MNC L80 LEC=3,,1.1
+MNC-02__few_shot__s44,deepseek,MNC-02,MNC,few_shot,3,44,block,1,,3 passed in 0.17s,0,MNC L80 LEC=3 | MNC L81 LEC=3,,0.9
+MNC-02__role__s42,deepseek,MNC-02,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.27s",0,MNC L94 LEC=3 | MNC L95 LEC=3,,1.0
+MNC-02__role__s43,deepseek,MNC-02,MNC,role,2,43,block,1,,3 passed in 0.16s,0,MNC L96 LEC=3 | MNC L97 LEC=3,,1.0
+MNC-02__role__s44,deepseek,MNC-02,MNC,role,3,44,block,1,,3 passed in 0.17s,0,MNC L95 LEC=3 | MNC L96 LEC=3,,1.0
+MNC-03__chain_of_thought__s42,deepseek,MNC-03,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+MNC-03__chain_of_thought__s43,deepseek,MNC-03,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L52 LEC=3,,0.8
+MNC-03__chain_of_thought__s44,deepseek,MNC-03,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,MNC L63 LEC=3,,0.8
+MNC-03__few_shot__s42,deepseek,MNC-03,MNC,few_shot,1,42,block,1,,3 passed in 0.01s,0,MNC L48 LEC=3,,0.8
+MNC-03__few_shot__s43,deepseek,MNC-03,MNC,few_shot,2,43,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__few_shot__s44,deepseek,MNC-03,MNC,few_shot,3,44,block,0,tests,3 failed in 0.10s,0,MNC L66 LEC=3,,0.8
+MNC-03__role__s42,deepseek,MNC-03,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__role__s43,deepseek,MNC-03,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__role__s44,deepseek,MNC-03,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-04__chain_of_thought__s42,deepseek,MNC-04,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+MNC-04__chain_of_thought__s43,deepseek,MNC-04,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L8 DNC=3;NCT=2,,0.8
+MNC-04__chain_of_thought__s44,deepseek,MNC-04,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+MNC-04__few_shot__s42,deepseek,MNC-04,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.12s",1,,,0.9
+MNC-04__few_shot__s43,deepseek,MNC-04,MNC,few_shot,2,43,block,0,tests,1 error in 0.22s,1,,,1.1
+MNC-04__few_shot__s44,deepseek,MNC-04,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+MNC-04__role__s42,deepseek,MNC-04,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,MNC L7 DNC=3;NCT=2,,1.0
+MNC-04__role__s43,deepseek,MNC-04,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L7 DNC=3;NCT=2,,0.9
+MNC-04__role__s44,deepseek,MNC-04,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L7 DNC=3;NCT=2,,0.8
+MNC-05__chain_of_thought__s42,deepseek,MNC-05,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-05__chain_of_thought__s43,deepseek,MNC-05,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-05__chain_of_thought__s44,deepseek,MNC-05,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+MNC-05__few_shot__s42,deepseek,MNC-05,MNC,few_shot,1,42,block,0,tests,3 failed in 0.10s,1,,,0.9
+MNC-05__few_shot__s43,deepseek,MNC-05,MNC,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,0.9
+MNC-05__few_shot__s44,deepseek,MNC-05,MNC,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+MNC-05__role__s42,deepseek,MNC-05,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L12 LEC=3,,0.9
+MNC-05__role__s43,deepseek,MNC-05,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L12 LEC=3,,0.9
+MNC-05__role__s44,deepseek,MNC-05,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+MNC-06__chain_of_thought__s42,deepseek,MNC-06,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.07s,1,,,0.9
+MNC-06__chain_of_thought__s43,deepseek,MNC-06,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.08s,1,,,0.9
+MNC-06__chain_of_thought__s44,deepseek,MNC-06,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.06s,0,MNC L19 LEC=3,,0.9
+MNC-06__few_shot__s42,deepseek,MNC-06,MNC,few_shot,1,42,block,1,,3 passed in 0.06s,0,MNC L21 LEC=3,,0.9
+MNC-06__few_shot__s43,deepseek,MNC-06,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,0,MNC L23 LEC=3,,1.0
+MNC-06__few_shot__s44,deepseek,MNC-06,MNC,few_shot,3,44,block,1,,3 passed in 0.07s,1,,,0.9
+MNC-06__role__s42,deepseek,MNC-06,MNC,role,1,42,block,1,,3 passed in 0.08s,1,,,0.9
+MNC-06__role__s43,deepseek,MNC-06,MNC,role,2,43,block,1,,3 passed in 0.07s,1,,,0.9
+MNC-06__role__s44,deepseek,MNC-06,MNC,role,3,44,block,1,,3 passed in 0.06s,1,,,0.9
+MNC-07__chain_of_thought__s42,deepseek,MNC-07,MNC,chain_of_thought,1,42,block,0,tests,1 error in 2.71s,1,,,3.8
+MNC-07__chain_of_thought__s43,deepseek,MNC-07,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 2.35s,1,,,3.4
+MNC-07__chain_of_thought__s44,deepseek,MNC-07,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 2.03s",0,MNC L68 LEC=3 | MNC L69 LEC=3,,3.0
+MNC-07__few_shot__s42,deepseek,MNC-07,MNC,few_shot,1,42,block,1,,3 passed in 1.54s,0,MNC L73 LEC=3 | MNC L74 LEC=3,,2.5
+MNC-07__few_shot__s43,deepseek,MNC-07,MNC,few_shot,2,43,block,1,,3 passed in 1.21s,0,MNC L50 LEC=3 | MNC L50 LEC=3,LPL L6 PAR=5,2.2
+MNC-07__few_shot__s44,deepseek,MNC-07,MNC,few_shot,3,44,block,1,,3 passed in 1.19s,0,MNC L48 LEC=3 | MNC L49 LEC=3,,2.2
+MNC-07__role__s42,deepseek,MNC-07,MNC,role,1,42,block,1,,3 passed in 1.17s,0,MNC L75 LEC=3 | MNC L76 LEC=3,,2.1
+MNC-07__role__s43,deepseek,MNC-07,MNC,role,2,43,block,1,,3 passed in 1.16s,0,MNC L76 LEC=3 | MNC L77 LEC=3,,2.1
+MNC-07__role__s44,deepseek,MNC-07,MNC,role,3,44,block,1,,3 passed in 1.16s,0,MNC L74 LEC=3 | MNC L75 LEC=3,,2.1
+MNC-08__chain_of_thought__s42,deepseek,MNC-08,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L43 LEC=3,,0.8
+MNC-08__chain_of_thought__s43,deepseek,MNC-08,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.8
+MNC-08__chain_of_thought__s44,deepseek,MNC-08,MNC,chain_of_thought,3,44,block,0,tests,1 error in 0.15s,0,MNC L43 LEC=3,,0.9
+MNC-08__few_shot__s42,deepseek,MNC-08,MNC,few_shot,1,42,block,1,,3 passed in 0.01s,0,MNC L42 LEC=3,,0.8
+MNC-08__few_shot__s43,deepseek,MNC-08,MNC,few_shot,2,43,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.8
+MNC-08__few_shot__s44,deepseek,MNC-08,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.8
+MNC-08__role__s42,deepseek,MNC-08,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L39 LEC=3,,0.8
+MNC-08__role__s43,deepseek,MNC-08,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L39 LEC=3,,0.8
+MNC-08__role__s44,deepseek,MNC-08,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.8
+MNC-09__chain_of_thought__s42,deepseek,MNC-09,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.06s,0,MNC L20 LEC=3,,0.8
+MNC-09__chain_of_thought__s43,deepseek,MNC-09,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.04s,0,MNC L17 LEC=3,,0.8
+MNC-09__chain_of_thought__s44,deepseek,MNC-09,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.05s,1,,,0.8
+MNC-09__few_shot__s42,deepseek,MNC-09,MNC,few_shot,1,42,block,1,,3 passed in 0.04s,0,MNC L21 LEC=3,,0.8
+MNC-09__few_shot__s43,deepseek,MNC-09,MNC,few_shot,2,43,block,1,,3 passed in 0.04s,0,MNC L21 LEC=3,,0.8
+MNC-09__few_shot__s44,deepseek,MNC-09,MNC,few_shot,3,44,block,1,,3 passed in 0.05s,0,MNC L17 LEC=3,,0.9
+MNC-09__role__s42,deepseek,MNC-09,MNC,role,1,42,block,1,,3 passed in 0.04s,0,MNC L20 LEC=3,,0.9
+MNC-09__role__s43,deepseek,MNC-09,MNC,role,2,43,block,1,,3 passed in 0.04s,0,MNC L20 LEC=3,,0.9
+MNC-09__role__s44,deepseek,MNC-09,MNC,role,3,44,block,1,,3 passed in 0.04s,0,MNC L17 LEC=3,,0.9
+MNC-10__chain_of_thought__s42,deepseek,MNC-10,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.34s",1,,,1.3
+MNC-10__chain_of_thought__s43,deepseek,MNC-10,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.23s,0,MNC L36 LEC=3,,1.1
+MNC-10__chain_of_thought__s44,deepseek,MNC-10,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.20s,0,MNC L36 LEC=3,,1.1
+MNC-10__few_shot__s42,deepseek,MNC-10,MNC,few_shot,1,42,block,1,,3 passed in 0.19s,0,MNC L36 LEC=3,,1.0
+MNC-10__few_shot__s43,deepseek,MNC-10,MNC,few_shot,2,43,block,1,,3 passed in 0.18s,0,MNC L36 LEC=3,,1.0
+MNC-10__few_shot__s44,deepseek,MNC-10,MNC,few_shot,3,44,block,1,,3 passed in 0.18s,0,MNC L36 LEC=3,,1.0
+MNC-10__role__s42,deepseek,MNC-10,MNC,role,1,42,block,1,,3 passed in 0.20s,0,MNC L43 LEC=3,,1.1
+MNC-10__role__s43,deepseek,MNC-10,MNC,role,2,43,block,1,,3 passed in 0.20s,0,MNC L36 LEC=3,,1.1
+MNC-10__role__s44,deepseek,MNC-10,MNC,role,3,44,block,1,,3 passed in 0.18s,0,MNC L36 LEC=3,,1.2
+MNC-11__chain_of_thought__s42,deepseek,MNC-11,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.49s",0,MNC L43 LEC=3,,1.4
+MNC-11__chain_of_thought__s43,deepseek,MNC-11,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.45s",1,,,1.3
+MNC-11__chain_of_thought__s44,deepseek,MNC-11,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.28s",0,MNC L53 LEC=3,,1.3
+MNC-11__few_shot__s42,deepseek,MNC-11,MNC,few_shot,1,42,block,0,tests,3 failed in 0.31s,1,,,1.2
+MNC-11__few_shot__s43,deepseek,MNC-11,MNC,few_shot,2,43,block,1,,3 passed in 0.23s,0,MNC L45 LEC=3,,1.1
+MNC-11__few_shot__s44,deepseek,MNC-11,MNC,few_shot,3,44,block,1,,3 passed in 0.20s,0,MNC L44 LEC=3,,1.1
+MNC-11__role__s42,deepseek,MNC-11,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.28s",0,MNC L43 LEC=3,,1.2
+MNC-11__role__s43,deepseek,MNC-11,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.28s",0,MNC L43 LEC=3,,1.2
+MNC-11__role__s44,deepseek,MNC-11,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.28s",0,MNC L43 LEC=3,,1.1
+MNC-12__chain_of_thought__s42,deepseek,MNC-12,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.20s,0,MNC L51 LEC=3,,1.1
+MNC-12__chain_of_thought__s43,deepseek,MNC-12,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.20s,0,MNC L62 LEC=3,,1.1
+MNC-12__chain_of_thought__s44,deepseek,MNC-12,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.18s,0,MNC L51 LEC=3,,1.1
+MNC-12__few_shot__s42,deepseek,MNC-12,MNC,few_shot,1,42,block,1,,3 passed in 0.18s,0,MNC L54 LEC=3,,1.1
+MNC-12__few_shot__s43,deepseek,MNC-12,MNC,few_shot,2,43,block,1,,3 passed in 0.18s,0,MNC L51 LEC=3,,1.1
+MNC-12__few_shot__s44,deepseek,MNC-12,MNC,few_shot,3,44,block,1,,3 passed in 0.20s,0,MNC L51 LEC=3,,1.1
+MNC-12__role__s42,deepseek,MNC-12,MNC,role,1,42,block,1,,3 passed in 0.18s,0,MNC L54 LEC=3,,1.0
+MNC-12__role__s43,deepseek,MNC-12,MNC,role,2,43,block,0,tests,1 error in 0.35s,0,MNC L51 LEC=3,,1.2
+MNC-12__role__s44,deepseek,MNC-12,MNC,role,3,44,block,1,,3 passed in 0.18s,0,MNC L55 LEC=3,,1.0
+MNC-13__chain_of_thought__s42,deepseek,MNC-13,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.18s,1,,,1.0
+MNC-13__chain_of_thought__s43,deepseek,MNC-13,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.19s,0,MNC L48 LEC=3 | MNC L48 LEC=3,,1.1
+MNC-13__chain_of_thought__s44,deepseek,MNC-13,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.17s,0,MNC L42 LEC=3 | MNC L42 LEC=3,,1.0
+MNC-13__few_shot__s42,deepseek,MNC-13,MNC,few_shot,1,42,block,0,tests,3 failed in 0.29s,0,MNC L55 LEC=3 | MNC L55 LEC=3,,1.2
+MNC-13__few_shot__s43,deepseek,MNC-13,MNC,few_shot,2,43,block,1,,3 passed in 0.18s,0,MNC L47 LEC=3 | MNC L47 LEC=3,,1.0
+MNC-13__few_shot__s44,deepseek,MNC-13,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.31s",0,MNC L54 LEC=3 | MNC L54 LEC=3,,1.2
+MNC-13__role__s42,deepseek,MNC-13,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.28s",0,MNC L41 LEC=3 | MNC L41 LEC=3,,1.2
+MNC-13__role__s43,deepseek,MNC-13,MNC,role,2,43,block,1,,3 passed in 0.18s,0,MNC L47 LEC=3 | MNC L47 LEC=3,,1.1
+MNC-13__role__s44,deepseek,MNC-13,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.31s",0,MNC L47 LEC=3 | MNC L47 LEC=3,,1.2
+MNC-14__chain_of_thought__s42,deepseek,MNC-14,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.26s",0,MNC L36 LEC=4 | MNC L40 LEC=3,,1.2
+MNC-14__chain_of_thought__s43,deepseek,MNC-14,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.16s,0,MNC L15 LEC=4 | MNC L19 LEC=3,,1.0
+MNC-14__chain_of_thought__s44,deepseek,MNC-14,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.16s,0,MNC L38 LEC=4 | MNC L44 LEC=3,,1.0
+MNC-14__few_shot__s42,deepseek,MNC-14,MNC,few_shot,1,42,block,0,tests,3 failed in 0.26s,1,,,1.1
+MNC-14__few_shot__s43,deepseek,MNC-14,MNC,few_shot,2,43,block,1,,3 passed in 0.14s,0,MNC L57 LEC=4 | MNC L63 LEC=3,,1.0
+MNC-14__few_shot__s44,deepseek,MNC-14,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.24s",1,,,1.1
+MNC-14__role__s42,deepseek,MNC-14,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.25s",0,MNC L27 LEC=4 | MNC L31 LEC=3,,1.1
+MNC-14__role__s43,deepseek,MNC-14,MNC,role,2,43,block,1,,3 passed in 0.16s,0,MNC L34 LEC=4 | MNC L40 LEC=3,,1.0
+MNC-14__role__s44,deepseek,MNC-14,MNC,role,3,44,block,1,,3 passed in 0.16s,0,MNC L33 LEC=4 | MNC L39 LEC=3,,1.0
+MNC-16__chain_of_thought__s42,deepseek,MNC-16,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.11s",0,MNC L35 LEC=4 | MNC L38 LEC=4 | MNC L46 LEC=3 | MNC L55 LEC=4 | MNC L56 LEC=4 | MNC L57 LEC=5,,0.9
+MNC-16__chain_of_thought__s43,deepseek,MNC-16,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",0,MNC L10 LEC=3,,0.9
+MNC-16__chain_of_thought__s44,deepseek,MNC-16,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.9
+MNC-16__few_shot__s42,deepseek,MNC-16,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L28 LEC=4 | MNC L29 LEC=4 | MNC L30 LEC=4 | MNC L32 LEC=5 | MNC L34 LEC=4 | MNC L37 LEC=4 | MNC L38 LEC=4 | MNC L40 LEC=5 | MNC L48 LEC=3,,0.8
+MNC-16__few_shot__s43,deepseek,MNC-16,MNC,few_shot,2,43,block,0,tests,3 failed in 0.11s,1,,,0.9
+MNC-16__few_shot__s44,deepseek,MNC-16,MNC,few_shot,3,44,block,1,,3 passed in 0.02s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.9
+MNC-16__role__s42,deepseek,MNC-16,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.8
+MNC-16__role__s43,deepseek,MNC-16,MNC,role,2,43,block,1,,3 passed in 0.03s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.9
+MNC-16__role__s44,deepseek,MNC-16,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.9
+MNC-17__chain_of_thought__s42,deepseek,MNC-17,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-17__chain_of_thought__s43,deepseek,MNC-17,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,1.0
+MNC-17__chain_of_thought__s44,deepseek,MNC-17,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,MNC L10 LEC=3,,0.8
+MNC-17__few_shot__s42,deepseek,MNC-17,MNC,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.08s",1,,,0.9
+MNC-17__few_shot__s43,deepseek,MNC-17,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.08s",0,MNC L19 LEC=3,,0.8
+MNC-17__few_shot__s44,deepseek,MNC-17,MNC,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.08s",1,,,0.8
+MNC-17__role__s42,deepseek,MNC-17,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L9 LEC=3 | MNC L18 LEC=3,,0.8
+MNC-17__role__s43,deepseek,MNC-17,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L9 LEC=3 | MNC L19 LEC=3,,0.8
+MNC-17__role__s44,deepseek,MNC-17,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L9 LEC=3 | MNC L18 LEC=3,,0.8
+MNC-18__chain_of_thought__s42,deepseek,MNC-18,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+MNC-18__chain_of_thought__s43,deepseek,MNC-18,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L31 LEC=3,,0.8
+MNC-18__chain_of_thought__s44,deepseek,MNC-18,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,MNC L31 LEC=3,,0.8
+MNC-18__few_shot__s42,deepseek,MNC-18,MNC,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,MNC L27 LEC=3,,0.8
+MNC-18__few_shot__s43,deepseek,MNC-18,MNC,few_shot,2,43,block,1,,3 passed in 0.01s,0,MNC L22 LEC=3,,0.8
+MNC-18__few_shot__s44,deepseek,MNC-18,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L22 LEC=3,,0.8
+MNC-18__role__s42,deepseek,MNC-18,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L31 LEC=3,,0.8
+MNC-18__role__s43,deepseek,MNC-18,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L23 LEC=3,,0.8
+MNC-18__role__s44,deepseek,MNC-18,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L23 LEC=3,,0.8
+MNC-19__chain_of_thought__s42,deepseek,MNC-19,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,MNC L35 LEC=3,,0.8
+MNC-19__chain_of_thought__s43,deepseek,MNC-19,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L31 LEC=3,,0.8
+MNC-19__chain_of_thought__s44,deepseek,MNC-19,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L28 LEC=3,,0.8
+MNC-19__few_shot__s42,deepseek,MNC-19,MNC,few_shot,1,42,block,1,,3 passed in 0.01s,0,MNC L27 LEC=3,,0.8
+MNC-19__few_shot__s43,deepseek,MNC-19,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",0,MNC L28 LEC=3,,0.9
+MNC-19__few_shot__s44,deepseek,MNC-19,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L24 LEC=3,,0.9
+MNC-19__role__s42,deepseek,MNC-19,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L29 LEC=3,,0.8
+MNC-19__role__s43,deepseek,MNC-19,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L22 LEC=3,,0.8
+MNC-19__role__s44,deepseek,MNC-19,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L20 LEC=3,,0.8
+MNC-20__chain_of_thought__s42,deepseek,MNC-20,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,MNC L54 LEC=3 | MNC L59 LEC=3,,0.8
+MNC-20__chain_of_thought__s43,deepseek,MNC-20,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L44 LEC=3 | MNC L49 LEC=3,,0.8
+MNC-20__chain_of_thought__s44,deepseek,MNC-20,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+MNC-20__few_shot__s42,deepseek,MNC-20,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L49 LEC=3 | MNC L54 LEC=3,,0.8
+MNC-20__few_shot__s43,deepseek,MNC-20,MNC,few_shot,2,43,block,1,,3 passed in 0.01s,0,MNC L46 LEC=3 | MNC L51 LEC=3,,0.8
+MNC-20__few_shot__s44,deepseek,MNC-20,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L43 LEC=3 | MNC L48 LEC=3,,0.7
+MNC-20__role__s42,deepseek,MNC-20,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L50 LEC=3 | MNC L88 LEC=3,,0.8
+MNC-20__role__s43,deepseek,MNC-20,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L32 LEC=3,,0.8
+MNC-20__role__s44,deepseek,MNC-20,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L50 LEC=3 | MNC L55 LEC=3,,0.8
+MNC-21__chain_of_thought__s42,deepseek,MNC-21,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.23s",0,MNC L67 LEC=3,,1.0
+MNC-21__chain_of_thought__s43,deepseek,MNC-21,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.23s",0,MNC L67 LEC=3,,1.0
+MNC-21__chain_of_thought__s44,deepseek,MNC-21,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L68 LEC=3,,1.0
+MNC-21__few_shot__s42,deepseek,MNC-21,MNC,few_shot,1,42,block,0,tests,3 failed in 0.34s,0,MNC L86 LEC=3,,1.1
+MNC-21__few_shot__s43,deepseek,MNC-21,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.26s",0,MNC L68 LEC=3,,1.1
+MNC-21__few_shot__s44,deepseek,MNC-21,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L68 LEC=3,,1.1
+MNC-21__role__s42,deepseek,MNC-21,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L74 LEC=3,,1.1
+MNC-21__role__s43,deepseek,MNC-21,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L70 LEC=3,,1.1
+MNC-21__role__s44,deepseek,MNC-21,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L69 LEC=3,,1.1
+LLF-01__chain_of_thought__s42,llama3,LLF-01,LLF,chain_of_thought,1,42,block,0,tests,3 failed in 1.08s,0,LLF L26 NOC=100;PAR=1;NOO=15,,2.0
+LLF-01__chain_of_thought__s43,llama3,LLF-01,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.55s,0,LLF L19 NOC=165;PAR=1;NOO=28,,1.5
+LLF-01__chain_of_thought__s44,llama3,LLF-01,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 1.10s,1,,,2.0
+LLF-01__few_shot__s42,llama3,LLF-01,LLF,few_shot,1,42,block,0,tests,3 failed in 1.09s,1,,,1.9
+LLF-01__few_shot__s43,llama3,LLF-01,LLF,few_shot,2,43,block,0,tests,3 failed in 0.72s,0,LLF L27 NOC=111;PAR=1;NOO=18,,1.6
+LLF-01__few_shot__s44,llama3,LLF-01,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.71s",1,,,1.6
+LLF-01__role__s42,llama3,LLF-01,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 0.90s",0,LLF L35 NOC=95;PAR=1;NOO=15,,1.8
+LLF-01__role__s43,llama3,LLF-01,LLF,role,2,43,block,0,tests,3 failed in 1.15s,1,,,2.0
+LLF-01__role__s44,llama3,LLF-01,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.69s",1,,,1.6
+LLF-02__chain_of_thought__s42,llama3,LLF-02,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-02__chain_of_thought__s43,llama3,LLF-02,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,LLF L16 NOC=73;PAR=1;NOO=20,,0.8
+LLF-02__chain_of_thought__s44,llama3,LLF-02,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.17s,0,LLF L16 NOC=73;PAR=1;NOO=20,,0.9
+LLF-02__few_shot__s42,llama3,LLF-02,LLF,few_shot,1,42,block,0,tests,1 error in 0.15s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.9
+LLF-02__few_shot__s43,llama3,LLF-02,LLF,few_shot,2,43,block,0,tests,1 error in 0.14s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.9
+LLF-02__few_shot__s44,llama3,LLF-02,LLF,few_shot,3,44,block,0,tests,1 error in 0.18s,0,LLF L20 NOC=73;PAR=1;NOO=20,,1.0
+LLF-02__role__s42,llama3,LLF-02,LLF,role,1,42,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-02__role__s43,llama3,LLF-02,LLF,role,2,43,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,1.0
+LLF-02__role__s44,llama3,LLF-02,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-03__chain_of_thought__s42,llama3,LLF-03,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__chain_of_thought__s43,llama3,LLF-03,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,LLF L16 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__chain_of_thought__s44,llama3,LLF-03,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-03__few_shot__s42,llama3,LLF-03,LLF,few_shot,1,42,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-03__few_shot__s43,llama3,LLF-03,LLF,few_shot,2,43,block,0,tests,1 error in 0.15s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.9
+LLF-03__few_shot__s44,llama3,LLF-03,LLF,few_shot,3,44,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.9
+LLF-03__role__s42,llama3,LLF-03,LLF,role,1,42,block,1,,3 passed in 0.02s,0,LLF L16 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__role__s43,llama3,LLF-03,LLF,role,2,43,block,0,tests,1 error in 0.14s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.9
+LLF-03__role__s44,llama3,LLF-03,LLF,role,3,44,block,0,tests,1 error in 0.17s,0,LLF L16 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__chain_of_thought__s42,llama3,LLF-04,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LLF L16 NOC=82;PAR=1;NOO=23,,0.8
+LLF-04__chain_of_thought__s43,llama3,LLF-04,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.13s,1,,,0.9
+LLF-04__chain_of_thought__s44,llama3,LLF-04,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-04__few_shot__s42,llama3,LLF-04,LLF,few_shot,1,42,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__few_shot__s43,llama3,LLF-04,LLF,few_shot,2,43,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__few_shot__s44,llama3,LLF-04,LLF,few_shot,3,44,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__role__s42,llama3,LLF-04,LLF,role,1,42,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__role__s43,llama3,LLF-04,LLF,role,2,43,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-04__role__s44,llama3,LLF-04,LLF,role,3,44,block,0,tests,1 error in 0.16s,0,LLF L16 NOC=82;PAR=1;NOO=23,,1.0
+LLF-05__chain_of_thought__s42,llama3,LLF-05,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LLF L16 NOC=82;PAR=1;NOO=23,,0.8
+LLF-05__chain_of_thought__s43,llama3,LLF-05,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.15s,0,LLF L16 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__chain_of_thought__s44,llama3,LLF-05,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-05__few_shot__s42,llama3,LLF-05,LLF,few_shot,1,42,block,0,tests,1 error in 0.15s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__few_shot__s43,llama3,LLF-05,LLF,few_shot,2,43,block,0,tests,1 error in 0.15s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__few_shot__s44,llama3,LLF-05,LLF,few_shot,3,44,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__role__s42,llama3,LLF-05,LLF,role,1,42,block,0,tests,1 error in 0.14s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__role__s43,llama3,LLF-05,LLF,role,2,43,block,0,tests,1 error in 0.16s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-05__role__s44,llama3,LLF-05,LLF,role,3,44,block,0,tests,1 error in 0.15s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.9
+LLF-06__chain_of_thought__s42,llama3,LLF-06,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-06__chain_of_thought__s43,llama3,LLF-06,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-06__chain_of_thought__s44,llama3,LLF-06,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-06__few_shot__s42,llama3,LLF-06,LLF,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,LLF L14 NOC=88;PAR=1;NOO=24,,0.8
+LLF-06__few_shot__s43,llama3,LLF-06,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-06__few_shot__s44,llama3,LLF-06,LLF,few_shot,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-06__role__s42,llama3,LLF-06,LLF,role,1,42,block,0,tests,3 failed in 0.08s,0,LLF L13 NOC=88;PAR=1;NOO=24,,0.8
+LLF-06__role__s43,llama3,LLF-06,LLF,role,2,43,block,0,tests,1 error in 0.16s,0,LLF L13 NOC=76;PAR=1;NOO=20,,0.9
+LLF-06__role__s44,llama3,LLF-06,LLF,role,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-07__chain_of_thought__s42,llama3,LLF-07,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-07__chain_of_thought__s43,llama3,LLF-07,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-07__chain_of_thought__s44,llama3,LLF-07,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-07__few_shot__s42,llama3,LLF-07,LLF,few_shot,1,42,block,0,tests,1 error in 0.16s,0,LLF L13 NOC=88;PAR=1;NOO=24 | LLF L28 NOC=88;PAR=1;NOO=24,,0.9
+LLF-07__few_shot__s43,llama3,LLF-07,LLF,few_shot,2,43,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-07__few_shot__s44,llama3,LLF-07,LLF,few_shot,3,44,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-07__role__s42,llama3,LLF-07,LLF,role,1,42,block,0,tests,3 failed in 0.11s,0,LLF L13 NOC=88;PAR=1;NOO=24,,1.1
+LLF-07__role__s43,llama3,LLF-07,LLF,role,2,43,block,0,tests,3 failed in 0.10s,0,LLF L13 NOC=76;PAR=1;NOO=20,,1.1
+LLF-07__role__s44,llama3,LLF-07,LLF,role,3,44,block,0,tests,3 failed in 0.08s,1,,,1.0
+LLF-08__chain_of_thought__s42,llama3,LLF-08,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.15s,1,,,1.2
+LLF-08__chain_of_thought__s43,llama3,LLF-08,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-08__chain_of_thought__s44,llama3,LLF-08,LLF,chain_of_thought,3,44,block,0,syntax,,,,,0
+LLF-08__few_shot__s42,llama3,LLF-08,LLF,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-08__few_shot__s43,llama3,LLF-08,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L22 NOC=85;PAR=1;NOO=23,,0.8
+LLF-08__few_shot__s44,llama3,LLF-08,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-08__role__s42,llama3,LLF-08,LLF,role,1,42,block,0,tests,3 failed in 0.10s,1,,,0.8
+LLF-08__role__s43,llama3,LLF-08,LLF,role,2,43,open fence,0,tests,1 error in 0.16s,1,,,0.9
+LLF-08__role__s44,llama3,LLF-08,LLF,role,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-09__chain_of_thought__s42,llama3,LLF-09,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.14s,1,,,0.9
+LLF-09__chain_of_thought__s43,llama3,LLF-09,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.14s,1,,,0.9
+LLF-09__chain_of_thought__s44,llama3,LLF-09,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,LLF L16 NOC=74;PAR=1;NOO=15,,0.8
+LLF-09__few_shot__s42,llama3,LLF-09,LLF,few_shot,1,42,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-09__few_shot__s43,llama3,LLF-09,LLF,few_shot,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-09__few_shot__s44,llama3,LLF-09,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L15 NOC=93;PAR=1;NOO=25,,0.7
+LLF-09__role__s42,llama3,LLF-09,LLF,role,1,42,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-09__role__s43,llama3,LLF-09,LLF,role,2,43,block,0,syntax,,,,,0
+LLF-09__role__s44,llama3,LLF-09,LLF,role,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-10__chain_of_thought__s42,llama3,LLF-10,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L14 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__chain_of_thought__s43,llama3,LLF-10,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.14s,1,,,0.9
+LLF-10__chain_of_thought__s44,llama3,LLF-10,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,1,,,0.8
+LLF-10__few_shot__s42,llama3,LLF-10,LLF,few_shot,1,42,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-10__few_shot__s43,llama3,LLF-10,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-10__few_shot__s44,llama3,LLF-10,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L14 NOC=104;PAR=1;NOO=29,,0.8
+LLF-10__role__s42,llama3,LLF-10,LLF,role,1,42,block,0,tests,1 error in 0.14s,1,,,0.9
+LLF-10__role__s43,llama3,LLF-10,LLF,role,2,43,block,0,tests,1 error in 0.14s,1,,,0.9
+LLF-10__role__s44,llama3,LLF-10,LLF,role,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-11__chain_of_thought__s42,llama3,LLF-11,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-11__chain_of_thought__s43,llama3,LLF-11,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.14s,0,LLF L16 NOC=88;PAR=1;NOO=24,,0.9
+LLF-11__chain_of_thought__s44,llama3,LLF-11,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.15s,1,,,0.9
+LLF-11__few_shot__s42,llama3,LLF-11,LLF,few_shot,1,42,block,0,tests,1 error in 0.17s,1,,,0.9
+LLF-11__few_shot__s43,llama3,LLF-11,LLF,few_shot,2,43,block,0,syntax,,,,,0
+LLF-11__few_shot__s44,llama3,LLF-11,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-11__role__s42,llama3,LLF-11,LLF,role,1,42,open fence,0,tests,1 error in 0.15s,1,,,0.9
+LLF-11__role__s43,llama3,LLF-11,LLF,role,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-11__role__s44,llama3,LLF-11,LLF,role,3,44,block,0,tests,1 error in 0.15s,0,LLF L16 NOC=78;PAR=1;NOO=17,,0.9
+LM-01__chain_of_thought__s42,llama3,LM-01,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.13s,1,,LPL L67 PAR=6,0.9
+LM-01__chain_of_thought__s43,llama3,LM-01,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L86 PAR=5,0.9
+LM-01__chain_of_thought__s44,llama3,LM-01,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L67 PAR=6,0.9
+LM-01__few_shot__s42,llama3,LM-01,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.14s",1,,LPL L100 PAR=5,0.9
+LM-01__few_shot__s43,llama3,LM-01,LM,few_shot,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L77 PAR=5 | LPL L92 PAR=6,0.9
+LM-01__few_shot__s44,llama3,LM-01,LM,few_shot,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L86 PAR=6,0.9
+LM-01__role__s42,llama3,LM-01,LM,role,1,42,block,0,tests,3 failed in 0.17s,1,,LPL L90 PAR=7,0.9
+LM-01__role__s43,llama3,LM-01,LM,role,2,43,block,0,tests,3 failed in 0.13s,1,,,0.9
+LM-01__role__s44,llama3,LM-01,LM,role,3,44,block,0,tests,3 failed in 0.13s,1,,,0.9
+LM-03__chain_of_thought__s42,llama3,LM-03,LM,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LM-03__chain_of_thought__s43,llama3,LM-03,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-03__chain_of_thought__s44,llama3,LM-03,LM,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.8
+LM-03__few_shot__s42,llama3,LM-03,LM,few_shot,1,42,block,0,tests,3 failed in 0.08s,1,,,0.8
+LM-03__few_shot__s43,llama3,LM-03,LM,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.9
+LM-03__few_shot__s44,llama3,LM-03,LM,few_shot,3,44,block,0,tests,3 failed in 0.10s,1,,,0.8
+LM-03__role__s42,llama3,LM-03,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.9
+LM-03__role__s43,llama3,LM-03,LM,role,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LM-03__role__s44,llama3,LM-03,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-04__chain_of_thought__s42,llama3,LM-04,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.10s,1,,,0.8
+LM-04__chain_of_thought__s43,llama3,LM-04,LM,chain_of_thought,2,43,block,0,tests,1 error in 0.15s,1,,,0.9
+LM-04__chain_of_thought__s44,llama3,LM-04,LM,chain_of_thought,3,44,block,0,tests,1 error in 0.16s,1,,,0.9
+LM-04__few_shot__s42,llama3,LM-04,LM,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,LM L108 MLOC=54,,0.8
+LM-04__few_shot__s43,llama3,LM-04,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-04__few_shot__s44,llama3,LM-04,LM,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,0.9
+LM-04__role__s42,llama3,LM-04,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-04__role__s43,llama3,LM-04,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-04__role__s44,llama3,LM-04,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-05__chain_of_thought__s42,llama3,LM-05,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.0
+LM-05__chain_of_thought__s43,llama3,LM-05,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.11s,1,,,0.9
+LM-05__chain_of_thought__s44,llama3,LM-05,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,1,,,0.9
+LM-05__few_shot__s42,llama3,LM-05,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,1.0
+LM-05__few_shot__s43,llama3,LM-05,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.15s",1,,,1.0
+LM-05__few_shot__s44,llama3,LM-05,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__role__s42,llama3,LM-05,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.20s",1,,,1.0
+LM-05__role__s43,llama3,LM-05,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,0.9
+LM-05__role__s44,llama3,LM-05,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,0.9
+LM-06__chain_of_thought__s42,llama3,LM-06,LM,chain_of_thought,1,42,block,0,syntax,,,,,0
+LM-06__chain_of_thought__s43,llama3,LM-06,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,1,,,0.9
+LM-06__chain_of_thought__s44,llama3,LM-06,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,1,,,0.9
+LM-06__few_shot__s42,llama3,LM-06,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,0.9
+LM-06__few_shot__s43,llama3,LM-06,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",0,LM L42 MLOC=67,,0.8
+LM-06__few_shot__s44,llama3,LM-06,LM,few_shot,3,44,block,0,syntax,,,,,0
+LM-06__role__s42,llama3,LM-06,LM,role,1,42,block,0,tests,3 failed in 0.11s,1,,,0.9
+LM-06__role__s43,llama3,LM-06,LM,role,2,43,block,0,tests,3 failed in 0.12s,1,,,0.9
+LM-06__role__s44,llama3,LM-06,LM,role,3,44,block,0,tests,3 failed in 0.10s,1,,,0.8
+LM-07__chain_of_thought__s42,llama3,LM-07,LM,chain_of_thought,1,42,block,0,tests,1 error in 0.16s,1,,LPL L70 PAR=5,0.9
+LM-07__chain_of_thought__s43,llama3,LM-07,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L38 PAR=5,0.9
+LM-07__chain_of_thought__s44,llama3,LM-07,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.13s,1,,,0.9
+LM-07__few_shot__s42,llama3,LM-07,LM,few_shot,1,42,block,0,tests,3 failed in 0.14s,1,,LPL L99 PAR=6,0.9
+LM-07__few_shot__s43,llama3,LM-07,LM,few_shot,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L25 PAR=6,0.9
+LM-07__few_shot__s44,llama3,LM-07,LM,few_shot,3,44,block,0,tests,3 failed in 0.12s,1,,LPL L91 PAR=6,0.9
+LM-07__role__s42,llama3,LM-07,LM,role,1,42,block,0,tests,3 failed in 0.12s,1,,LPL L91 PAR=6,0.9
+LM-07__role__s43,llama3,LM-07,LM,role,2,43,block,0,tests,3 failed in 0.11s,1,,LPL L57 PAR=6,0.9
+LM-07__role__s44,llama3,LM-07,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.19s",0,LM L12 MLOC=65,LPL L95 PAR=6,1.0
+LM-09__chain_of_thought__s42,llama3,LM-09,LM,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.27s",0,LM L54 MLOC=83,,1.0
+LM-09__chain_of_thought__s43,llama3,LM-09,LM,chain_of_thought,2,43,block,0,tests,1 error in 0.26s,0,LM L44 MLOC=84,,1.1
+LM-09__chain_of_thought__s44,llama3,LM-09,LM,chain_of_thought,3,44,block,0,tests,1 error in 0.22s,0,LM L50 MLOC=84,LPL L167 PAR=5,1.1
+LM-09__few_shot__s42,llama3,LM-09,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.36s",0,LM L73 MLOC=72,,1.1
+LM-09__few_shot__s43,llama3,LM-09,LM,few_shot,2,43,block,1,,3 passed in 0.29s,0,LM L50 MLOC=83,,1.1
+LM-09__few_shot__s44,llama3,LM-09,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.13s",0,LM L56 MLOC=84,,1.1
+LM-09__role__s42,llama3,LM-09,LM,role,1,42,block,1,,3 passed in 0.08s,0,LM L51 MLOC=85,,1.0
+LM-09__role__s43,llama3,LM-09,LM,role,2,43,block,1,,3 passed in 0.24s,0,LM L65 MLOC=87,,1.1
+LM-09__role__s44,llama3,LM-09,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.40s",0,LM L51 MLOC=87,,1.2
+LM-10__chain_of_thought__s42,llama3,LM-10,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.1
+LM-10__chain_of_thought__s43,llama3,LM-10,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",0,LM L69 MLOC=64,,1.1
+LM-10__chain_of_thought__s44,llama3,LM-10,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LM L18 MLOC=59,,0.9
+LM-10__few_shot__s42,llama3,LM-10,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-10__few_shot__s43,llama3,LM-10,LM,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,LPL L46 PAR=5,0.9
+LM-10__few_shot__s44,llama3,LM-10,LM,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LM L83 MLOC=65,LPL L75 PAR=5,0.8
+LM-10__role__s42,llama3,LM-10,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LM L78 MLOC=58,LPL L67 PAR=5,0.9
+LM-10__role__s43,llama3,LM-10,LM,role,2,43,block,0,tests,"1 failed, 2 passed in 0.08s",0,LM L65 MLOC=57,,0.8
+LM-10__role__s44,llama3,LM-10,LM,role,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LM-11__chain_of_thought__s42,llama3,LM-11,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-11__chain_of_thought__s43,llama3,LM-11,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-11__chain_of_thought__s44,llama3,LM-11,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-11__few_shot__s42,llama3,LM-11,LM,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__few_shot__s43,llama3,LM-11,LM,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__few_shot__s44,llama3,LM-11,LM,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__role__s42,llama3,LM-11,LM,role,1,42,block,0,tests,3 failed in 0.08s,1,,,0.8
+LM-11__role__s43,llama3,LM-11,LM,role,2,43,block,1,,3 passed in 0.02s,0,LM L32 MLOC=63,,0.8
+LM-11__role__s44,llama3,LM-11,LM,role,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-01__chain_of_thought__s42,llama3,LPL-01,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.15s,0,LPL L118 PAR=5,,0.9
+LPL-01__chain_of_thought__s43,llama3,LPL-01,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L2 PAR=5,,0.8
+LPL-01__chain_of_thought__s44,llama3,LPL-01,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=6,,0.8
+LPL-01__few_shot__s42,llama3,LPL-01,LPL,few_shot,1,42,block,1,,3 passed in 0.07s,1,,,0.8
+LPL-01__few_shot__s43,llama3,LPL-01,LPL,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.15s",0,LPL L109 PAR=5,,0.9
+LPL-01__few_shot__s44,llama3,LPL-01,LPL,few_shot,3,44,block,1,,3 passed in 0.07s,0,LPL L118 PAR=6,,0.8
+LPL-01__role__s42,llama3,LPL-01,LPL,role,1,42,block,0,tests,"1 failed, 2 passed in 0.16s",1,,,0.9
+LPL-01__role__s43,llama3,LPL-01,LPL,role,2,43,block,0,tests,"1 failed, 2 passed in 0.14s",0,LPL L120 PAR=5,,0.9
+LPL-01__role__s44,llama3,LPL-01,LPL,role,3,44,block,1,,3 passed in 0.07s,0,LPL L118 PAR=5,,0.8
+LPL-02__chain_of_thought__s42,llama3,LPL-02,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.14s,0,LPL L118 PAR=5,,0.9
+LPL-02__chain_of_thought__s43,llama3,LPL-02,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.08s,0,LPL L2 PAR=5,,0.8
+LPL-02__chain_of_thought__s44,llama3,LPL-02,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L2 PAR=6,,0.9
+LPL-02__few_shot__s42,llama3,LPL-02,LPL,few_shot,1,42,block,1,,3 passed in 0.07s,1,,,0.9
+LPL-02__few_shot__s43,llama3,LPL-02,LPL,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.15s",0,LPL L109 PAR=5,,0.9
+LPL-02__few_shot__s44,llama3,LPL-02,LPL,few_shot,3,44,block,1,,3 passed in 0.07s,0,LPL L118 PAR=6,,0.9
+LPL-02__role__s42,llama3,LPL-02,LPL,role,1,42,block,0,tests,"1 failed, 2 passed in 0.13s",1,,,0.9
+LPL-02__role__s43,llama3,LPL-02,LPL,role,2,43,block,0,tests,"1 failed, 2 passed in 0.13s",0,LPL L120 PAR=5,,0.9
+LPL-02__role__s44,llama3,LPL-02,LPL,role,3,44,block,1,,3 passed in 0.07s,0,LPL L118 PAR=5,,0.8
+LPL-03__chain_of_thought__s42,llama3,LPL-03,LPL,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L72 PAR=6,,0.9
+LPL-03__chain_of_thought__s43,llama3,LPL-03,LPL,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",0,LPL L69 PAR=5,,0.8
+LPL-03__chain_of_thought__s44,llama3,LPL-03,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.08s",0,LPL L42 PAR=7 | LPL L71 PAR=5 | LPL L73 PAR=7,,0.8
+LPL-03__few_shot__s42,llama3,LPL-03,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,LPL L41 PAR=5 | LPL L73 PAR=6,,0.8
+LPL-03__few_shot__s43,llama3,LPL-03,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",0,LPL L46 PAR=5 | LPL L49 PAR=5 | LPL L65 PAR=5,,0.8
+LPL-03__few_shot__s44,llama3,LPL-03,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L70 PAR=6,,0.8
+LPL-03__role__s42,llama3,LPL-03,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L73 PAR=6,,0.8
+LPL-03__role__s43,llama3,LPL-03,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L69 PAR=6,,0.8
+LPL-03__role__s44,llama3,LPL-03,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L71 PAR=6,,0.9
+LPL-04__chain_of_thought__s42,llama3,LPL-04,LPL,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L42 PAR=6 | LPL L89 PAR=7 | LPL L106 PAR=7,,0.8
+LPL-04__chain_of_thought__s43,llama3,LPL-04,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L2 PAR=6 | LPL L12 PAR=7 | LPL L30 PAR=7,,0.8
+LPL-04__chain_of_thought__s44,llama3,LPL-04,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,LPL L2 PAR=6 | LPL L29 PAR=5 | LPL L31 PAR=7 | LPL L46 PAR=7,,0.8
+LPL-04__few_shot__s42,llama3,LPL-04,LPL,few_shot,1,42,block,0,tests,1 error in 0.15s,0,LPL L50 PAR=5,,0.9
+LPL-04__few_shot__s43,llama3,LPL-04,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LPL-04__few_shot__s44,llama3,LPL-04,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L42 PAR=5 | LPL L58 PAR=6 | LPL L63 PAR=6 | LPL L77 PAR=5 | LPL L79 PAR=7 | LPL L91 PAR=7,,0.8
+LPL-04__role__s42,llama3,LPL-04,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",0,LPL L88 PAR=5 | LPL L99 PAR=5,,0.9
+LPL-04__role__s43,llama3,LPL-04,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.12s",0,LPL L89 PAR=6 | LPL L107 PAR=6,,0.9
+LPL-04__role__s44,llama3,LPL-04,LPL,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L86 PAR=5 | LPL L97 PAR=5,,0.9
+LPL-05__chain_of_thought__s42,llama3,LPL-05,LPL,chain_of_thought,1,42,block,0,tests,1 error in 0.15s,0,LPL L76 PAR=5,,0.9
+LPL-05__chain_of_thought__s43,llama3,LPL-05,LPL,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L59 PAR=5,,0.9
+LPL-05__chain_of_thought__s44,llama3,LPL-05,LPL,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L59 PAR=5,,0.8
+LPL-05__few_shot__s42,llama3,LPL-05,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,LPL L59 PAR=5,,0.8
+LPL-05__few_shot__s43,llama3,LPL-05,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-05__few_shot__s44,llama3,LPL-05,LPL,few_shot,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-05__role__s42,llama3,LPL-05,LPL,role,1,42,block,0,tests,3 failed in 0.09s,0,LPL L59 PAR=5,,0.8
+LPL-05__role__s43,llama3,LPL-05,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L59 PAR=5 | LPL L73 PAR=6,,0.8
+LPL-05__role__s44,llama3,LPL-05,LPL,role,3,44,block,0,tests,3 failed in 0.10s,1,,,1.0
+LPL-06__chain_of_thought__s42,llama3,LPL-06,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.29s,0,LPL L15 PAR=6,,1.0
+LPL-06__chain_of_thought__s43,llama3,LPL-06,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,0,LPL L18 PAR=6,,1.0
+LPL-06__chain_of_thought__s44,llama3,LPL-06,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.08s,0,LPL L17 PAR=6,,1.0
+LPL-06__few_shot__s42,llama3,LPL-06,LPL,few_shot,1,42,block,0,tests,1 error in 0.15s,1,,,1.0
+LPL-06__few_shot__s43,llama3,LPL-06,LPL,few_shot,2,43,block,0,tests,3 failed in 0.26s,0,LPL L17 PAR=6,,1.0
+LPL-06__few_shot__s44,llama3,LPL-06,LPL,few_shot,3,44,block,0,tests,3 failed in 0.13s,0,LPL L17 PAR=6,,1.0
+LPL-06__role__s42,llama3,LPL-06,LPL,role,1,42,block,0,tests,3 failed in 0.11s,0,LPL L17 PAR=6,,1.0
+LPL-06__role__s43,llama3,LPL-06,LPL,role,2,43,block,0,tests,3 failed in 0.30s,0,LPL L17 PAR=6,,1.1
+LPL-06__role__s44,llama3,LPL-06,LPL,role,3,44,block,0,tests,3 failed in 0.11s,0,LPL L17 PAR=6,,1.0
+LPL-07__chain_of_thought__s42,llama3,LPL-07,LPL,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.14s",0,LPL L17 PAR=6,,1.1
+LPL-07__chain_of_thought__s43,llama3,LPL-07,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,0,LPL L17 PAR=6,,1.1
+LPL-07__chain_of_thought__s44,llama3,LPL-07,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.14s,0,LPL L16 PAR=6,,0.9
+LPL-07__few_shot__s42,llama3,LPL-07,LPL,few_shot,1,42,block,0,tests,3 failed in 0.13s,0,LPL L17 PAR=6,,0.9
+LPL-07__few_shot__s43,llama3,LPL-07,LPL,few_shot,2,43,block,0,tests,3 failed in 0.13s,0,LPL L17 PAR=6,,0.9
+LPL-07__few_shot__s44,llama3,LPL-07,LPL,few_shot,3,44,block,0,tests,1 error in 0.19s,1,,,0.9
+LPL-07__role__s42,llama3,LPL-07,LPL,role,1,42,block,0,tests,3 failed in 0.13s,0,LPL L17 PAR=6,,0.9
+LPL-07__role__s43,llama3,LPL-07,LPL,role,2,43,block,0,tests,3 failed in 0.10s,0,LPL L17 PAR=6,,0.9
+LPL-07__role__s44,llama3,LPL-07,LPL,role,3,44,block,0,tests,3 failed in 0.13s,0,LPL L17 PAR=6,,0.9
+LPL-08__chain_of_thought__s42,llama3,LPL-08,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.06s,0,LPL L32 PAR=6,,0.8
+LPL-08__chain_of_thought__s43,llama3,LPL-08,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.15s,0,LPL L17 PAR=6,,0.9
+LPL-08__chain_of_thought__s44,llama3,LPL-08,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.09s,0,LPL L17 PAR=6,,0.8
+LPL-08__few_shot__s42,llama3,LPL-08,LPL,few_shot,1,42,block,0,tests,3 failed in 0.15s,0,LPL L17 PAR=6,,0.9
+LPL-08__few_shot__s43,llama3,LPL-08,LPL,few_shot,2,43,block,0,tests,3 failed in 0.15s,0,LPL L17 PAR=6,,0.9
+LPL-08__few_shot__s44,llama3,LPL-08,LPL,few_shot,3,44,block,0,tests,3 failed in 0.26s,0,LPL L32 PAR=6,,1.0
+LPL-08__role__s42,llama3,LPL-08,LPL,role,1,42,block,0,tests,3 failed in 0.12s,0,LPL L17 PAR=6,,1.0
+LPL-08__role__s43,llama3,LPL-08,LPL,role,2,43,block,0,tests,3 failed in 0.12s,0,LPL L17 PAR=6,,1.0
+LPL-08__role__s44,llama3,LPL-08,LPL,role,3,44,block,0,tests,3 failed in 0.14s,0,LPL L17 PAR=6,,1.0
+LPL-09__chain_of_thought__s42,llama3,LPL-09,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.25s,1,,,1.1
+LPL-09__chain_of_thought__s43,llama3,LPL-09,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.21s,0,LPL L26 PAR=5 | LPL L46 PAR=5,,1.0
+LPL-09__chain_of_thought__s44,llama3,LPL-09,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.20s,0,LPL L26 PAR=5 | LPL L42 PAR=5,,1.0
+LPL-09__few_shot__s42,llama3,LPL-09,LPL,few_shot,1,42,block,0,tests,3 failed in 0.21s,0,LPL L44 PAR=5,,1.0
+LPL-09__few_shot__s43,llama3,LPL-09,LPL,few_shot,2,43,block,0,tests,3 failed in 0.25s,1,,,1.0
+LPL-09__few_shot__s44,llama3,LPL-09,LPL,few_shot,3,44,block,0,tests,1 error in 0.28s,1,,,1.0
+LPL-09__role__s42,llama3,LPL-09,LPL,role,1,42,block,0,tests,3 failed in 0.22s,0,LPL L44 PAR=5,,1.0
+LPL-09__role__s43,llama3,LPL-09,LPL,role,2,43,block,0,tests,3 failed in 0.22s,0,LPL L44 PAR=5,,1.0
+LPL-09__role__s44,llama3,LPL-09,LPL,role,3,44,block,0,tests,3 failed in 0.21s,0,LPL L44 PAR=5,,1.0
+LPL-10__chain_of_thought__s42,llama3,LPL-10,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.14s,0,LPL L52 PAR=5,,0.9
+LPL-10__chain_of_thought__s43,llama3,LPL-10,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.26s,1,,,1.1
+LPL-10__chain_of_thought__s44,llama3,LPL-10,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.24s",0,LPL L43 PAR=7,,1.0
+LPL-10__few_shot__s42,llama3,LPL-10,LPL,few_shot,1,42,block,0,tests,3 failed in 0.20s,0,LPL L52 PAR=5,,1.0
+LPL-10__few_shot__s43,llama3,LPL-10,LPL,few_shot,2,43,block,0,tests,3 failed in 0.24s,1,,,1.0
+LPL-10__few_shot__s44,llama3,LPL-10,LPL,few_shot,3,44,block,0,tests,3 failed in 0.24s,1,,,1.0
+LPL-10__role__s42,llama3,LPL-10,LPL,role,1,42,block,0,tests,3 failed in 0.21s,1,,,1.0
+LPL-10__role__s43,llama3,LPL-10,LPL,role,2,43,block,0,tests,"1 failed, 2 passed in 0.23s",1,,,1.0
+LPL-10__role__s44,llama3,LPL-10,LPL,role,3,44,block,1,,3 passed in 0.15s,1,,,0.9
+LPL-11__chain_of_thought__s42,llama3,LPL-11,LPL,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.21s",0,LPL L51 PAR=6,,1.0
+LPL-11__chain_of_thought__s43,llama3,LPL-11,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.20s,0,LPL L2 PAR=6,,1.0
+LPL-11__chain_of_thought__s44,llama3,LPL-11,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.25s,0,LPL L39 PAR=5,,1.0
+LPL-11__few_shot__s42,llama3,LPL-11,LPL,few_shot,1,42,block,0,tests,3 failed in 0.22s,0,LPL L47 PAR=6,,1.0
+LPL-11__few_shot__s43,llama3,LPL-11,LPL,few_shot,2,43,block,0,tests,3 failed in 0.26s,1,,,1.0
+LPL-11__few_shot__s44,llama3,LPL-11,LPL,few_shot,3,44,block,0,tests,3 failed in 0.23s,1,,,1.0
+LPL-11__role__s42,llama3,LPL-11,LPL,role,1,42,block,0,tests,3 failed in 0.20s,0,LPL L51 PAR=6,,1.0
+LPL-11__role__s43,llama3,LPL-11,LPL,role,2,43,block,0,tests,3 failed in 0.20s,1,,,1.0
+LPL-11__role__s44,llama3,LPL-11,LPL,role,3,44,block,0,tests,3 failed in 0.22s,0,LPL L51 PAR=6,,1.0
+LPL-12__chain_of_thought__s42,llama3,LPL-12,LPL,chain_of_thought,1,42,block,1,,"3 passed, 1 warning in 1.12s",1,,,2.0
+LPL-12__chain_of_thought__s43,llama3,LPL-12,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 1.54s,1,,,2.4
+LPL-12__chain_of_thought__s44,llama3,LPL-12,LPL,chain_of_thought,3,44,block,1,,"3 passed, 1 warning in 1.07s",1,,,2.0
+LPL-12__few_shot__s42,llama3,LPL-12,LPL,few_shot,1,42,block,0,tests,"2 failed, 1 passed, 1 warning in 1.30s",1,,,2.2
+LPL-12__few_shot__s43,llama3,LPL-12,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed, 1 warning in 1.31s",0,LPL L13 PAR=5,,2.2
+LPL-12__few_shot__s44,llama3,LPL-12,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed, 1 warning in 1.35s",1,,,2.3
+LPL-12__role__s42,llama3,LPL-12,LPL,role,1,42,block,0,tests,3 failed in 1.37s,1,,,2.3
+LPL-12__role__s43,llama3,LPL-12,LPL,role,2,43,block,1,,"3 passed, 1 warning in 1.11s",1,,,2.0
+LPL-12__role__s44,llama3,LPL-12,LPL,role,3,44,block,1,,"3 passed, 1 warning in 1.11s",1,,,2.1
+LPL-13__chain_of_thought__s42,llama3,LPL-13,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.10s,0,LPL L15 PAR=5,,0.8
+LPL-13__chain_of_thought__s43,llama3,LPL-13,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L2 PAR=11,,0.8
+LPL-13__chain_of_thought__s44,llama3,LPL-13,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,LPL L9 PAR=11,,0.8
+LPL-13__few_shot__s42,llama3,LPL-13,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-13__few_shot__s43,llama3,LPL-13,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-13__few_shot__s44,llama3,LPL-13,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-13__role__s42,llama3,LPL-13,LPL,role,1,42,block,0,tests,3 failed in 0.09s,0,LPL L15 PAR=5 | LPL L23 PAR=5,,0.8
+LPL-13__role__s43,llama3,LPL-13,LPL,role,2,43,block,0,tests,3 failed in 0.09s,0,LPL L9 PAR=9 | LPL L36 PAR=10,,0.8
+LPL-13__role__s44,llama3,LPL-13,LPL,role,3,44,block,1,,3 passed in 0.01s,0,LPL L9 PAR=9,,0.8
+LPL-14__chain_of_thought__s42,llama3,LPL-14,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LPL L9 PAR=7,,0.8
+LPL-14__chain_of_thought__s43,llama3,LPL-14,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,LPL L9 PAR=7,,0.8
+LPL-14__chain_of_thought__s44,llama3,LPL-14,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L9 PAR=7,,0.8
+LPL-14__few_shot__s42,llama3,LPL-14,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-14__few_shot__s43,llama3,LPL-14,LPL,few_shot,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LPL-14__few_shot__s44,llama3,LPL-14,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LPL-14__role__s42,llama3,LPL-14,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L9 PAR=7,,0.8
+LPL-14__role__s43,llama3,LPL-14,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L9 PAR=7,,0.8
+LPL-14__role__s44,llama3,LPL-14,LPL,role,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-15__chain_of_thought__s42,llama3,LPL-15,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L25 PAR=5,,0.8
+LPL-15__chain_of_thought__s43,llama3,LPL-15,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L25 PAR=5,,0.8
+LPL-15__chain_of_thought__s44,llama3,LPL-15,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,LPL L25 PAR=5 | LPL L48 PAR=5,,0.8
+LPL-15__few_shot__s42,llama3,LPL-15,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,LPL L55 PAR=5,,0.9
+LPL-15__few_shot__s43,llama3,LPL-15,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,0,LPL L60 PAR=5,,0.8
+LPL-15__few_shot__s44,llama3,LPL-15,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,0,LPL L56 PAR=5,,0.8
+LPL-15__role__s42,llama3,LPL-15,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L27 PAR=5,,0.8
+LPL-15__role__s43,llama3,LPL-15,LPL,role,2,43,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L48 PAR=5,,0.8
+LPL-15__role__s44,llama3,LPL-15,LPL,role,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-16__chain_of_thought__s42,llama3,LPL-16,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.8
+LPL-16__chain_of_thought__s43,llama3,LPL-16,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.8
+LPL-16__chain_of_thought__s44,llama3,LPL-16,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,0,LPL L11 PAR=7 | LPL L34 PAR=5,,0.9
+LPL-16__few_shot__s42,llama3,LPL-16,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-16__few_shot__s43,llama3,LPL-16,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-16__few_shot__s44,llama3,LPL-16,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-16__role__s42,llama3,LPL-16,LPL,role,1,42,block,1,,3 passed in 0.03s,0,LPL L11 PAR=5,,0.8
+LPL-16__role__s43,llama3,LPL-16,LPL,role,2,43,block,0,tests,3 failed in 0.09s,0,LPL L11 PAR=5,,0.8
+LPL-16__role__s44,llama3,LPL-16,LPL,role,3,44,block,0,tests,3 failed in 0.09s,0,LPL L11 PAR=5,,0.8
+LPL-17__chain_of_thought__s42,llama3,LPL-17,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.10s,0,LPL L72 PAR=5,,0.8
+LPL-17__chain_of_thought__s43,llama3,LPL-17,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,0,LPL L72 PAR=5,,0.8
+LPL-17__chain_of_thought__s44,llama3,LPL-17,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L72 PAR=5 | LPL L89 PAR=5,,0.8
+LPL-17__few_shot__s42,llama3,LPL-17,LPL,few_shot,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-17__few_shot__s43,llama3,LPL-17,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.9
+LPL-17__few_shot__s44,llama3,LPL-17,LPL,few_shot,3,44,block,0,tests,3 failed in 0.10s,1,,,0.8
+LPL-17__role__s42,llama3,LPL-17,LPL,role,1,42,block,0,tests,3 failed in 0.10s,1,,,0.9
+LPL-17__role__s43,llama3,LPL-17,LPL,role,2,43,block,0,tests,3 failed in 0.11s,1,,,0.9
+LPL-17__role__s44,llama3,LPL-17,LPL,role,3,44,block,0,tests,3 failed in 0.10s,1,,,0.9
+LPL-18__chain_of_thought__s42,llama3,LPL-18,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.09s,0,LPL L50 PAR=9 | LPL L71 PAR=9,,0.9
+LPL-18__chain_of_thought__s43,llama3,LPL-18,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,0,LPL L60 PAR=9,,1.0
+LPL-18__chain_of_thought__s44,llama3,LPL-18,LPL,chain_of_thought,3,44,block,0,tests,1 error in 0.16s,1,,MNC L1 DNC=3;NCT=2,1.0
+LPL-18__few_shot__s42,llama3,LPL-18,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,1,,,1.0
+LPL-18__few_shot__s43,llama3,LPL-18,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,LPL L47 PAR=9,,0.9
+LPL-18__few_shot__s44,llama3,LPL-18,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-18__role__s42,llama3,LPL-18,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L50 PAR=9,,0.8
+LPL-18__role__s43,llama3,LPL-18,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L50 PAR=9,,0.9
+LPL-18__role__s44,llama3,LPL-18,LPL,role,3,44,block,1,,3 passed in 0.01s,0,LPL L63 PAR=9,,0.9
+LPL-19__chain_of_thought__s42,llama3,LPL-19,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.03s,0,LPL L84 PAR=7,,0.9
+LPL-19__chain_of_thought__s43,llama3,LPL-19,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,0,LPL L92 PAR=7,,1.0
+LPL-19__chain_of_thought__s44,llama3,LPL-19,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L84 PAR=6,,0.9
+LPL-19__few_shot__s42,llama3,LPL-19,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,LPL L83 PAR=7,,0.9
+LPL-19__few_shot__s43,llama3,LPL-19,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,LPL L35 PAR=7,,0.9
+LPL-19__few_shot__s44,llama3,LPL-19,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L83 PAR=7,,0.9
+LPL-19__role__s42,llama3,LPL-19,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L91 PAR=7,,0.9
+LPL-19__role__s43,llama3,LPL-19,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",0,LPL L91 PAR=7,,0.9
+LPL-19__role__s44,llama3,LPL-19,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L92 PAR=6,,0.8
+MNC-01__chain_of_thought__s42,llama3,MNC-01,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.03s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__chain_of_thought__s43,llama3,MNC-01,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L106 LEC=4 | MNC L107 LEC=3 | MNC L108 LEC=3 | MNC L109 LEC=4 | MNC L114 LEC=4 | MNC L121 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4,,0.8
+MNC-01__chain_of_thought__s44,llama3,MNC-01,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.11s,0,MNC L111 LEC=4 | MNC L112 LEC=3 | MNC L113 LEC=3 | MNC L114 LEC=4 | MNC L119 LEC=4 | MNC L126 LEC=4 | MNC L127 LEC=4 | MNC L128 LEC=4,,0.9
+MNC-01__few_shot__s42,llama3,MNC-01,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__few_shot__s43,llama3,MNC-01,MNC,few_shot,2,43,open fence,0,tests,3 failed in 0.11s,0,MNC L93 LEC=4 | MNC L94 LEC=3 | MNC L95 LEC=3 | MNC L96 LEC=4 | MNC L101 LEC=4 | MNC L108 LEC=4 | MNC L109 LEC=4 | MNC L110 LEC=4,,0.9
+MNC-01__few_shot__s44,llama3,MNC-01,MNC,few_shot,3,44,block,0,tests,1 error in 0.17s,0,MNC L76 LEC=3 | MNC L87 LEC=4 | MNC L88 LEC=3 | MNC L89 LEC=3 | MNC L90 LEC=4 | MNC L95 LEC=4 | MNC L102 LEC=4 | MNC L103 LEC=4 | MNC L104 LEC=4,,0.9
+MNC-01__role__s42,llama3,MNC-01,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__role__s43,llama3,MNC-01,MNC,role,2,43,block,0,tests,1 error in 0.17s,0,MNC L102 LEC=4 | MNC L103 LEC=3 | MNC L104 LEC=3 | MNC L105 LEC=4 | MNC L110 LEC=4 | MNC L117 LEC=4 | MNC L118 LEC=4 | MNC L119 LEC=4,,0.9
+MNC-01__role__s44,llama3,MNC-01,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-02__chain_of_thought__s42,llama3,MNC-02,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.35s",1,,,1.2
+MNC-02__chain_of_thought__s43,llama3,MNC-02,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.18s,1,,,1.0
+MNC-02__chain_of_thought__s44,llama3,MNC-02,MNC,chain_of_thought,3,44,block,0,tests,1 error in 0.37s,1,,,1.2
+MNC-02__few_shot__s42,llama3,MNC-02,MNC,few_shot,1,42,block,0,tests,"3 failed, 2 warnings in 0.29s",0,MNC L96 LEC=3 | MNC L97 LEC=3,,1.1
+MNC-02__few_shot__s43,llama3,MNC-02,MNC,few_shot,2,43,block,0,tests,1 error in 0.36s,0,MNC L98 LEC=3 | MNC L99 LEC=3,LPL L42 PAR=10,1.2
+MNC-02__few_shot__s44,llama3,MNC-02,MNC,few_shot,3,44,block,1,,3 passed in 0.20s,0,MNC L96 LEC=3 | MNC L97 LEC=3,LPL L119 PAR=6,1.0
+MNC-02__role__s42,llama3,MNC-02,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.38s",0,MNC L107 LEC=3 | MNC L108 LEC=3,,1.3
+MNC-02__role__s43,llama3,MNC-02,MNC,role,2,43,block,1,,3 passed in 0.19s,0,MNC L94 LEC=3 | MNC L95 LEC=3,,1.1
+MNC-02__role__s44,llama3,MNC-02,MNC,role,3,44,block,1,,3 passed in 0.19s,0,MNC L115 LEC=3 | MNC L116 LEC=3,,1.1
+MNC-03__chain_of_thought__s42,llama3,MNC-03,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,MNC L39 LEC=3,,0.9
+MNC-03__chain_of_thought__s43,llama3,MNC-03,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L51 LEC=3,,0.9
+MNC-03__chain_of_thought__s44,llama3,MNC-03,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L52 LEC=3,,0.9
+MNC-03__few_shot__s42,llama3,MNC-03,MNC,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,MNC L56 LEC=3,LPL L37 PAR=7,1.0
+MNC-03__few_shot__s43,llama3,MNC-03,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",0,MNC L46 LEC=3,,1.0
+MNC-03__few_shot__s44,llama3,MNC-03,MNC,few_shot,3,44,block,0,tests,3 failed in 0.10s,0,MNC L65 LEC=3,LPL L18 PAR=8,1.0
+MNC-03__role__s42,llama3,MNC-03,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L44 LEC=3,,1.0
+MNC-03__role__s43,llama3,MNC-03,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L47 LEC=3 | MNC L73 LEC=3,,0.9
+MNC-03__role__s44,llama3,MNC-03,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3 | MNC L75 LEC=3,,0.9
+MNC-04__chain_of_thought__s42,llama3,MNC-04,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-04__chain_of_thought__s43,llama3,MNC-04,MNC,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.9
+MNC-04__chain_of_thought__s44,llama3,MNC-04,MNC,chain_of_thought,3,44,block,0,tests,1 error in 0.17s,1,,,1.0
+MNC-04__few_shot__s42,llama3,MNC-04,MNC,few_shot,1,42,block,0,tests,1 error in 0.18s,1,,,1.0
+MNC-04__few_shot__s43,llama3,MNC-04,MNC,few_shot,2,43,block,0,tests,1 error in 0.17s,1,,,1.0
+MNC-04__few_shot__s44,llama3,MNC-04,MNC,few_shot,3,44,block,0,tests,1 error in 0.21s,1,,,1.0
+MNC-04__role__s42,llama3,MNC-04,MNC,role,1,42,block,0,tests,3 failed in 0.08s,0,MNC L7 DNC=3;NCT=2,,1.0
+MNC-04__role__s43,llama3,MNC-04,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L7 DNC=3;NCT=2,,1.0
+MNC-04__role__s44,llama3,MNC-04,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.08s",1,,,0.9
+MNC-05__chain_of_thought__s42,llama3,MNC-05,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-05__chain_of_thought__s43,llama3,MNC-05,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-05__chain_of_thought__s44,llama3,MNC-05,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-05__few_shot__s42,llama3,MNC-05,MNC,few_shot,1,42,block,0,tests,1 error in 0.15s,1,,,1.0
+MNC-05__few_shot__s43,llama3,MNC-05,MNC,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,1.0
+MNC-05__few_shot__s44,llama3,MNC-05,MNC,few_shot,3,44,block,0,syntax,,,,,0
+MNC-05__role__s42,llama3,MNC-05,MNC,role,1,42,block,1,,3 passed in 0.01s,1,,,0.9
+MNC-05__role__s43,llama3,MNC-05,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L22 LEC=3,,0.8
+MNC-05__role__s44,llama3,MNC-05,MNC,role,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+MNC-06__chain_of_thought__s42,llama3,MNC-06,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.07s,1,,,0.9
+MNC-06__chain_of_thought__s43,llama3,MNC-06,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,1,,,1.0
+MNC-06__chain_of_thought__s44,llama3,MNC-06,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.27s,1,,,1.0
+MNC-06__few_shot__s42,llama3,MNC-06,MNC,few_shot,1,42,block,1,,3 passed in 0.07s,1,,,1.1
+MNC-06__few_shot__s43,llama3,MNC-06,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.31s",1,,,1.2
+MNC-06__few_shot__s44,llama3,MNC-06,MNC,few_shot,3,44,block,0,tests,1 error in 0.15s,0,MNC L26 LEC=3,,1.1
+MNC-06__role__s42,llama3,MNC-06,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.14s",1,,,1.1
+MNC-06__role__s43,llama3,MNC-06,MNC,role,2,43,block,1,,3 passed in 0.08s,1,,,0.9
+MNC-06__role__s44,llama3,MNC-06,MNC,role,3,44,block,1,,3 passed in 0.05s,1,,,0.8
+MNC-07__chain_of_thought__s42,llama3,MNC-07,MNC,chain_of_thought,1,42,block,0,tests,3 failed in 1.38s,0,MNC L67 LEC=3 | MNC L68 LEC=3,,2.3
+MNC-07__chain_of_thought__s43,llama3,MNC-07,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 1.34s",1,,,2.3
+MNC-07__chain_of_thought__s44,llama3,MNC-07,MNC,chain_of_thought,3,44,block,1,,3 passed in 1.13s,0,MNC L79 LEC=3 | MNC L80 LEC=3,,2.0
+MNC-07__few_shot__s42,llama3,MNC-07,MNC,few_shot,1,42,block,0,tests,3 failed in 1.34s,0,MNC L53 LEC=3 | MNC L53 LEC=3,,2.2
+MNC-07__few_shot__s43,llama3,MNC-07,MNC,few_shot,2,43,block,0,tests,3 failed in 1.37s,0,MNC L65 LEC=3 | MNC L65 LEC=3,,2.3
+MNC-07__few_shot__s44,llama3,MNC-07,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 1.36s",0,MNC L55 LEC=3 | MNC L55 LEC=3,,2.3
+MNC-07__role__s42,llama3,MNC-07,MNC,role,1,42,block,1,,3 passed in 1.12s,0,MNC L74 LEC=3 | MNC L74 LEC=3,,2.0
+MNC-07__role__s43,llama3,MNC-07,MNC,role,2,43,block,1,,3 passed in 1.13s,0,MNC L72 LEC=3 | MNC L73 LEC=3,,2.1
+MNC-07__role__s44,llama3,MNC-07,MNC,role,3,44,block,1,,3 passed in 1.17s,0,MNC L74 LEC=3 | MNC L74 LEC=3,,2.1
+MNC-08__chain_of_thought__s42,llama3,MNC-08,MNC,chain_of_thought,1,42,block,0,tests,3 failed in 0.08s,0,MNC L43 LEC=3,,0.9
+MNC-08__chain_of_thought__s43,llama3,MNC-08,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,MNC L43 LEC=3,,0.9
+MNC-08__chain_of_thought__s44,llama3,MNC-08,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L36 LEC=3,,0.8
+MNC-08__few_shot__s42,llama3,MNC-08,MNC,few_shot,1,42,block,0,tests,3 failed in 0.08s,0,MNC L40 LEC=3,,0.8
+MNC-08__few_shot__s43,llama3,MNC-08,MNC,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.9
+MNC-08__few_shot__s44,llama3,MNC-08,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,MNC L42 LEC=3,,0.9
+MNC-08__role__s42,llama3,MNC-08,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L36 LEC=3,,0.9
+MNC-08__role__s43,llama3,MNC-08,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L39 LEC=3,,0.8
+MNC-08__role__s44,llama3,MNC-08,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L48 LEC=3,,0.8
+MNC-09__chain_of_thought__s42,llama3,MNC-09,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.11s",1,,,0.9
+MNC-09__chain_of_thought__s43,llama3,MNC-09,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.05s,1,,,0.8
+MNC-09__chain_of_thought__s44,llama3,MNC-09,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.11s",1,,,0.9
+MNC-09__few_shot__s42,llama3,MNC-09,MNC,few_shot,1,42,block,1,,3 passed in 0.04s,0,MNC L20 LEC=3,,0.8
+MNC-09__few_shot__s43,llama3,MNC-09,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,0,MNC L22 LEC=3,,0.9
+MNC-09__few_shot__s44,llama3,MNC-09,MNC,few_shot,3,44,block,1,,3 passed in 0.04s,1,,,0.8
+MNC-09__role__s42,llama3,MNC-09,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.11s",1,,,0.9
+MNC-09__role__s43,llama3,MNC-09,MNC,role,2,43,block,1,,3 passed in 0.05s,0,MNC L20 LEC=3,,0.8
+MNC-09__role__s44,llama3,MNC-09,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.11s",1,,,0.9
+MNC-10__chain_of_thought__s42,llama3,MNC-10,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.18s,0,MNC L34 LEC=3,,1.0
+MNC-10__chain_of_thought__s43,llama3,MNC-10,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.18s,1,,,0.9
+MNC-10__chain_of_thought__s44,llama3,MNC-10,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.18s,1,,,0.9
+MNC-10__few_shot__s42,llama3,MNC-10,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.25s",1,,,1.0
+MNC-10__few_shot__s43,llama3,MNC-10,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,0,MNC L23 LEC=3 | MNC L39 LEC=3,,0.9
+MNC-10__few_shot__s44,llama3,MNC-10,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.25s",0,MNC L37 LEC=3,,1.1
+MNC-10__role__s42,llama3,MNC-10,MNC,role,1,42,block,1,,3 passed in 0.19s,0,MNC L34 LEC=3,,1.0
+MNC-10__role__s43,llama3,MNC-10,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.28s",0,MNC L34 LEC=3,,1.1
+MNC-10__role__s44,llama3,MNC-10,MNC,role,3,44,block,1,,3 passed in 0.18s,0,MNC L34 LEC=3,,1.1
+MNC-11__chain_of_thought__s42,llama3,MNC-11,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.19s,1,,,1.1
+MNC-11__chain_of_thought__s43,llama3,MNC-11,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.19s,1,,,1.1
+MNC-11__chain_of_thought__s44,llama3,MNC-11,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.27s",1,,,1.1
+MNC-11__few_shot__s42,llama3,MNC-11,MNC,few_shot,1,42,block,0,tests,3 failed in 0.29s,1,,,1.2
+MNC-11__few_shot__s43,llama3,MNC-11,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.29s",0,MNC L37 LEC=3,,1.2
+MNC-11__few_shot__s44,llama3,MNC-11,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.29s",1,,,1.2
+MNC-11__role__s42,llama3,MNC-11,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.26s",0,MNC L57 LEC=3,,1.1
+MNC-11__role__s43,llama3,MNC-11,MNC,role,2,43,block,0,tests,3 failed in 0.28s,0,MNC L45 LEC=3 | MNC L80 LEC=3,,1.1
+MNC-11__role__s44,llama3,MNC-11,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.27s",0,MNC L41 LEC=3,,1.1
+MNC-12__chain_of_thought__s42,llama3,MNC-12,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.18s,1,,,1.0
+MNC-12__chain_of_thought__s43,llama3,MNC-12,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.17s,1,,,1.0
+MNC-12__chain_of_thought__s44,llama3,MNC-12,MNC,chain_of_thought,3,44,block,0,tests,1 error in 0.32s,1,,,1.1
+MNC-12__few_shot__s42,llama3,MNC-12,MNC,few_shot,1,42,block,1,,3 passed in 0.17s,0,MNC L68 LEC=3,,1.0
+MNC-12__few_shot__s43,llama3,MNC-12,MNC,few_shot,2,43,block,0,tests,1 error in 0.33s,0,MNC L21 LEC=3,,1.1
+MNC-12__few_shot__s44,llama3,MNC-12,MNC,few_shot,3,44,block,0,tests,3 failed in 0.29s,1,,,1.1
+MNC-12__role__s42,llama3,MNC-12,MNC,role,1,42,block,1,,3 passed in 0.20s,0,MNC L44 LEC=3,,1.0
+MNC-12__role__s43,llama3,MNC-12,MNC,role,2,43,block,1,,3 passed in 0.19s,0,MNC L55 LEC=3,,1.0
+MNC-12__role__s44,llama3,MNC-12,MNC,role,3,44,block,1,,3 passed in 0.19s,0,MNC L50 LEC=3,,1.1
+MNC-13__chain_of_thought__s42,llama3,MNC-13,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.17s,1,,,1.1
+MNC-13__chain_of_thought__s43,llama3,MNC-13,MNC,chain_of_thought,2,43,open fence,1,,3 passed in 0.17s,0,MNC L50 LEC=3 | MNC L50 LEC=3,,1.1
+MNC-13__chain_of_thought__s44,llama3,MNC-13,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.18s,1,,,1.1
+MNC-13__few_shot__s42,llama3,MNC-13,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.30s",0,MNC L31 LEC=3 | MNC L31 LEC=3,,1.2
+MNC-13__few_shot__s43,llama3,MNC-13,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.27s",0,MNC L19 LEC=3 | MNC L19 LEC=3,,1.3
+MNC-13__few_shot__s44,llama3,MNC-13,MNC,few_shot,3,44,block,0,tests,3 failed in 0.29s,0,MNC L46 LEC=3 | MNC L46 LEC=3,,1.4
+MNC-13__role__s42,llama3,MNC-13,MNC,role,1,42,block,0,tests,3 failed in 0.30s,0,MNC L48 LEC=3 | MNC L48 LEC=3,,1.4
+MNC-13__role__s43,llama3,MNC-13,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.31s",0,MNC L52 LEC=3 | MNC L52 LEC=3,,1.4
+MNC-13__role__s44,llama3,MNC-13,MNC,role,3,44,block,1,,3 passed in 0.15s,0,MNC L41 LEC=3 | MNC L41 LEC=3,,1.1
+MNC-14__chain_of_thought__s42,llama3,MNC-14,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.22s",1,,,1.0
+MNC-14__chain_of_thought__s43,llama3,MNC-14,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.23s",1,,,1.0
+MNC-14__chain_of_thought__s44,llama3,MNC-14,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.23s",1,,,1.0
+MNC-14__few_shot__s42,llama3,MNC-14,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.23s",1,,,1.0
+MNC-14__few_shot__s43,llama3,MNC-14,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.24s",0,MNC L11 LEC=4 | MNC L15 LEC=3,,1.0
+MNC-14__few_shot__s44,llama3,MNC-14,MNC,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.24s",0,MNC L20 LEC=4 | MNC L24 LEC=3,,1.0
+MNC-14__role__s42,llama3,MNC-14,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.23s",0,MNC L29 LEC=4 | MNC L32 LEC=3,,1.0
+MNC-14__role__s43,llama3,MNC-14,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.26s",0,MNC L29 LEC=4 | MNC L32 LEC=3,,1.0
+MNC-14__role__s44,llama3,MNC-14,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.23s",0,MNC L29 LEC=4 | MNC L32 LEC=3,,1.0
+MNC-16__chain_of_thought__s42,llama3,MNC-16,MNC,chain_of_thought,1,42,block,0,syntax,,,,,0
+MNC-16__chain_of_thought__s43,llama3,MNC-16,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5,,0.8
+MNC-16__chain_of_thought__s44,llama3,MNC-16,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L13 LEC=3 | MNC L32 LEC=4 | MNC L33 LEC=4 | MNC L33 LEC=4 | MNC L33 LEC=5 | MNC L35 LEC=4 | MNC L38 LEC=4 | MNC L38 LEC=4 | MNC L38 LEC=5,,0.8
+MNC-16__few_shot__s42,llama3,MNC-16,MNC,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,MNC L15 LEC=3 | MNC L20 LEC=3 | MNC L27 LEC=3,,0.8
+MNC-16__few_shot__s43,llama3,MNC-16,MNC,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,MNC L39 LEC=3 | MNC L44 LEC=3 | MNC L50 LEC=3,,0.9
+MNC-16__few_shot__s44,llama3,MNC-16,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L13 LEC=3,,0.9
+MNC-16__role__s42,llama3,MNC-16,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",0,MNC L25 LEC=3 | MNC L30 LEC=3 | MNC L38 LEC=3,,0.9
+MNC-16__role__s43,llama3,MNC-16,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L24 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=4 | MNC L25 LEC=5 | MNC L27 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=4 | MNC L30 LEC=5 | MNC L38 LEC=3,,0.8
+MNC-16__role__s44,llama3,MNC-16,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L26 LEC=3 | MNC L31 LEC=3 | MNC L39 LEC=3,,0.8
+MNC-17__chain_of_thought__s42,llama3,MNC-17,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,MNC L10 LEC=3,,0.8
+MNC-17__chain_of_thought__s43,llama3,MNC-17,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L9 LEC=3,,0.8
+MNC-17__chain_of_thought__s44,llama3,MNC-17,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,MNC L10 LEC=3,,0.8
+MNC-17__few_shot__s42,llama3,MNC-17,MNC,few_shot,1,42,block,0,tests,1 error in 0.15s,1,,,0.9
+MNC-17__few_shot__s43,llama3,MNC-17,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,1,,,0.9
+MNC-17__few_shot__s44,llama3,MNC-17,MNC,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.07s",1,,,0.8
+MNC-17__role__s42,llama3,MNC-17,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L16 LEC=3,,0.8
+MNC-17__role__s43,llama3,MNC-17,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L11 LEC=3,,0.8
+MNC-17__role__s44,llama3,MNC-17,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L10 LEC=3,,0.8
+MNC-18__chain_of_thought__s42,llama3,MNC-18,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+MNC-18__chain_of_thought__s43,llama3,MNC-18,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L35 LEC=3 | MNC L38 LEC=3 | MNC L48 LEC=3,,0.8
+MNC-18__chain_of_thought__s44,llama3,MNC-18,MNC,chain_of_thought,3,44,block,0,syntax,,,,,0
+MNC-18__few_shot__s42,llama3,MNC-18,MNC,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,MNC L46 LEC=3,,0.8
+MNC-18__few_shot__s43,llama3,MNC-18,MNC,few_shot,2,43,block,0,tests,3 failed in 0.09s,0,MNC L31 LEC=3,,0.8
+MNC-18__few_shot__s44,llama3,MNC-18,MNC,few_shot,3,44,block,0,tests,3 failed in 0.09s,0,MNC L38 LEC=3,,0.8
+MNC-18__role__s42,llama3,MNC-18,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",0,MNC L33 LEC=3,,0.8
+MNC-18__role__s43,llama3,MNC-18,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L35 LEC=3,,0.8
+MNC-18__role__s44,llama3,MNC-18,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L33 LEC=3,,0.8
+MNC-19__chain_of_thought__s42,llama3,MNC-19,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+MNC-19__chain_of_thought__s43,llama3,MNC-19,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.10s,1,,,0.8
+MNC-19__chain_of_thought__s44,llama3,MNC-19,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+MNC-19__few_shot__s42,llama3,MNC-19,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L28 LEC=3,,0.8
+MNC-19__few_shot__s43,llama3,MNC-19,MNC,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+MNC-19__few_shot__s44,llama3,MNC-19,MNC,few_shot,3,44,block,0,tests,3 failed in 0.09s,0,MNC L28 LEC=3,,0.8
+MNC-19__role__s42,llama3,MNC-19,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",0,MNC L28 LEC=4,,0.8
+MNC-19__role__s43,llama3,MNC-19,MNC,role,2,43,block,0,tests,3 failed in 0.09s,0,MNC L28 LEC=3,,0.8
+MNC-19__role__s44,llama3,MNC-19,MNC,role,3,44,block,0,tests,3 failed in 0.09s,0,MNC L28 LEC=4,,0.8
+MNC-20__chain_of_thought__s42,llama3,MNC-20,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,MNC L32 LEC=3,,0.8
+MNC-20__chain_of_thought__s43,llama3,MNC-20,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,MNC L35 LEC=3,,0.8
+MNC-20__chain_of_thought__s44,llama3,MNC-20,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,MNC L32 LEC=3,,0.8
+MNC-20__few_shot__s42,llama3,MNC-20,MNC,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.08s",1,,,0.8
+MNC-20__few_shot__s43,llama3,MNC-20,MNC,few_shot,2,43,block,0,tests,3 failed in 0.10s,1,,,0.8
+MNC-20__few_shot__s44,llama3,MNC-20,MNC,few_shot,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+MNC-20__role__s42,llama3,MNC-20,MNC,role,1,42,block,0,tests,3 failed in 0.08s,0,MNC L32 LEC=3,,0.8
+MNC-20__role__s43,llama3,MNC-20,MNC,role,2,43,block,0,tests,3 failed in 0.10s,0,MNC L33 LEC=3,,0.8
+MNC-20__role__s44,llama3,MNC-20,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L36 LEC=3 | MNC L39 LEC=3,,0.8
+MNC-21__chain_of_thought__s42,llama3,MNC-21,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.17s,0,MNC L87 LEC=3,,1.0
+MNC-21__chain_of_thought__s43,llama3,MNC-21,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.15s,0,MNC L84 LEC=3,,0.9
+MNC-21__chain_of_thought__s44,llama3,MNC-21,MNC,chain_of_thought,3,44,block,0,syntax,,,,,0
+MNC-21__few_shot__s42,llama3,MNC-21,MNC,few_shot,1,42,block,0,tests,3 failed in 0.27s,0,MNC L61 LEC=3,,1.0
+MNC-21__few_shot__s43,llama3,MNC-21,MNC,few_shot,2,43,block,0,tests,1 error in 0.33s,0,MNC L77 LEC=3,,1.1
+MNC-21__few_shot__s44,llama3,MNC-21,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.24s",0,MNC L21 LEC=3,,1.0
+MNC-21__role__s42,llama3,MNC-21,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.24s",0,MNC L83 LEC=3,,1.0
+MNC-21__role__s43,llama3,MNC-21,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.24s",0,MNC L84 LEC=3,,1.0
+MNC-21__role__s44,llama3,MNC-21,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.24s",0,MNC L84 LEC=3,,1.0
+LLF-01__chain_of_thought__s42,qwen,LLF-01,LLF,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.72s",1,,,1.6
+LLF-01__chain_of_thought__s43,qwen,LLF-01,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.57s,0,LLF L32 NOC=158;PAR=1;NOO=33,,1.4
+LLF-01__chain_of_thought__s44,qwen,LLF-01,LLF,chain_of_thought,3,44,block,0,tests,1 error in 0.17s,1,,,0.9
+LLF-01__few_shot__s42,qwen,LLF-01,LLF,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.71s",1,,,1.5
+LLF-01__few_shot__s43,qwen,LLF-01,LLF,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.68s",1,,,1.6
+LLF-01__few_shot__s44,qwen,LLF-01,LLF,few_shot,3,44,block,1,,3 passed in 0.54s,0,LLF L29 NOC=161;PAR=1;NOO=23,,1.4
+LLF-01__role__s42,qwen,LLF-01,LLF,role,1,42,block,1,,3 passed in 0.57s,0,LLF L29 NOC=161;PAR=1;NOO=23,,1.5
+LLF-01__role__s43,qwen,LLF-01,LLF,role,2,43,block,1,,3 passed in 0.60s,0,LLF L19 NOC=141;PAR=1;NOO=32,,1.4
+LLF-01__role__s44,qwen,LLF-01,LLF,role,3,44,block,1,,3 passed in 0.57s,0,LLF L29 NOC=149;PAR=1;NOO=22,,1.5
+LLF-02__chain_of_thought__s42,qwen,LLF-02,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LLF-02__chain_of_thought__s43,qwen,LLF-02,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-02__chain_of_thought__s44,qwen,LLF-02,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-02__few_shot__s42,qwen,LLF-02,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-02__few_shot__s43,qwen,LLF-02,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-02__few_shot__s44,qwen,LLF-02,LLF,few_shot,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-02__role__s42,qwen,LLF-02,LLF,role,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-02__role__s43,qwen,LLF-02,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-02__role__s44,qwen,LLF-02,LLF,role,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__chain_of_thought__s42,qwen,LLF-03,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LLF-03__chain_of_thought__s43,qwen,LLF-03,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__chain_of_thought__s44,qwen,LLF-03,LLF,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.8
+LLF-03__few_shot__s42,qwen,LLF-03,LLF,few_shot,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-03__few_shot__s43,qwen,LLF-03,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__few_shot__s44,qwen,LLF-03,LLF,few_shot,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.7
+LLF-03__role__s42,qwen,LLF-03,LLF,role,1,42,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__role__s43,qwen,LLF-03,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-03__role__s44,qwen,LLF-03,LLF,role,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=73;PAR=1;NOO=20,,0.8
+LLF-04__chain_of_thought__s42,qwen,LLF-04,LLF,chain_of_thought,1,42,block,0,tests,1 error in 0.16s,1,,,0.9
+LLF-04__chain_of_thought__s43,qwen,LLF-04,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-04__chain_of_thought__s44,qwen,LLF-04,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LLF L21 NOC=82;PAR=1;NOO=23,,0.8
+LLF-04__few_shot__s42,qwen,LLF-04,LLF,few_shot,1,42,block,1,,3 passed in 0.02s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.8
+LLF-04__few_shot__s43,qwen,LLF-04,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.8
+LLF-04__few_shot__s44,qwen,LLF-04,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-04__role__s42,qwen,LLF-04,LLF,role,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-04__role__s43,qwen,LLF-04,LLF,role,2,43,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-04__role__s44,qwen,LLF-04,LLF,role,3,44,block,1,,3 passed in 0.01s,0,LLF L20 NOC=82;PAR=1;NOO=23,,0.8
+LLF-05__chain_of_thought__s42,qwen,LLF-05,LLF,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.9
+LLF-05__chain_of_thought__s43,qwen,LLF-05,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-05__chain_of_thought__s44,qwen,LLF-05,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LLF-05__few_shot__s42,qwen,LLF-05,LLF,few_shot,1,42,block,1,,3 passed in 0.03s,1,,,0.8
+LLF-05__few_shot__s43,qwen,LLF-05,LLF,few_shot,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-05__few_shot__s44,qwen,LLF-05,LLF,few_shot,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-05__role__s42,qwen,LLF-05,LLF,role,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-05__role__s43,qwen,LLF-05,LLF,role,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-05__role__s44,qwen,LLF-05,LLF,role,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LLF-06__chain_of_thought__s42,qwen,LLF-06,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L9 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__chain_of_thought__s43,qwen,LLF-06,LLF,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 1.19s",1,,,2.0
+LLF-06__chain_of_thought__s44,qwen,LLF-06,LLF,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,LLF L15 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__few_shot__s42,qwen,LLF-06,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 1.19s",1,,,1.9
+LLF-06__few_shot__s43,qwen,LLF-06,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 1.20s",1,,,2.0
+LLF-06__few_shot__s44,qwen,LLF-06,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L16 NOC=76;PAR=1;NOO=20,,0.9
+LLF-06__role__s42,qwen,LLF-06,LLF,role,1,42,block,0,tests,3 failed in 1.28s,1,,,2.0
+LLF-06__role__s43,qwen,LLF-06,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",0,LLF L27 NOC=76;PAR=1;NOO=20,,0.8
+LLF-06__role__s44,qwen,LLF-06,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.8
+LLF-07__chain_of_thought__s42,qwen,LLF-07,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L9 NOC=76;PAR=1;NOO=20,,0.8
+LLF-07__chain_of_thought__s43,qwen,LLF-07,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LLF L28 NOC=76;PAR=1;NOO=20,,0.8
+LLF-07__chain_of_thought__s44,qwen,LLF-07,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-07__few_shot__s42,qwen,LLF-07,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 1.16s",1,,,1.9
+LLF-07__few_shot__s43,qwen,LLF-07,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-07__few_shot__s44,qwen,LLF-07,LLF,few_shot,3,44,block,1,,3 passed in 0.02s,0,LLF L16 NOC=76;PAR=1;NOO=20,,0.8
+LLF-07__role__s42,qwen,LLF-07,LLF,role,1,42,block,0,tests,3 failed in 1.17s,1,,,1.9
+LLF-07__role__s43,qwen,LLF-07,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-07__role__s44,qwen,LLF-07,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.07s",1,,,0.8
+LLF-08__chain_of_thought__s42,qwen,LLF-08,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,1.0
+LLF-08__chain_of_thought__s43,qwen,LLF-08,LLF,chain_of_thought,2,43,block,0,tests,1 error in 0.16s,1,,,1.1
+LLF-08__chain_of_thought__s44,qwen,LLF-08,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,1.0
+LLF-08__few_shot__s42,qwen,LLF-08,LLF,few_shot,1,42,block,0,tests,3 failed in 0.08s,1,,,0.8
+LLF-08__few_shot__s43,qwen,LLF-08,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L15 NOC=85;PAR=1;NOO=23,,0.8
+LLF-08__few_shot__s44,qwen,LLF-08,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-08__role__s42,qwen,LLF-08,LLF,role,1,42,block,1,,3 passed in 0.01s,0,LLF L9 NOC=85;PAR=1;NOO=23,,0.8
+LLF-08__role__s43,qwen,LLF-08,LLF,role,2,43,block,1,,3 passed in 0.01s,0,LLF L15 NOC=85;PAR=1;NOO=23,,0.8
+LLF-08__role__s44,qwen,LLF-08,LLF,role,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-09__chain_of_thought__s42,qwen,LLF-09,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LLF L15 NOC=87;PAR=1;NOO=23,,0.8
+LLF-09__chain_of_thought__s43,qwen,LLF-09,LLF,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LLF-09__chain_of_thought__s44,qwen,LLF-09,LLF,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,1,,,0.9
+LLF-09__few_shot__s42,qwen,LLF-09,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-09__few_shot__s43,qwen,LLF-09,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L15 NOC=87;PAR=1;NOO=23,,0.8
+LLF-09__few_shot__s44,qwen,LLF-09,LLF,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-09__role__s42,qwen,LLF-09,LLF,role,1,42,block,1,,3 passed in 0.02s,0,LLF L9 NOC=87;PAR=1;NOO=23,,0.8
+LLF-09__role__s43,qwen,LLF-09,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LLF-09__role__s44,qwen,LLF-09,LLF,role,3,44,block,0,tests,3 failed in 0.09s,1,,,0.9
+LLF-10__chain_of_thought__s42,qwen,LLF-10,LLF,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-10__chain_of_thought__s43,qwen,LLF-10,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LLF L8 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__chain_of_thought__s44,qwen,LLF-10,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,1.0
+LLF-10__few_shot__s42,qwen,LLF-10,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,1.0
+LLF-10__few_shot__s43,qwen,LLF-10,LLF,few_shot,2,43,block,1,,3 passed in 0.02s,0,LLF L16 NOC=86;PAR=1;NOO=23,,0.9
+LLF-10__few_shot__s44,qwen,LLF-10,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,1.0
+LLF-10__role__s42,qwen,LLF-10,LLF,role,1,42,block,1,,3 passed in 0.02s,0,LLF L9 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__role__s43,qwen,LLF-10,LLF,role,2,43,block,1,,3 passed in 0.02s,0,LLF L15 NOC=86;PAR=1;NOO=23,,0.8
+LLF-10__role__s44,qwen,LLF-10,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-11__chain_of_thought__s42,qwen,LLF-11,LLF,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LLF L15 NOC=104;PAR=1;NOO=28 | LLF L15 NOC=76;PAR=1;NOO=20,,0.8
+LLF-11__chain_of_thought__s43,qwen,LLF-11,LLF,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,LLF L9 NOC=104;PAR=1;NOO=28 | LLF L9 NOC=76;PAR=1;NOO=20,,0.7
+LLF-11__chain_of_thought__s44,qwen,LLF-11,LLF,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-11__few_shot__s42,qwen,LLF-11,LLF,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-11__few_shot__s43,qwen,LLF-11,LLF,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 1.28s",1,,,2.0
+LLF-11__few_shot__s44,qwen,LLF-11,LLF,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LLF-11__role__s42,qwen,LLF-11,LLF,role,1,42,block,0,tests,3 failed in 1.38s,1,,,2.1
+LLF-11__role__s43,qwen,LLF-11,LLF,role,2,43,block,0,tests,"2 failed, 1 passed in 1.28s",1,,,2.1
+LLF-11__role__s44,qwen,LLF-11,LLF,role,3,44,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.9
+LM-01__chain_of_thought__s42,qwen,LM-01,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.18s,1,,LPL L62 PAR=5,1.0
+LM-01__chain_of_thought__s43,qwen,LM-01,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L81 PAR=5,1.0
+LM-01__chain_of_thought__s44,qwen,LM-01,LM,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.13s",1,,,1.0
+LM-01__few_shot__s42,qwen,LM-01,LM,few_shot,1,42,block,0,tests,3 failed in 0.16s,1,,,1.0
+LM-01__few_shot__s43,qwen,LM-01,LM,few_shot,2,43,block,0,tests,3 failed in 0.17s,1,,LPL L99 PAR=5,1.0
+LM-01__few_shot__s44,qwen,LM-01,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-01__role__s42,qwen,LM-01,LM,role,1,42,block,0,tests,3 failed in 0.12s,1,,LPL L78 PAR=7,1.0
+LM-01__role__s43,qwen,LM-01,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.14s",1,,,1.0
+LM-01__role__s44,qwen,LM-01,LM,role,3,44,block,0,tests,"1 failed, 2 passed in 0.12s",1,,LPL L73 PAR=5,1.0
+LM-03__chain_of_thought__s42,qwen,LM-03,LM,chain_of_thought,1,42,block,1,,3 passed in 0.03s,1,,,0.9
+LM-03__chain_of_thought__s43,qwen,LM-03,LM,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.9
+LM-03__chain_of_thought__s44,qwen,LM-03,LM,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.9
+LM-03__few_shot__s42,qwen,LM-03,LM,few_shot,1,42,block,1,,3 passed in 0.02s,1,,,0.9
+LM-03__few_shot__s43,qwen,LM-03,LM,few_shot,2,43,block,1,,3 passed in 0.02s,0,LM L10 MLOC=54,,0.9
+LM-03__few_shot__s44,qwen,LM-03,LM,few_shot,3,44,block,1,,3 passed in 0.04s,1,,,0.9
+LM-03__role__s42,qwen,LM-03,LM,role,1,42,block,1,,3 passed in 0.03s,1,,,0.9
+LM-03__role__s43,qwen,LM-03,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,1.0
+LM-03__role__s44,qwen,LM-03,LM,role,3,44,block,1,,3 passed in 0.02s,1,,,0.9
+LM-04__chain_of_thought__s42,qwen,LM-04,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.13s",1,,,1.0
+LM-04__chain_of_thought__s43,qwen,LM-04,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,0.9
+LM-04__chain_of_thought__s44,qwen,LM-04,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LM-04__few_shot__s42,qwen,LM-04,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,1.0
+LM-04__few_shot__s43,qwen,LM-04,LM,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",1,,,1.0
+LM-04__few_shot__s44,qwen,LM-04,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LM-04__role__s42,qwen,LM-04,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,1.0
+LM-04__role__s43,qwen,LM-04,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.11s",1,,,1.0
+LM-04__role__s44,qwen,LM-04,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LM-05__chain_of_thought__s42,qwen,LM-05,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,1.0
+LM-05__chain_of_thought__s43,qwen,LM-05,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__chain_of_thought__s44,qwen,LM-05,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__few_shot__s42,qwen,LM-05,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.17s",1,,,1.0
+LM-05__few_shot__s43,qwen,LM-05,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,0.9
+LM-05__few_shot__s44,qwen,LM-05,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.0
+LM-05__role__s42,qwen,LM-05,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.19s",1,,,1.0
+LM-05__role__s43,qwen,LM-05,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,1.0
+LM-05__role__s44,qwen,LM-05,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.16s",1,,,0.9
+LM-06__chain_of_thought__s42,qwen,LM-06,LM,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LM-06__chain_of_thought__s43,qwen,LM-06,LM,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LM-06__chain_of_thought__s44,qwen,LM-06,LM,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+LM-06__few_shot__s42,qwen,LM-06,LM,few_shot,1,42,block,1,,3 passed in 0.03s,1,,,0.8
+LM-06__few_shot__s43,qwen,LM-06,LM,few_shot,2,43,block,1,,3 passed in 0.03s,1,,,0.8
+LM-06__few_shot__s44,qwen,LM-06,LM,few_shot,3,44,block,0,syntax,,,,,0
+LM-06__role__s42,qwen,LM-06,LM,role,1,42,block,1,,3 passed in 0.03s,1,,,0.8
+LM-06__role__s43,qwen,LM-06,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.9
+LM-06__role__s44,qwen,LM-06,LM,role,3,44,block,0,tests,3 failed in 0.11s,1,,,0.9
+LM-07__chain_of_thought__s42,qwen,LM-07,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.12s,1,,LPL L23 PAR=6,0.9
+LM-07__chain_of_thought__s43,qwen,LM-07,LM,chain_of_thought,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L23 PAR=6,0.9
+LM-07__chain_of_thought__s44,qwen,LM-07,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.13s,1,,LPL L53 PAR=6,0.9
+LM-07__few_shot__s42,qwen,LM-07,LM,few_shot,1,42,block,0,tests,3 failed in 0.12s,1,,LPL L49 PAR=6,0.9
+LM-07__few_shot__s43,qwen,LM-07,LM,few_shot,2,43,block,0,tests,3 failed in 0.12s,1,,,0.9
+LM-07__few_shot__s44,qwen,LM-07,LM,few_shot,3,44,block,0,tests,3 failed in 0.12s,1,,,0.9
+LM-07__role__s42,qwen,LM-07,LM,role,1,42,block,0,tests,3 failed in 0.11s,1,,LPL L23 PAR=6,0.9
+LM-07__role__s43,qwen,LM-07,LM,role,2,43,block,0,tests,3 failed in 0.12s,1,,LPL L23 PAR=6,0.9
+LM-07__role__s44,qwen,LM-07,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.13s",1,,LPL L23 PAR=6,0.9
+LM-09__chain_of_thought__s42,qwen,LM-09,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.13s",1,,,0.9
+LM-09__chain_of_thought__s43,qwen,LM-09,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.26s",1,,,1.0
+LM-09__chain_of_thought__s44,qwen,LM-09,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.16s",1,,LPL L76 PAR=5,1.0
+LM-09__few_shot__s42,qwen,LM-09,LM,few_shot,1,42,block,0,tests,3 failed in 0.12s,1,,,1.0
+LM-09__few_shot__s43,qwen,LM-09,LM,few_shot,2,43,block,1,,3 passed in 0.07s,0,LM L49 MLOC=83,,1.0
+LM-09__few_shot__s44,qwen,LM-09,LM,few_shot,3,44,block,1,,3 passed in 0.07s,0,LM L48 MLOC=83,,0.8
+LM-09__role__s42,qwen,LM-09,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.14s",0,LM L52 MLOC=55,,0.9
+LM-09__role__s43,qwen,LM-09,LM,role,2,43,block,1,,3 passed in 0.08s,0,LM L62 MLOC=75,LPL L49 PAR=5,0.8
+LM-09__role__s44,qwen,LM-09,LM,role,3,44,block,0,tests,"1 failed, 2 passed in 0.14s",0,LM L49 MLOC=55,,0.9
+LM-10__chain_of_thought__s42,qwen,LM-10,LM,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.8
+LM-10__chain_of_thought__s43,qwen,LM-10,LM,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.08s",0,LM L38 MLOC=71,,0.8
+LM-10__chain_of_thought__s44,qwen,LM-10,LM,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,LM L61 MLOC=57,,0.9
+LM-10__few_shot__s42,qwen,LM-10,LM,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",1,,LPL L41 PAR=5,0.9
+LM-10__few_shot__s43,qwen,LM-10,LM,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,LPL L29 PAR=5,0.9
+LM-10__few_shot__s44,qwen,LM-10,LM,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,LPL L25 PAR=5,0.8
+LM-10__role__s42,qwen,LM-10,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.09s",1,,LPL L19 PAR=5 | LPL L41 PAR=5,0.8
+LM-10__role__s43,qwen,LM-10,LM,role,2,43,block,0,tests,3 failed in 0.09s,1,,LPL L19 PAR=5,0.8
+LM-10__role__s44,qwen,LM-10,LM,role,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",1,,,0.8
+LM-11__chain_of_thought__s42,qwen,LM-11,LM,chain_of_thought,1,42,block,0,tests,3 failed in 0.08s,1,,,0.8
+LM-11__chain_of_thought__s43,qwen,LM-11,LM,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-11__chain_of_thought__s44,qwen,LM-11,LM,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__few_shot__s42,qwen,LM-11,LM,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__few_shot__s43,qwen,LM-11,LM,few_shot,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LM-11__few_shot__s44,qwen,LM-11,LM,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LM-11__role__s42,qwen,LM-11,LM,role,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-11__role__s43,qwen,LM-11,LM,role,2,43,block,0,tests,"2 failed, 1 passed in 0.08s",1,,,0.8
+LM-11__role__s44,qwen,LM-11,LM,role,3,44,block,1,,3 passed in 0.01s,0,LM L7 MLOC=63,,0.8
+LPL-01__chain_of_thought__s42,qwen,LPL-01,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.09s,0,LPL L118 PAR=6,,0.9
+LPL-01__chain_of_thought__s43,qwen,LPL-01,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.09s,0,LPL L115 PAR=6,,0.9
+LPL-01__chain_of_thought__s44,qwen,LPL-01,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.08s,0,LPL L118 PAR=6,,0.9
+LPL-01__few_shot__s42,qwen,LPL-01,LPL,few_shot,1,42,block,0,tests,1 error in 0.20s,1,,,1.0
+LPL-01__few_shot__s43,qwen,LPL-01,LPL,few_shot,2,43,block,0,tests,3 failed in 0.13s,1,,,1.0
+LPL-01__few_shot__s44,qwen,LPL-01,LPL,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,1.0
+LPL-01__role__s42,qwen,LPL-01,LPL,role,1,42,block,1,,3 passed in 0.08s,1,,,0.9
+LPL-01__role__s43,qwen,LPL-01,LPL,role,2,43,block,1,,3 passed in 0.08s,1,,,0.9
+LPL-01__role__s44,qwen,LPL-01,LPL,role,3,44,block,1,,3 passed in 0.09s,1,,,0.9
+LPL-02__chain_of_thought__s42,qwen,LPL-02,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.08s,0,LPL L118 PAR=6,,0.9
+LPL-02__chain_of_thought__s43,qwen,LPL-02,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.07s,0,LPL L115 PAR=6,,1.0
+LPL-02__chain_of_thought__s44,qwen,LPL-02,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.08s,0,LPL L118 PAR=6,,0.9
+LPL-02__few_shot__s42,qwen,LPL-02,LPL,few_shot,1,42,block,0,tests,1 error in 0.21s,1,,,1.1
+LPL-02__few_shot__s43,qwen,LPL-02,LPL,few_shot,2,43,block,0,tests,3 failed in 0.11s,1,,,1.0
+LPL-02__few_shot__s44,qwen,LPL-02,LPL,few_shot,3,44,block,0,tests,3 failed in 0.11s,1,,,1.0
+LPL-02__role__s42,qwen,LPL-02,LPL,role,1,42,block,1,,3 passed in 0.08s,1,,,0.9
+LPL-02__role__s43,qwen,LPL-02,LPL,role,2,43,block,1,,3 passed in 0.07s,1,,,0.9
+LPL-02__role__s44,qwen,LPL-02,LPL,role,3,44,block,1,,3 passed in 0.08s,1,,,0.9
+LPL-03__chain_of_thought__s42,qwen,LPL-03,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.03s,0,LPL L41 PAR=8 | LPL L81 PAR=5 | LPL L83 PAR=7,,0.9
+LPL-03__chain_of_thought__s43,qwen,LPL-03,LPL,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",0,LPL L39 PAR=5 | LPL L71 PAR=5 | LPL L74 PAR=6,,0.9
+LPL-03__chain_of_thought__s44,qwen,LPL-03,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L39 PAR=5 | LPL L71 PAR=5 | LPL L73 PAR=7,,0.9
+LPL-03__few_shot__s42,qwen,LPL-03,LPL,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.10s",0,LPL L69 PAR=5 | LPL L71 PAR=7,,1.0
+LPL-03__few_shot__s43,qwen,LPL-03,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,LPL L50 PAR=6,,0.9
+LPL-03__few_shot__s44,qwen,LPL-03,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",0,LPL L76 PAR=5 | LPL L78 PAR=7,,0.9
+LPL-03__role__s42,qwen,LPL-03,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.08s",0,LPL L39 PAR=5 | LPL L71 PAR=5 | LPL L73 PAR=7,,0.8
+LPL-03__role__s43,qwen,LPL-03,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L42 PAR=6,,0.8
+LPL-03__role__s44,qwen,LPL-03,LPL,role,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L58 PAR=5 | LPL L70 PAR=6,,0.8
+LPL-04__chain_of_thought__s42,qwen,LPL-04,LPL,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L39 PAR=5 | LPL L86 PAR=7 | LPL L98 PAR=7 | LPL L105 PAR=5,,0.8
+LPL-04__chain_of_thought__s43,qwen,LPL-04,LPL,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L39 PAR=5 | LPL L105 PAR=5,,0.8
+LPL-04__chain_of_thought__s44,qwen,LPL-04,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L39 PAR=5 | LPL L106 PAR=5,,0.8
+LPL-04__few_shot__s42,qwen,LPL-04,LPL,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.11s",0,LPL L89 PAR=6 | LPL L107 PAR=6,,0.9
+LPL-04__few_shot__s43,qwen,LPL-04,LPL,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",0,LPL L42 PAR=5 | LPL L88 PAR=5 | LPL L90 PAR=7 | LPL L108 PAR=7,,0.9
+LPL-04__few_shot__s44,qwen,LPL-04,LPL,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L88 PAR=6 | LPL L105 PAR=6,,0.9
+LPL-04__role__s42,qwen,LPL-04,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.10s",0,LPL L39 PAR=5 | LPL L88 PAR=5 | LPL L90 PAR=7 | LPL L108 PAR=7,,0.9
+LPL-04__role__s43,qwen,LPL-04,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L42 PAR=6 | LPL L88 PAR=5,,0.8
+LPL-04__role__s44,qwen,LPL-04,LPL,role,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L85 PAR=5 | LPL L87 PAR=7 | LPL L105 PAR=7,,0.9
+LPL-05__chain_of_thought__s42,qwen,LPL-05,LPL,chain_of_thought,1,42,block,0,tests,1 error in 0.15s,0,LPL L60 PAR=5,,0.9
+LPL-05__chain_of_thought__s43,qwen,LPL-05,LPL,chain_of_thought,2,43,block,0,tests,1 error in 0.15s,0,LPL L17 PAR=5,,0.9
+LPL-05__chain_of_thought__s44,qwen,LPL-05,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L60 PAR=5,,0.8
+LPL-05__few_shot__s42,qwen,LPL-05,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-05__few_shot__s43,qwen,LPL-05,LPL,few_shot,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-05__few_shot__s44,qwen,LPL-05,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,0,LPL L53 PAR=5,,0.8
+LPL-05__role__s42,qwen,LPL-05,LPL,role,1,42,block,0,tests,3 failed in 0.10s,1,,,0.8
+LPL-05__role__s43,qwen,LPL-05,LPL,role,2,43,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-05__role__s44,qwen,LPL-05,LPL,role,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-06__chain_of_thought__s42,qwen,LPL-06,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.07s,0,LPL L16 PAR=6,,0.8
+LPL-06__chain_of_thought__s43,qwen,LPL-06,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.13s,0,LPL L14 PAR=6,,0.9
+LPL-06__chain_of_thought__s44,qwen,LPL-06,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.14s,0,LPL L16 PAR=6,,0.9
+LPL-06__few_shot__s42,qwen,LPL-06,LPL,few_shot,1,42,block,0,tests,3 failed in 0.15s,0,LPL L15 PAR=6,,0.9
+LPL-06__few_shot__s43,qwen,LPL-06,LPL,few_shot,2,43,block,0,tests,3 failed in 0.17s,0,LPL L16 PAR=6,,0.9
+LPL-06__few_shot__s44,qwen,LPL-06,LPL,few_shot,3,44,block,0,tests,3 failed in 0.12s,1,,,0.9
+LPL-06__role__s42,qwen,LPL-06,LPL,role,1,42,block,0,tests,3 failed in 0.13s,0,LPL L15 PAR=6,,0.9
+LPL-06__role__s43,qwen,LPL-06,LPL,role,2,43,block,0,tests,3 failed in 0.14s,0,LPL L14 PAR=6,,0.9
+LPL-06__role__s44,qwen,LPL-06,LPL,role,3,44,block,0,tests,3 failed in 0.13s,0,LPL L50 PAR=6,,0.9
+LPL-07__chain_of_thought__s42,qwen,LPL-07,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.14s,0,LPL L16 PAR=6,,0.9
+LPL-07__chain_of_thought__s43,qwen,LPL-07,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.13s,0,LPL L14 PAR=6,,0.9
+LPL-07__chain_of_thought__s44,qwen,LPL-07,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.14s,0,LPL L14 PAR=6 | LPL L39 PAR=5,,0.9
+LPL-07__few_shot__s42,qwen,LPL-07,LPL,few_shot,1,42,block,0,tests,3 failed in 0.15s,1,,,0.9
+LPL-07__few_shot__s43,qwen,LPL-07,LPL,few_shot,2,43,block,0,tests,3 failed in 0.13s,1,,,0.9
+LPL-07__few_shot__s44,qwen,LPL-07,LPL,few_shot,3,44,block,0,tests,3 failed in 0.13s,0,LPL L16 PAR=6,,0.9
+LPL-07__role__s42,qwen,LPL-07,LPL,role,1,42,block,0,tests,3 failed in 0.14s,0,LPL L48 PAR=6,,0.9
+LPL-07__role__s43,qwen,LPL-07,LPL,role,2,43,block,0,tests,3 failed in 0.15s,0,LPL L48 PAR=6,,0.9
+LPL-07__role__s44,qwen,LPL-07,LPL,role,3,44,block,0,tests,3 failed in 0.13s,0,LPL L14 PAR=6,,0.9
+LPL-08__chain_of_thought__s42,qwen,LPL-08,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.14s,0,LPL L14 PAR=6,,0.9
+LPL-08__chain_of_thought__s43,qwen,LPL-08,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.06s,0,LPL L16 PAR=6,,0.8
+LPL-08__chain_of_thought__s44,qwen,LPL-08,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.14s,0,LPL L14 PAR=6,,0.9
+LPL-08__few_shot__s42,qwen,LPL-08,LPL,few_shot,1,42,block,0,tests,1 error in 0.16s,1,,,1.0
+LPL-08__few_shot__s43,qwen,LPL-08,LPL,few_shot,2,43,block,0,tests,3 failed in 0.21s,1,,,1.1
+LPL-08__few_shot__s44,qwen,LPL-08,LPL,few_shot,3,44,block,0,tests,3 failed in 0.13s,0,LPL L16 PAR=6,,1.0
+LPL-08__role__s42,qwen,LPL-08,LPL,role,1,42,block,0,tests,3 failed in 0.15s,0,LPL L41 PAR=6,,1.0
+LPL-08__role__s43,qwen,LPL-08,LPL,role,2,43,block,0,tests,3 failed in 0.15s,0,LPL L48 PAR=6,,1.0
+LPL-08__role__s44,qwen,LPL-08,LPL,role,3,44,block,0,tests,3 failed in 0.14s,0,LPL L14 PAR=6,,1.0
+LPL-09__chain_of_thought__s42,qwen,LPL-09,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.27s,0,LPL L26 PAR=5 | LPL L46 PAR=5,,1.1
+LPL-09__chain_of_thought__s43,qwen,LPL-09,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.24s,0,LPL L26 PAR=5 | LPL L46 PAR=5,,1.1
+LPL-09__chain_of_thought__s44,qwen,LPL-09,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.22s,0,LPL L44 PAR=5,,1.1
+LPL-09__few_shot__s42,qwen,LPL-09,LPL,few_shot,1,42,block,0,tests,3 failed in 0.23s,0,LPL L26 PAR=5 | LPL L46 PAR=5,,1.1
+LPL-09__few_shot__s43,qwen,LPL-09,LPL,few_shot,2,43,block,1,,3 passed in 0.18s,1,,,1.0
+LPL-09__few_shot__s44,qwen,LPL-09,LPL,few_shot,3,44,block,1,,3 passed in 0.18s,1,,,1.0
+LPL-09__role__s42,qwen,LPL-09,LPL,role,1,42,block,1,,3 passed in 0.17s,0,LPL L26 PAR=5 | LPL L44 PAR=5,,1.1
+LPL-09__role__s43,qwen,LPL-09,LPL,role,2,43,block,1,,3 passed in 0.16s,1,,,1.1
+LPL-09__role__s44,qwen,LPL-09,LPL,role,3,44,block,1,,3 passed in 0.18s,1,,,1.1
+LPL-10__chain_of_thought__s42,qwen,LPL-10,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.25s,0,LPL L33 PAR=7,,1.1
+LPL-10__chain_of_thought__s43,qwen,LPL-10,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.22s,0,LPL L33 PAR=7,,1.1
+LPL-10__chain_of_thought__s44,qwen,LPL-10,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.26s",0,LPL L50 PAR=7,,1.1
+LPL-10__few_shot__s42,qwen,LPL-10,LPL,few_shot,1,42,block,1,,3 passed in 0.17s,1,,,1.1
+LPL-10__few_shot__s43,qwen,LPL-10,LPL,few_shot,2,43,block,1,,3 passed in 0.17s,1,,,1.1
+LPL-10__few_shot__s44,qwen,LPL-10,LPL,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.26s",0,LPL L33 PAR=5,,1.2
+LPL-10__role__s42,qwen,LPL-10,LPL,role,1,42,block,1,,3 passed in 0.15s,1,,,1.0
+LPL-10__role__s43,qwen,LPL-10,LPL,role,2,43,block,1,,3 passed in 0.16s,1,,,1.0
+LPL-10__role__s44,qwen,LPL-10,LPL,role,3,44,block,0,tests,3 failed in 0.22s,1,,,1.1
+LPL-11__chain_of_thought__s42,qwen,LPL-11,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.20s,0,LPL L33 PAR=6,,1.0
+LPL-11__chain_of_thought__s43,qwen,LPL-11,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.22s,0,LPL L33 PAR=6,,1.0
+LPL-11__chain_of_thought__s44,qwen,LPL-11,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.21s,0,LPL L33 PAR=6,,1.0
+LPL-11__few_shot__s42,qwen,LPL-11,LPL,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.23s",1,,,1.0
+LPL-11__few_shot__s43,qwen,LPL-11,LPL,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.24s",0,LPL L33 PAR=5,,1.0
+LPL-11__few_shot__s44,qwen,LPL-11,LPL,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.26s",1,,,1.0
+LPL-11__role__s42,qwen,LPL-11,LPL,role,1,42,block,0,tests,"2 failed, 1 passed in 0.23s",0,LPL L33 PAR=5,,1.0
+LPL-11__role__s43,qwen,LPL-11,LPL,role,2,43,block,0,tests,"2 failed, 1 passed in 0.23s",0,LPL L33 PAR=5,,1.0
+LPL-11__role__s44,qwen,LPL-11,LPL,role,3,44,block,1,,3 passed in 0.15s,1,,,0.9
+LPL-12__chain_of_thought__s42,qwen,LPL-12,LPL,chain_of_thought,1,42,block,1,,"3 passed, 1 warning in 1.11s",0,LPL L13 PAR=6,,2.0
+LPL-12__chain_of_thought__s43,qwen,LPL-12,LPL,chain_of_thought,2,43,block,1,,"3 passed, 1 warning in 1.08s",0,LPL L12 PAR=6,,2.0
+LPL-12__chain_of_thought__s44,qwen,LPL-12,LPL,chain_of_thought,3,44,block,1,,"3 passed, 1 warning in 1.09s",1,,,2.0
+LPL-12__few_shot__s42,qwen,LPL-12,LPL,few_shot,1,42,block,1,,"3 passed, 1 warning in 1.08s",1,,,2.0
+LPL-12__few_shot__s43,qwen,LPL-12,LPL,few_shot,2,43,block,0,tests,1 error in 1.39s,1,,,2.3
+LPL-12__few_shot__s44,qwen,LPL-12,LPL,few_shot,3,44,block,1,,"3 passed, 1 warning in 1.08s",1,,,2.0
+LPL-12__role__s42,qwen,LPL-12,LPL,role,1,42,block,1,,"3 passed, 1 warning in 1.10s",0,LPL L13 PAR=6,,2.0
+LPL-12__role__s43,qwen,LPL-12,LPL,role,2,43,block,1,,"3 passed, 1 warning in 1.09s",0,LPL L13 PAR=6,,2.0
+LPL-12__role__s44,qwen,LPL-12,LPL,role,3,44,block,1,,"3 passed, 1 warning in 1.13s",1,,,2.1
+LPL-13__chain_of_thought__s42,qwen,LPL-13,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L8 PAR=11,,0.8
+LPL-13__chain_of_thought__s43,qwen,LPL-13,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L8 PAR=11,,0.8
+LPL-13__chain_of_thought__s44,qwen,LPL-13,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,LPL L8 PAR=11,,0.8
+LPL-13__few_shot__s42,qwen,LPL-13,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.9
+LPL-13__few_shot__s43,qwen,LPL-13,LPL,few_shot,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+LPL-13__few_shot__s44,qwen,LPL-13,LPL,few_shot,3,44,block,0,tests,3 failed in 0.08s,1,,,0.8
+LPL-13__role__s42,qwen,LPL-13,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L8 PAR=11,,0.8
+LPL-13__role__s43,qwen,LPL-13,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L8 PAR=11,,0.8
+LPL-13__role__s44,qwen,LPL-13,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L8 PAR=11,,0.8
+LPL-14__chain_of_thought__s42,qwen,LPL-14,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-14__chain_of_thought__s43,qwen,LPL-14,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.8
+LPL-14__chain_of_thought__s44,qwen,LPL-14,LPL,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",0,LPL L8 PAR=7,,0.9
+LPL-14__few_shot__s42,qwen,LPL-14,LPL,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.9
+LPL-14__few_shot__s43,qwen,LPL-14,LPL,few_shot,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+LPL-14__few_shot__s44,qwen,LPL-14,LPL,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.09s",1,,,0.9
+LPL-14__role__s42,qwen,LPL-14,LPL,role,1,42,block,1,,3 passed in 0.01s,0,LPL L13 PAR=6,,0.8
+LPL-14__role__s43,qwen,LPL-14,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L8 PAR=7,,0.8
+LPL-14__role__s44,qwen,LPL-14,LPL,role,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+LPL-15__chain_of_thought__s42,qwen,LPL-15,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,LPL L27 PAR=5,,0.8
+LPL-15__chain_of_thought__s43,qwen,LPL-15,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L25 PAR=5,,0.8
+LPL-15__chain_of_thought__s44,qwen,LPL-15,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.08s,0,LPL L25 PAR=5,,0.8
+LPL-15__few_shot__s42,qwen,LPL-15,LPL,few_shot,1,42,block,0,tests,3 failed in 0.10s,0,LPL L25 PAR=5 | LPL L48 PAR=5,,0.8
+LPL-15__few_shot__s43,qwen,LPL-15,LPL,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,LPL L25 PAR=5 | LPL L48 PAR=5,,0.9
+LPL-15__few_shot__s44,qwen,LPL-15,LPL,few_shot,3,44,block,1,,3 passed in 0.02s,0,LPL L25 PAR=5,,0.8
+LPL-15__role__s42,qwen,LPL-15,LPL,role,1,42,block,0,tests,3 failed in 0.09s,0,LPL L25 PAR=5 | LPL L48 PAR=5,,0.8
+LPL-15__role__s43,qwen,LPL-15,LPL,role,2,43,block,0,tests,3 failed in 0.10s,0,LPL L25 PAR=5 | LPL L64 PAR=5,,0.9
+LPL-15__role__s44,qwen,LPL-15,LPL,role,3,44,block,0,tests,3 failed in 0.08s,0,LPL L25 PAR=5 | LPL L48 PAR=5,,0.8
+LPL-16__chain_of_thought__s42,qwen,LPL-16,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L11 PAR=5,,0.8
+LPL-16__chain_of_thought__s43,qwen,LPL-16,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L11 PAR=5,,0.8
+LPL-16__chain_of_thought__s44,qwen,LPL-16,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.09s,0,LPL L11 PAR=5,,0.8
+LPL-16__few_shot__s42,qwen,LPL-16,LPL,few_shot,1,42,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-16__few_shot__s43,qwen,LPL-16,LPL,few_shot,2,43,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-16__few_shot__s44,qwen,LPL-16,LPL,few_shot,3,44,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-16__role__s42,qwen,LPL-16,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L11 PAR=5,,0.8
+LPL-16__role__s43,qwen,LPL-16,LPL,role,2,43,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-16__role__s44,qwen,LPL-16,LPL,role,3,44,block,1,,3 passed in 0.02s,0,LPL L34 PAR=5,,0.8
+LPL-17__chain_of_thought__s42,qwen,LPL-17,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.09s,0,LPL L72 PAR=5 | LPL L80 PAR=5,,0.8
+LPL-17__chain_of_thought__s43,qwen,LPL-17,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.08s,0,LPL L72 PAR=5 | LPL L80 PAR=5,,0.8
+LPL-17__chain_of_thought__s44,qwen,LPL-17,LPL,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,LPL L72 PAR=5 | LPL L80 PAR=5,,0.9
+LPL-17__few_shot__s42,qwen,LPL-17,LPL,few_shot,1,42,block,1,,3 passed in 0.02s,0,LPL L72 PAR=5,,0.8
+LPL-17__few_shot__s43,qwen,LPL-17,LPL,few_shot,2,43,block,0,tests,3 failed in 0.08s,1,,,0.8
+LPL-17__few_shot__s44,qwen,LPL-17,LPL,few_shot,3,44,block,0,tests,3 failed in 0.10s,0,LPL L25 PAR=5,,0.8
+LPL-17__role__s42,qwen,LPL-17,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L72 PAR=5,,0.8
+LPL-17__role__s43,qwen,LPL-17,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L72 PAR=5,,0.8
+LPL-17__role__s44,qwen,LPL-17,LPL,role,3,44,block,1,,3 passed in 0.01s,0,LPL L72 PAR=5,,0.8
+LPL-18__chain_of_thought__s42,qwen,LPL-18,LPL,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,LPL L50 PAR=9,,0.7
+LPL-18__chain_of_thought__s43,qwen,LPL-18,LPL,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,LPL L50 PAR=9,,0.7
+LPL-18__chain_of_thought__s44,qwen,LPL-18,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,LPL L15 PAR=9,,0.7
+LPL-18__few_shot__s42,qwen,LPL-18,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,0,LPL L50 PAR=5 | LPL L61 PAR=6 | LPL L73 PAR=6,,0.8
+LPL-18__few_shot__s43,qwen,LPL-18,LPL,few_shot,2,43,block,0,tests,3 failed in 0.11s,0,LPL L50 PAR=5 | LPL L58 PAR=5,,0.9
+LPL-18__few_shot__s44,qwen,LPL-18,LPL,few_shot,3,44,block,1,,3 passed in 0.02s,0,LPL L50 PAR=9,,0.8
+LPL-18__role__s42,qwen,LPL-18,LPL,role,1,42,block,1,,3 passed in 0.02s,0,LPL L50 PAR=9,,0.8
+LPL-18__role__s43,qwen,LPL-18,LPL,role,2,43,block,1,,3 passed in 0.01s,0,LPL L50 PAR=9,,0.8
+LPL-18__role__s44,qwen,LPL-18,LPL,role,3,44,block,1,,3 passed in 0.01s,0,LPL L50 PAR=9,,0.8
+LPL-19__chain_of_thought__s42,qwen,LPL-19,LPL,chain_of_thought,1,42,block,0,tests,3 failed in 0.08s,0,LPL L84 PAR=7,,0.8
+LPL-19__chain_of_thought__s43,qwen,LPL-19,LPL,chain_of_thought,2,43,block,0,tests,3 failed in 0.09s,0,LPL L92 PAR=7,,0.8
+LPL-19__chain_of_thought__s44,qwen,LPL-19,LPL,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,LPL L84 PAR=7,,0.8
+LPL-19__few_shot__s42,qwen,LPL-19,LPL,few_shot,1,42,block,0,tests,3 failed in 0.09s,1,,,0.8
+LPL-19__few_shot__s43,qwen,LPL-19,LPL,few_shot,2,43,block,0,tests,3 failed in 0.09s,0,LPL L102 PAR=6,,0.8
+LPL-19__few_shot__s44,qwen,LPL-19,LPL,few_shot,3,44,block,0,tests,3 failed in 0.09s,0,LPL L102 PAR=6,,0.8
+LPL-19__role__s42,qwen,LPL-19,LPL,role,1,42,block,0,tests,3 failed in 0.09s,0,LPL L91 PAR=5,,0.8
+LPL-19__role__s43,qwen,LPL-19,LPL,role,2,43,block,0,tests,3 failed in 0.09s,0,LPL L92 PAR=7,,0.8
+LPL-19__role__s44,qwen,LPL-19,LPL,role,3,44,block,0,tests,3 failed in 0.09s,0,LPL L91 PAR=6,,0.8
+MNC-01__chain_of_thought__s42,qwen,MNC-01,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.11s",0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L130 LEC=4 | MNC L142 LEC=4 | MNC L143 LEC=4 | MNC L144 LEC=4,,0.8
+MNC-01__chain_of_thought__s43,qwen,MNC-01,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__chain_of_thought__s44,qwen,MNC-01,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__few_shot__s42,qwen,MNC-01,MNC,few_shot,1,42,block,0,tests,1 error in 0.19s,0,MNC L119 LEC=4 | MNC L120 LEC=3 | MNC L121 LEC=3 | MNC L122 LEC=4 | MNC L127 LEC=4 | MNC L134 LEC=4 | MNC L135 LEC=4 | MNC L136 LEC=4,,0.9
+MNC-01__few_shot__s43,qwen,MNC-01,MNC,few_shot,2,43,block,1,,3 passed in 0.02s,0,MNC L117 LEC=4 | MNC L118 LEC=3 | MNC L119 LEC=3 | MNC L120 LEC=4 | MNC L125 LEC=4 | MNC L132 LEC=4 | MNC L133 LEC=4 | MNC L134 LEC=4,,0.8
+MNC-01__few_shot__s44,qwen,MNC-01,MNC,few_shot,3,44,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__role__s42,qwen,MNC-01,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L115 LEC=4 | MNC L116 LEC=3 | MNC L117 LEC=3 | MNC L118 LEC=4 | MNC L123 LEC=4 | MNC L130 LEC=4 | MNC L131 LEC=4 | MNC L132 LEC=4,,0.8
+MNC-01__role__s43,qwen,MNC-01,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-01__role__s44,qwen,MNC-01,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L107 LEC=4 | MNC L108 LEC=3 | MNC L109 LEC=3 | MNC L110 LEC=4 | MNC L115 LEC=4 | MNC L122 LEC=4 | MNC L123 LEC=4 | MNC L124 LEC=4,,0.8
+MNC-02__chain_of_thought__s42,qwen,MNC-02,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.16s,0,MNC L99 LEC=3 | MNC L100 LEC=3,,0.9
+MNC-02__chain_of_thought__s43,qwen,MNC-02,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.17s,0,MNC L124 LEC=3 | MNC L128 LEC=3,,0.9
+MNC-02__chain_of_thought__s44,qwen,MNC-02,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.26s",0,MNC L97 LEC=3 | MNC L98 LEC=3,,1.1
+MNC-02__few_shot__s42,qwen,MNC-02,MNC,few_shot,1,42,block,1,,3 passed in 0.16s,0,MNC L96 LEC=3 | MNC L97 LEC=3,,1.0
+MNC-02__few_shot__s43,qwen,MNC-02,MNC,few_shot,2,43,block,1,,3 passed in 0.17s,0,MNC L114 LEC=3 | MNC L115 LEC=3,,1.0
+MNC-02__few_shot__s44,qwen,MNC-02,MNC,few_shot,3,44,block,1,,3 passed in 0.17s,0,MNC L106 LEC=3 | MNC L107 LEC=3,,1.0
+MNC-02__role__s42,qwen,MNC-02,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.26s",0,MNC L104 LEC=3 | MNC L105 LEC=3,,1.1
+MNC-02__role__s43,qwen,MNC-02,MNC,role,2,43,block,1,,3 passed in 0.16s,0,MNC L105 LEC=3 | MNC L106 LEC=3,,0.9
+MNC-02__role__s44,qwen,MNC-02,MNC,role,3,44,block,1,,3 passed in 0.17s,0,MNC L102 LEC=3 | MNC L103 LEC=3,,0.9
+MNC-03__chain_of_thought__s42,qwen,MNC-03,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.08s",1,,,0.8
+MNC-03__chain_of_thought__s43,qwen,MNC-03,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-03__chain_of_thought__s44,qwen,MNC-03,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-03__few_shot__s42,qwen,MNC-03,MNC,few_shot,1,42,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__few_shot__s43,qwen,MNC-03,MNC,few_shot,2,43,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__few_shot__s44,qwen,MNC-03,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L47 LEC=3,,0.8
+MNC-03__role__s42,qwen,MNC-03,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L49 LEC=3,,0.8
+MNC-03__role__s43,qwen,MNC-03,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L55 LEC=3,,0.8
+MNC-03__role__s44,qwen,MNC-03,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L52 LEC=3,,0.8
+MNC-04__chain_of_thought__s42,qwen,MNC-04,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-04__chain_of_thought__s43,qwen,MNC-04,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-04__chain_of_thought__s44,qwen,MNC-04,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L7 DNC=3;NCT=2 | MNC L33 LEC=3 | MNC L36 LEC=3,,0.8
+MNC-04__few_shot__s42,qwen,MNC-04,MNC,few_shot,1,42,block,0,tests,1 error in 0.16s,1,,,0.9
+MNC-04__few_shot__s43,qwen,MNC-04,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.07s",1,,LPL L13 PAR=5 | LPL L20 PAR=11,0.8
+MNC-04__few_shot__s44,qwen,MNC-04,MNC,few_shot,3,44,block,0,tests,1 error in 0.16s,1,,,0.9
+MNC-04__role__s42,qwen,MNC-04,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L7 DNC=3;NCT=2,,0.8
+MNC-04__role__s43,qwen,MNC-04,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L7 DNC=3;NCT=2,,0.8
+MNC-04__role__s44,qwen,MNC-04,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L7 DNC=3;NCT=2,,0.7
+MNC-05__chain_of_thought__s42,qwen,MNC-05,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,0,MNC L12 LEC=3,,0.7
+MNC-05__chain_of_thought__s43,qwen,MNC-05,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-05__chain_of_thought__s44,qwen,MNC-05,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,1,,,0.8
+MNC-05__few_shot__s42,qwen,MNC-05,MNC,few_shot,1,42,block,0,tests,1 error in 0.16s,1,,,0.9
+MNC-05__few_shot__s43,qwen,MNC-05,MNC,few_shot,2,43,block,0,tests,1 error in 0.16s,1,,,0.9
+MNC-05__few_shot__s44,qwen,MNC-05,MNC,few_shot,3,44,block,0,tests,3 failed in 0.09s,1,,,0.8
+MNC-05__role__s42,qwen,MNC-05,MNC,role,1,42,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-05__role__s43,qwen,MNC-05,MNC,role,2,43,block,1,,3 passed in 0.01s,1,,,0.8
+MNC-05__role__s44,qwen,MNC-05,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L12 LEC=3,,0.8
+MNC-06__chain_of_thought__s42,qwen,MNC-06,MNC,chain_of_thought,1,42,block,0,tests,"2 failed, 1 passed in 0.13s",1,,,0.9
+MNC-06__chain_of_thought__s43,qwen,MNC-06,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.14s,1,,,1.0
+MNC-06__chain_of_thought__s44,qwen,MNC-06,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.1
+MNC-06__few_shot__s42,qwen,MNC-06,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.21s",1,,,1.1
+MNC-06__few_shot__s43,qwen,MNC-06,MNC,few_shot,2,43,block,1,,3 passed in 0.07s,1,,,1.0
+MNC-06__few_shot__s44,qwen,MNC-06,MNC,few_shot,3,44,block,1,,3 passed in 0.07s,1,,,1.0
+MNC-06__role__s42,qwen,MNC-06,MNC,role,1,42,block,0,tests,"2 failed, 1 passed in 0.15s",1,,,1.0
+MNC-06__role__s43,qwen,MNC-06,MNC,role,2,43,block,0,tests,"2 failed, 1 passed in 0.22s",1,,,1.1
+MNC-06__role__s44,qwen,MNC-06,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.18s",1,,,1.1
+MNC-07__chain_of_thought__s42,qwen,MNC-07,MNC,chain_of_thought,1,42,block,1,,3 passed in 1.31s,0,MNC L76 LEC=3 | MNC L76 LEC=3,,2.4
+MNC-07__chain_of_thought__s43,qwen,MNC-07,MNC,chain_of_thought,2,43,block,0,tests,"2 failed, 1 passed in 1.51s",0,MNC L64 LEC=3 | MNC L65 LEC=3,,2.6
+MNC-07__chain_of_thought__s44,qwen,MNC-07,MNC,chain_of_thought,3,44,block,1,,3 passed in 1.26s,1,,LPL L78 PAR=6,2.3
+MNC-07__few_shot__s42,qwen,MNC-07,MNC,few_shot,1,42,block,1,,3 passed in 1.30s,0,MNC L78 LEC=3 | MNC L78 LEC=3,,2.4
+MNC-07__few_shot__s43,qwen,MNC-07,MNC,few_shot,2,43,block,1,,3 passed in 1.30s,0,MNC L75 LEC=3 | MNC L76 LEC=3,,2.3
+MNC-07__few_shot__s44,qwen,MNC-07,MNC,few_shot,3,44,block,0,tests,3 failed in 1.51s,0,MNC L56 LEC=3 | MNC L57 LEC=3,,2.6
+MNC-07__role__s42,qwen,MNC-07,MNC,role,1,42,block,1,,3 passed in 1.27s,0,MNC L66 LEC=3 | MNC L67 LEC=3,,2.3
+MNC-07__role__s43,qwen,MNC-07,MNC,role,2,43,block,1,,3 passed in 1.28s,0,MNC L70 LEC=3 | MNC L71 LEC=3,,2.3
+MNC-07__role__s44,qwen,MNC-07,MNC,role,3,44,block,1,,3 passed in 1.32s,0,MNC L69 LEC=3 | MNC L69 LEC=3,,2.4
+MNC-08__chain_of_thought__s42,qwen,MNC-08,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.01s,1,,,0.9
+MNC-08__chain_of_thought__s43,qwen,MNC-08,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-08__chain_of_thought__s44,qwen,MNC-08,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L40 LEC=3,,0.9
+MNC-08__few_shot__s42,qwen,MNC-08,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L39 LEC=3,,0.9
+MNC-08__few_shot__s43,qwen,MNC-08,MNC,few_shot,2,43,block,1,,3 passed in 0.02s,0,MNC L39 LEC=3,,0.9
+MNC-08__few_shot__s44,qwen,MNC-08,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.9
+MNC-08__role__s42,qwen,MNC-08,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.9
+MNC-08__role__s43,qwen,MNC-08,MNC,role,2,43,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.9
+MNC-08__role__s44,qwen,MNC-08,MNC,role,3,44,block,1,,3 passed in 0.01s,0,MNC L39 LEC=3,,0.9
+MNC-09__chain_of_thought__s42,qwen,MNC-09,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.05s,1,,,0.9
+MNC-09__chain_of_thought__s43,qwen,MNC-09,MNC,chain_of_thought,2,43,block,0,tests,3 failed in 0.13s,1,,,1.0
+MNC-09__chain_of_thought__s44,qwen,MNC-09,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.05s,1,,,0.9
+MNC-09__few_shot__s42,qwen,MNC-09,MNC,few_shot,1,42,block,1,,3 passed in 0.05s,0,MNC L18 LEC=3,,0.9
+MNC-09__few_shot__s43,qwen,MNC-09,MNC,few_shot,2,43,block,1,,3 passed in 0.05s,0,MNC L15 LEC=3,,0.9
+MNC-09__few_shot__s44,qwen,MNC-09,MNC,few_shot,3,44,block,1,,3 passed in 0.04s,0,MNC L20 LEC=3,,1.0
+MNC-09__role__s42,qwen,MNC-09,MNC,role,1,42,block,1,,3 passed in 0.06s,0,MNC L21 LEC=3,,1.0
+MNC-09__role__s43,qwen,MNC-09,MNC,role,2,43,block,1,,3 passed in 0.05s,0,MNC L15 LEC=3,,0.9
+MNC-09__role__s44,qwen,MNC-09,MNC,role,3,44,block,1,,3 passed in 0.05s,0,MNC L15 LEC=3,,1.0
+MNC-10__chain_of_thought__s42,qwen,MNC-10,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.19s,1,,,1.1
+MNC-10__chain_of_thought__s43,qwen,MNC-10,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.20s,1,,,1.1
+MNC-10__chain_of_thought__s44,qwen,MNC-10,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.18s,1,,,1.1
+MNC-10__few_shot__s42,qwen,MNC-10,MNC,few_shot,1,42,block,1,,3 passed in 0.22s,0,MNC L38 LEC=3,,1.1
+MNC-10__few_shot__s43,qwen,MNC-10,MNC,few_shot,2,43,block,0,tests,"2 failed, 1 passed in 0.32s",0,MNC L32 LEC=3,,1.2
+MNC-10__few_shot__s44,qwen,MNC-10,MNC,few_shot,3,44,block,0,tests,1 error in 0.38s,0,MNC L45 LEC=3,,1.3
+MNC-10__role__s42,qwen,MNC-10,MNC,role,1,42,block,1,,3 passed in 0.21s,0,MNC L28 LEC=3,,1.1
+MNC-10__role__s43,qwen,MNC-10,MNC,role,2,43,block,1,,3 passed in 0.22s,0,MNC L28 LEC=3,,1.1
+MNC-10__role__s44,qwen,MNC-10,MNC,role,3,44,block,1,,3 passed in 0.19s,0,MNC L28 LEC=3,,1.1
+MNC-11__chain_of_thought__s42,qwen,MNC-11,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.21s,0,MNC L35 LEC=3,,1.1
+MNC-11__chain_of_thought__s43,qwen,MNC-11,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.19s,0,MNC L44 LEC=3,,1.1
+MNC-11__chain_of_thought__s44,qwen,MNC-11,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.20s,1,,,1.1
+MNC-11__few_shot__s42,qwen,MNC-11,MNC,few_shot,1,42,block,1,,3 passed in 0.19s,0,MNC L43 LEC=3,,1.1
+MNC-11__few_shot__s43,qwen,MNC-11,MNC,few_shot,2,43,block,1,,3 passed in 0.18s,0,MNC L43 LEC=3,,1.1
+MNC-11__few_shot__s44,qwen,MNC-11,MNC,few_shot,3,44,block,1,,3 passed in 0.19s,0,MNC L44 LEC=3,,1.1
+MNC-11__role__s42,qwen,MNC-11,MNC,role,1,42,block,1,,3 passed in 0.19s,0,MNC L45 LEC=3,,1.1
+MNC-11__role__s43,qwen,MNC-11,MNC,role,2,43,block,0,tests,3 failed in 0.36s,0,MNC L43 LEC=3,,1.3
+MNC-11__role__s44,qwen,MNC-11,MNC,role,3,44,block,0,tests,"2 failed, 1 passed in 0.28s",0,MNC L42 LEC=3,,1.2
+MNC-12__chain_of_thought__s42,qwen,MNC-12,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.20s,0,MNC L28 LEC=3,,1.1
+MNC-12__chain_of_thought__s43,qwen,MNC-12,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.18s,1,,,1.1
+MNC-12__chain_of_thought__s44,qwen,MNC-12,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.19s,1,,,1.2
+MNC-12__few_shot__s42,qwen,MNC-12,MNC,few_shot,1,42,block,1,,3 passed in 0.19s,0,MNC L53 LEC=3,,1.2
+MNC-12__few_shot__s43,qwen,MNC-12,MNC,few_shot,2,43,block,1,,3 passed in 0.18s,0,MNC L52 LEC=3,,1.2
+MNC-12__few_shot__s44,qwen,MNC-12,MNC,few_shot,3,44,block,0,tests,3 failed in 0.30s,0,MNC L53 LEC=3,,1.3
+MNC-12__role__s42,qwen,MNC-12,MNC,role,1,42,block,1,,3 passed in 0.19s,0,MNC L30 LEC=3,,1.1
+MNC-12__role__s43,qwen,MNC-12,MNC,role,2,43,block,1,,3 passed in 0.18s,0,MNC L28 LEC=3,,1.1
+MNC-12__role__s44,qwen,MNC-12,MNC,role,3,44,block,1,,3 passed in 0.19s,0,MNC L53 LEC=3,,1.1
+MNC-13__chain_of_thought__s42,qwen,MNC-13,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.20s,0,MNC L46 LEC=3 | MNC L46 LEC=3,,1.1
+MNC-13__chain_of_thought__s43,qwen,MNC-13,MNC,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.29s",0,MNC L47 LEC=3 | MNC L47 LEC=3,,1.2
+MNC-13__chain_of_thought__s44,qwen,MNC-13,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.19s,0,MNC L42 LEC=3 | MNC L43 LEC=3,,1.1
+MNC-13__few_shot__s42,qwen,MNC-13,MNC,few_shot,1,42,block,0,tests,3 failed in 0.29s,0,MNC L41 LEC=3 | MNC L41 LEC=3,,1.2
+MNC-13__few_shot__s43,qwen,MNC-13,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.29s",0,MNC L43 LEC=3 | MNC L43 LEC=3,,1.2
+MNC-13__few_shot__s44,qwen,MNC-13,MNC,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.30s",0,MNC L44 LEC=3 | MNC L44 LEC=3,,1.2
+MNC-13__role__s42,qwen,MNC-13,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.29s",1,,,1.2
+MNC-13__role__s43,qwen,MNC-13,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.29s",0,MNC L46 LEC=3 | MNC L46 LEC=3,,1.2
+MNC-13__role__s44,qwen,MNC-13,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.27s",0,MNC L45 LEC=3 | MNC L45 LEC=3,,1.2
+MNC-14__chain_of_thought__s42,qwen,MNC-14,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.26s",0,MNC L18 LEC=4 | MNC L24 LEC=3,,1.1
+MNC-14__chain_of_thought__s43,qwen,MNC-14,MNC,chain_of_thought,2,43,block,0,tests,"1 failed, 2 passed in 0.28s",0,MNC L30 LEC=4 | MNC L37 LEC=3,,1.2
+MNC-14__chain_of_thought__s44,qwen,MNC-14,MNC,chain_of_thought,3,44,block,0,tests,"1 failed, 2 passed in 0.26s",0,MNC L29 LEC=4 | MNC L35 LEC=3,,1.1
+MNC-14__few_shot__s42,qwen,MNC-14,MNC,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.26s",1,,,1.1
+MNC-14__few_shot__s43,qwen,MNC-14,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.27s",0,MNC L46 LEC=4 | MNC L51 LEC=3,,1.2
+MNC-14__few_shot__s44,qwen,MNC-14,MNC,few_shot,3,44,block,0,tests,"1 failed, 2 passed in 0.27s",0,MNC L29 LEC=4 | MNC L35 LEC=3,,1.2
+MNC-14__role__s42,qwen,MNC-14,MNC,role,1,42,block,1,,3 passed in 0.15s,0,MNC L44 LEC=4 | MNC L48 LEC=3,,1.1
+MNC-14__role__s43,qwen,MNC-14,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.27s",0,MNC L32 LEC=4 | MNC L36 LEC=3,,1.2
+MNC-14__role__s44,qwen,MNC-14,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.28s",0,MNC L28 LEC=4 | MNC L37 LEC=3,,1.2
+MNC-16__chain_of_thought__s42,qwen,MNC-16,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.03s,0,MNC L29 LEC=3 | MNC L45 LEC=3,,0.9
+MNC-16__chain_of_thought__s43,qwen,MNC-16,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.03s,0,MNC L28 LEC=3 | MNC L44 LEC=3,,0.9
+MNC-16__chain_of_thought__s44,qwen,MNC-16,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L25 LEC=4 | MNC L26 LEC=4 | MNC L27 LEC=4 | MNC L28 LEC=5 | MNC L44 LEC=3,,0.9
+MNC-16__few_shot__s42,qwen,MNC-16,MNC,few_shot,1,42,block,1,,3 passed in 0.03s,0,MNC L26 LEC=3 | MNC L31 LEC=3 | MNC L39 LEC=3,,0.9
+MNC-16__few_shot__s43,qwen,MNC-16,MNC,few_shot,2,43,block,1,,3 passed in 0.03s,0,MNC L27 LEC=3 | MNC L43 LEC=3,,0.9
+MNC-16__few_shot__s44,qwen,MNC-16,MNC,few_shot,3,44,block,1,,3 passed in 0.03s,0,MNC L24 LEC=4 | MNC L26 LEC=4 | MNC L26 LEC=4 | MNC L26 LEC=5 | MNC L31 LEC=4 | MNC L31 LEC=4 | MNC L31 LEC=5 | MNC L39 LEC=3,,0.9
+MNC-16__role__s42,qwen,MNC-16,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",0,MNC L26 LEC=3 | MNC L31 LEC=3 | MNC L38 LEC=3,,1.0
+MNC-16__role__s43,qwen,MNC-16,MNC,role,2,43,block,1,,3 passed in 0.03s,0,MNC L26 LEC=3 | MNC L31 LEC=3 | MNC L38 LEC=3,,0.9
+MNC-16__role__s44,qwen,MNC-16,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L26 LEC=3 | MNC L31 LEC=3,,0.9
+MNC-17__chain_of_thought__s42,qwen,MNC-17,MNC,chain_of_thought,1,42,block,0,tests,"1 failed, 2 passed in 0.10s",0,MNC L9 LEC=3,,1.0
+MNC-17__chain_of_thought__s43,qwen,MNC-17,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,1,,,0.9
+MNC-17__chain_of_thought__s44,qwen,MNC-17,MNC,chain_of_thought,3,44,block,0,tests,"2 failed, 1 passed in 0.10s",0,MNC L14 LEC=3,,0.9
+MNC-17__few_shot__s42,qwen,MNC-17,MNC,few_shot,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,0.9
+MNC-17__few_shot__s43,qwen,MNC-17,MNC,few_shot,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",0,MNC L9 LEC=3,,0.9
+MNC-17__few_shot__s44,qwen,MNC-17,MNC,few_shot,3,44,block,1,,3 passed in 0.02s,1,,,0.9
+MNC-17__role__s42,qwen,MNC-17,MNC,role,1,42,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,1.0
+MNC-17__role__s43,qwen,MNC-17,MNC,role,2,43,block,0,tests,"1 failed, 2 passed in 0.10s",1,,,1.0
+MNC-17__role__s44,qwen,MNC-17,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.09s",1,,,1.0
+MNC-18__chain_of_thought__s42,qwen,MNC-18,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,MNC L36 LEC=3,,0.9
+MNC-18__chain_of_thought__s43,qwen,MNC-18,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L31 LEC=3,,0.9
+MNC-18__chain_of_thought__s44,qwen,MNC-18,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.01s,0,MNC L36 LEC=3,,0.9
+MNC-18__few_shot__s42,qwen,MNC-18,MNC,few_shot,1,42,block,0,tests,3 failed in 0.10s,1,,,1.0
+MNC-18__few_shot__s43,qwen,MNC-18,MNC,few_shot,2,43,block,0,tests,3 failed in 0.11s,1,,,1.0
+MNC-18__few_shot__s44,qwen,MNC-18,MNC,few_shot,3,44,block,0,tests,3 failed in 0.10s,1,,,1.0
+MNC-18__role__s42,qwen,MNC-18,MNC,role,1,42,block,1,,3 passed in 0.02s,0,MNC L31 LEC=3,,0.9
+MNC-18__role__s43,qwen,MNC-18,MNC,role,2,43,block,1,,3 passed in 0.02s,0,MNC L30 LEC=3,,0.9
+MNC-18__role__s44,qwen,MNC-18,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L31 LEC=3,,0.9
+MNC-19__chain_of_thought__s42,qwen,MNC-19,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.02s,0,MNC L40 LEC=3,,1.0
+MNC-19__chain_of_thought__s43,qwen,MNC-19,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.03s,0,MNC L32 LEC=3,,1.0
+MNC-19__chain_of_thought__s44,qwen,MNC-19,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.02s,0,MNC L29 LEC=3,,1.0
+MNC-19__few_shot__s42,qwen,MNC-19,MNC,few_shot,1,42,block,0,tests,3 failed in 0.11s,0,MNC L31 LEC=3,LPL L24 PAR=5,1.1
+MNC-19__few_shot__s43,qwen,MNC-19,MNC,few_shot,2,43,block,1,,3 passed in 0.02s,0,MNC L33 LEC=3,,0.9
+MNC-19__few_shot__s44,qwen,MNC-19,MNC,few_shot,3,44,block,1,,3 passed in 0.01s,0,MNC L28 LEC=3,LPL L24 PAR=5,0.9
+MNC-19__role__s42,qwen,MNC-19,MNC,role,1,42,block,1,,3 passed in 0.01s,0,MNC L29 LEC=3,LPL L25 PAR=5,0.9
+MNC-19__role__s43,qwen,MNC-19,MNC,role,2,43,block,0,tests,3 failed in 0.09s,0,MNC L27 LEC=3,,0.9
+MNC-19__role__s44,qwen,MNC-19,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L25 LEC=3,,0.9
+MNC-20__chain_of_thought__s42,qwen,MNC-20,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.03s,0,MNC L48 LEC=3 | MNC L53 LEC=3,,0.9
+MNC-20__chain_of_thought__s43,qwen,MNC-20,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.01s,0,MNC L56 LEC=3 | MNC L61 LEC=3,,0.9
+MNC-20__chain_of_thought__s44,qwen,MNC-20,MNC,chain_of_thought,3,44,block,0,tests,3 failed in 0.10s,0,MNC L52 LEC=3 | MNC L57 LEC=3,,0.9
+MNC-20__few_shot__s42,qwen,MNC-20,MNC,few_shot,1,42,block,1,,3 passed in 0.02s,0,MNC L57 LEC=3 | MNC L62 LEC=3,,0.9
+MNC-20__few_shot__s43,qwen,MNC-20,MNC,few_shot,2,43,block,0,tests,3 failed in 0.10s,0,MNC L56 LEC=3 | MNC L61 LEC=3,,0.9
+MNC-20__few_shot__s44,qwen,MNC-20,MNC,few_shot,3,44,block,1,,3 passed in 0.02s,0,MNC L65 LEC=3 | MNC L70 LEC=3,,0.9
+MNC-20__role__s42,qwen,MNC-20,MNC,role,1,42,block,0,tests,3 failed in 0.10s,0,MNC L65 LEC=3 | MNC L70 LEC=3,,0.9
+MNC-20__role__s43,qwen,MNC-20,MNC,role,2,43,block,0,tests,3 failed in 0.11s,0,MNC L56 LEC=3 | MNC L61 LEC=3,,0.9
+MNC-20__role__s44,qwen,MNC-20,MNC,role,3,44,block,1,,3 passed in 0.02s,0,MNC L56 LEC=3 | MNC L61 LEC=3,,0.8
+MNC-21__chain_of_thought__s42,qwen,MNC-21,MNC,chain_of_thought,1,42,block,1,,3 passed in 0.16s,0,MNC L91 LEC=3,,1.0
+MNC-21__chain_of_thought__s43,qwen,MNC-21,MNC,chain_of_thought,2,43,block,1,,3 passed in 0.13s,1,,,0.9
+MNC-21__chain_of_thought__s44,qwen,MNC-21,MNC,chain_of_thought,3,44,block,1,,3 passed in 0.13s,0,MNC L89 LEC=3,,0.9
+MNC-21__few_shot__s42,qwen,MNC-21,MNC,few_shot,1,42,block,0,tests,"2 failed, 1 passed in 0.23s",0,MNC L71 LEC=3,,1.0
+MNC-21__few_shot__s43,qwen,MNC-21,MNC,few_shot,2,43,block,1,,3 passed in 0.15s,0,MNC L79 LEC=3,,0.9
+MNC-21__few_shot__s44,qwen,MNC-21,MNC,few_shot,3,44,block,0,tests,"2 failed, 1 passed in 0.23s",0,MNC L81 LEC=3,,1.0
+MNC-21__role__s42,qwen,MNC-21,MNC,role,1,42,block,1,,3 passed in 0.13s,0,MNC L70 LEC=3,,0.9
+MNC-21__role__s43,qwen,MNC-21,MNC,role,2,43,block,1,,3 passed in 0.15s,0,MNC L70 LEC=3,,0.9
+MNC-21__role__s44,qwen,MNC-21,MNC,role,3,44,block,0,tests,"1 failed, 2 passed in 0.21s",0,MNC L65 LEC=3,,0.9

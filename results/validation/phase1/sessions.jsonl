@@ -1,0 +1,1 @@
+{"start_utc": "2026-11-17T15:20:02.810887+00:00", "commit": "f01df3ba336d9041f0eac58603bdbe1b8f4eb567", "timeout_s": 60, "jobs": 4, "pending": 1593, "environment": "Python 3.14.6; pytest 9.1.1; pandas 3.0.6; tqdm 4.70.1; numpy 2.5.3; scikit-image 0.26.0; scipy 1.18.1; requests 2.34.2; toml 0.10.2; invoke 3.0.3; beautifulsoup4 4.15.0; termcolor 3.3.0"}
