@@ -18,7 +18,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from adaptation.checklist import _paths, _pytest, _selection
+from adaptation.checklist import SMELLS, _paths, _pytest, _selection
 from pysmell.detect import detect_file
 
 
@@ -40,7 +40,9 @@ def check(inst, path, timeout=None):
         last = "timeout"
     else:
         last = (r.stdout.strip().splitlines() or ["(no output)"])[-1]
-    detections = detect_file(str(path))
+    # The smells of the instance's phase, as in the checklist: phase 1 is
+    # judged by its four smells, phase 2 by the six.
+    detections = detect_file(str(path), smells=SMELLS[inst["phase"]])
     remaining = [f"{d['smell']} L{d['line']} {d['metrics']}"
                  for d in detections if d["smell"] == inst["smell"]]
     others = [f"{d['smell']} L{d['line']} {d['metrics']}"

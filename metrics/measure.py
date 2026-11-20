@@ -39,7 +39,8 @@ Output, in results/metrics/<phase>/:
 
 Usage:
     python -m metrics.measure --sample 10   # tests, only prints
-    python -m metrics.measure               # whole phase
+    python -m metrics.measure               # whole phase 1
+    python -m metrics.measure --phase 2     # whole phase 2
 """
 
 import argparse
@@ -62,10 +63,9 @@ from radon.metrics import h_visit, mi_rank, mi_visit
 from adaptation.checklist import _paths, _selection
 from generation.generate import _commit
 from pysmell.detect import detect_file
-from validation.validate import EXTRACTED, PHASE, OUTPUT as VALIDATION
+from validation.validate import PHASES, paths
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "results" / "metrics" / PHASE
 
 PACKAGES = ("radon", "pylint", "astroid", "astunparse")
 PYLINT_TIMEOUT = 120  # seconds per file
@@ -157,9 +157,10 @@ def measure(base, path, inst):
             **_pysmell(path, inst["smell"])}
 
 
-def _tasks(selection):
+def _tasks(selection, phase):
     """(base, path, inst) of the originals and of the refactorings that preserved."""
-    with open(VALIDATION / "validation.csv", encoding="utf-8", newline="") as fh:
+    extracted, validation_dir = paths(phase)
+    with open(validation_dir / "validation.csv", encoding="utf-8", newline="") as fh:
         validation = list(csv.DictReader(fh))
     ids = sorted({r["instance"] for r in validation})
     tasks = []
@@ -174,7 +175,7 @@ def _tasks(selection):
         base = {c: "" for c in COLUMNS}
         base.update({c: r[c] for c in ("identifier", "model", "instance", "smell",
                                        "technique", "run", "seed")}, type="refactored")
-        tasks.append((base, EXTRACTED / r["model"] / f"{r['identifier']}.py",
+        tasks.append((base, extracted / r["model"] / f"{r['identifier']}.py",
                       selection[r["instance"]]))
     return tasks
 
@@ -184,10 +185,12 @@ def main(argv=None):
     p.add_argument("--sample", type=int, metavar="N",
                    help="measure N files spread over the phase and only print, writing nothing")
     p.add_argument("--jobs", type=int, default=4, help="files in parallel (default 4)")
+    p.add_argument("--phase", type=int, choices=PHASES, default=1, help="phase to measure (default 1)")
     args = p.parse_args(argv)
 
-    tasks = _tasks(_selection())
-    table = OUTPUT / "metrics.csv"
+    tasks = _tasks(_selection(), args.phase)
+    output = ROOT / "results" / "metrics" / f"phase{args.phase}"
+    table = output / "metrics.csv"
     if args.sample:
         tasks = tasks[::max(1, len(tasks) // args.sample)][:args.sample]
     else:
@@ -195,11 +198,11 @@ def main(argv=None):
             sys.exit(f"{table} already exists. Measured results are not overwritten; "
                      "delete it by hand if you really mean to measure again.")
         commit = _commit(require_clean=True)
-        OUTPUT.mkdir(parents=True, exist_ok=True)
-        with open(OUTPUT / "sessions.jsonl", "a", encoding="utf-8") as fh:
+        output.mkdir(parents=True, exist_ok=True)
+        with open(output / "sessions.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps({
                 "start_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                "commit": commit, "files": len(tasks), "environment": _environment()},
+                "commit": commit, "phase": args.phase, "files": len(tasks), "environment": _environment()},
                 ensure_ascii=False) + "\n")
 
     print(f"{len(tasks)} files to measure")

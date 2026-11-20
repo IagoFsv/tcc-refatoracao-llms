@@ -100,12 +100,14 @@ python -m adaptation.measure_window        # prompt size of each instance in eac
 python -m generation.smoke_test --dry-run  # checks config, Ollama up and digests
 python -m generation.smoke_test            # one short call to each model
 python -m generation.generate --dry-run    # checks the environment and counts what is missing
-python -m generation.generate              # whole phase, resumes where it stopped
-python -m generation.extract               # extracts the code from the raw responses
+python -m generation.generate              # whole phase 1, resumes where it stopped
+python -m generation.generate --phase 2    # whole phase 2
+python -m generation.extract               # extracts the code from the raw responses (phase 1)
+python -m generation.extract results/generations/phase2
 
 python -m validation.check LLF-01 <file>   # preserved? smell removed?
-python -m validation.validate              # validation of the whole phase
-python -m metrics.measure                  # metrics of the whole phase
+python -m validation.validate              # validation of phase 1 (--phase 2 for phase 2)
+python -m metrics.measure                  # metrics of phase 1 (--phase 2 for phase 2)
 ```
 
 Metric values depend on the tool versions, pinned in `requirements.txt`.

@@ -35,7 +35,8 @@ Usage:
     python -m generation.generate --dry-run      # checks everything and counts what is missing
     python -m generation.generate --pilot        # LM-01, LPL-01, LLF-01, MNC-01, first seed,
                                                  # in _pilot/ (disposable, outside git)
-    python -m generation.generate                # whole phase, resumes where it stopped
+    python -m generation.generate                # whole phase 1, resumes where it stopped
+    python -m generation.generate --phase 2      # whole phase 2
     python -m generation.generate --model qwen   # one model only
 """
 
@@ -57,12 +58,13 @@ import requests
 import yaml
 from tqdm import tqdm
 
+from adaptation.checklist import _selection
 from generation import client, prompts
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTANCES = ROOT / "instances"
 GENERATIONS = ROOT / "results" / "generations"
-PHASE = "phase1"
+PHASES = (1, 2)
 
 # Pilot: only measures time and tests the pipeline.
 PILOT_IDS = ("LM-01", "LPL-01", "LLF-01", "MNC-01")
@@ -71,12 +73,14 @@ PILOT_IDS = ("LM-01", "LPL-01", "LLF-01", "MNC-01")
 MAX_CONSECUTIVE_FAILURES = 3
 
 
-def _units(ids=None):
-    """{id: unit path} of the instances that have a folder (or only the requested ones)."""
+def _units(ids=None, phase=None):
+    """{id: unit path} of the instances that have a folder: the requested ones,
+    or every one of the phase (the phase comes from the selection lists)."""
     everything = {p.parent.name: p for p in sorted(INSTANCES.glob("*/*/*.py"))
                   if p.stem == p.parent.name.replace("-", "_")}
     if not ids:
-        return everything
+        selection = _selection()
+        return {i: u for i, u in everything.items() if selection[i]["phase"] == phase}
     unknown = [i for i in ids if i not in everything]
     if unknown:
         sys.exit(f"no unit in instances/: {', '.join(unknown)}")
@@ -138,6 +142,8 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Generation loop.")
     p.add_argument("--pilot", action="store_true",
                    help=f"only {', '.join(PILOT_IDS)} with the first seed, in _pilot/")
+    p.add_argument("--phase", type=int, choices=PHASES, default=1,
+                   help="phase whose instances are generated (default 1); ignored with --pilot")
     p.add_argument("--model", action="append",
                    help="only this model (name in config.yaml); may be repeated")
     p.add_argument("--dry-run", action="store_true",
@@ -159,9 +165,9 @@ def main(argv=None):
         seeds = cfg["seeds"][:1]
         phase_dir = GENERATIONS / "_pilot" / session
     else:
-        units = _units()
+        units = _units(phase=args.phase)
         seeds = cfg["seeds"]
-        phase_dir = GENERATIONS / PHASE
+        phase_dir = GENERATIONS / f"phase{args.phase}"
     commit = _commit(require_clean=not (args.pilot or args.dry_run))
 
     # Full environment of every model at the start: if a digest does not

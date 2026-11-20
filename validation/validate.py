@@ -27,7 +27,8 @@ Output, in results/validation/<phase>/:
 
 Usage:
     python -m validation.validate --sample 30   # tests, only prints
-    python -m validation.validate               # whole phase
+    python -m validation.validate               # whole phase 1
+    python -m validation.validate --phase 2     # whole phase 2
 """
 
 import argparse
@@ -47,9 +48,14 @@ from generation.generate import _commit
 from validation.check import check
 
 ROOT = Path(__file__).resolve().parents[1]
-PHASE = "phase1"
-EXTRACTED = ROOT / "results" / "generations" / PHASE / "_extracted"
-OUTPUT = ROOT / "results" / "validation" / PHASE
+PHASES = (1, 2)
+
+
+def paths(phase):
+    """(extracted code folder, validation output folder) of a phase."""
+    return (ROOT / "results" / "generations" / f"phase{phase}" / "_extracted",
+            ROOT / "results" / "validation" / f"phase{phase}")
+
 
 TIMEOUT = 60  # seconds per generation (the 3 tests together)
 
@@ -69,7 +75,7 @@ def _parses(path):
     return True
 
 
-def validate(row, inst):
+def validate(row, inst, extracted):
     """Row of validation.csv for one row of extraction.csv."""
     base = {c: row[c] for c in ("identifier", "model", "instance", "smell",
                                 "technique", "run", "seed")}
@@ -77,7 +83,7 @@ def validate(row, inst):
                 remaining="", others="", seconds=0)
     if not row["file"]:
         return {**base, "preserved": 0, "reason": "no code"}
-    path = EXTRACTED.parent / row["file"]
+    path = extracted.parent / row["file"]
     if not _parses(path):
         return {**base, "preserved": 0, "reason": "syntax"}
     start = time.perf_counter()
@@ -116,12 +122,14 @@ def main(argv=None):
     p.add_argument("--sample", type=int, metavar="N",
                    help="validate N generations spread over the phase and only print, writing nothing")
     p.add_argument("--jobs", type=int, default=4, help="pytest runs in parallel (default 4)")
+    p.add_argument("--phase", type=int, choices=PHASES, default=1, help="phase to validate (default 1)")
     args = p.parse_args(argv)
 
-    with open(EXTRACTED / "extraction.csv", encoding="utf-8", newline="") as fh:
+    extracted, output = paths(args.phase)
+    with open(extracted / "extraction.csv", encoding="utf-8", newline="") as fh:
         extraction = list(csv.DictReader(fh))
     selection = _selection()
-    table = OUTPUT / "validation.csv"
+    table = output / "validation.csv"
 
     if args.sample:
         step = max(1, len(extraction) // args.sample)
@@ -129,17 +137,17 @@ def main(argv=None):
         done = []
     else:
         commit = _commit(require_clean=True)
-        OUTPUT.mkdir(parents=True, exist_ok=True)
+        output.mkdir(parents=True, exist_ok=True)
         done = []
         if table.exists():
             with open(table, encoding="utf-8", newline="") as fh:
                 done = list(csv.DictReader(fh))
         seen = {(r["model"], r["identifier"]) for r in done}
         pending = [r for r in extraction if (r["model"], r["identifier"]) not in seen]
-        with open(OUTPUT / "sessions.jsonl", "a", encoding="utf-8") as fh:
+        with open(output / "sessions.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps({
                 "start_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-                "commit": commit, "timeout_s": TIMEOUT, "jobs": args.jobs,
+                "commit": commit, "phase": args.phase, "timeout_s": TIMEOUT, "jobs": args.jobs,
                 "pending": len(pending), "environment": _environment()},
                 ensure_ascii=False) + "\n")
 
@@ -151,7 +159,7 @@ def main(argv=None):
         if w and new:
             w.writeheader()
         with ThreadPoolExecutor(max_workers=args.jobs) as ex:
-            futures = [ex.submit(validate, r, selection[r["instance"]]) for r in pending]
+            futures = [ex.submit(validate, r, selection[r["instance"]], extracted) for r in pending]
             for i, f in enumerate(as_completed(futures), start=1):
                 row = f.result()
                 done.append(row)
@@ -180,7 +188,7 @@ def main(argv=None):
     if len(done) == len(extraction):
         flagged = _suspicious(done)
         if not args.sample:
-            with open(OUTPUT / "suspicious.csv", "w", encoding="utf-8", newline="") as fh:
+            with open(output / "suspicious.csv", "w", encoding="utf-8", newline="") as fh:
                 w = csv.DictWriter(fh, fieldnames=SUSPICIOUS_COLUMNS)
                 w.writeheader()
                 w.writerows(flagged)
