@@ -1,0 +1,54 @@
+{
+  "id": "LTCE-12",
+  "files": {
+    "unit": "LTCE_12.py",
+    "tests": "test_LTCE_12.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 9 (data/selection/candidates_pyexamine.csv)",
+  "file": "033_airflow/airflow/utils/log/logging_mixin.py",
+  "function": "_create_logger_name",
+  "function_line": 83,
+  "lines": [
+    95
+  ],
+  "snippet": "whole function _create_logger_name, lines 82 to 102 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "95:NOC=103;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "Both thresholds on line 95 (NOC=103, NOL=3); the second conditional expression (line 101) is below both.",
+  "entry_point": "run(logged_class, config_logger_name=None, class_logger_name=None)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 18: from __future__ import annotations",
+    "line 26: from typing import ... (reduced to TypeVar)",
+    "line 64: _T = TypeVar(\"_T\")",
+    "lines 67 and 68: class LoggingMixin and its docstring",
+    "lines 82 to 102: _create_logger_name (with its @staticmethod decorator)"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (abc, enum, logging, sys, IOBase, Handler, StreamHandler, the rest of typing and re2): not used by the snippet.",
+    "the class attributes of LoggingMixin (_log, _log_config_logger_name, _logger_name), its __init__ and its other methods, and the rest of the file (stream handlers, ANSI helpers): outside the snippet; the static method uses none of them."
+  ],
+  "scaffolding": [
+    "run(logged_class, config_logger_name=None, class_logger_name=None): calls the static method through the class."
+  ],
+  "pinned_behavior": [
+    "typical: module and class name; with a parent logger name, prefixed with a dot; an explicit class logger name replaces the module and class name.",
+    "edge: an empty parent name is ignored; an empty class logger name ('' is not None) gives only the parent, or an empty string.",
+    "invalid: an object without __module__/__name__ (an int) raises AttributeError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

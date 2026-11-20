@@ -1,0 +1,57 @@
+{
+  "id": "LTCE-09",
+  "files": {
+    "unit": "LTCE_09.py",
+    "tests": "test_LTCE_09.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 6 (data/selection/candidates_pyexamine.csv)",
+  "file": "127_nni/nni/common/concrete_trace_utils/flop_utils.py",
+  "function": "norm_flop_counter",
+  "function_line": 364,
+  "lines": [
+    377
+  ],
+  "snippet": "whole function norm_flop_counter, lines 364 to 384 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "377:NOC=112;NOL=2",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOC >= 101 (NOC=112, NOL=2).",
+  "entry_point": "run(input_shape, affine, input_index=0, affine_index=1)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 8: import operator",
+    "line 12: from functools import ... (reduced to reduce)",
+    "line 13: from typing import ... (reduced to Any, Callable, List)",
+    "lines 364 to 384: norm_flop_counter"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet).",
+  "removed_from_original": [
+    "the other imports (defaultdict, contextmanager, Enum, auto, partial, Union, torch, tree_map): not used by the snippet.",
+    "the rest of the file (the other flop counters and the table that maps operators to counters): outside the snippet."
+  ],
+  "scaffolding": [
+    "_Argument: object with a shape attribute, standing for the traced tensors, whose shape is all the snippet reads.",
+    "run(input_shape, affine, input_index=0, affine_index=1): builds the list of inputs, gets the counter from norm_flop_counter and calls it."
+  ],
+  "pinned_behavior": [
+    "typical: 4-dimensional input with weights (factor 5) and with an argument whose shape is None (factor 4).",
+    "edge: plain True/False flag without a shape attribute; argument positions swapped; the 2 and 5 dimension limits; an empty shape () counts as weights present (it is not None).",
+    "invalid: 1 or 6 dimensions raise AssertionError."
+  ],
+  "not_pinned_on_purpose": [
+    "The outputs argument of the counter is never read; run passes an empty list."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "note": "The original module imports torch, but the snippet does not use it: the traced arguments only need a shape attribute."
+}

@@ -1,0 +1,59 @@
+{
+  "id": "LTCE-11",
+  "files": {
+    "unit": "LTCE_11.py",
+    "tests": "test_LTCE_11.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 8 (data/selection/candidates_pyexamine.csv)",
+  "file": "006_scikit-learn/sklearn/utils/_testing.py",
+  "function": "__init__",
+  "function_line": 886,
+  "lines": [
+    888
+  ],
+  "snippet": "whole function __init__, lines 886 to 895 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "888:NOC=80;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=80): the expression on line 888 is spread over three lines.",
+  "entry_point": "run(expected_exc_type, match=None, error=None, may_pass=False, err_msg=None)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 14: import contextlib",
+    "line 20: import re",
+    "line 26: from collections.abc import Iterable",
+    "lines 884 and 885: class _Raises(contextlib.AbstractContextManager) and its comment",
+    "lines 886 to 895: _Raises.__init__",
+    "lines 897 to 926: _Raises.__exit__"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (numpy, scipy, joblib, sklearn and the remaining standard library modules): not used by the snippet or by __exit__.",
+    "the raises() function that builds _Raises, and the rest of the file (assertion helpers, minimal estimators): outside the snippet."
+  ],
+  "scaffolding": [
+    "__exit__ is copied from the original because AbstractContextManager requires it (without it the class cannot be instantiated) and because it is where the attributes set by the snippet are used.",
+    "run(expected_exc_type, match=None, error=None, may_pass=False, err_msg=None): builds _Raises, runs a block that raises error (if any) inside it and returns raised_and_matched."
+  ],
+  "pinned_behavior": [
+    "typical: a single type is accepted (no pattern: returns False; with a pattern found: True); a list of types.",
+    "edge: a tuple of types and a list of patterns; may_pass without error returns False; without error and without may_pass, the AssertionError message shows the expected types, where a single type was wrapped in a list and a tuple is kept as it is.",
+    "invalid: an unexpected error propagates (KeyError), or becomes AssertionError with err_msg; a pattern that is not found raises AssertionError with the default message."
+  ],
+  "not_pinned_on_purpose": [
+    "A string as expected_exc_type (a str is Iterable, so it is kept as is and issubclass fails with TypeError): accidental behavior of the original, not part of what the class sets out to handle."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "_Raises (line 884 of the original)"
+}

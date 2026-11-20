@@ -1,0 +1,61 @@
+{
+  "id": "LTCE-08",
+  "files": {
+    "unit": "LTCE_08.py",
+    "tests": "test_LTCE_08.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 5 (data/selection/candidates_pyexamine.csv)",
+  "file": "119_python-slack-sdk/slack_sdk/audit_logs/v1/logs.py",
+  "function": "__init__",
+  "function_line": 376,
+  "lines": [
+    391
+  ],
+  "snippet": "whole function __init__, lines 376 to 392 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "391:NOC=103;NOL=1",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOC >= 101 (NOC=103, NOL=1) on line 391; the conditional expression of line 389 (NOC < 101, one line) is below both thresholds.",
+  "entry_point": "run(rule)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 2: from typing import Optional, List, Union, Any, Dict",
+    "lines 270 to 279: AAARuleActionResolution",
+    "lines 282 to 291: AAARuleActionNotify",
+    "lines 320 to 338: AAARuleConditionValue",
+    "lines 341 to 366: AAARuleCondition (except the annotation of values, see scaffolding)",
+    "lines 369 to 374: class AAARule and its annotations",
+    "lines 376 to 392: AAARule.__init__"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "line 1, import json: not used by the snippet.",
+    "the other classes of the file (audit log entries, users, apps, workflows and the response wrapper): outside the snippet."
+  ],
+  "scaffolding": [
+    "AAARuleAction (lines 294 to 317 of the original) rewritten: the original assigns self.resolution with a conditional expression of 104 characters over 5 lines, which is an LTCE in the scaffolding; the unit uses an equivalent if statement. The type annotations of resolution and notify were removed from its signature, for the reason below. The rest of the class is unchanged.",
+    "AAARuleCondition: the annotation of the values parameter (Optional[List[Union[Dict[str, Any], AAARuleConditionValue]]]) was removed. Pysmell counts parameters by splitting the signature text on commas, so the commas inside the annotations made these two signatures count as LPL (PAR=7 and PAR=5) in the scaffolding.",
+    "run(rule): builds AAARule(**rule) and a second AAARule that receives the built action and condition, so both branches of the conditional expressions are exercised without the test importing the classes."
+  ],
+  "pinned_behavior": [
+    "typical: nested dicts of action, notify, condition and condition values become objects with the same fields; objects already built are reused as they are.",
+    "edge: unknown keys are ignored (**kwargs); missing parts stay None; an empty rule.",
+    "invalid: an action that is a list or a condition that is a string raise TypeError."
+  ],
+  "not_pinned_on_purpose": [
+    "The class names of the objects are not pinned; only their fields."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "AAARule (line 369 of the original)"
+}

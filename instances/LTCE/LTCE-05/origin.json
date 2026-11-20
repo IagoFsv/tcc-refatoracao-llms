@@ -1,0 +1,58 @@
+{
+  "id": "LTCE-05",
+  "files": {
+    "unit": "LTCE_05.py",
+    "tests": "test_LTCE_05.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 2 (data/selection/candidates_pyexamine.csv)",
+  "file": "241_cpython/Lib/idlelib/help.py",
+  "function": "handle_endtag",
+  "function_line": 131,
+  "lines": [
+    136
+  ],
+  "snippet": "whole function handle_endtag, lines 131 to 150 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "136:NOC=42;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=42): the expression is spread over three lines.",
+  "entry_point": "run(html, show=True, header='Intro', level=0)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 27: from html.parser import HTMLParser",
+    "lines 43 to 51: class HelpParser(HTMLParser) and its docstring",
+    "lines 52 to 66: HelpParser.__init__",
+    "lines 68 to 71: HelpParser.indent",
+    "lines 131 to 150: HelpParser.handle_endtag"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (os.path, platform, tkinter, tkinter.ttk, idlelib.config, idlelib.colorizer): the snippet does not use them; tkinter would need a display.",
+    "handle_starttag and handle_data of HelpParser, and the rest of the file (the help window, the text widget class, the frame and copy_strip): outside the snippet."
+  ],
+  "scaffolding": [
+    "_TextWidget: stands for the tkinter Text widget; the snippet only calls index('insert'), which returns successive positions so that the table of contents is observable.",
+    "run(html, show=True, header='Intro', level=0): builds the parser, sets the state that the opening tags and the text would set, feeds the html and returns the state."
+  ],
+  "pinned_behavior": [
+    "typical: h1, h2 and h3 add an entry to the table of contents with no indent, 4 spaces and 8 spaces, and clear the tags; the last closed tag is recorded.",
+    "edge: hidden content adds nothing; span, a, pre and other tags reset their own state; dd and ul decrease the indent level and update the tags.",
+    "invalid: a header closed while the indent level is not 0 fails the assert (AssertionError)."
+  ],
+  "not_pinned_on_purpose": [
+    "The other tags kept by the parser (nested_dl, simplelist, hprefix) are not touched by the snippet."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "HelpParser (line 43 of the original)"
+}

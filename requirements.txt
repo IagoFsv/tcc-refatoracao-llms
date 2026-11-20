@@ -30,3 +30,4 @@ toml==0.10.2       # MNC-09 to 11 (AiShell tasks.py)
 invoke==3.0.3      # MNC-10 and 11 (AiShell tasks.py): @task and Context
 beautifulsoup4==4.15.0  # LM-05 (WindCatcher decoder.py): the test builds the HTML, no network
 termcolor==3.3.0   # LM-06 (WindCatcher weather.py): colored()
+tabulate==0.10.0   # LTCE-04 (airflow provider_documentation.py): imported inside the snippet

@@ -1,0 +1,57 @@
+{
+  "id": "LTCE-07",
+  "files": {
+    "unit": "LTCE_07.py",
+    "tests": "test_LTCE_07.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 4 (data/selection/candidates_pyexamine.csv)",
+  "file": "256_bandit/bandit/core/utils.py",
+  "function": "concat_string",
+  "function_line": 273,
+  "lines": [
+    288,
+    293
+  ],
+  "snippet": "whole function concat_string, lines 273 to 303 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "288:NOC=71;NOL=3|293:NOC=74;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=71 and 74): both expressions are spread over three lines.",
+  "entry_point": "run(source, with_parents=True)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 5: import ast",
+    "lines 273 to 303: concat_string"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "lines 6 to 8, imports logging, os.path and sys: not used by the snippet.",
+    "the rest of the file (helpers of the security scanner: call names, module paths, line ranges, configuration): outside the snippet."
+  ],
+  "scaffolding": [
+    "Shim for ast.Str and Constant.s: the snippet uses ast.Str and the .s attribute of string nodes, which were removed from the standard library in Python 3.14 (deprecated since 3.8). The shim restores both with their old meaning (a string constant; its value) only when they are missing, like the stubs of removed library APIs used in other instances.",
+    "run(source, with_parents=True): parses the expression, sets _bandit_parent on every node (what the scanner's tree visitor does before calling the helpers), calls concat_string from the first string constant and returns the root as source code and the text."
+  ],
+  "pinned_behavior": [
+    "typical: concatenation of strings and names: the root is the whole expression and the text joins the string pieces; with two strings, the starting piece appears twice (defect of the original, pinned as it is: bits starts with the node, which is then added again as a leaf).",
+    "edge: a single string (no BinOp: the root is the string itself); % formatting; a concatenation inside a call argument (the root stops at the BinOp); a non-string piece is skipped.",
+    "invalid: nodes without parent links raise AttributeError."
+  ],
+  "not_pinned_on_purpose": [
+    "The stop argument of concat_string is not exercised: run always calls it without stop.",
+    "The order of the pieces in the text follows the recursion of the original, which is pinned through the whole text."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "note": "ast.Str was removed in Python 3.14, the version of the study environment; without the shim the snippet raises AttributeError."
+}

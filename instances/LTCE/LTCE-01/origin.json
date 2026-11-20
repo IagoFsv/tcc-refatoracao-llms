@@ -1,0 +1,65 @@
+{
+  "id": "LTCE-01",
+  "files": {
+    "unit": "LTCE_01.py",
+    "tests": "test_LTCE_01.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/main-4.py",
+  "function": "<module>",
+  "function_line": 0,
+  "lines": [
+    157,
+    165,
+    173
+  ],
+  "snippet": "lines 132 to 195 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "157:NOC=105;NOL=2|165:NOC=106;NOL=2|173:NOC=107;NOL=2",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOC >= 101 only on lines 157, 165 and 173 (NOC=105, 106 and 107; NOL=2): three conditional expressions continued with a backslash.",
+  "entry_point": "run(arguments)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 48 to 88: _print_help",
+    "lines 91 to 128: run_program (with the comment above it)",
+    "line 131: comment '# Run the program'",
+    "lines 132 to 195: the __main__ block",
+    "lines 38 to 40: imports os, sys and time"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet).",
+  "removed_from_original": [
+    "lines 1 to 36: license, description and TODO comments; the description says the program was written with the help of GitHub Copilot, which would give the model a hint about the origin of the code.",
+    "lines 42 to 45: imports of the four functions of the project's own Functions package, which is not in the dataset (replaced, see scaffolding)."
+  ],
+  "scaffolding": [
+    "get_json_file_paths, get_data_from_discord_chat_exports_json_files, convert_data_to_required_format and write_converted_data_to_text_file: minimal versions in the unit file, in place of the project's Functions package (not in the dataset), following the steps described in the original header (read the JSON exports, take author name, discriminator and content, write 'Name___Discriminator: content', skip empty messages, split messages with line breaks). They do not create folders.",
+    "run(arguments): sets sys.argv and executes the file itself with runpy as __main__, like the program run from the command line.",
+    "imports json and runpy, used by the scaffolding."
+  ],
+  "pinned_behavior": [
+    "typical: -i/-o and --input/--output read the paths; the converted messages are written in file name order, one line each, empty messages skipped; with -v t the progress messages are printed, without -v nothing is printed.",
+    "edge: without arguments, the defaults are cwd + '/JSON Files' and cwd + '/Output/output.txt'; -h/--help prints the help (with the default paths) and exits; '-v false' keeps the string 'false', which is truthy, so the progress is printed (defect, pinned); only the parent of the output folder is created, so a two-level new output folder ends in FileNotFoundError with only the first level created (defect, pinned).",
+    "invalid: an option without its value (-i at the end) raises IndexError."
+  ],
+  "not_pinned_on_purpose": [
+    "The total time printed in verbose mode varies; only the fixed messages are pinned.",
+    "Absolute Windows paths with backslashes are not used: the program splits paths on '/', and that path handling is not what the snippet sets out to do differently on each system."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "snippet_lines": [
+    132,
+    195
+  ]
+}

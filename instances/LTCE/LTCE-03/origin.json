@@ -1,0 +1,64 @@
+{
+  "id": "LTCE-03",
+  "files": {
+    "unit": "LTCE_03.py",
+    "tests": "test_LTCE_03.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Code/std_hustle.py",
+  "function": "visit_takeElementNode",
+  "function_line": 3256,
+  "lines": [
+    3300
+  ],
+  "snippet": "whole function visit_takeElementNode, lines 3256 to 3302 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "3300:NOC=108;NOL=2",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOC >= 101 only (NOC=108, NOL=2) on line 3300.",
+  "entry_point": "run(container, index, should_return_null=False)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 9: import sys",
+    "lines 1850 to 1871 and 1893 to 1899: RTResult (__init__, reset, register, success and should_return)",
+    "lines 1901 to 1913: Value (__init__, set_pos, set_context)",
+    "lines 1974 to 1977 and 2085 to 2089: Number (__init__, __str__, __repr__); line 2091: Number.null",
+    "lines 2096 to 2099 and 2133 to 2137: String (__init__, __str__, __repr__)",
+    "lines 2139 to 2142 and 2199 to 2203: List (__init__, __str__, __repr__)",
+    "lines 2911 to 2918: class Interpreter, visit and no_visit_method",
+    "lines 3256 to 3302: Interpreter.visit_takeElementNode"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet).",
+  "removed_from_original": [
+    "lines 1 to 8 and 10 to 14: the other imports, including star imports of the project's own modules (arrow_strings, keywords, ops), not in the dataset: not used by the snippet.",
+    "line 16: TODO comment about a game: not used.",
+    "the rest of the 3,441-line file (lexer, parser, the other node classes, the other methods of RTResult, Value, Number, String and List, built-in functions, the compiler and the other visit methods): outside the snippet and not needed to run it."
+  ],
+  "scaffolding": [
+    "takeElementNode (lines 453 to 461 of the original) rewritten without the body_node parameter, which the snippet never reads: with it, the constructor has 5 parameters and Pysmell detects LPL (PAR=5) in the scaffolding.",
+    "ValueNode and Interpreter.visit_ValueNode: a node that evaluates to an already computed value, in place of the number, string and list nodes of the parser (which would need tokens and positions); visit dispatches to it by the class name, as for any node.",
+    "run(container, index, should_return_null=False): converts the Python arguments into values of the language, builds the takeElementNode, visits it and converts the result back."
+  ],
+  "pinned_behavior": [
+    "typical: element of a list (number or nested list) and character of a string, returned inside a list.",
+    "edge: a negative index is not checked and works as in Python; should_return_null returns the null value ('\\\\n').",
+    "invalid: index out of range, index that is not a number and container that is neither a list nor a string print a RUNTIME ERROR line and exit (SystemExit) with the messages of the original."
+  ],
+  "not_pinned_on_purpose": [
+    "The context and positions of the values are not observable through run."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "Interpreter (line 2911 of the original)",
+  "note": "The snippet keeps the author's comment 'github copilot helped me out on this one lul' (line 3266), by rule 1, as in LPL-01 and MNC-07."
+}

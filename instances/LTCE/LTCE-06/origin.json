@@ -1,0 +1,53 @@
+{
+  "id": "LTCE-06",
+  "files": {
+    "unit": "LTCE_06.py",
+    "tests": "test_LTCE_06.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 3 (data/selection/candidates_pyexamine.csv)",
+  "file": "097_playwright-python/scripts/documentation_provider.py",
+  "function": "self_or_override",
+  "function_line": 542,
+  "lines": [
+    544
+  ],
+  "snippet": "whole function self_or_override, lines 542 to 548 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "544:NOC=84;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=84): the expression is spread over three lines.",
+  "entry_point": "run(item)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 19: from typing import ... (reduced to Any)",
+    "lines 542 to 548: self_or_override"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (json, re, subprocess, stderr, urljoin, to_snake_case and the rest of typing): not used by the snippet.",
+    "the rest of the file (the DocumentationProvider class and the script that compares the API documentation with the Python implementation): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(item): calls self_or_override and returns its result."
+  ],
+  "pinned_behavior": [
+    "typical: an item with a Python override returns the override object itself; an item without overrides returns the item itself.",
+    "edge: overrides without a python entry, with an empty python entry ({}) or empty: the item itself is returned (an empty override is falsy).",
+    "invalid: an item without 'langs' raises KeyError; overrides that are not a dict (a list) raise AttributeError."
+  ],
+  "not_pinned_on_purpose": [
+    "Whether run returns a copy or the same object is pinned with 'is', since the original returns the same object; nothing else about the objects is pinned."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

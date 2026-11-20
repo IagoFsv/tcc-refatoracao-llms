@@ -1,0 +1,57 @@
+{
+  "id": "LTCE-13",
+  "files": {
+    "unit": "LTCE_13.py",
+    "tests": "test_LTCE_13.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 10 (data/selection/candidates_pyexamine.csv)",
+  "file": "024_sentry/src/sentry/dynamic_sampling/tasks/boost_low_volume_transactions.py",
+  "function": "merge_transactions",
+  "function_line": 617,
+  "lines": [
+    661
+  ],
+  "snippet": "whole function merge_transactions, lines 617 to 665 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "661:NOC=63;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=63): the expression on line 661 is spread over three lines.",
+  "entry_point": "run(left, right=None, totals=None)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 3: from typing import ... (reduced to TypedDict)",
+    "lines 60 to 68: ProjectIdentity",
+    "lines 70 to 79: ProjectTransactions",
+    "lines 82 to 86: ProjectTransactionsTotals",
+    "lines 243 to 247: is_same_project",
+    "lines 617 to 665: merge_transactions"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet).",
+  "removed_from_original": [
+    "the other imports (sentry_sdk, snuba_sdk, the sentry modules, datetime and the rest of collections.abc/typing): not used by the snippet or by the copied definitions.",
+    "the rest of the file (the Celery tasks, the Snuba queries and the iterators over organizations): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(left, right=None, totals=None): calls merge_transactions."
+  ],
+  "pinned_behavior": [
+    "typical: left and right of the same project: left order kept, names of right already in left ignored (the left count wins), new names appended; totals copied.",
+    "edge: only left: the merged counts are the left list itself; no totals: both totals are None; empty left plus right.",
+    "invalid: no input raises ValueError('no transactions passed to merge'); different projects and mismatched totals raise ValueError with the ids in the arguments; left None with right given fails the assert (AssertionError)."
+  ],
+  "not_pinned_on_purpose": [
+    "Whether the left list is copied when right is given (it is: a new list) is not pinned; only the content."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

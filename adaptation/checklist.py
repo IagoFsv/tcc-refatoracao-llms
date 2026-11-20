@@ -39,16 +39,27 @@ import tempfile
 import tokenize
 import warnings
 import xml.etree.ElementTree as ET
+import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from pysmell.detect import detect_file
 
 ROOT = Path(__file__).resolve().parent.parent
-SELECTION = ROOT / "data" / "selection" / "instances_zhang.csv"
+# Selection lists. Zhang rows point to a file of the Zhang dataset; PyExamine
+# rows (with a "repo" column) point to a file inside the corpus zip.
+SELECTIONS = {ROOT / "data" / "selection" / name: phase for name, phase in
+              (("instances_zhang.csv", 1), ("instances_zhang_phase2.csv", 2),
+               ("instances_pyexamine.csv", 2))}
 DATASET = ROOT / "data" / "dataset_zhang" / "dataset" / "files"
+CORPUS_ZIP = ROOT / "data" / "dataset_pyexamine" / "cloned_repositories_py.zip"
 INSTANCES = ROOT / "instances"
 TABLE = INSTANCES / "checklist.csv"
+
+# Smells whose detections are compared inside the snippet and forbidden in
+# the scaffolding, per phase. Phase 1 units were built and used when only
+# its four smells were studied, so they are judged by those four.
+SMELLS = {1: ("LM", "LPL", "LLF", "MNC"), 2: ("LM", "LPL", "LLF", "MNC", "LTCE", "CCC")}
 
 # Provenance record of each instance and the keys the checklist reads.
 ORIGIN_FILE = "origin.json"
@@ -57,7 +68,7 @@ ORIGIN_SAME_AS_SELECTION = {"id": "id", "smell": "smell", "file": "file"}
 ORIGIN_SNIPPET_LINES = "snippet_lines"
 
 PACKAGES = ("pytest", "pandas", "tqdm", "numpy", "scikit-image", "scipy", "requests", "toml", "invoke",
-            "beautifulsoup4", "termcolor")
+            "beautifulsoup4", "termcolor", "tabulate")
 MUTANT_TIMEOUT = 30  # seconds; a mutant that times out counts as killed
 TEST_PREFIXES = ("test_typical_", "test_edge_", "test_invalid_")
 CONTRACT = ("Public entry point: run(", "Do not change its name or signature")
@@ -91,8 +102,36 @@ def _parse(text):
 
 
 def _selection():
-    with open(SELECTION, encoding="utf-8", newline="") as fh:
-        return {row["id"]: row for row in csv.DictReader(fh)}
+    """Every selected instance by id, with its phase; PyExamine rows get file = repo/file."""
+    instances = {}
+    for path, phase in SELECTIONS.items():
+        if not path.exists():
+            continue
+        with open(path, encoding="utf-8", newline="") as fh:
+            for row in csv.DictReader(fh):
+                if "repo" in row:
+                    row["file"] = f"{row['repo']}/{row['file']}"
+                row["phase"] = phase
+                instances[row["id"]] = row
+    return instances
+
+
+_corpus_dir = None
+
+
+def _original_path(inst):
+    """Path of the original file; corpus files are extracted to a temporary folder."""
+    global _corpus_dir
+    if "repo" not in inst:
+        return DATASET / inst["file"]
+    if _corpus_dir is None:
+        _corpus_dir = Path(tempfile.mkdtemp(prefix="checklist_corpus_"))
+    target = _corpus_dir / inst["file"]
+    if not target.exists():
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(CORPUS_ZIP) as z:
+            target.write_bytes(z.read(inst["file"]))
+    return target
 
 
 def _paths(inst):
@@ -120,7 +159,7 @@ def _original_snippet(inst, origin):
     through the line of the def. Module-level code (<module>) has no function
     node; the range comes from the provenance record.
     """
-    lines = _read_lines(DATASET / inst["file"])
+    lines = _read_lines(_original_path(inst))
     if ORIGIN_SNIPPET_LINES in origin:
         start, end = origin[ORIGIN_SNIPPET_LINES]
         return start, end, lines[start - 1:end]
@@ -142,14 +181,14 @@ def _locate(block, lines):
 
 # ---------------------------------------------------------------- 2. pysmell
 
-def _detections(path, start, end):
+def _detections(path, start, end, smells):
     """Detections of the study smells, split into inside and outside the snippet.
 
     Inside the snippet, the line becomes relative to the start, to compare
     original and unit.
     """
     inside, outside = [], []
-    for d in detect_file(str(path)):
+    for d in detect_file(str(path), smells=smells):
         if start <= d["line"] <= end:
             inside.append((d["smell"], d["line"] - start, d["metrics"]))
         else:
@@ -380,8 +419,9 @@ def check(inst, with_mutation=True):
     if ustart is None:
         row["pysmell"] = "n/a"
     else:
-        orig_inside, _ = _detections(DATASET / inst["file"], start, end)
-        unit_inside, unit_outside = _detections(unit, ustart, uend)
+        smells = SMELLS[inst["phase"]]
+        orig_inside, _ = _detections(_original_path(inst), start, end, smells)
+        unit_inside, unit_outside = _detections(unit, ustart, uend, smells)
         expected = {int(n) - start for n in inst["lines"].split(";")}
         of_smell = {rel for s, rel, _ in orig_inside if s == inst["smell"]}
         ok = orig_inside == unit_inside and not unit_outside and expected <= of_smell

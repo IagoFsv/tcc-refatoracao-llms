@@ -1,0 +1,51 @@
+{
+  "id": "LTCE-10",
+  "files": {
+    "unit": "LTCE_10.py",
+    "tests": "test_LTCE_10.py"
+  },
+  "smell": "LTCE",
+  "smell_name": "Long Ternary Conditional Expression",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 7 (data/selection/candidates_pyexamine.csv)",
+  "file": "011_keras/keras/src/backend/common/backend_utils.py",
+  "function": "_convert_conv_tranpose_padding_args_from_keras_to_jax",
+  "function_line": 7,
+  "lines": [
+    25
+  ],
+  "snippet": "whole function _convert_conv_tranpose_padding_args_from_keras_to_jax, lines 7 to 45 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "25:NOC=79;NOL=3",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 101 or NOL >= 3"
+  },
+  "trigger": "NOL >= 3 only (NOC=79): the expression is spread over three lines.",
+  "entry_point": "run(kernel_size, stride, padding, output_padding=None, dilation_rate=1)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 7 to 45: _convert_conv_tranpose_padding_args_from_keras_to_jax"
+  ],
+  "comments_in_snippet": "Kept, by rule 1 (verbatim snippet).",
+  "removed_from_original": [
+    "lines 1 to 4, imports functools, operator, re and warnings: not used by the snippet.",
+    "the rest of the file (the other padding conversions and helpers for the backends): outside the snippet."
+  ],
+  "scaffolding": [
+    "run(kernel_size, stride, padding, output_padding=None, dilation_rate=1): calls the function with the arguments in its order. The padding mode comes before the optional arguments so that run itself does not take five required parameters."
+  ],
+  "pinned_behavior": [
+    "typical: valid and same padding, odd and even kernel, no output padding.",
+    "edge: stride larger than the kernel (valid fills the output padding up to the stride), dilation, explicit output padding in both modes, mode in upper case, kernel 1.",
+    "invalid: an unknown mode raises AssertionError; None as mode raises AttributeError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "note": "The snippet has 5 parameters without default, so it also has LPL (PAR=5), in the original and in the unit; only LTCE is the instance smell."
+}
