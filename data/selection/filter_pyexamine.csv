@@ -1,0 +1,11 @@
+smell,reason,units
+LTCE,duplicate repository,22
+LTCE,test file,621
+LTCE,external name,2871
+LTCE,too large,22
+LTCE,eligible,202
+CCC,duplicate repository,31
+CCC,test file,915
+CCC,external name,1734
+CCC,too large,34
+CCC,eligible,238
