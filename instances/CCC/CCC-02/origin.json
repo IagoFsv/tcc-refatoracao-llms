@@ -1,0 +1,58 @@
+{
+  "id": "CCC-02",
+  "files": {
+    "unit": "CCC_02.py",
+    "tests": "test_CCC_02.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "render_scene",
+  "function_line": 1012,
+  "lines": [
+    1018
+  ],
+  "occurrences": 1,
+  "snippet": "whole function render_scene, lines 1012 to 1030 of the original",
+  "verbatim": true,
+  "copy_of": {
+    "instance": "MNC-20",
+    "detail": "Same function of the same file (render_scene has both MNC and CCC). The tests are the same as in MNC-20, except for the instance id and the imported module; the unit differs only in World.__init__ (see scaffolding)."
+  },
+  "metrics": {
+    "original": "1018:NOC=113;NOFF=3;NOO=18",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOFF=3 only (NOC=113 but NOO=18): three nested for clauses.",
+  "entry_point": "run(descriptions)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 539 and 540: get_description of Location",
+    "lines 1012 to 1030: render_scene"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: '# Print out the world map'.",
+  "removed_from_original": [
+    "all the rest of the file: outside the snippet; GameData reads game_data.json from disk when the module is imported."
+  ],
+  "scaffolding": [
+    "Same unit as MNC-20 (the same function is the MNC-20 snippet: lines 1023 and 1028 also have LEC=3, so the snippet keeps the MNC detections of the original), except for World.__init__: in MNC-20 it builds the map with a comprehension of three for clauses, which is CCC; here it uses loops with the same behavior, so that nothing in the scaffolding is flagged among the six smells.",
+    "Minimal Location: description and get_description (copied).",
+    "get_location written without the chain of three indices, as in MNC-20.",
+    "run(descriptions): render_scene(World(descriptions))."
+  ],
+  "pinned_behavior": [
+    "typical: 100 blank lines (clearing the screen), one line per (x, y) with the z descriptions joined, a blank line at the end.",
+    "edge: empty descriptions print nothing on the line; a one-cell map.",
+    "invalid: an irregular map (a row shorter than the first) raises IndexError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "CCC-12",
+  "files": {
+    "unit": "CCC_12.py",
+    "tests": "test_CCC_12.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 9 (data/selection/candidates_pyexamine.csv)",
+  "file": "241_cpython/Lib/tkinter/__init__.py",
+  "function": "<module>",
+  "function_line": 0,
+  "lines": [
+    4977
+  ],
+  "snippet": "lines 4977 to 4979 of the original (module-level statement)",
+  "verbatim": true,
+  "metrics": {
+    "original": "4977:NOC=136;NOFF=2;NOO=24",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=136 and NOO=24 (NOFF=2): the list of public names, with three conditions.",
+  "entry_point": "run(extra_names)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 36: import types",
+    "line 43: wantobjects = 1",
+    "lines 4977 to 4979: __all__"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the whole module except the snippet (about 4,970 lines: Tk, widgets, variables, _test): the snippet only lists the names the module defines; _tkinter needs the Tcl/Tk library."
+  ],
+  "scaffolding": [
+    "A small module in place of tkinter, with names of each kind the snippet tells apart: public classes and functions (TclError, Variable, getint), a public constant (TkVersion), private names (_default_root, _join), modules (importlib, sys, types) and wantobjects.",
+    "run(extra_names): adds the names to the module namespace, reloads the module with importlib.reload (which runs the module code again in the same namespace, so the snippet sees the extra names in globals()), returns sorted(__all__) and removes the extra names. run is defined before the snippet, so it is itself a public name.",
+    "The `if __name__ == '__main__': _test()` block of the original is not in the unit: _test opens a window."
+  ],
+  "pinned_behavior": [
+    "typical: the public names of the module.",
+    "edge: extra names that start with an underscore, that are modules or that are wantobjects are left out; a plain extra name is included; a later call without extra names is back to the module's own names.",
+    "invalid: a name that is not a string makes the snippet fail (AttributeError on startswith)."
+  ],
+  "not_pinned_on_purpose": [
+    "The order of __all__: run returns it sorted.",
+    "A refactoring that adds new public names to the module (for example a public helper function) changes __all__ and fails the tests: that changes the public interface of the module, not only its structure."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "snippet_lines": [
+    4977,
+    4979
+  ]
+}

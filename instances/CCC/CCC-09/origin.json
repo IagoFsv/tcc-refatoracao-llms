@@ -1,0 +1,56 @@
+{
+  "id": "CCC-09",
+  "files": {
+    "unit": "CCC_09.py",
+    "tests": "test_CCC_09.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 6 (data/selection/candidates_pyexamine.csv)",
+  "file": "036_pipenv/pipenv/patched/pip/_vendor/pkg_resources/__init__.py",
+  "function": "iter_entry_points",
+  "function_line": 702,
+  "lines": [
+    709
+  ],
+  "snippet": "whole method iter_entry_points, lines 702 to 714 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "709:NOC=100;NOFF=3;NOO=18",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOFF=3 only (NOC=100 but NOO=18): a generator expression with two for clauses and a condition.",
+  "entry_point": "run(distributions, group, name=None)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 2933 to 2943: Distribution.get_entry_map",
+    "lines 702 to 714: WorkingSet.iter_entry_points"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the rest of pkg_resources (3,361 lines: metadata providers, requirement parsing, the real WorkingSet and Distribution): outside the snippet."
+  ],
+  "scaffolding": [
+    "Minimal EntryPoint: name, value and the distribution that declares it.",
+    "Minimal Distribution: project name and the entry point map built from a dict; get_entry_map copied (in the original the map is parsed from entry_points.txt when first read; here it is ready at creation, so the AttributeError branch is never taken).",
+    "Minimal WorkingSet: iterates the distributions in the order given (the original iterates path entries and skips duplicate projects).",
+    "run(distributions, group, name=None): builds the working set, iterates the entry points and returns (project, entry name, value) for each one."
+  ],
+  "pinned_behavior": [
+    "typical: every entry point of the group, in distribution order and, inside a distribution, in declaration order.",
+    "edge: filtering by name; a name that is not in the group; an unknown group yields nothing.",
+    "invalid: a name with group None raises AttributeError (get_entry_map(None) returns the whole map, whose values are dicts, not entry points)."
+  ],
+  "not_pinned_on_purpose": [
+    "That the result is a lazy generator: a refactoring may return a list."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "WorkingSet (line 600 of the original)"
+}

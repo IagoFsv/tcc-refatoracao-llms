@@ -1,0 +1,54 @@
+{
+  "id": "CCC-10",
+  "files": {
+    "unit": "CCC_10.py",
+    "tests": "test_CCC_10.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 7 (data/selection/candidates_pyexamine.csv)",
+  "file": "275_beam/sdks/python/apache_beam/runners/worker/operation_specs.py",
+  "function": "worker_printable_fields",
+  "function_line": 53,
+  "lines": [
+    55
+  ],
+  "snippet": "whole function worker_printable_fields, lines 53 to 78 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "55:NOC=371;NOFF=2;NOO=37",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=371 and NOO=37 (NOFF=2): the comprehension spans the condition and a tuple of 20 field names.",
+  "entry_point": "run(type_name, fields)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 26: import collections",
+    "lines 31 to 50: build_worker_instruction",
+    "lines 53 to 78: worker_printable_fields",
+    "lines 81 to 85: worker_object_to_string"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the comments about _asdict, the pylint directive and 'want to output value 0 but not None nor []'.",
+  "removed_from_original": [
+    "license header and module docstring; 'from apache_beam import coders' and the Worker* record definitions with their docstrings (lines 88 to the end): the snippet does not use them."
+  ],
+  "scaffolding": [
+    "run(type_name, fields): builds a record type with build_worker_instruction (copied), creates a record with the values and returns str(record), which calls worker_object_to_string (copied). Written with 2-space indentation, as the original file."
+  ],
+  "pinned_behavior": [
+    "typical: a field whose name is in the excluded list is left out.",
+    "edge: 0 and False are kept, empty list, None and empty string are left out, excluded names are left out, a record with no fields.",
+    "invalid: a field name that is not an identifier is rejected when the type is built (ValueError, from namedtuple)."
+  ],
+  "not_pinned_on_purpose": [
+    "The error case comes from the record type (namedtuple), not from the snippet: given a record, the snippet does not fail."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

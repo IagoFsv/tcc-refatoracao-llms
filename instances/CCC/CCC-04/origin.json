@@ -1,0 +1,55 @@
+{
+  "id": "CCC-04",
+  "files": {
+    "unit": "CCC_04.py",
+    "tests": "test_CCC_04.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 1 (data/selection/candidates_pyexamine.csv)",
+  "file": "029_holoviews/holoviews/core/util.py",
+  "function": "dimension_sort",
+  "function_line": 1260,
+  "lines": [
+    1268,
+    1276
+  ],
+  "snippet": "whole function dimension_sort, lines 1260 to 1279 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "1268:NOC=94;NOFF=2;NOO=23|1276:NOC=101;NOFF=2;NOO=28",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC and NOO on both lines (NOC=94 and 101, NOO=23 and 28; NOFF=2): the list of indexes and the generator inside the sort key. The lambda on line 1276 is also LLF (NOC=116, NOO=31), as in the original.",
+  "entry_point": "run(data, kdims, vdims, key_index)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 5: import itertools",
+    "lines 1215 to 1231: python2sort",
+    "lines 1260 to 1279: dimension_sort"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (numpy, pandas, param, packaging and many standard modules): the snippet and python2sort do not use them.",
+    "all the rest of the module: outside the snippet."
+  ],
+  "scaffolding": [
+    "Minimal Dimension: name and values (a non-empty list makes it categorical), the two attributes the snippet reads; the real one is holoviews.core.dimension.Dimension, built on param.",
+    "_dimension(spec): a name or a (name, values) pair becomes a Dimension.",
+    "run(data, kdims, vdims, key_index): builds the dimensions, calls dimension_sort and returns the items as a list."
+  ],
+  "pinned_behavior": [
+    "typical: sorting by the key dimensions in order and by a value dimension.",
+    "edge: categorical order follows the declared values; incomparable keys (None and integers) are grouped and each group sorted (python2sort); empty data.",
+    "invalid: a repeated dimension raises ValueError('Cannot sort on duplicated dimensions'); a key value missing from the categorical values raises ValueError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

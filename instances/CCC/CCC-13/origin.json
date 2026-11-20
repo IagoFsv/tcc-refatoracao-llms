@@ -1,0 +1,57 @@
+{
+  "id": "CCC-13",
+  "files": {
+    "unit": "CCC_13.py",
+    "tests": "test_CCC_13.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 10 (data/selection/candidates_pyexamine.csv)",
+  "file": "080_cython/setup.py",
+  "function": "<module>",
+  "function_line": 0,
+  "lines": [
+    41
+  ],
+  "snippet": "lines 41 to 45 of the original (module-level statement)",
+  "verbatim": true,
+  "metrics": {
+    "original": "41:NOC=180;NOFF=2;NOO=29",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=180 and NOO=29 (NOFF=2): a comprehension over os.walk with three conditions.",
+  "entry_point": "run(folder)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 6: import os",
+    "lines 41 to 45: pxd_include_dirs"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the rest of setup.py: setuptools/distutils imports, the sdist command, the package data, the compilation of the Cython modules and the call to setup() (which would build the package); they are outside the snippet."
+  ],
+  "scaffolding": [
+    "run(folder): changes the working directory to folder, reloads the module with importlib.reload (the snippet is module-level code and reads the tree relative to the working directory, as setup.py does when run from the source root), returns the folders found, sorted, and goes back to the previous directory.",
+    "When the unit is first imported, the snippet runs in the current directory, where Cython/Includes does not exist, and finds nothing."
+  ],
+  "pinned_behavior": [
+    "typical: the root Cython/Includes and the folders holding __init__.pxd or __init__.pyx; a folder with only other .pxd files is left out.",
+    "edge: nested folders; a folder without the tree gives an empty list.",
+    "invalid: a Cython/Includes that is a file is accepted and gives an empty list (os.walk does not fail)."
+  ],
+  "not_pinned_on_purpose": [
+    "The order of the folders: os.walk lists them in the order of the file system; run returns them sorted."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "snippet_lines": [
+    41,
+    45
+  ]
+}

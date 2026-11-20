@@ -1,0 +1,56 @@
+{
+  "id": "CCC-01",
+  "files": {
+    "unit": "CCC_01.py",
+    "tests": "test_CCC_01.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "Zhang et al. (2024), results of RQ1.xlsx",
+  "file": "Repositories/argos_ai_adventure.py",
+  "function": "generate_world_map",
+  "function_line": 811,
+  "lines": [
+    812
+  ],
+  "occurrences": 1,
+  "snippet": "whole method generate_world_map, lines 811 and 812 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "812:NOC=123;NOFF=3;NOO=22",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOFF=3 (three nested for clauses); NOC=123 and NOO=22 also reach the threshold.",
+  "entry_point": "run(size_x, size_y, size_z)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 787: world_map_size in World.__init__",
+    "lines 811 and 812: World.generate_world_map"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "all the rest of the file: outside the snippet; GameData reads game_data.json from disk when the module is imported, and the original World.__init__ creates the player, enemies and treasure, which the snippet does not use."
+  ],
+  "scaffolding": [
+    "Minimal Location: coordinates x, y, z and the location tuple (the original Location derives from Node and also generates terrain, monsters and an item dict, which the snippet does not use).",
+    "Minimal World: the three sizes come from the arguments (the original fixes them at 10) and __init__ calls generate_world_map.",
+    "run(size_x, size_y, size_z): builds the World and returns the coordinates of every cell grouped by x and then by y, with loops (a comprehension of the same shape would put the smell in the scaffolding)."
+  ],
+  "pinned_behavior": [
+    "typical: a 2 x 2 x 3 map has one cell per coordinate, grouped by x and then by y.",
+    "edge: a one-cell map; a zero size on any axis gives empty groups at that level.",
+    "invalid: a size that is not an integer raises TypeError."
+  ],
+  "not_pinned_on_purpose": [
+    "get_location of the original is not in the unit: it is the snippet of MNC-19 (chain of three indices) and the snippet does not call it."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "World (line 782 of the original)"
+}

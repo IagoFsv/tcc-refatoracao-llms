@@ -1,0 +1,58 @@
+{
+  "id": "CCC-06",
+  "files": {
+    "unit": "CCC_06.py",
+    "tests": "test_CCC_06.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 3 (data/selection/candidates_pyexamine.csv)",
+  "file": "010_matplotlib/lib/matplotlib/transforms.py",
+  "function": "__setstate__",
+  "function_line": 137,
+  "lines": [
+    142
+  ],
+  "snippet": "whole method __setstate__, lines 137 to 144 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "142:NOC=106;NOFF=2;NOO=26",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=106 and NOO=26 (NOFF=2): the dict comprehension that rebuilds the weak references, with a lambda as callback.",
+  "entry_point": "run(parents)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 42: import weakref",
+    "line 100: the state constants of TransformNode",
+    "lines 113 to 125: TransformNode.__init__",
+    "lines 132 to 135: TransformNode.__getstate__",
+    "lines 137 to 144: TransformNode.__setstate__"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: the three comments about turning the dictionary back into weak values.",
+  "removed_from_original": [
+    "the other imports (numpy, matplotlib._api, matplotlib._path, Path): the snippet does not use them.",
+    "the rest of TransformNode (DEBUG __str__, __copy__, invalidation, set_children, frozen) and of the module (the transform classes): outside the snippet."
+  ],
+  "scaffolding": [
+    "Class TransformNode reduced to its docstring summary, the state constants, __init__, __getstate__ and __setstate__ (copied).",
+    "run(parents): restores a node with TransformNode.__new__ and __setstate__, as pickle does, from a state whose _parents holds the given objects (None for a parent that no longer exists), and returns the object each rebuilt reference leads to."
+  ],
+  "pinned_behavior": [
+    "typical: each parent is kept, in order, and its reference leads to the same object.",
+    "edge: parents given as None are dropped; an empty state.",
+    "invalid: a parent that cannot be referenced weakly (an int) raises TypeError."
+  ],
+  "not_pinned_on_purpose": [
+    "What happens when a parent object dies after the restore: the callback is bound to the pop of the dictionary that was in the state (self._parents before the assignment), not to the new one, and that old dictionary keeps the parents alive through the bound method. That depends on reference counting and on the lifetime of objects outside the unit, not on a returned value."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "TransformNode (line 84 of the original)"
+}

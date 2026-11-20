@@ -1,0 +1,52 @@
+{
+  "id": "CCC-11",
+  "files": {
+    "unit": "CCC_11.py",
+    "tests": "test_CCC_11.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 8 (data/selection/candidates_pyexamine.csv)",
+  "file": "030_streamlit/scripts/run_bare_execution_tests.py",
+  "function": "_get_filenames",
+  "function_line": 51,
+  "lines": [
+    53
+  ],
+  "snippet": "whole function _get_filenames, lines 51 to 59 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "53:NOC=181;NOFF=2;NOO=26",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=181 and NOO=26 (NOFF=2): a comprehension with three conditions.",
+  "entry_point": "run(folder, excluded=())",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 27: import os",
+    "line 32: from typing import Set",
+    "line 39: EXCLUDED_FILENAMES",
+    "lines 51 to 59: _get_filenames"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "license header and module docstring; imports of multiprocessing, subprocess, sys, click; E2E_DIR, the MPLBACKEND setting, _command_to_string, run_commands and main: they run the scripts in subprocesses and are outside the snippet."
+  ],
+  "scaffolding": [
+    "run(folder, excluded=()): fills EXCLUDED_FILENAMES (empty in the original, so the exclusion would never be observable) and returns _get_filenames(folder)."
+  ],
+  "pinned_behavior": [
+    "typical: .py files sorted by name, as absolute paths; other extensions left out.",
+    "edge: files ending in _test.py and excluded names are left out (a name starting with test_ is kept, and so is a folder named like a script); an empty folder.",
+    "invalid: a folder that does not exist raises FileNotFoundError."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

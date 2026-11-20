@@ -1,0 +1,58 @@
+{
+  "id": "CCC-07",
+  "files": {
+    "unit": "CCC_07.py",
+    "tests": "test_CCC_07.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 4 (data/selection/candidates_pyexamine.csv)",
+  "file": "137_datasets/tensorflow_datasets/datasets/asset/asset_dataset_builder.py",
+  "function": "<module>",
+  "function_line": 0,
+  "lines": [
+    45
+  ],
+  "snippet": "lines 45 to 52 of the original (module-level statement)",
+  "verbatim": true,
+  "metrics": {
+    "original": "45:NOC=160;NOFF=2;NOO=23",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=160 and NOO=23 (NOFF=2): the list of (name, address) pairs built from two for clauses.",
+  "entry_point": "run(name)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "lines 28 to 41: _URL_LIST",
+    "lines 45 to 52: the snippet",
+    "line 54: _URLs = dict(_URL_LIST)"
+  ],
+  "comments_in_snippet": "Kept, by rule 1: '# pylint:disable=g-complex-comprehension'. The comment names the kind of problem in the line (a lint rule of the original project), which the model will see.",
+  "removed_from_original": [
+    "license header, module docstring and the other constants (_HOMEPAGE, _LICENSE) and the comment on line 43: not used by the snippet.",
+    "imports of csv, numpy, tensorflow and tensorflow_datasets, and the Builder class (lines 57 to the end): the builder needs tensorflow_datasets and downloads the files; the snippet only builds the list of addresses."
+  ],
+  "scaffolding": [
+    "run(name): returns _URLs[name], the use the Builder makes of the list (it downloads the dict of addresses)."
+  ],
+  "pinned_behavior": [
+    "typical: the address of a simplification file of each split.",
+    "edge: the files listed before the snippet (human ratings and the original sentences) and the last simplification (index 9).",
+    "invalid: a simplification index beyond 9 and an unknown split raise KeyError."
+  ],
+  "not_pinned_on_purpose": [
+    "The order of _URL_LIST: the dataset only uses it through the dict."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "snippet_lines": [
+    45,
+    52
+  ]
+}

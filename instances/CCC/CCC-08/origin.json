@@ -1,0 +1,51 @@
+{
+  "id": "CCC-08",
+  "files": {
+    "unit": "CCC_08.py",
+    "tests": "test_CCC_08.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 5 (data/selection/candidates_pyexamine.csv)",
+  "file": "067_jax/jax/_src/util.py",
+  "function": "subs_list2",
+  "function_line": 170,
+  "lines": [
+    176
+  ],
+  "snippet": "whole function subs_list2, lines 170 to 180 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "176:NOC=99;NOFF=3;NOO=24",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOFF=3, and NOC=99 with NOO=24: a comprehension whose element is a nested conditional expression. The function also has PAR=5 (LPL), as in the original.",
+  "entry_point": "run(subs1, subs2, sources, base)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 15: from __future__ import annotations",
+    "lines 170 to 180: subs_list2"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (numpy, jax internals) and the rest of the module: the snippet does not use them."
+  ],
+  "scaffolding": [
+    "Sequence (collections.abc, as in the original) and T = TypeVar('T') for the annotations.",
+    "run(subs1, subs2, sources, base): sources is the pair (src1, src2), so that run has four parameters and does not have the LPL of the snippet. Written with 2-space indentation, as the original file."
+  ],
+  "pinned_behavior": [
+    "typical: each element comes from the first source when its first index is set, else from the second source, else from the base.",
+    "edge: empty lists; only base elements.",
+    "invalid: index lists of different sizes, or a base with elements left over, fail the assert (AssertionError)."
+  ],
+  "not_pinned_on_purpose": [],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  }
+}

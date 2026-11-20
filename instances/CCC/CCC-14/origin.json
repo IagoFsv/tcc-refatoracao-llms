@@ -1,0 +1,59 @@
+{
+  "id": "CCC-14",
+  "files": {
+    "unit": "CCC_14.py",
+    "tests": "test_CCC_14.py"
+  },
+  "smell": "CCC",
+  "smell_name": "Complex Container Comprehension",
+  "source": "PyExamine corpus (Shivashankar and Martini, 2025), Zenodo record 14060772; drawn with seed 42, rank 11 (data/selection/candidates_pyexamine.csv)",
+  "file": "191_jupyterhub/jupyterhub/services/auth.py",
+  "function": "__repr__",
+  "function_line": 140,
+  "lines": [
+    144
+  ],
+  "snippet": "whole method __repr__, lines 140 to 150 of the original",
+  "verbatim": true,
+  "metrics": {
+    "original": "144:NOC=136;NOFF=1;NOO=25",
+    "unit": "see instances/checklist.csv",
+    "tuning_threshold": "NOC >= 92 and NOO >= 22, or NOFF >= 3"
+  },
+  "trigger": "NOC=136 and NOO=25 (NOFF=1): a dict comprehension whose value formats the value and the age.",
+  "entry_point": "run(entries, now)",
+  "external_dependencies": [],
+  "copied_verbatim": [
+    "line 36: import time",
+    "lines 108 to 119: class _ExpiringDict, docstring and class attributes",
+    "lines 121 to 138: __init__, __len__ and __setitem__",
+    "lines 140 to 150: __repr__",
+    "lines 174 to 176: __delitem__",
+    "lines 204 to 224: _maybe_purge and purge_expired"
+  ],
+  "comments_in_snippet": "No comment in the snippet.",
+  "removed_from_original": [
+    "the other imports (tornado, traitlets, jupyterhub internals) and the rest of the module (HubAuth, the request handlers): outside the snippet.",
+    "the other methods of _ExpiringDict (_check_age, __contains__, __getitem__, get, pop, clear): not used by the snippet nor by the methods kept."
+  ],
+  "scaffolding": [
+    "_clock(reading): context manager that replaces time.monotonic while a value is stored and while the repr is taken, so that the ages are fixed (the snippet calls time.monotonic()).",
+    "run(entries, now): stores each (key, value) when the clock reads its own time and returns repr(cache) when the clock reads now."
+  ],
+  "pinned_behavior": [
+    "typical: for each key, repr of the value cut to 16 characters plus '...', and the age in whole seconds.",
+    "edge: an empty cache gives '{}'; the age is rounded to whole seconds.",
+    "invalid: a time that is not a number fails when the age is computed (TypeError)."
+  ],
+  "not_pinned_on_purpose": [
+    "The clock is replaced through the time module: a refactoring that imports monotonic directly (from time import monotonic) would read the real clock and fail the tests."
+  ],
+  "adaptation_check": {
+    "environment": ".venv, Python 3.14.6",
+    "snippet_diff": "see instances/checklist.csv",
+    "pysmell": "see instances/checklist.csv",
+    "pytest": "3 passed",
+    "mutation": "see instances/checklist.csv"
+  },
+  "class": "_ExpiringDict (line 108 of the original)"
+}
