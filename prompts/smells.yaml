@@ -171,3 +171,46 @@ MNC:
 
     def first_order_city(data):
         return data[0].customer.address.city
+
+LTCE:
+  name: "Long Ternary Conditional Expression"
+  definition: "A ternary conditional expression that exceeds a considerable length."
+  technique: "Replace Ternary Expression with If Statement"
+  example_before: |-
+    def shipping_label(order):
+        label = (
+            f"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg"
+            if order['priority'] and order['weight_kg'] <= 5
+            else f"STANDARD | {order['customer']} | {order['city']}"
+        )
+        return label
+  example_after: |-
+    def shipping_label(order):
+        if order['priority'] and order['weight_kg'] <= 5:
+            label = f"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg"
+        else:
+            label = f"STANDARD | {order['customer']} | {order['city']}"
+        return label
+
+CCC:
+  name: "Complex Container Comprehension"
+  definition: "A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity."
+  technique: "Replace Comprehension with For Loop"
+  example_before: |-
+    def low_stock_report(warehouses):
+        return [
+            (warehouse['name'], product['sku'], product['qty'])
+            for warehouse in warehouses
+            if warehouse['active']
+            for product in warehouse['products']
+            if product['qty'] < product['min_qty']
+        ]
+  example_after: |-
+    def low_stock_report(warehouses):
+        report = []
+        for warehouse in warehouses:
+            if warehouse['active']:
+                for product in warehouse['products']:
+                    if product['qty'] < product['min_qty']:
+                        report.append((warehouse['name'], product['sku'], product['qty']))
+        return report

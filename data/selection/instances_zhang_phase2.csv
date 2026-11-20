@@ -1,0 +1,7 @@
+id,smell,file,function,function_line,lines,metrics,occurrences
+LTCE-01,LTCE,Code/main-4.py,<module>,0,157;165;173,157:NOC=105;NOL=2|165:NOC=106;NOL=2|173:NOC=107;NOL=2,3
+LTCE-02,LTCE,Code/main-8.py,update_city_column,83,94,94:NOC=131;NOL=1,1
+LTCE-03,LTCE,Code/std_hustle.py,visit_takeElementNode,3256,3300,3300:NOC=108;NOL=2,1
+CCC-01,CCC,Repositories/argos_ai_adventure.py,generate_world_map,811,812,812:NOC=123;NOFF=3;NOO=22,1
+CCC-02,CCC,Repositories/argos_ai_adventure.py,render_scene,1012,1018,1018:NOC=113;NOFF=3;NOO=18,1
+CCC-03,CCC,Repositories/day5.py,<module>,0,34;92,34:NOC=61;NOFF=3;NOO=19|92:NOC=61;NOFF=3;NOO=19,2

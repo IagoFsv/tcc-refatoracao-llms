@@ -47,9 +47,9 @@ pinned in `config.yaml`; the client aborts if the installed model differs.
 | Step                            | Where                                   |
 |---------------------------------|-----------------------------------------|
 | Input dataset (phase 1)         | `data/dataset_zhang/` (download, see below) |
-| Corpus (phase 2)                | `data/pyexamine/` (extraction and detection) |
+| Corpus (phase 2)                | `data/pyexamine/` (extraction, detection and sampling) |
 | Smell detection                 | `pysmell/` (Pysmell ported to Python 3) |
-| Instance selection (phase 1)    | `data/selection/`                       |
+| Instance selection              | `data/selection/`                       |
 | Adapted units + tests           | `instances/<SMELL>/<ID>/`               |
 | Instance checklist              | `adaptation/checklist.py`, `instances/checklist.csv` |
 | Context window                  | `adaptation/measure_window.py`, `instances/window.csv` |
@@ -91,6 +91,8 @@ python -m pysmell.validate_port            # checks the Pysmell port (83/83 snip
 python -m data.selection.select            # builds the list of phase 1 instances
 python -m data.pyexamine.extract_py        # downloads only the .py files of the PyExamine corpus
 python -m data.pyexamine.detect            # runs Pysmell on that corpus
+python -m data.selection.select --phase 2  # Zhang instances of the phase 2 smells
+python -m data.pyexamine.sample            # filters and samples the phase 2 instances
 python -m adaptation.checklist             # checklist of every instance
 pytest instances                           # tests of every instance
 python -m adaptation.measure_window        # prompt size of each instance in each model

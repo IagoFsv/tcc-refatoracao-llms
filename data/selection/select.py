@@ -1,4 +1,9 @@
-"""Selection of the phase 1 instances: the snippets of the Zhang et al. (2024) dataset.
+"""Selection of the instances from the Zhang et al. (2024) dataset.
+
+Phase 1 covers LM, LPL, LLF and MNC. Phase 2 (--phase 2) adds LTCE and CCC
+from the same spreadsheet and writes a separate CSV, so the phase 1 list is
+never touched. The rules below apply to both phases; the counts are those
+of phase 1.
 
 The universe is NOT everything Pysmell finds in the 311 files of the dataset
 (that would give 333 snippets of the 4 smells). It is the subset the paper
@@ -30,8 +35,9 @@ check: if any snippet of the spreadsheet is not reproduced by the port, the
 script fails instead of writing a partial list.
 
 Usage:
-    python -m data.selection.select           # writes the default CSV
-    python -m data.selection.select --check   # only checks, does not write
+    python -m data.selection.select             # phase 1, writes the default CSV
+    python -m data.selection.select --phase 2   # phase 2 (LTCE, CCC)
+    python -m data.selection.select --check     # only checks, does not write
 """
 
 import argparse
@@ -50,11 +56,25 @@ from pysmell._xlsx import read  # noqa: E402
 from pysmell.detect import detect_file  # noqa: E402
 
 SPREADSHEET = os.path.join(validate_port.ROOT, "results of RQ1.xlsx")
-OUTPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instances_zhang.csv")
+HERE = os.path.dirname(os.path.abspath(__file__))
 
-# Fixed order of the smells in the id numbering. Changing it renumbers every
-# instance.
-ORDER = ("LM", "LPL", "LLF", "MNC")
+# Per phase: the smells in id-numbering order (changing it renumbers every
+# instance), their names in the spreadsheet and the default output CSV.
+PHASES = {
+    1: {
+        "order": ("LM", "LPL", "LLF", "MNC"),
+        "labels": validate_port.NAMES,
+        "output": os.path.join(HERE, "instances_zhang.csv"),
+    },
+    2: {
+        "order": ("LTCE", "CCC"),
+        "labels": {
+            "Long Ternary Conditional Expression": "LTCE",
+            "Complex Container Comprehension": "CCC",
+        },
+        "output": os.path.join(HERE, "instances_zhang_phase2.csv"),
+    },
+}
 
 # lines and metrics are lists when the function has more than one snippet:
 #   lines   = "60;61;62"
@@ -63,7 +83,7 @@ FIELDS = ["id", "smell", "file", "function", "function_line", "lines",
           "metrics", "occurrences"]
 
 
-def spreadsheet_snippets(all_files):
+def spreadsheet_snippets(all_files, labels):
     """Reads the RQ1 spreadsheet and returns {(path, line, smell): n_occurrences}.
 
     Groups by (file, line, smell) because the unit refactored is the snippet,
@@ -74,13 +94,13 @@ def spreadsheet_snippets(all_files):
     occurrences = Counter()
     missing_file = []
     for row in read(SPREADSHEET)["Detected Code Smells"][1:]:
-        if len(row) < 4 or row[3] not in validate_port.NAMES:
+        if len(row) < 4 or row[3] not in labels:
             continue
         path = validate_port.locate(row[0], row[1], all_files)
         if path is None:
             missing_file.append(row[1])
             continue
-        occurrences[(path, int(row[2]), validate_port.NAMES[row[3]])] += 1
+        occurrences[(path, int(row[2]), labels[row[3]])] += 1
     if missing_file:
         raise SystemExit(
             "files in the spreadsheet that do not exist on disk: %s\n"
@@ -89,11 +109,11 @@ def spreadsheet_snippets(all_files):
     return occurrences
 
 
-def file_metrics(paths):
+def file_metrics(paths, smells):
     """Runs the port only on the relevant files and indexes by (path, line, smell)."""
     measures = {}
     for path in sorted(paths):
-        for item in detect_file(path, "tuning"):
+        for item in detect_file(path, "tuning", smells=smells):
             measures[(path, item["line"], item["smell"])] = item["metrics"]
     return measures
 
@@ -124,11 +144,12 @@ def enclosing_function(path, line, _cache={}):
     return (best.lineno, best.name) if best else (0, "<module>")
 
 
-def build():
+def build(phase=1):
     """Returns the list of instances, with ids, or aborts if the port diverges."""
+    order = PHASES[phase]["order"]
     all_files = list(validate_port.all_py())
-    occurrences = spreadsheet_snippets(all_files)
-    measures = file_metrics({p for p, _, _ in occurrences})
+    occurrences = spreadsheet_snippets(all_files, PHASES[phase]["labels"])
+    measures = file_metrics({p for p, _, _ in occurrences}, order)
 
     missing = sorted(set(occurrences) - set(measures))
     if missing:
@@ -150,7 +171,7 @@ def build():
         names[(path, start)] = name
 
     instances = []
-    for smell in ORDER:
+    for smell in order:
         # Sorted by file and by the first detected line, so the id is always
         # the same, however many times the script runs.
         keys = sorted(
@@ -174,19 +195,22 @@ def build():
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description="Selects the phase 1 instances (Zhang et al.).")
+    p = argparse.ArgumentParser(description="Selects the instances from Zhang et al.")
+    p.add_argument("--phase", type=int, choices=sorted(PHASES), default=1)
     p.add_argument("--check", action="store_true",
                    help="only check and summarize, without writing the CSV")
-    p.add_argument("--output", default=OUTPUT, help="path of the output CSV")
+    p.add_argument("--output", help="path of the output CSV (default depends on the phase)")
     args = p.parse_args(argv)
+    order = PHASES[args.phase]["order"]
+    output = args.output or PHASES[args.phase]["output"]
 
-    instances = build()
+    instances = build(args.phase)
     n_snippets = Counter()
     for i in instances:
         n_snippets[i["smell"]] += len(i["lines"].split(";"))
     count = Counter(i["smell"] for i in instances)
     print("%-5s %8s %9s" % ("smell", "snippets", "instances"))
-    for smell in ORDER:
+    for smell in order:
         print("%-5s %8d %9d" % (smell, n_snippets[smell], count[smell]))
     print("%-5s %8d %9d" % ("total", sum(n_snippets.values()), len(instances)))
     print("occurrences in the spreadsheet: %d" % sum(i["occurrences"] for i in instances))
@@ -200,11 +224,11 @@ def main(argv=None):
 
     if args.check:
         return 0
-    with open(args.output, "w", newline="", encoding="utf-8") as fh:
+    with open(output, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(instances)
-    print("\nwritten: %s" % args.output)
+    print("\nwritten: %s" % output)
     return 0
 
 
