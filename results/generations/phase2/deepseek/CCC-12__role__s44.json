@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-12__role__s44",
+  "instance": "CCC-12",
+  "smell": "CCC",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:57:30.455856+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \" \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names ({name: object}) added to its\n    namespace and returns its public names, sorted. Public entry point of this\n    unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = [name for name, obj in globals().items()\n           if not name.startswith('_') and not isinstance(obj, types.ModuleType)\n           and name not in {'wantobjects'}]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 27.26,
+  "done_reason": "stop",
+  "prompt_eval_count": 643,
+  "eval_count": 394,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \"  \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names \n    ({name: object}) added to its namespace and returns its public names, \n    sorted. Public entry point of this unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = []\nfor name, obj in globals().items():\n    if not name.startswith('_') and not isinstance(obj, types.ModuleType) and name not in {'wantobjects'}:\n        __all__.append(name)\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:57:30.4282504Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \"  \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names \n    ({name: object}) added to its namespace and returns its public names, \n    sorted. Public entry point of this unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = []\nfor name, obj in globals().items():\n    if not name.startswith('_') and not isinstance(obj, types.ModuleType) and name not in {'wantobjects'}:\n        __all__.append(name)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 27239639300,
+    "load_duration": 7033934400,
+    "prompt_eval_count": 643,
+    "prompt_eval_duration": 2349610000,
+    "eval_count": 394,
+    "eval_duration": 17852006000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-10__few_shot__s43",
+  "instance": "CCC-10",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T18:43:40.212674+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Compact text representation of worker instruction records.\n\nPublic entry point: run(type_name, fields). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport collections\n\n\ndef build_worker_instruction(*args):\n  \"\"\"Create an object representing a ParallelInstruction protobuf.\n\n  This will be a collections.namedtuple with a custom __str__ method.\n\n  Alas, this wrapper is not known to pylint, which thinks it creates\n  constants.  You may have to put a disable=invalid-name pylint\n  annotation on any use of this, depending on your names.\n\n  Args:\n    *args: first argument is the name of the type to create.  Should\n      start with \"Worker\".  Second arguments is alist of the\n      attributes of this object.\n  Returns:\n    A new class, a subclass of tuple, that represents the protobuf.\n  \"\"\"\n  tuple_class = collections.namedtuple(*args)\n  tuple_class.__str__ = worker_object_to_string\n  tuple_class.__repr__ = worker_object_to_string\n  return tuple_class\n\n\ndef worker_printable_fields(workerproto):\n  \"\"\"Returns the interesting fields of a Worker* object.\"\"\"\n  return [\n      '%s=%s' % (name, value)\n      # _asdict is the only way and cannot subclass this generated class\n      # pylint: disable=protected-access\n      for name,\n      value in workerproto._asdict().items()\n      # want to output value 0 but not None nor []\n      if (value or value == 0) and name not in (\n          'coder',\n          'coders',\n          'output_coders',\n          'elements',\n          'combine_fn',\n          'serialized_fn',\n          'window_fn',\n          'append_trailing_newlines',\n          'strip_trailing_newlines',\n          'compression_type',\n          'context',\n          'start_shuffle_position',\n          'end_shuffle_position',\n          'shuffle_reader_config',\n          'shuffle_writer_config')\n  ]\n\n\ndef worker_object_to_string(worker_object):\n  \"\"\"Returns a string compactly representing a Worker* object.\"\"\"\n  return '%s(%s)' % (\n      worker_object.__class__.__name__,\n      ', '.join(worker_printable_fields(worker_object)))\n\n\ndef run(type_name, fields):\n  \"\"\"Builds a record type with the given name and fields, creates a record\n  with the field values and returns its text. Public entry point of this\n  unit.\"\"\"\n  record_class = build_worker_instruction(type_name, list(fields))\n  return str(record_class(**fields))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.502,
+  "done_reason": "stop",
+  "prompt_eval_count": 872,
+  "eval_count": 538,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Compact text representation of worker instruction records.\n\nPublic entry point: run(type_name, fields). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport collections\n\n\ndef build_worker_instruction(*args):\n  \"\"\"Create an object representing a ParallelInstruction protobuf.\n\n  This will be a collections.namedtuple with a custom __str__ method.\n\n  Alas, this wrapper is not known to pylint, which thinks it creates\n  constants.  You may have to put a disable=invalid-name pylint\n  annotation on any use of this, depending on your names.\n\n  Args:\n    *args: first argument is the name of the type to create.  Should\n      start with \"Worker\".  Second arguments is alist of the\n      attributes of this object.\n  Returns:\n    A new class, a subclass of tuple, that represents the protobuf.\n  \"\"\"\n  tuple_class = collections.namedtuple(*args)\n  tuple_class.__str__ = worker_object_to_string\n  tuple_class.__repr__ = worker_object_to_string\n  return tuple_class\n\n\ndef worker_printable_fields(workerproto):\n  \"\"\"Returns the interesting fields of a Worker* object.\"\"\"\n  report = []\n  for name, value in workerproto._asdict().items():\n    if (value or value == 0) and name not in (\n        'coder',\n        'coders',\n        'output_coders',\n        'elements',\n        'combine_fn',\n        'serialized_fn',\n        'window_fn',\n        'append_trailing_newlines',\n        'strip_trailing_newlines',\n        'compression_type',\n        'context',\n        'start_shuffle_position',\n        'end_shuffle_position',\n        'shuffle_reader_config',\n        'shuffle_writer_config'):\n      report.append('%s=%s' % (name, value))\n  return ', '.join(report)\n\n\ndef worker_object_to_string(worker_object):\n  \"\"\"Returns a string compactly representing a Worker* object.\"\"\"\n  return '%s(%s)' % (\n      worker_object.__class__.__name__,\n      worker_printable_fields(worker_object))\n\n\ndef run(type_name, fields):\n  \"\"\"Builds a record type with the given name and fields, creates a record\n  with the field values and returns its text. Public entry point of this\n  unit.\"\"\"\n  record_class = build_worker_instruction(type_name, list(fields))\n  report = []\n  for field_name, field_value in fields.items():\n    report.append('%s=%s' % (field_name, field_value))\n  return '%s(%s)' % (record_class.__name__, ', '.join(report))\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T18:43:40.1836414Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Compact text representation of worker instruction records.\n\nPublic entry point: run(type_name, fields). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport collections\n\n\ndef build_worker_instruction(*args):\n  \"\"\"Create an object representing a ParallelInstruction protobuf.\n\n  This will be a collections.namedtuple with a custom __str__ method.\n\n  Alas, this wrapper is not known to pylint, which thinks it creates\n  constants.  You may have to put a disable=invalid-name pylint\n  annotation on any use of this, depending on your names.\n\n  Args:\n    *args: first argument is the name of the type to create.  Should\n      start with \"Worker\".  Second arguments is alist of the\n      attributes of this object.\n  Returns:\n    A new class, a subclass of tuple, that represents the protobuf.\n  \"\"\"\n  tuple_class = collections.namedtuple(*args)\n  tuple_class.__str__ = worker_object_to_string\n  tuple_class.__repr__ = worker_object_to_string\n  return tuple_class\n\n\ndef worker_printable_fields(workerproto):\n  \"\"\"Returns the interesting fields of a Worker* object.\"\"\"\n  report = []\n  for name, value in workerproto._asdict().items():\n    if (value or value == 0) and name not in (\n        'coder',\n        'coders',\n        'output_coders',\n        'elements',\n        'combine_fn',\n        'serialized_fn',\n        'window_fn',\n        'append_trailing_newlines',\n        'strip_trailing_newlines',\n        'compression_type',\n        'context',\n        'start_shuffle_position',\n        'end_shuffle_position',\n        'shuffle_reader_config',\n        'shuffle_writer_config'):\n      report.append('%s=%s' % (name, value))\n  return ', '.join(report)\n\n\ndef worker_object_to_string(worker_object):\n  \"\"\"Returns a string compactly representing a Worker* object.\"\"\"\n  return '%s(%s)' % (\n      worker_object.__class__.__name__,\n      worker_printable_fields(worker_object))\n\n\ndef run(type_name, fields):\n  \"\"\"Builds a record type with the given name and fields, creates a record\n  with the field values and returns its text. Public entry point of this\n  unit.\"\"\"\n  record_class = build_worker_instruction(type_name, list(fields))\n  report = []\n  for field_name, field_value in fields.items():\n    report.append('%s=%s' % (field_name, field_value))\n  return '%s(%s)' % (record_class.__name__, ', '.join(report))\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21486613100,
+    "load_duration": 8070830000,
+    "prompt_eval_count": 872,
+    "prompt_eval_duration": 801200000,
+    "eval_count": 538,
+    "eval_duration": 12611873000
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-12__chain_of_thought__s43",
+  "instance": "CCC-12",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T17:08:02.853026+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \" \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names ({name: object}) added to its\n    namespace and returns its public names, sorted. Public entry point of this\n    unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = [name for name, obj in globals().items()\n           if not name.startswith('_') and not isinstance(obj, types.ModuleType)\n           and name not in {'wantobjects'}]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 21.626,
+  "done_reason": "stop",
+  "prompt_eval_count": 536,
+  "eval_count": 558,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Complex Container Comprehension\" code smell because the `__all__` list comprehension is quite complex and involves multiple conditions and operations. The comprehension filters out names from the global namespace that start with an underscore, are not module types, and are not in a predefined set.\n\n### Step 2: Explain the Refactoring Technique\nThe indicated refactoring technique is \"Replace Comprehension with For Loop.\" This involves converting the list comprehension into a for loop that accumulates the desired elements into a list. This approach can make the code more readable and easier to understand.\n\n### Step 3: Apply the Refactoring\nWe will replace the list comprehension in the `__all__` definition with a for loop that iterates over the global namespace and appends the appropriate names to a list.\n\n### Step 4: Verify the Refactored Code\nWe will verify that the refactored code preserves the original behavior by ensuring that the `__all__` list is correctly generated and contains the expected names.\n\n### Refactored Code\n```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \" \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names ({name: object}) added to its\n    namespace and returns its public names, sorted. Public entry point of this\n    unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = []\nfor name, obj in globals().items():\n    if not name.startswith('_') and not isinstance(obj, types.ModuleType) and name not in {'wantobjects'}:\n        __all__.append(name)\n```\n\nThis refactored code uses a for loop to populate the `__all__` list, making it easier to read and understand while preserving the original functionality.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T17:08:02.8503481Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Complex Container Comprehension\" code smell because the `__all__` list comprehension is quite complex and involves multiple conditions and operations. The comprehension filters out names from the global namespace that start with an underscore, are not module types, and are not in a predefined set.\n\n### Step 2: Explain the Refactoring Technique\nThe indicated refactoring technique is \"Replace Comprehension with For Loop.\" This involves converting the list comprehension into a for loop that accumulates the desired elements into a list. This approach can make the code more readable and easier to understand.\n\n### Step 3: Apply the Refactoring\nWe will replace the list comprehension in the `__all__` definition with a for loop that iterates over the global namespace and appends the appropriate names to a list.\n\n### Step 4: Verify the Refactored Code\nWe will verify that the refactored code preserves the original behavior by ensuring that the `__all__` list is correctly generated and contains the expected names.\n\n### Refactored Code\n```python\n\"\"\"Public names of a toolkit wrapper module, computed when the module loads.\n\nPublic entry point: run(extra_names). Do not change its name or signature;\nthe rest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport sys\nimport types\n\nwantobjects = 1\nTkVersion = 8.6\n_default_root = None\n\n\nclass TclError(Exception):\n    \"\"\"Error raised by the toolkit.\"\"\"\n\n\nclass Variable:\n    \"\"\"Value holder shared with the toolkit.\"\"\"\n\n    def __init__(self, value=None):\n        self._value = value\n\n    def get(self):\n        return self._value\n\n\ndef getint(text):\n    return int(text)\n\n\ndef _join(value):\n    return \" \".join(str(item) for item in value)\n\n\ndef run(extra_names):\n    \"\"\"Loads the module again with extra_names ({name: object}) added to its\n    namespace and returns its public names, sorted. Public entry point of this\n    unit.\"\"\"\n    module = sys.modules[__name__]\n    namespace = vars(module)\n    namespace.update(extra_names)\n    try:\n        importlib.reload(module)\n        return sorted(__all__)\n    finally:\n        for name in extra_names:\n            namespace.pop(name, None)\n\n\n__all__ = []\nfor name, obj in globals().items():\n    if not name.startswith('_') and not isinstance(obj, types.ModuleType) and name not in {'wantobjects'}:\n        __all__.append(name)\n```\n\nThis refactored code uses a for loop to populate the `__all__` list, making it easier to read and understand while preserving the original functionality."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 21623811800,
+    "load_duration": 8796886800,
+    "prompt_eval_count": 536,
+    "prompt_eval_duration": 513875000,
+    "eval_count": 558,
+    "eval_duration": 12309678000
+  }
+}

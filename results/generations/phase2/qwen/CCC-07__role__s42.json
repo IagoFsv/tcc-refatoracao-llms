@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-07__role__s42",
+  "instance": "CCC-07",
+  "smell": "CCC",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T14:34:02.398024+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\n_URL_LIST += [\n    (  # pylint:disable=g-complex-comprehension\n        f'asset.{spl}.simp.{i}',\n        f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n    )\n    for spl in ['valid', 'test']\n    for i in range(10)\n]\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 13.374,
+  "done_reason": "stop",
+  "prompt_eval_count": 433,
+  "eval_count": 238,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\nfor spl in ['valid', 'test']:\n    for i in range(10):\n        _URL_LIST.append((\n            f'asset.{spl}.simp.{i}',\n            f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n        ))\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T14:34:02.3954753Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\nfor spl in ['valid', 'test']:\n    for i in range(10):\n        _URL_LIST.append((\n            f'asset.{spl}.simp.{i}',\n            f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n        ))\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 13371619100,
+    "load_duration": 7562228300,
+    "prompt_eval_count": 433,
+    "prompt_eval_duration": 427531000,
+    "eval_count": 238,
+    "eval_duration": 5379494000
+  }
+}

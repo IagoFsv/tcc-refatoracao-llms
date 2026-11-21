@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-11__role__s43",
+  "instance": "CCC-11",
+  "smell": "CCC",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T18:44:26.470478+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    return [\n        os.path.join(folder_path, filename)\n        for filename in sorted(os.listdir(folder_path))\n        if filename.endswith(\".py\")\n        and not filename.endswith(\"_test.py\")\n        and filename not in EXCLUDED_FILENAMES\n    ]\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 14.37,
+  "done_reason": "stop",
+  "prompt_eval_count": 363,
+  "eval_count": 216,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    script_filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            script_filenames.append(os.path.join(folder_path, filename))\n    script_filenames = [filename for filename in script_filenames if filename not in EXCLUDED_FILENAMES]\n    return script_filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T18:44:26.4551059Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    script_filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            script_filenames.append(os.path.join(folder_path, filename))\n    script_filenames = [filename for filename in script_filenames if filename not in EXCLUDED_FILENAMES]\n    return script_filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 14357747500,
+    "load_duration": 8928407400,
+    "prompt_eval_count": 363,
+    "prompt_eval_duration": 419097000,
+    "eval_count": 216,
+    "eval_duration": 5007852000
+  }
+}

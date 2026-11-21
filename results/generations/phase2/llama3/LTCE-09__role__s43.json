@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-09__role__s43",
+  "instance": "LTCE-09",
+  "smell": "LTCE",
+  "technique": "role",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:01:54.368373+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        # Inputs[0] contains the shape of the input.\n        input_shape = inputs[input_arg_index].shape\n\n        has_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index],\n                                                                           'shape') else inputs[affine_arg_index]\n        assert 2 <= len(input_shape) <= 5, input_shape\n        # 5 is just a rough estimate\n        flop = reduce(operator.mul, input_shape) * (5 if has_affine else 4)\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 19.58,
+  "done_reason": "stop",
+  "prompt_eval_count": 619,
+  "eval_count": 452,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        input_shape = inputs[input_arg_index].shape\n\n        has_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index], 'shape') else inputs[affine_arg_index]\n        assert 2 <= len(input_shape) <= 5, input_shape\n\n        flop = reduce(operator.mul, input_shape)\n        if has_affine:\n            flop *= 5\n        else:\n            flop *= 4\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:01:54.3442607Z",
+    "message": {
+      "role": "assistant",
+      "content": "```\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        input_shape = inputs[input_arg_index].shape\n\n        has_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index], 'shape') else inputs[affine_arg_index]\n        assert 2 <= len(input_shape) <= 5, input_shape\n\n        flop = reduce(operator.mul, input_shape)\n        if has_affine:\n            flop *= 5\n        else:\n            flop *= 4\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19577687500,
+    "load_duration": 8299652800,
+    "prompt_eval_count": 619,
+    "prompt_eval_duration": 711441000,
+    "eval_count": 452,
+    "eval_duration": 10563611000
+  }
+}

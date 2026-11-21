@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-10__few_shot__s43",
+  "instance": "LTCE-10",
+  "smell": "LTCE",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T17:25:21.613172+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\ndef shipping_label(order):\n    label = (\n        f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n        if order['priority'] and order['weight_kg'] <= 5\n        else f\"STANDARD | {order['customer']} | {order['city']}\"\n    )\n    return label\n```\nRefactored code:\n```python\ndef shipping_label(order):\n    if order['priority'] and order['weight_kg'] <= 5:\n        label = f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n    else:\n        label = f\"STANDARD | {order['customer']} | {order['city']}\"\n    return label\n```\n\nNow refactor the following file.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1) * stride - kernel_size + 2`,\n    then adds `left_pad` on the left, and `right_pad` on the right.\n    In Keras, the `padding` argument determines a base shape, to which\n    `output_padding` is added on the right. If `output_padding` is None, it will\n    be given a default value.\n    \"\"\"\n\n    assert padding.lower() in {\"valid\", \"same\"}\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        # If output_padding is None, we fill it so that the shape of the output\n        # is `(input-1)*s + max(kernel_size, stride)`\n        output_padding = (\n            max(kernel_size, stride) - kernel_size\n            if output_padding is None\n            else output_padding\n        )\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        if output_padding is None:\n            # When output_padding is None, we want the shape of the output to\n            # be `input * s`, therefore a total padding of\n            # `stride + kernel_size - 2`\n            pad_len = stride + kernel_size - 2\n        else:\n            # When output_padding is filled, we want the shape of the output to\n            # be `(input-1)*stride + kernel_size%2 + output_padding`\n            pad_len = kernel_size + kernel_size % 2 - 2 + output_padding\n        left_pad = min(pad_len // 2 + pad_len % 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 19.108,
+  "done_reason": "stop",
+  "prompt_eval_count": 943,
+  "eval_count": 438,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1) * stride - kernel_size + 2`,\n    then adds `left_pad` on the left, and `right_pad` on the right.\n    In Keras, the `padding` argument determines a base shape, to which\n    `output_padding` is added on the right. If `output_padding` is None, it will\n    be given a default value.\n    \"\"\"\n\n    assert padding.lower() in {\"valid\", \"same\"}\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        if output_padding is None:\n            output_padding = max(kernel_size, stride) - kernel_size\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        if output_padding is None:\n            pad_len = stride + kernel_size - 2\n        else:\n            pad_len = kernel_size + kernel_size % 2 - 2 + output_padding\n        left_pad = min(pad_len // 2 + pad_len % 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T17:25:21.6097073Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1) * stride - kernel_size + 2`,\n    then adds `left_pad` on the left, and `right_pad` on the right.\n    In Keras, the `padding` argument determines a base shape, to which\n    `output_padding` is added on the right. If `output_padding` is None, it will\n    be given a default value.\n    \"\"\"\n\n    assert padding.lower() in {\"valid\", \"same\"}\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        if output_padding is None:\n            output_padding = max(kernel_size, stride) - kernel_size\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        if output_padding is None:\n            pad_len = stride + kernel_size - 2\n        else:\n            pad_len = kernel_size + kernel_size % 2 - 2 + output_padding\n        left_pad = min(pad_len // 2 + pad_len % 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 19084350900,
+    "load_duration": 8314228800,
+    "prompt_eval_count": 943,
+    "prompt_eval_duration": 833425000,
+    "eval_count": 438,
+    "eval_duration": 9933522000
+  }
+}

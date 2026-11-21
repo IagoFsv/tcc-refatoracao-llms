@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-11__few_shot__s42",
+  "instance": "LTCE-11",
+  "smell": "LTCE",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T16:54:20.018144+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\ndef shipping_label(order):\n    label = (\n        f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n        if order['priority'] and order['weight_kg'] <= 5\n        else f\"STANDARD | {order['customer']} | {order['city']}\"\n    )\n    return label\n```\nRefactored code:\n```python\ndef shipping_label(order):\n    if order['priority'] and order['weight_kg'] <= 5:\n        label = f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n    else:\n        label = f\"STANDARD | {order['customer']} | {order['city']}\"\n    return label\n```\n\nNow refactor the following file.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Context manager that checks that a block raises one of the expected errors.\n\nPublic entry point: run(expected_exc_type, match=None, error=None,\nmay_pass=False, err_msg=None). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport contextlib\nimport re\nfrom collections.abc import Iterable\n\n\nclass _Raises(contextlib.AbstractContextManager):\n    # see raises() for parameters\n    def __init__(self, expected_exc_type, match, may_pass, err_msg):\n        self.expected_exc_types = (\n            expected_exc_type\n            if isinstance(expected_exc_type, Iterable)\n            else [expected_exc_type]\n        )\n        self.matches = [match] if isinstance(match, str) else match\n        self.may_pass = may_pass\n        self.err_msg = err_msg\n        self.raised_and_matched = False\n\n    def __exit__(self, exc_type, exc_value, _):\n        # see\n        # https://docs.python.org/2.5/whatsnew/pep-343.html#SECTION000910000000000000000\n\n        if exc_type is None:  # No exception was raised in the block\n            if self.may_pass:\n                return True  # CM is happy\n            else:\n                err_msg = self.err_msg or f\"Did not raise: {self.expected_exc_types}\"\n                raise AssertionError(err_msg)\n\n        if not any(\n            issubclass(exc_type, expected_type)\n            for expected_type in self.expected_exc_types\n        ):\n            if self.err_msg is not None:\n                raise AssertionError(self.err_msg) from exc_value\n            else:\n                return False  # will re-raise the original exception\n\n        if self.matches is not None:\n            err_msg = self.err_msg or (\n                \"The error message should contain one of the following \"\n                \"patterns:\\n{}\\nGot {}\".format(\"\\n\".join(self.matches), str(exc_value))\n            )\n            if not any(re.search(match, str(exc_value)) for match in self.matches):\n                raise AssertionError(err_msg) from exc_value\n            self.raised_and_matched = True\n\n        return True\n\n\ndef run(expected_exc_type, match=None, error=None, may_pass=False, err_msg=None):\n    \"\"\"Runs a block that raises error (or nothing, if error is None) inside the\n    context manager and returns whether the error was raised and matched.\n    Public entry point of this unit.\"\"\"\n    checker = _Raises(expected_exc_type, match, may_pass, err_msg)\n    with checker:\n        if error is not None:\n            raise error\n    return checker.raised_and_matched\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 22.398,
+  "done_reason": "stop",
+  "prompt_eval_count": 919,
+  "eval_count": 557,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Context manager that checks that a block raises one of the expected errors.\n\nPublic entry point: run(expected_exc_type, match=None, error=None,\nmay_pass=False, err_msg=None). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport contextlib\nimport re\nfrom collections.abc import Iterable\n\n\nclass _Raises(contextlib.AbstractContextManager):\n    # see raises() for parameters\n    def __init__(self, expected_exc_type, match, may_pass, err_msg):\n        self.expected_exc_types = (\n            expected_exc_type\n            if isinstance(expected_exc_type, Iterable)\n            else [expected_exc_type]\n        )\n        self.matches = [match] if isinstance(match, str) else match\n        self.may_pass = may_pass\n        self.err_msg = err_msg\n        self.raised_and_matched = False\n\n    def __exit__(self, exc_type, exc_value, _):\n        # see\n        # https://docs.python.org/2.5/whatsnew/pep-343.html#SECTION000910000000000000000\n\n        if exc_type is None:  # No exception was raised in the block\n            if self.may_pass:\n                return True  # CM is happy\n            else:\n                err_msg = self.err_msg or f\"Did not raise: {self.expected_exc_types}\"\n                raise AssertionError(err_msg)\n\n        if not any(\n            issubclass(exc_type, expected_type)\n            for expected_type in self.expected_exc_types\n        ):\n            if self.err_msg is not None:\n                raise AssertionError(self.err_msg) from exc_value\n            else:\n                return False  # will re-raise the original exception\n\n        if self.matches is not None:\n            if not any(re.search(match, str(exc_value)) for match in self.matches):\n                err_msg = self.err_msg or (\n                    \"The error message should contain one of the following \"\n                    \"patterns:\\n{}\\nGot {}\".format(\"\\n\".join(map(str, self.matches)), str(exc_value))\n                )\n                raise AssertionError(err_msg) from exc_value\n            self.raised_and_matched = True\n\n        return True\n\n\ndef run(expected_exc_type, match=None, error=None, may_pass=False, err_msg=None):\n    \"\"\"Runs a block that raises error (or nothing, if error is None) inside the\n    context manager and returns whether the error was raised and matched.\n    Public entry point of this unit.\"\"\"\n    checker = _Raises(expected_exc_type, match, may_pass, err_msg)\n    with checker:\n        if error is not None:\n            raise error\n    return checker.raised_and_matched\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T16:54:20.015171Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Context manager that checks that a block raises one of the expected errors.\n\nPublic entry point: run(expected_exc_type, match=None, error=None,\nmay_pass=False, err_msg=None). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\nimport contextlib\nimport re\nfrom collections.abc import Iterable\n\n\nclass _Raises(contextlib.AbstractContextManager):\n    # see raises() for parameters\n    def __init__(self, expected_exc_type, match, may_pass, err_msg):\n        self.expected_exc_types = (\n            expected_exc_type\n            if isinstance(expected_exc_type, Iterable)\n            else [expected_exc_type]\n        )\n        self.matches = [match] if isinstance(match, str) else match\n        self.may_pass = may_pass\n        self.err_msg = err_msg\n        self.raised_and_matched = False\n\n    def __exit__(self, exc_type, exc_value, _):\n        # see\n        # https://docs.python.org/2.5/whatsnew/pep-343.html#SECTION000910000000000000000\n\n        if exc_type is None:  # No exception was raised in the block\n            if self.may_pass:\n                return True  # CM is happy\n            else:\n                err_msg = self.err_msg or f\"Did not raise: {self.expected_exc_types}\"\n                raise AssertionError(err_msg)\n\n        if not any(\n            issubclass(exc_type, expected_type)\n            for expected_type in self.expected_exc_types\n        ):\n            if self.err_msg is not None:\n                raise AssertionError(self.err_msg) from exc_value\n            else:\n                return False  # will re-raise the original exception\n\n        if self.matches is not None:\n            if not any(re.search(match, str(exc_value)) for match in self.matches):\n                err_msg = self.err_msg or (\n                    \"The error message should contain one of the following \"\n                    \"patterns:\\n{}\\nGot {}\".format(\"\\n\".join(map(str, self.matches)), str(exc_value))\n                )\n                raise AssertionError(err_msg) from exc_value\n            self.raised_and_matched = True\n\n        return True\n\n\ndef run(expected_exc_type, match=None, error=None, may_pass=False, err_msg=None):\n    \"\"\"Runs a block that raises error (or nothing, if error is None) inside the\n    context manager and returns whether the error was raised and matched.\n    Public entry point of this unit.\"\"\"\n    checker = _Raises(expected_exc_type, match, may_pass, err_msg)\n    with checker:\n        if error is not None:\n            raise error\n    return checker.raised_and_matched\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22396196200,
+    "load_duration": 8225975400,
+    "prompt_eval_count": 919,
+    "prompt_eval_duration": 851016000,
+    "eval_count": 557,
+    "eval_duration": 13316662000
+  }
+}

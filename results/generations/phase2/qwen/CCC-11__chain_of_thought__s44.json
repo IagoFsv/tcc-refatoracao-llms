@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-11__chain_of_thought__s44",
+  "instance": "CCC-11",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:17:07.496698+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    return [\n        os.path.join(folder_path, filename)\n        for filename in sorted(os.listdir(folder_path))\n        if filename.endswith(\".py\")\n        and not filename.endswith(\"_test.py\")\n        and filename not in EXCLUDED_FILENAMES\n    ]\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.912,
+  "done_reason": "stop",
+  "prompt_eval_count": 441,
+  "eval_count": 468,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code exhibits a Complex Container Comprehension. The list comprehension in the `_get_filenames` function is complex and involves multiple conditions and operations, making it difficult to read and understand.\n\n### Step 2: Apply the Refactoring Technique\nThe refactoring technique is to replace the comprehension with a for loop. This will break down the logic into more manageable parts and make it easier to understand.\n\n### Step 3: Apply the Refactoring\nWe will replace the list comprehension with a for loop that iterates over the files in the directory, applying the conditions one by one.\n\n### Step 4: Verify the Refactored Code\nWe will ensure that the refactored code preserves the original behavior by checking that it still returns the correct list of filenames.\n\nHere is the refactored code:\n\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\") and filename not in EXCLUDED_FILENAMES:\n            filenames.append(os.path.join(folder_path, filename))\n    return filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\n\n### Explanation of Changes\n1. **Replaced Comprehension with For Loop**: The list comprehension has been replaced with a for loop that iterates over the files in the directory. This makes the logic clearer and easier to follow.\n2. **Preserved Original Behavior**: The refactored code still returns the correct list of filenames that meet the specified conditions. The `EXCLUDED_FILENAMES` set is updated and cleared as in the original code.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:17:07.4745835Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code exhibits a Complex Container Comprehension. The list comprehension in the `_get_filenames` function is complex and involves multiple conditions and operations, making it difficult to read and understand.\n\n### Step 2: Apply the Refactoring Technique\nThe refactoring technique is to replace the comprehension with a for loop. This will break down the logic into more manageable parts and make it easier to understand.\n\n### Step 3: Apply the Refactoring\nWe will replace the list comprehension with a for loop that iterates over the files in the directory, applying the conditions one by one.\n\n### Step 4: Verify the Refactored Code\nWe will ensure that the refactored code preserves the original behavior by checking that it still returns the correct list of filenames.\n\nHere is the refactored code:\n\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\") and filename not in EXCLUDED_FILENAMES:\n            filenames.append(os.path.join(folder_path, filename))\n    return filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\n\n### Explanation of Changes\n1. **Replaced Comprehension with For Loop**: The list comprehension has been replaced with a for loop that iterates over the files in the directory. This makes the logic clearer and easier to follow.\n2. **Preserved Original Behavior**: The refactored code still returns the correct list of filenames that meet the specified conditions. The `EXCLUDED_FILENAMES` set is updated and cleared as in the original code."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18909940800,
+    "load_duration": 7814053800,
+    "prompt_eval_count": 441,
+    "prompt_eval_duration": 471022000,
+    "eval_count": 468,
+    "eval_duration": 10620895000
+  }
+}

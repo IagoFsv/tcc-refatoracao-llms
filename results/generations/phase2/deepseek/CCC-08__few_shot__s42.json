@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-08__few_shot__s42",
+  "instance": "CCC-08",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T15:14:12.541114+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Substitution of list elements from two sources and a fallback sequence.\n\nPublic entry point: run(subs1, subs2, sources, base). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom collections.abc import Sequence\nfrom typing import TypeVar\n\nT = TypeVar(\"T\")\n\ndef subs_list2(\n    subs1: Sequence[int | None], subs2: Sequence[int | None],\n    src1: Sequence[T], src2: Sequence[T], base: Sequence[T],\n) -> list[T]:\n  assert len(subs1) == len(subs2)\n  base_ = iter(base)\n  out = [src1[f1] if f1 is not None else src2[f2] if f2 is not None else\n         next(base_) for f1, f2, in zip(subs1, subs2)]\n  sentinel = object()\n  assert next(base_, sentinel) is sentinel\n  return out\n\n\ndef run(subs1, subs2, sources, base):\n  \"\"\"Builds the list taking each element from the first source, the second\n  source or the base, as the two index lists say; sources is the pair\n  (src1, src2). Public entry point of this unit.\"\"\"\n  src1, src2 = sources\n  return subs_list2(subs1, subs2, src1, src2, base)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 33.952,
+  "done_reason": "stop",
+  "prompt_eval_count": 867,
+  "eval_count": 393,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Substitution of list elements from two sources and a fallback sequence.\n\nPublic entry point: run(subs1, subs2, sources, base). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom collections.abc import Sequence\nfrom typing import TypeVar\n\nT = TypeVar(\"T\")\n\ndef subs_list2(\n    subs1: Sequence[int | None], subs2: Sequence[int | None],\n    src1: Sequence[T], src2: Sequence[T], base: Sequence[T],\n) -> list[T]:\n  assert len(subs1) == len(subs2)\n  base_ = iter(base)\n  out = []\n  for f1, f2 in zip(subs1, subs2):\n    if f1 is not None:\n      out.append(src1[f1])\n    elif f2 is not None:\n      out.append(src2[f2])\n    else:\n      out.append(next(base_))\n  sentinel = object()\n  assert next(base_, sentinel) is sentinel\n  return out\n\n\ndef run(subs1, subs2, sources, base):\n  \"\"\"Builds the list taking each element from the first source, the second\n  source or the base, as the two index lists say; sources is the pair\n  (src1, src2). Public entry point of this unit.\"\"\"\n  src1, src2 = sources\n  return subs_list2(subs1, subs2, src1, src2, base)\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T15:14:12.5383588Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Substitution of list elements from two sources and a fallback sequence.\n\nPublic entry point: run(subs1, subs2, sources, base). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom collections.abc import Sequence\nfrom typing import TypeVar\n\nT = TypeVar(\"T\")\n\ndef subs_list2(\n    subs1: Sequence[int | None], subs2: Sequence[int | None],\n    src1: Sequence[T], src2: Sequence[T], base: Sequence[T],\n) -> list[T]:\n  assert len(subs1) == len(subs2)\n  base_ = iter(base)\n  out = []\n  for f1, f2 in zip(subs1, subs2):\n    if f1 is not None:\n      out.append(src1[f1])\n    elif f2 is not None:\n      out.append(src2[f2])\n    else:\n      out.append(next(base_))\n  sentinel = object()\n  assert next(base_, sentinel) is sentinel\n  return out\n\n\ndef run(subs1, subs2, sources, base):\n  \"\"\"Builds the list taking each element from the first source, the second\n  source or the base, as the two index lists say; sources is the pair\n  (src1, src2). Public entry point of this unit.\"\"\"\n  src1, src2 = sources\n  return subs_list2(subs1, subs2, src1, src2, base)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 33930299600,
+    "load_duration": 7058629800,
+    "prompt_eval_count": 867,
+    "prompt_eval_duration": 2718607000,
+    "eval_count": 393,
+    "eval_duration": 24149306000
+  }
+}

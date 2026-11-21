@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-04__few_shot__s42",
+  "instance": "CCC-04",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T16:27:33.120167+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Sorting of keyed data by key dimensions, value dimensions and categorical order.\n\nPublic entry point: run(data, kdims, vdims, key_index). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport itertools\n\n\nclass Dimension:\n    \"\"\"A named dimension; a non-empty list of values makes it categorical.\"\"\"\n\n    def __init__(self, name, values=()):\n        self.name = name\n        self.values = list(values)\n\n\ndef python2sort(x,key=None):\n    if len(x) == 0: return x\n    it = iter(x)\n    groups = [[next(it)]]\n    for item in it:\n        for group in groups:\n            try:\n                item_precedence = item if key is None else key(item)\n                group_precedence = group[0] if key is None else key(group[0])\n                item_precedence < group_precedence  # noqa: B015, TypeError if not comparable\n                group.append(item)\n                break\n            except TypeError:\n                continue\n        else:  # did not break, make new group\n            groups.append([item])\n    return itertools.chain.from_iterable(sorted(group, key=key) for group in groups)\n\n\ndef dimension_sort(odict, kdims, vdims, key_index):\n    \"\"\"\n    Sorts data by key using usual Python tuple sorting semantics\n    or sorts in categorical order for any categorical Dimensions.\n    \"\"\"\n    sortkws = {}\n    ndims = len(kdims)\n    dimensions = kdims+vdims\n    indexes = [(dimensions[i], int(i not in range(ndims)),\n                    i if i in range(ndims) else i-ndims)\n                for i in key_index]\n    cached_values = {d.name: [None]+list(d.values) for d in dimensions}\n\n    if len(set(key_index)) != len(key_index):\n        raise ValueError(\"Cannot sort on duplicated dimensions\")\n    else:\n       sortkws['key'] = lambda x: tuple(cached_values[dim.name].index(x[t][d])\n                                        if dim.values else x[t][d]\n                                        for i, (dim, t, d) in enumerate(indexes))\n    return python2sort(odict.items(), **sortkws)\n\n\ndef _dimension(spec):\n    \"\"\"A name, or a (name, values) pair for a categorical dimension.\"\"\"\n    if isinstance(spec, str):\n        return Dimension(spec)\n    name, values = spec\n    return Dimension(name, values)\n\n\ndef run(data, kdims, vdims, key_index):\n    \"\"\"Sorts the (key, value) items of data by the dimensions at key_index and\n    returns them as a list. Public entry point of this unit.\"\"\"\n    kdims = [_dimension(spec) for spec in kdims]\n    vdims = [_dimension(spec) for spec in vdims]\n    return list(dimension_sort(data, kdims, vdims, key_index))\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 25.588,
+  "done_reason": "stop",
+  "prompt_eval_count": 958,
+  "eval_count": 676,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored code:\n\n```python\n\"\"\"Sorting of keyed data by key dimensions, value dimensions and categorical order.\n\nPublic entry point: run(data, kdims, vdims, key_index). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport itertools\n\n\nclass Dimension:\n    \"\"\"A named dimension; a non-empty list of values makes it categorical.\"\"\"\n\n    def __init__(self, name, values=()):\n        self.name = name\n        self.values = list(values)\n\n\ndef python2sort(x, key=None):\n    if len(x) == 0:\n        return x\n    it = iter(x)\n    groups = [[next(it)]]\n    for item in it:\n        for group in groups:\n            try:\n                item_precedence = item if key is None else key(item)\n                group_precedence = group[0] if key is None else key(group[0])\n                item_precedence < group_precedence  # noqa: B015, TypeError if not comparable\n                group.append(item)\n                break\n            except TypeError:\n                continue\n        else:  # did not break, make new group\n            groups.append([item])\n    return itertools.chain.from_iterable(sorted(group, key=key) for group in groups)\n\n\ndef dimension_sort(odict, kdims, vdims, key_index):\n    \"\"\"\n    Sorts data by key using usual Python tuple sorting semantics\n    or sorts in categorical order for any categorical Dimensions.\n    \"\"\"\n    sortkws = {}\n    ndims = len(kdims)\n    dimensions = kdims + vdims\n    indexes = [(dimensions[i], int(i not in range(ndims)),\n                i if i in range(ndims) else i - ndims)\n               for i in key_index]\n    cached_values = {d.name: [None] + list(d.values) for d in dimensions}\n\n    if len(set(key_index)) != len(key_index):\n        raise ValueError(\"Cannot sort on duplicated dimensions\")\n    else:\n        sorted_items = []\n        for i, (dim, t, d) in enumerate(indexes):\n            if dim.values:\n                for k, v in odict.items():\n                    if v[t][d] in dim.values:\n                        sorted_items.append(k)\n            else:\n                sorted_items.append(k)\n        sorted_items.sort(key=lambda x: tuple(cached_values[dim.name].index(x[t][d])\n                                               if dim.values else x[t][d]\n                                               for i, (dim, t, d) in enumerate(indexes)))\n        return sorted_items\n\n\ndef _dimension(spec):\n    \"\"\"A name, or a (name, values) pair for a categorical dimension.\"\"\"\n    if isinstance(spec, str):\n        return Dimension(spec)\n    name, values = spec\n    return Dimension(name, values)\n\n\ndef run(data, kdims, vdims, key_index):\n    \"\"\"Sorts the (key, value) items of data by the dimensions at key_index and\n    returns them as a list. Public entry point of this unit.\"\"\"\n    kdims = [_dimension(spec) for spec in kdims]\n    vdims = [_dimension(spec) for spec in vdims]\n    return dimension_sort(dict(data), kdims, vdims, key_index)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T16:27:33.1043699Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored code:\n\n```python\n\"\"\"Sorting of keyed data by key dimensions, value dimensions and categorical order.\n\nPublic entry point: run(data, kdims, vdims, key_index). Do not change its name\nor signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport itertools\n\n\nclass Dimension:\n    \"\"\"A named dimension; a non-empty list of values makes it categorical.\"\"\"\n\n    def __init__(self, name, values=()):\n        self.name = name\n        self.values = list(values)\n\n\ndef python2sort(x, key=None):\n    if len(x) == 0:\n        return x\n    it = iter(x)\n    groups = [[next(it)]]\n    for item in it:\n        for group in groups:\n            try:\n                item_precedence = item if key is None else key(item)\n                group_precedence = group[0] if key is None else key(group[0])\n                item_precedence < group_precedence  # noqa: B015, TypeError if not comparable\n                group.append(item)\n                break\n            except TypeError:\n                continue\n        else:  # did not break, make new group\n            groups.append([item])\n    return itertools.chain.from_iterable(sorted(group, key=key) for group in groups)\n\n\ndef dimension_sort(odict, kdims, vdims, key_index):\n    \"\"\"\n    Sorts data by key using usual Python tuple sorting semantics\n    or sorts in categorical order for any categorical Dimensions.\n    \"\"\"\n    sortkws = {}\n    ndims = len(kdims)\n    dimensions = kdims + vdims\n    indexes = [(dimensions[i], int(i not in range(ndims)),\n                i if i in range(ndims) else i - ndims)\n               for i in key_index]\n    cached_values = {d.name: [None] + list(d.values) for d in dimensions}\n\n    if len(set(key_index)) != len(key_index):\n        raise ValueError(\"Cannot sort on duplicated dimensions\")\n    else:\n        sorted_items = []\n        for i, (dim, t, d) in enumerate(indexes):\n            if dim.values:\n                for k, v in odict.items():\n                    if v[t][d] in dim.values:\n                        sorted_items.append(k)\n            else:\n                sorted_items.append(k)\n        sorted_items.sort(key=lambda x: tuple(cached_values[dim.name].index(x[t][d])\n                                               if dim.values else x[t][d]\n                                               for i, (dim, t, d) in enumerate(indexes)))\n        return sorted_items\n\n\ndef _dimension(spec):\n    \"\"\"A name, or a (name, values) pair for a categorical dimension.\"\"\"\n    if isinstance(spec, str):\n        return Dimension(spec)\n    name, values = spec\n    return Dimension(name, values)\n\n\ndef run(data, kdims, vdims, key_index):\n    \"\"\"Sorts the (key, value) items of data by the dimensions at key_index and\n    returns them as a list. Public entry point of this unit.\"\"\"\n    kdims = [_dimension(spec) for spec in kdims]\n    vdims = [_dimension(spec) for spec in vdims]\n    return dimension_sort(dict(data), kdims, vdims, key_index)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 25585292100,
+    "load_duration": 8574186900,
+    "prompt_eval_count": 958,
+    "prompt_eval_duration": 847605000,
+    "eval_count": 676,
+    "eval_duration": 16161571000
+  }
+}

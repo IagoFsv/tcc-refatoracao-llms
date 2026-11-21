@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-07__chain_of_thought__s43",
+  "instance": "CCC-07",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T17:03:03.430937+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\n_URL_LIST += [\n    (  # pylint:disable=g-complex-comprehension\n        f'asset.{spl}.simp.{i}',\n        f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n    )\n    for spl in ['valid', 'test']\n    for i in range(10)\n]\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 18.618,
+  "done_reason": "stop",
+  "prompt_eval_count": 492,
+  "eval_count": 458,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Complex Container Comprehension\" code smell because the list comprehension used to extend `_URL_LIST` is complex and difficult to read. It involves nested loops and conditional logic, making it harder to understand and maintain.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Replace Comprehension with For Loop\" technique involves converting the complex comprehension into a series of nested for loops. This makes the code more readable and easier to understand while preserving its original behavior.\n\n### Step 3: Apply the Refactoring\nWe will replace the complex list comprehension with a series of nested for loops to generate the URLs.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, we will verify that the refactored code still returns the same URLs as the original code.\n\n### Refactored Code\n```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\n# Extend _URL_LIST using nested for loops\nfor spl in ['valid', 'test']:\n    for i in range(10):\n        _URL_LIST.append((\n            f'asset.{spl}.simp.{i}',\n            f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n        ))\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```\n\nThis refactored code uses nested for loops to extend `_URL_LIST`, making it easier to read and understand while preserving the original behavior.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T17:03:03.4279609Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code exhibits the \"Complex Container Comprehension\" code smell because the list comprehension used to extend `_URL_LIST` is complex and difficult to read. It involves nested loops and conditional logic, making it harder to understand and maintain.\n\n### Step 2: Explain the Refactoring Technique\nThe \"Replace Comprehension with For Loop\" technique involves converting the complex comprehension into a series of nested for loops. This makes the code more readable and easier to understand while preserving its original behavior.\n\n### Step 3: Apply the Refactoring\nWe will replace the complex list comprehension with a series of nested for loops to generate the URLs.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, we will verify that the refactored code still returns the same URLs as the original code.\n\n### Refactored Code\n```python\n\"\"\"Download addresses of the files of a text simplification dataset.\n\nPublic entry point: run(name). Do not change its name or signature; the rest\nof the file may be freely reorganized.\n\"\"\"\n\n_URL_LIST = [\n    (\n        'human_ratings.csv',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/human_ratings/human_ratings.csv',\n    ),\n    (\n        'asset.valid.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.valid.orig',\n    ),\n    (\n        'asset.test.orig',\n        'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.test.orig',\n    ),\n]\n\n# Extend _URL_LIST using nested for loops\nfor spl in ['valid', 'test']:\n    for i in range(10):\n        _URL_LIST.append((\n            f'asset.{spl}.simp.{i}',\n            f'https://raw.githubusercontent.com/facebookresearch/asset/main/dataset/asset.{spl}.simp.{i}',\n        ))\n\n_URLs = dict(_URL_LIST)\n\n\ndef run(name):\n    \"\"\"Returns the download address of the named file. Public entry point of\n    this unit.\"\"\"\n    return _URLs[name]\n```\n\nThis refactored code uses nested for loops to extend `_URL_LIST`, making it easier to read and understand while preserving the original behavior."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 18616011700,
+    "load_duration": 7933747200,
+    "prompt_eval_count": 492,
+    "prompt_eval_duration": 460749000,
+    "eval_count": 458,
+    "eval_duration": 10218005000
+  }
+}

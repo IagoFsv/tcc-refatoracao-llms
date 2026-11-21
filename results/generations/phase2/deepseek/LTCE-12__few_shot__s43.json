@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-12__few_shot__s43",
+  "instance": "LTCE-12",
+  "smell": "LTCE",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T18:31:32.907004+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\ndef shipping_label(order):\n    label = (\n        f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n        if order['priority'] and order['weight_kg'] <= 5\n        else f\"STANDARD | {order['customer']} | {order['city']}\"\n    )\n    return label\n```\nRefactored code:\n```python\ndef shipping_label(order):\n    if order['priority'] and order['weight_kg'] <= 5:\n        label = f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n    else:\n        label = f\"STANDARD | {order['customer']} | {order['city']}\"\n    return label\n```\n\nNow refactor the following file.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Name of the logger used by a class.\n\nPublic entry point: run(logged_class, config_logger_name=None,\nclass_logger_name=None). Do not change its name or signature; the rest of\nthe file may be freely reorganized.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom typing import TypeVar\n\n_T = TypeVar(\"_T\")\n\n\nclass LoggingMixin:\n    \"\"\"Convenience super-class to have a logger configured with the class name.\"\"\"\n\n    @staticmethod\n    def _create_logger_name(\n        logged_class: type[_T],\n        log_config_logger_name: str | None = None,\n        class_logger_name: str | None = None,\n    ) -> str:\n        \"\"\"Generate a logger name for the given `logged_class`.\n\n        By default, this function returns the `class_logger_name` as logger name. If it is not provided,\n        the {class.__module__}.{class.__name__} is returned instead. When a `parent_logger_name` is provided,\n        it will prefix the logger name with a separating dot.\n        \"\"\"\n        logger_name: str = (\n            class_logger_name\n            if class_logger_name is not None\n            else f\"{logged_class.__module__}.{logged_class.__name__}\"\n        )\n\n        if log_config_logger_name:\n            return f\"{log_config_logger_name}.{logger_name}\" if logger_name else log_config_logger_name\n        return logger_name\n\n\ndef run(logged_class, config_logger_name=None, class_logger_name=None):\n    \"\"\"Returns the logger name for the class. Public entry point of this unit.\"\"\"\n    return LoggingMixin._create_logger_name(logged_class, config_logger_name, class_logger_name)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 28.606,
+  "done_reason": "stop",
+  "prompt_eval_count": 981,
+  "eval_count": 396,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\nfrom __future__ import annotations\n\nfrom typing import TypeVar\n\n_T = TypeVar(\"_T\")\n\n\nclass LoggingMixin:\n    \"\"\"Convenience super-class to have a logger configured with the class name.\"\"\"\n\n    @staticmethod\n    def _create_logger_name(\n        logged_class: type[_T],\n        log_config_logger_name: str | None = None,\n        class_logger_name: str | None = None,\n    ) -> str:\n        \"\"\"Generate a logger name for the given `logged_class`.\n\n        By default, this function returns the `class_logger_name` as logger name. If it is not provided,\n        the  {class.__module__}.{class.__name__} is returned instead. When a `parent_logger_name` is provided,\n        it will prefix the logger name with a separating dot.\n        \"\"\"\n        if class_logger_name is not None:\n            logger_name = class_logger_name\n        else:\n            logger_name = f\"{logged_class.__module__}.{logged_class.__name__}\"\n\n        if log_config_logger_name:\n            return f\"{log_config_logger_name}.{logger_name}\" if logger_name else log_config_logger_name\n        return logger_name\n\n\ndef run(logged_class, config_logger_name=None, class_logger_name=None):\n    \"\"\"Returns the logger name for the class. Public entry point of this unit.\"\"\"\n    return LoggingMixin._create_logger_name(logged_class, config_logger_name, class_logger_name)\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T18:31:32.8860452Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\nfrom __future__ import annotations\n\nfrom typing import TypeVar\n\n_T = TypeVar(\"_T\")\n\n\nclass LoggingMixin:\n    \"\"\"Convenience super-class to have a logger configured with the class name.\"\"\"\n\n    @staticmethod\n    def _create_logger_name(\n        logged_class: type[_T],\n        log_config_logger_name: str | None = None,\n        class_logger_name: str | None = None,\n    ) -> str:\n        \"\"\"Generate a logger name for the given `logged_class`.\n\n        By default, this function returns the `class_logger_name` as logger name. If it is not provided,\n        the  {class.__module__}.{class.__name__} is returned instead. When a `parent_logger_name` is provided,\n        it will prefix the logger name with a separating dot.\n        \"\"\"\n        if class_logger_name is not None:\n            logger_name = class_logger_name\n        else:\n            logger_name = f\"{logged_class.__module__}.{logged_class.__name__}\"\n\n        if log_config_logger_name:\n            return f\"{log_config_logger_name}.{logger_name}\" if logger_name else log_config_logger_name\n        return logger_name\n\n\ndef run(logged_class, config_logger_name=None, class_logger_name=None):\n    \"\"\"Returns the logger name for the class. Public entry point of this unit.\"\"\"\n    return LoggingMixin._create_logger_name(logged_class, config_logger_name, class_logger_name)\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 28591963000,
+    "load_duration": 7754939200,
+    "prompt_eval_count": 981,
+    "prompt_eval_duration": 3115976000,
+    "eval_count": 396,
+    "eval_duration": 17715951000
+  }
+}

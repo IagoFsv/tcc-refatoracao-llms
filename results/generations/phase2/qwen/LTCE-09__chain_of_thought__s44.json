@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-09__chain_of_thought__s44",
+  "instance": "LTCE-09",
+  "smell": "LTCE",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:34:31.368500+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        # Inputs[0] contains the shape of the input.\n        input_shape = inputs[input_arg_index].shape\n\n        has_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index],\n                                                                           'shape') else inputs[affine_arg_index]\n        assert 2 <= len(input_shape) <= 5, input_shape\n        # 5 is just a rough estimate\n        flop = reduce(operator.mul, input_shape) * (5 if has_affine else 4)\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 26.888,
+  "done_reason": "stop",
+  "prompt_eval_count": 697,
+  "eval_count": 779,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "### Step 1: Identify the Code Smell\nThe code contains a ternary conditional expression that is quite long and complex:\n```python\nhas_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index], 'shape') else inputs[affine_arg_index]\n```\nThis ternary expression checks if the `inputs[affine_arg_index]` has a `shape` attribute and assigns the result accordingly. The refactoring technique suggested is to replace this ternary expression with an `if` statement to improve readability and maintainability.\n\n### Step 2: Explain the Refactoring Technique\nThe refactoring technique involves replacing the ternary expression with an `if` statement. This will break down the logic into more readable parts, making it easier to understand and maintain.\n\n### Step 3: Apply the Refactoring\nWe will replace the ternary expression with an `if` statement to check if `inputs[affine_arg_index]` has a `shape` attribute and assign the result accordingly.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, we will verify that the refactored code preserves the original behavior by running the code with the same inputs and ensuring that the output is the same.\n\nHere is the refactored code:\n\n```python\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        # Inputs[0] contains the shape of the input.\n        input_shape = inputs[input_arg_index].shape\n\n        if hasattr(inputs[affine_arg_index], 'shape'):\n            has_affine = inputs[affine_arg_index].shape is not None\n        else:\n            has_affine = inputs[affine_arg_index]\n\n        assert 2 <= len(input_shape) <= 5, input_shape\n        # 5 is just a rough estimate\n        flop = reduce(operator.mul, input_shape) * (5 if has_affine else 4)\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```\n\nThe refactored code has replaced the long ternary conditional expression with an `if` statement, making the code easier to read and understand while preserving the original behavior.",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:34:31.3643421Z",
+    "message": {
+      "role": "assistant",
+      "content": "### Step 1: Identify the Code Smell\nThe code contains a ternary conditional expression that is quite long and complex:\n```python\nhas_affine = inputs[affine_arg_index].shape is not None if hasattr(inputs[affine_arg_index], 'shape') else inputs[affine_arg_index]\n```\nThis ternary expression checks if the `inputs[affine_arg_index]` has a `shape` attribute and assigns the result accordingly. The refactoring technique suggested is to replace this ternary expression with an `if` statement to improve readability and maintainability.\n\n### Step 2: Explain the Refactoring Technique\nThe refactoring technique involves replacing the ternary expression with an `if` statement. This will break down the logic into more readable parts, making it easier to understand and maintain.\n\n### Step 3: Apply the Refactoring\nWe will replace the ternary expression with an `if` statement to check if `inputs[affine_arg_index]` has a `shape` attribute and assign the result accordingly.\n\n### Step 4: Verify the Refactored Code\nAfter applying the refactoring, we will verify that the refactored code preserves the original behavior by running the code with the same inputs and ensuring that the output is the same.\n\nHere is the refactored code:\n\n```python\n\"\"\"Floating-point operation count of normalization layers.\n\nPublic entry point: run(input_shape, affine, input_index=0, affine_index=1).\nDo not change its name or signature; the rest of the file may be freely\nreorganized.\n\"\"\"\n\nimport operator\nfrom functools import reduce\nfrom typing import Any, Callable, List\n\n\nclass _Argument:\n    \"\"\"Argument of a traced operation that exposes a shape.\"\"\"\n\n    def __init__(self, shape):\n        self.shape = shape\n\n\ndef norm_flop_counter(affine_arg_index: int, input_arg_index: int) -> Callable:\n    \"\"\"\n    Args:\n        affine_arg_index: index of the affine argument in inputs\n    \"\"\"\n\n    def norm_flop_jit(inputs: List[Any], outputs: List[Any]) -> int:\n        \"\"\"\n        Count flops for norm layers.\n        \"\"\"\n        # Inputs[0] contains the shape of the input.\n        input_shape = inputs[input_arg_index].shape\n\n        if hasattr(inputs[affine_arg_index], 'shape'):\n            has_affine = inputs[affine_arg_index].shape is not None\n        else:\n            has_affine = inputs[affine_arg_index]\n\n        assert 2 <= len(input_shape) <= 5, input_shape\n        # 5 is just a rough estimate\n        flop = reduce(operator.mul, input_shape) * (5 if has_affine else 4)\n        return flop\n\n    return norm_flop_jit\n\n\ndef run(input_shape, affine, input_index=0, affine_index=1):\n    \"\"\"Counts the operations of one normalization call. Public entry point of this unit.\n\n    input_shape is the shape of the input tensor. affine is either a shape\n    (wrapped in an object with a shape attribute, None meaning no weights) or\n    a plain flag (True/False), as the traced arguments can be.\n    \"\"\"\n    inputs = [None] * (max(input_index, affine_index) + 1)\n    inputs[input_index] = _Argument(input_shape)\n    if isinstance(affine, bool):\n        inputs[affine_index] = affine\n    else:\n        inputs[affine_index] = _Argument(affine)\n    return norm_flop_counter(affine_index, input_index)(inputs, [])\n```\n\nThe refactored code has replaced the long ternary conditional expression with an `if` statement, making the code easier to read and understand while preserving the original behavior."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26865799400,
+    "load_duration": 8311372000,
+    "prompt_eval_count": 697,
+    "prompt_eval_duration": 668653000,
+    "eval_count": 779,
+    "eval_duration": 17882685000
+  }
+}

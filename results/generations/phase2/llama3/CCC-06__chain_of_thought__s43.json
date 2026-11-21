@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-06__chain_of_thought__s43",
+  "instance": "CCC-06",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T18:39:46.150615+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Node of a tree of transforms that keeps weak references to its parents.\n\nPublic entry point: run(parents). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport weakref\n\n\nclass TransformNode:\n    \"\"\"The base class for anything that participates in the transform tree.\"\"\"\n\n    _VALID, _INVALID_AFFINE_ONLY, _INVALID_FULL = range(3)\n\n    def __init__(self, shorthand_name=None):\n        \"\"\"\n        Parameters\n        ----------\n        shorthand_name : str\n            A string representing the \"name\" of the transform. The name carries\n            no significance other than to improve the readability of\n            ``str(transform)`` when DEBUG=True.\n        \"\"\"\n        self._parents = {}\n        # Initially invalid, until first computation.\n        self._invalid = self._INVALID_FULL\n        self._shorthand_name = shorthand_name or ''\n\n    def __getstate__(self):\n        # turn the dictionary with weak values into a normal dictionary\n        return {**self.__dict__,\n                '_parents': {k: v() for k, v in self._parents.items()}}\n\n    def __setstate__(self, data_dict):\n        self.__dict__ = data_dict\n        # turn the normal dictionary back into a dictionary with weak values\n        # The extra lambda is to provide a callback to remove dead\n        # weakrefs from the dictionary when garbage collection is done.\n        self._parents = {\n            k: weakref.ref(v, lambda _, pop=self._parents.pop, k=k: pop(k))\n            for k, v in self._parents.items() if v is not None}\n\n\ndef run(parents):\n    \"\"\"Restores a node from a saved state whose parents are given as {key: parent\n    or None} and returns {key: object referenced by the restored node}.\n    Public entry point of this unit.\"\"\"\n    node = TransformNode.__new__(TransformNode)\n    node.__setstate__({\"_invalid\": 0, \"_shorthand_name\": \"node\", \"_parents\": dict(parents)})\n    return {key: reference() for key, reference in node._parents.items()}\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 25.973,
+  "done_reason": "stop",
+  "prompt_eval_count": 671,
+  "eval_count": 749,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here's the step-by-step reasoning:\n\n1. The code exhibits the Complex Container Comprehension code smell because the list comprehension in the `run` function is complex and hard to understand. It creates a new dictionary with weak references to the parents of the node, but it's not immediately clear what's happening.\n\n2. The indicated refactoring technique is to Replace Comprehension with For Loop. This means we'll replace the list comprehension with a for loop that achieves the same result.\n\n3. Here's the refactored code:\n```\ndef run(parents):\n    node = TransformNode.__new__(TransformNode)\n    node.__setstate__({\"_invalid\": 0, \"_shorthand_name\": \"node\", \"_parents\": dict(parents)})\n    node_references = {}\n    for key, reference in node._parents.items():\n        if reference is not None:\n            node_references[key] = weakref.ref(reference, lambda _, pop=node._parents.pop, k=key: pop(k))\n    return node_references\n```\n4. To verify that the refactored code preserves the original behavior, we can test it with the same inputs and verify that it produces the same output. The original code and the refactored code should behave identically.\n\nHere's the complete refactored file:\n```python\n\"\"\"Node of a tree of transforms that keeps weak references to its parents.\n\nPublic entry point: run(parents). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport weakref\n\n\nclass TransformNode:\n    \"\"\"The base class for anything that participates in the transform tree.\"\"\"\n\n    _VALID, _INVALID_AFFINE_ONLY, _INVALID_FULL = range(3)\n\n    def __init__(self, shorthand_name=None):\n        \"\"\"\n        Parameters\n        ----------\n        shorthand_name : str\n            A string representing the \"name\" of the transform. The name carries\n            no significance other than to improve the readability of\n            ``str(transform)`` when DEBUG=True.\n        \"\"\"\n        self._parents = {}\n        # Initially invalid, until first computation.\n        self._invalid = self._INVALID_FULL\n        self._shorthand_name = shorthand_name or ''\n\n    def __getstate__(self):\n        # turn the dictionary with weak values into a normal dictionary\n        return {**self.__dict__,\n                '_parents': {k: v() for k, v in self._parents.items()}}\n\n    def __setstate__(self, data_dict):\n        self.__dict__ = data_dict\n        # turn the normal dictionary back into a dictionary with weak values\n        # The extra lambda is to provide a callback to remove dead\n        # weakrefs from the dictionary when garbage collection is done.\n        self._parents = {\n            k: weakref.ref(v, lambda _, pop=self._parents.pop, k=k: pop(k))\n            for k, v in self._parents.items() if v is not None}\n\n\ndef run(parents):\n    \"\"\"Restores a node from a saved state whose parents are given as {key: parent\n    or None} and returns {key: object referenced by the restored node}.\n    Public entry point of this unit.\"\"\"\n    node = TransformNode.__new__(TransformNode)\n    node.__setstate__({\"_invalid\": 0, \"_shorthand_name\": \"node\", \"_parents\": dict(parents)})\n    node_references = {}\n    for key, reference in node._parents.items():\n        if reference is not None:\n            node_references[key] = weakref.ref(reference, lambda _, pop=node._parents.pop, k=key: pop(k))\n    return node_references\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T18:39:46.1265174Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here's the step-by-step reasoning:\n\n1. The code exhibits the Complex Container Comprehension code smell because the list comprehension in the `run` function is complex and hard to understand. It creates a new dictionary with weak references to the parents of the node, but it's not immediately clear what's happening.\n\n2. The indicated refactoring technique is to Replace Comprehension with For Loop. This means we'll replace the list comprehension with a for loop that achieves the same result.\n\n3. Here's the refactored code:\n```\ndef run(parents):\n    node = TransformNode.__new__(TransformNode)\n    node.__setstate__({\"_invalid\": 0, \"_shorthand_name\": \"node\", \"_parents\": dict(parents)})\n    node_references = {}\n    for key, reference in node._parents.items():\n        if reference is not None:\n            node_references[key] = weakref.ref(reference, lambda _, pop=node._parents.pop, k=key: pop(k))\n    return node_references\n```\n4. To verify that the refactored code preserves the original behavior, we can test it with the same inputs and verify that it produces the same output. The original code and the refactored code should behave identically.\n\nHere's the complete refactored file:\n```python\n\"\"\"Node of a tree of transforms that keeps weak references to its parents.\n\nPublic entry point: run(parents). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport weakref\n\n\nclass TransformNode:\n    \"\"\"The base class for anything that participates in the transform tree.\"\"\"\n\n    _VALID, _INVALID_AFFINE_ONLY, _INVALID_FULL = range(3)\n\n    def __init__(self, shorthand_name=None):\n        \"\"\"\n        Parameters\n        ----------\n        shorthand_name : str\n            A string representing the \"name\" of the transform. The name carries\n            no significance other than to improve the readability of\n            ``str(transform)`` when DEBUG=True.\n        \"\"\"\n        self._parents = {}\n        # Initially invalid, until first computation.\n        self._invalid = self._INVALID_FULL\n        self._shorthand_name = shorthand_name or ''\n\n    def __getstate__(self):\n        # turn the dictionary with weak values into a normal dictionary\n        return {**self.__dict__,\n                '_parents': {k: v() for k, v in self._parents.items()}}\n\n    def __setstate__(self, data_dict):\n        self.__dict__ = data_dict\n        # turn the normal dictionary back into a dictionary with weak values\n        # The extra lambda is to provide a callback to remove dead\n        # weakrefs from the dictionary when garbage collection is done.\n        self._parents = {\n            k: weakref.ref(v, lambda _, pop=self._parents.pop, k=k: pop(k))\n            for k, v in self._parents.items() if v is not None}\n\n\ndef run(parents):\n    \"\"\"Restores a node from a saved state whose parents are given as {key: parent\n    or None} and returns {key: object referenced by the restored node}.\n    Public entry point of this unit.\"\"\"\n    node = TransformNode.__new__(TransformNode)\n    node.__setstate__({\"_invalid\": 0, \"_shorthand_name\": \"node\", \"_parents\": dict(parents)})\n    node_references = {}\n    for key, reference in node._parents.items():\n        if reference is not None:\n            node_references[key] = weakref.ref(reference, lambda _, pop=node._parents.pop, k=key: pop(k))\n    return node_references\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 25959146000,
+    "load_duration": 8059791500,
+    "prompt_eval_count": 671,
+    "prompt_eval_duration": 638030000,
+    "eval_count": 749,
+    "eval_duration": 17259313000
+  }
+}

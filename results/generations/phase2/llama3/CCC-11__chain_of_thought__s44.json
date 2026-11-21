@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-11__chain_of_thought__s44",
+  "instance": "CCC-11",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T20:54:04.954492+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    return [\n        os.path.join(folder_path, filename)\n        for filename in sorted(os.listdir(folder_path))\n        if filename.endswith(\".py\")\n        and not filename.endswith(\"_test.py\")\n        and filename not in EXCLUDED_FILENAMES\n    ]\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 20.741,
+  "done_reason": "stop",
+  "prompt_eval_count": 422,
+  "eval_count": 490,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here's the step-by-step reasoning:\n\n1. The code exhibits the \"Complex Container Comprehension\" code smell because the list comprehension in the `_get_filenames` function has multiple conditions and operations, making it hard to read and understand. The conditions include checking for file extensions, excluding certain files, and updating the `EXCLUDED_FILENAMES` set.\n\n2. The refactoring technique \"Replace Comprehension with For Loop\" suggests replacing the complex comprehension with a for loop, which can be more readable and maintainable. The loop can iterate over the list of files, and the conditions can be applied individually.\n\n3. Here's the refactored code:\n```python\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            if filename not in EXCLUDED_FILENAMES:\n                filenames.append(os.path.join(folder_path, filename))\n    return filenames\n```\n4. The refactored code preserves the original behavior by iterating over the list of files and applying the same conditions as before. The `EXCLUDED_FILENAMES` set is still updated in the `run` function.\n\nHere's the complete refactored file:\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            if filename not in EXCLUDED_FILENAMES:\n                filenames.append(os.path.join(folder_path, filename))\n    return filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\nThe code is now more readable and maintainable, and the complex comprehension has been replaced with a for loop.",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T20:54:04.936444Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here's the step-by-step reasoning:\n\n1. The code exhibits the \"Complex Container Comprehension\" code smell because the list comprehension in the `_get_filenames` function has multiple conditions and operations, making it hard to read and understand. The conditions include checking for file extensions, excluding certain files, and updating the `EXCLUDED_FILENAMES` set.\n\n2. The refactoring technique \"Replace Comprehension with For Loop\" suggests replacing the complex comprehension with a for loop, which can be more readable and maintainable. The loop can iterate over the list of files, and the conditions can be applied individually.\n\n3. Here's the refactored code:\n```python\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            if filename not in EXCLUDED_FILENAMES:\n                filenames.append(os.path.join(folder_path, filename))\n    return filenames\n```\n4. The refactored code preserves the original behavior by iterating over the list of files and applying the same conditions as before. The `EXCLUDED_FILENAMES` set is still updated in the `run` function.\n\nHere's the complete refactored file:\n```python\n\"\"\"Lists the example scripts of a folder that should be run on their own.\n\nPublic entry point: run(folder, excluded=()). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\nimport os\nfrom typing import Set\n\nEXCLUDED_FILENAMES: Set[str] = set()\n\n\ndef _get_filenames(folder):\n    folder_path = os.path.abspath(folder)\n    filenames = []\n    for filename in sorted(os.listdir(folder_path)):\n        if filename.endswith(\".py\") and not filename.endswith(\"_test.py\"):\n            if filename not in EXCLUDED_FILENAMES:\n                filenames.append(os.path.join(folder_path, filename))\n    return filenames\n\n\ndef run(folder, excluded=()):\n    \"\"\"Returns the absolute paths of the scripts of the folder, leaving out the\n    file names in excluded. Public entry point of this unit.\"\"\"\n    EXCLUDED_FILENAMES.clear()\n    EXCLUDED_FILENAMES.update(excluded)\n    return _get_filenames(folder)\n```\nThe code is now more readable and maintainable, and the complex comprehension has been replaced with a for loop."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20738558800,
+    "load_duration": 8810538700,
+    "prompt_eval_count": 422,
+    "prompt_eval_duration": 443680000,
+    "eval_count": 490,
+    "eval_duration": 11482521000
+  }
+}

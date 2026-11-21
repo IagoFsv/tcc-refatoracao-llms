@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-13__few_shot__s42",
+  "instance": "LTCE-13",
+  "smell": "LTCE",
+  "technique": "few_shot",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T15:00:13.105414+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\ndef shipping_label(order):\n    label = (\n        f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n        if order['priority'] and order['weight_kg'] <= 5\n        else f\"STANDARD | {order['customer']} | {order['city']}\"\n    )\n    return label\n```\nRefactored code:\n```python\ndef shipping_label(order):\n    if order['priority'] and order['weight_kg'] <= 5:\n        label = f\"EXPRESS | {order['customer'].upper()} | {order['city']} | {order['weight_kg']:.1f} kg\"\n    else:\n        label = f\"STANDARD | {order['customer']} | {order['city']}\"\n    return label\n```\n\nNow refactor the following file.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Merging of transaction counts of the same project.\n\nPublic entry point: run(left, right=None, totals=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import TypedDict\n\n\nclass ProjectIdentity(TypedDict, total=True):\n    \"\"\"\n    Project identity, used to match projects and also to\n    order them\n    \"\"\"\n\n    project_id: int\n    org_id: int\n\n\n\nclass ProjectTransactions(TypedDict, total=True):\n    \"\"\"\n    Information about the project transactions\n    \"\"\"\n\n    project_id: int\n    org_id: int\n    transaction_counts: list[tuple[str, float]]\n    total_num_transactions: float | None\n    total_num_classes: int | None\n\n\nclass ProjectTransactionsTotals(TypedDict, total=True):\n    project_id: int\n    org_id: int\n    total_num_transactions: float\n    total_num_classes: int\n\n\ndef is_same_project(left: ProjectIdentity | None, right: ProjectIdentity | None) -> bool:\n    if left is None or right is None:\n        return False\n\n    return left[\"project_id\"] == right[\"project_id\"] and left[\"org_id\"] == right[\"org_id\"]\n\n\ndef merge_transactions(\n    left: ProjectTransactions,\n    right: ProjectTransactions | None,\n    totals: ProjectTransactionsTotals | None,\n) -> ProjectTransactions:\n    if right is None and left is None:\n        raise ValueError(\n            \"no transactions passed to merge\",\n        )\n\n    if left is not None and right is not None and not is_same_project(left, right):\n        raise ValueError(\n            \"mismatched project transactions\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (right[\"org_id\"], right[\"project_id\"]),\n        )\n\n    if totals is not None and not is_same_project(left, totals):\n        raise ValueError(\n            \"mismatched projectTransaction and projectTransactionTotals\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (totals[\"org_id\"], totals[\"project_id\"]),\n        )\n\n    assert left is not None\n\n    if right is None:\n        merged_transactions = left[\"transaction_counts\"]\n    else:\n        # we have both left and right we need to merge\n        names = set()\n        merged_transactions = [*left[\"transaction_counts\"]]\n        for transaction_name, _ in merged_transactions:\n            names.add(transaction_name)\n\n        for transaction_name, count in right[\"transaction_counts\"]:\n            if transaction_name not in names:\n                # not already in left, add it\n                merged_transactions.append((transaction_name, count))\n\n    return {\n        \"org_id\": left[\"org_id\"],\n        \"project_id\": left[\"project_id\"],\n        \"transaction_counts\": merged_transactions,\n        \"total_num_transactions\": totals.get(\"total_num_transactions\")\n        if totals is not None\n        else None,\n        \"total_num_classes\": totals.get(\"total_num_classes\") if totals is not None else None,\n    }\n\n\ndef run(left, right=None, totals=None):\n    \"\"\"Merges the counts of two pages of the same project. Public entry point of this unit.\"\"\"\n    return merge_transactions(left, right, totals)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 23.907,
+  "done_reason": "stop",
+  "prompt_eval_count": 1045,
+  "eval_count": 656,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Merging of transaction counts of the same project.\n\nPublic entry point: run(left, right=None, totals=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import TypedDict\n\n\nclass ProjectIdentity(TypedDict, total=True):\n    \"\"\"\n    Project identity, used to match projects and also to\n    order them\n    \"\"\"\n\n    project_id: int\n    org_id: int\n\n\n\nclass ProjectTransactions(TypedDict, total=True):\n    \"\"\"\n    Information about the project transactions\n    \"\"\"\n\n    project_id: int\n    org_id: int\n    transaction_counts: list[tuple[str, float]]\n    total_num_transactions: float | None\n    total_num_classes: int | None\n\n\nclass ProjectTransactionsTotals(TypedDict, total=True):\n    project_id: int\n    org_id: int\n    total_num_transactions: float\n    total_num_classes: int\n\n\ndef is_same_project(left: ProjectIdentity | None, right: ProjectIdentity | None) -> bool:\n    if left is None or right is None:\n        return False\n\n    return left[\"project_id\"] == right[\"project_id\"] and left[\"org_id\"] == right[\"org_id\"]\n\n\ndef merge_transactions(\n    left: ProjectTransactions,\n    right: ProjectTransactions | None,\n    totals: ProjectTransactionsTotals | None,\n) -> ProjectTransactions:\n    if right is None and left is None:\n        raise ValueError(\n            \"no transactions passed to merge\",\n        )\n\n    if left is not None and right is not None and not is_same_project(left, right):\n        raise ValueError(\n            \"mismatched project transactions\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (right[\"org_id\"], right[\"project_id\"]),\n        )\n\n    if totals is not None and not is_same_project(left, totals):\n        raise ValueError(\n            \"mismatched projectTransaction and projectTransactionTotals\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (totals[\"org_id\"], totals[\"project_id\"]),\n        )\n\n    assert left is not None\n\n    if right is None:\n        merged_transactions = left[\"transaction_counts\"]\n    else:\n        # we have both left and right we need to merge\n        names = set()\n        merged_transactions = [*left[\"transaction_counts\"]]\n        for transaction_name, _ in merged_transactions:\n            names.add(transaction_name)\n\n        for transaction_name, count in right[\"transaction_counts\"]:\n            if transaction_name not in names:\n                # not already in left, add it\n                merged_transactions.append((transaction_name, count))\n\n    return {\n        \"org_id\": left[\"org_id\"],\n        \"project_id\": left[\"project_id\"],\n        \"transaction_counts\": merged_transactions,\n        \"total_num_transactions\": totals[\"total_num_transactions\"] if totals is not None else None,\n        \"total_num_classes\": totals[\"total_num_classes\"] if totals is not None else None,\n    }\n\n\ndef run(left, right=None, totals=None):\n    \"\"\"Merges the counts of two pages of the same project. Public entry point of this unit.\"\"\"\n    return merge_transactions(left, right, totals)\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T15:00:13.1021824Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Merging of transaction counts of the same project.\n\nPublic entry point: run(left, right=None, totals=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import TypedDict\n\n\nclass ProjectIdentity(TypedDict, total=True):\n    \"\"\"\n    Project identity, used to match projects and also to\n    order them\n    \"\"\"\n\n    project_id: int\n    org_id: int\n\n\n\nclass ProjectTransactions(TypedDict, total=True):\n    \"\"\"\n    Information about the project transactions\n    \"\"\"\n\n    project_id: int\n    org_id: int\n    transaction_counts: list[tuple[str, float]]\n    total_num_transactions: float | None\n    total_num_classes: int | None\n\n\nclass ProjectTransactionsTotals(TypedDict, total=True):\n    project_id: int\n    org_id: int\n    total_num_transactions: float\n    total_num_classes: int\n\n\ndef is_same_project(left: ProjectIdentity | None, right: ProjectIdentity | None) -> bool:\n    if left is None or right is None:\n        return False\n\n    return left[\"project_id\"] == right[\"project_id\"] and left[\"org_id\"] == right[\"org_id\"]\n\n\ndef merge_transactions(\n    left: ProjectTransactions,\n    right: ProjectTransactions | None,\n    totals: ProjectTransactionsTotals | None,\n) -> ProjectTransactions:\n    if right is None and left is None:\n        raise ValueError(\n            \"no transactions passed to merge\",\n        )\n\n    if left is not None and right is not None and not is_same_project(left, right):\n        raise ValueError(\n            \"mismatched project transactions\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (right[\"org_id\"], right[\"project_id\"]),\n        )\n\n    if totals is not None and not is_same_project(left, totals):\n        raise ValueError(\n            \"mismatched projectTransaction and projectTransactionTotals\",\n            (left[\"org_id\"], left[\"project_id\"]),\n            (totals[\"org_id\"], totals[\"project_id\"]),\n        )\n\n    assert left is not None\n\n    if right is None:\n        merged_transactions = left[\"transaction_counts\"]\n    else:\n        # we have both left and right we need to merge\n        names = set()\n        merged_transactions = [*left[\"transaction_counts\"]]\n        for transaction_name, _ in merged_transactions:\n            names.add(transaction_name)\n\n        for transaction_name, count in right[\"transaction_counts\"]:\n            if transaction_name not in names:\n                # not already in left, add it\n                merged_transactions.append((transaction_name, count))\n\n    return {\n        \"org_id\": left[\"org_id\"],\n        \"project_id\": left[\"project_id\"],\n        \"transaction_counts\": merged_transactions,\n        \"total_num_transactions\": totals[\"total_num_transactions\"] if totals is not None else None,\n        \"total_num_classes\": totals[\"total_num_classes\"] if totals is not None else None,\n    }\n\n\ndef run(left, right=None, totals=None):\n    \"\"\"Merges the counts of two pages of the same project. Public entry point of this unit.\"\"\"\n    return merge_transactions(left, right, totals)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 23890949400,
+    "load_duration": 7807354100,
+    "prompt_eval_count": 1045,
+    "prompt_eval_duration": 894481000,
+    "eval_count": 656,
+    "eval_duration": 15184762000
+  }
+}

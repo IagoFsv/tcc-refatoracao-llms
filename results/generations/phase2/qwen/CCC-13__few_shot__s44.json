@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-13__few_shot__s44",
+  "instance": "CCC-13",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:18:28.406491+00:00",
+  "model": "qwen",
+  "tag": "qwen2.5-coder:7b-instruct-q4_K_M",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\npxd_include_dirs = [\n    directory for directory, dirs, files\n    in os.walk(os.path.join('Cython', 'Includes'))\n    if '__init__.pyx' in files or '__init__.pxd' in files\n    or directory == os.path.join('Cython', 'Includes')]\n\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 13.264,
+  "done_reason": "stop",
+  "prompt_eval_count": 556,
+  "eval_count": 196,
+  "gpu_usage": {
+    "size": 5133943438,
+    "size_vram": 5133943438,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\npxd_include_dirs = []\nfor directory, dirs, files in os.walk(os.path.join('Cython', 'Includes')):\n    if '__init__.pyx' in files or '__init__.pxd' in files or directory == os.path.join('Cython', 'Includes'):\n        pxd_include_dirs.append(directory)\n\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```",
+  "raw_response": {
+    "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:18:28.3868627Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\npxd_include_dirs = []\nfor directory, dirs, files in os.walk(os.path.join('Cython', 'Includes')):\n    if '__init__.pyx' in files or '__init__.pxd' in files or directory == os.path.join('Cython', 'Includes'):\n        pxd_include_dirs.append(directory)\n\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 13245992900,
+    "load_duration": 8318442100,
+    "prompt_eval_count": 556,
+    "prompt_eval_duration": 513477999,
+    "eval_count": 196,
+    "eval_duration": 4411195000
+  }
+}

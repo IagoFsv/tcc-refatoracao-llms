@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-06__role__s42",
+  "instance": "LTCE-06",
+  "smell": "LTCE",
+  "technique": "role",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T16:47:42.840972+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Python-specific override of an entry of an API documentation file.\n\nPublic entry point: run(item). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import Any\n\n\ndef self_or_override(item: Any) -> Any:\n    override = (\n        item[\"langs\"].get(\"overrides\").get(\"python\")\n        if item[\"langs\"].get(\"overrides\")\n        else None\n    )\n    return override or item\n\n\ndef run(item):\n    \"\"\"Returns the entry that documents the Python API. Public entry point of this unit.\"\"\"\n    return self_or_override(item)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 12.777,
+  "done_reason": "stop",
+  "prompt_eval_count": 282,
+  "eval_count": 122,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Python-specific override of an entry of an API documentation file.\n\nPublic entry point: run(item). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import Any\n\n\ndef self_or_override(item: Any) -> Any:\n    override = item[\"langs\"].get(\"overrides\")\n    if override and \"python\" in override:\n        return override[\"python\"]\n    return item\n\n\ndef run(item):\n    \"\"\"Returns the entry that documents the Python API. Public entry point of this unit.\"\"\"\n    return self_or_override(item)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T16:47:42.8117652Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Python-specific override of an entry of an API documentation file.\n\nPublic entry point: run(item). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nfrom typing import Any\n\n\ndef self_or_override(item: Any) -> Any:\n    override = item[\"langs\"].get(\"overrides\")\n    if override and \"python\" in override:\n        return override[\"python\"]\n    return item\n\n\ndef run(item):\n    \"\"\"Returns the entry that documents the Python API. Public entry point of this unit.\"\"\"\n    return self_or_override(item)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 12773996900,
+    "load_duration": 9581699500,
+    "prompt_eval_count": 282,
+    "prompt_eval_duration": 326986000,
+    "eval_count": 122,
+    "eval_duration": 2862884000
+  }
+}

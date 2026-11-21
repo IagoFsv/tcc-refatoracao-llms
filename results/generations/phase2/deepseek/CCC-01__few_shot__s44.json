@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-01__few_shot__s44",
+  "instance": "CCC-01",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T19:40:24.354892+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Three-dimensional map of an adventure game: building the grid of cells.\n\nPublic entry point: run(size_x, size_y, size_z). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.world_map_size = self.world_map_size_x * self.world_map_size_y * self.world_map_size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n\ndef run(size_x, size_y, size_z):\n    \"\"\"Builds a map of the given size and returns the coordinates of each cell,\n    grouped by x and then by y. Public entry point of this unit.\"\"\"\n    world = World(size_x, size_y, size_z)\n    planes = []\n    for plane in world.world_map:\n        rows = []\n        for row in plane:\n            rows.append([cell.location for cell in row])\n        planes.append(rows)\n    return planes\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 33.905,
+  "done_reason": "stop",
+  "prompt_eval_count": 964,
+  "eval_count": 455,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Three-dimensional map of an adventure game: building the grid of cells.\n\nPublic entry point: run(size_x, size_y, size_z). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.world_map_size = self.world_map_size_x * self.world_map_size_y * self.world_map_size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n\ndef run(size_x, size_y, size_z):\n    \"\"\"Builds a map of the given size and returns the coordinates of each cell,\n    grouped by x and then by y. Public entry point of this unit.\"\"\"\n    world = World(size_x, size_y, size_z)\n    planes = []\n    for plane in world.world_map:\n        rows = []\n        for row in plane:\n            rows.append([cell.location for cell in row])\n        planes.append(rows)\n    return planes\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T19:40:24.3519737Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Three-dimensional map of an adventure game: building the grid of cells.\n\nPublic entry point: run(size_x, size_y, size_z). Do not change its name or\nsignature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass Location:\n    \"\"\"A map cell, identified by its coordinates.\"\"\"\n\n    def __init__(self, x, y, z):\n        self.x = x\n        self.y = y\n        self.z = z\n        self.location = (x, y, z)\n\n\nclass World:\n    def __init__(self, size_x, size_y, size_z):\n        self.world_map_size_x = size_x\n        self.world_map_size_y = size_y\n        self.world_map_size_z = size_z\n        self.world_map_size = self.world_map_size_x * self.world_map_size_y * self.world_map_size_z\n        self.generate_world_map()\n\n    def generate_world_map(self):\n        self.world_map = [[[Location(x, y, z) for z in range(self.world_map_size_z)] for y in range(self.world_map_size_y)] for x in range(self.world_map_size_x)]\n\n\ndef run(size_x, size_y, size_z):\n    \"\"\"Builds a map of the given size and returns the coordinates of each cell,\n    grouped by x and then by y. Public entry point of this unit.\"\"\"\n    world = World(size_x, size_y, size_z)\n    planes = []\n    for plane in world.world_map:\n        rows = []\n        for row in plane:\n            rows.append([cell.location for cell in row])\n        planes.append(rows)\n    return planes\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 33890598300,
+    "load_duration": 7421681100,
+    "prompt_eval_count": 964,
+    "prompt_eval_duration": 3316905000,
+    "eval_count": 455,
+    "eval_duration": 23146975000
+  }
+}

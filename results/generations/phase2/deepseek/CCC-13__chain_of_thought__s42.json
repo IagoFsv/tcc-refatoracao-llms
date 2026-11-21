@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-13__chain_of_thought__s42",
+  "instance": "CCC-13",
+  "smell": "CCC",
+  "technique": "chain_of_thought",
+  "run": 1,
+  "seed": 42,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T15:25:34.648204+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nBefore answering, reason step by step:\n1. Identify why the code exhibits the indicated code smell.\n2. Explain how the indicated refactoring technique applies to the code.\n3. Apply the refactoring.\n4. Verify that the refactored code preserves the original behavior.\n\nAfter the reasoning, present the complete refactored file in a single Python code block. This must be the last code block in your response and must contain all the code, not only the changed parts.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\npxd_include_dirs = [\n    directory for directory, dirs, files\n    in os.walk(os.path.join('Cython', 'Includes'))\n    if '__init__.pyx' in files or '__init__.pxd' in files\n    or directory == os.path.join('Cython', 'Includes')]\n\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 42
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 41.102,
+  "done_reason": "stop",
+  "prompt_eval_count": 575,
+  "eval_count": 580,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "The code exhibits the Complex Container Comprehension code smell because the comprehension in the line where `pxd_include_dirs` is defined is quite complex. It traverses the file system to find directories that contain '__init__.pyx' or '__init__.pxd' files, and it also includes the 'Cython/Includes' directory in the list. This comprehension is quite verbose and hard to read.\n\nThe refactoring technique to apply here is Replace Comprehension with For Loop. This refactoring technique involves rewriting the comprehension as a for loop, which can make the code more readable and easier to understand.\n\nHere is the refactored code:\n\n```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\ndef get_include_dirs(directory):\n    dirs, files = [], []\n    for dirpath, dirnames, filenames in os.walk(directory):\n        dirs.append(dirpath)\n        files.append(filenames)\n\n    return dirs, files\n\npxd_include_dirs = []\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        dirs, files = get_include_dirs(os.path.join('Cython', 'Includes'))\n        for dirpath in dirs:\n            if '__init__.pyx' in files or '__init__.pxd' in files or dirpath == os.path.join('Cython', 'Includes'):\n                pxd_include_dirs.append(dirpath)\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```\n\nIn this refactored code, the comprehension has been replaced with a for loop in the `get_include_dirs` function. This makes the code more readable and easier to understand. The refactored code also separates the comprehension into a separate function, `get_include_dirs`, which makes the code easier to test and maintain.\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T15:25:34.6452997Z",
+    "message": {
+      "role": "assistant",
+      "content": "The code exhibits the Complex Container Comprehension code smell because the comprehension in the line where `pxd_include_dirs` is defined is quite complex. It traverses the file system to find directories that contain '__init__.pyx' or '__init__.pxd' files, and it also includes the 'Cython/Includes' directory in the list. This comprehension is quite verbose and hard to read.\n\nThe refactoring technique to apply here is Replace Comprehension with For Loop. This refactoring technique involves rewriting the comprehension as a for loop, which can make the code more readable and easier to understand.\n\nHere is the refactored code:\n\n```python\n\"\"\"Package build script: folders of a source tree that hold declaration files.\n\nPublic entry point: run(folder). Do not change its name or signature; the\nrest of the file may be freely reorganized.\n\"\"\"\n\nimport importlib\nimport os\nimport sys\n\ndef get_include_dirs(directory):\n    dirs, files = [], []\n    for dirpath, dirnames, filenames in os.walk(directory):\n        dirs.append(dirpath)\n        files.append(filenames)\n\n    return dirs, files\n\npxd_include_dirs = []\n\ndef run(folder):\n    \"\"\"Loads the module again with folder as the working directory and returns\n    the include folders found, sorted. Public entry point of this unit.\"\"\"\n    previous = os.getcwd()\n    os.chdir(folder)\n    try:\n        importlib.reload(sys.modules[__name__])\n        dirs, files = get_include_dirs(os.path.join('Cython', 'Includes'))\n        for dirpath in dirs:\n            if '__init__.pyx' in files or '__init__.pxd' in files or dirpath == os.path.join('Cython', 'Includes'):\n                pxd_include_dirs.append(dirpath)\n        return sorted(pxd_include_dirs)\n    finally:\n        os.chdir(previous)\n```\n\nIn this refactored code, the comprehension has been replaced with a for loop in the `get_include_dirs` function. This makes the code more readable and easier to understand. The refactored code also separates the comprehension into a separate function, `get_include_dirs`, which makes the code easier to test and maintain.\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 41081557700,
+    "load_duration": 7030129200,
+    "prompt_eval_count": 575,
+    "prompt_eval_duration": 1797373000,
+    "eval_count": 580,
+    "eval_duration": 32250737000
+  }
+}

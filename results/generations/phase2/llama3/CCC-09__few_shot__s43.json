@@ -1,0 +1,66 @@
+{
+  "identifier": "CCC-09__few_shot__s43",
+  "instance": "CCC-09",
+  "smell": "CCC",
+  "technique": "few_shot",
+  "run": 2,
+  "seed": 43,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T18:42:24.133055+00:00",
+  "model": "llama3",
+  "tag": "llama3:8b-instruct-q4_K_M",
+  "digest": "9b8f3f3385bff4774daf0f2689af7563cc9cd7f9571ffa8aafbc2cc53ff3cb86",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nExample:\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\ndef low_stock_report(warehouses):\n    return [\n        (warehouse['name'], product['sku'], product['qty'])\n        for warehouse in warehouses\n        if warehouse['active']\n        for product in warehouse['products']\n        if product['qty'] < product['min_qty']\n    ]\n```\nRefactored code:\n```python\ndef low_stock_report(warehouses):\n    report = []\n    for warehouse in warehouses:\n        if warehouse['active']:\n            for product in warehouse['products']:\n                if product['qty'] < product['min_qty']:\n                    report.append((warehouse['name'], product['sku'], product['qty']))\n    return report\n```\n\nNow refactor the following file.\n\nCode smell: Complex Container Comprehension\nDefinition: A container comprehension (i.e., list, set, and dict comprehension, along with generator expression) with excessive complexity.\nRefactoring technique: Replace Comprehension with For Loop\nOriginal code:\n```python\n\"\"\"Entry points declared by the distributions of a working set.\n\nPublic entry point: run(distributions, group, name=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass EntryPoint:\n    \"\"\"Object representing an advertised importable object.\"\"\"\n\n    def __init__(self, name, value, dist):\n        self.name = name\n        self.value = value\n        self.dist = dist\n\n\nclass Distribution:\n    \"\"\"A distribution and the entry points it declares, by group and name.\"\"\"\n\n    def __init__(self, project_name, entry_points):\n        self.project_name = project_name\n        self._ep_map = {}\n        for group, entries in entry_points.items():\n            self._ep_map[group] = {}\n            for name, value in entries.items():\n                self._ep_map[group][name] = EntryPoint(name, value, self)\n\n    def get_entry_map(self, group=None):\n        \"\"\"Return the entry point map for `group`, or the full entry map\"\"\"\n        try:\n            ep_map = self._ep_map\n        except AttributeError:\n            ep_map = self._ep_map = EntryPoint.parse_map(\n                self._get_metadata('entry_points.txt'), self\n            )\n        if group is not None:\n            return ep_map.get(group, {})\n        return ep_map\n\n\nclass WorkingSet:\n    \"\"\"A collection of active distributions, in the order they were added.\"\"\"\n\n    def __init__(self, distributions):\n        self.distributions = list(distributions)\n\n    def __iter__(self):\n        \"\"\"Yield distributions in the order they were added.\"\"\"\n        return iter(self.distributions)\n\n    def iter_entry_points(self, group, name=None):\n        \"\"\"Yield entry point objects from `group` matching `name`\n\n        If `name` is None, yields all entry points in `group` from all\n        distributions in the working set, otherwise only ones matching\n        both `group` and `name` are yielded (in distribution order).\n        \"\"\"\n        return (\n            entry\n            for dist in self\n            for entry in dist.get_entry_map(group).values()\n            if name is None or name == entry.name\n        )\n\n\ndef run(distributions, group, name=None):\n    \"\"\"distributions is a list of (project name, {group: {entry name: value}}).\n    Returns (project, entry name, value) for each entry point of the group that\n    matches the name. Public entry point of this unit.\"\"\"\n    working_set = WorkingSet(Distribution(project, entries) for project, entries in distributions)\n    found = []\n    for entry in working_set.iter_entry_points(group, name):\n        found.append((entry.dist.project_name, entry.name, entry.value))\n    return found\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 43
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 23.011,
+  "done_reason": "stop",
+  "prompt_eval_count": 913,
+  "eval_count": 599,
+  "gpu_usage": {
+    "size": 5812781055,
+    "size_vram": 5812781055,
+    "gpu_fraction": 1.0,
+    "context_length": 8192
+  },
+  "response_text": "Here is the refactored file:\n\n```python\n\"\"\"Entry points declared by the distributions of a working set.\n\nPublic entry point: run(distributions, group, name=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass EntryPoint:\n    \"\"\"Object representing an advertised importable object.\"\"\"\n\n    def __init__(self, name, value, dist):\n        self.name = name\n        self.value = value\n        self.dist = dist\n\n\nclass Distribution:\n    \"\"\"A distribution and the entry points it declares, by group and name.\"\"\"\n\n    def __init__(self, project_name, entry_points):\n        self.project_name = project_name\n        self._ep_map = {}\n        for group, entries in entry_points.items():\n            self._ep_map[group] = {}\n            for name, value in entries.items():\n                self._ep_map[group][name] = EntryPoint(name, value, self)\n\n    def get_entry_map(self, group=None):\n        \"\"\"Return the entry point map for `group`, or the full entry map\"\"\"\n        try:\n            ep_map = self._ep_map\n        except AttributeError:\n            ep_map = self._ep_map = EntryPoint.parse_map(\n                self._get_metadata('entry_points.txt'), self\n            )\n        if group is not None:\n            return ep_map.get(group, {})\n        return ep_map\n\n\nclass WorkingSet:\n    \"\"\"A collection of active distributions, in the order they were added.\"\"\"\n\n    def __init__(self, distributions):\n        self.distributions = list(distributions)\n\n    def __iter__(self):\n        \"\"\"Yield distributions in the order they were added.\"\"\"\n        return iter(self.distributions)\n\n    def iter_entry_points(self, group, name=None):\n        \"\"\"Yield entry point objects from `group` matching `name`\n\n        If `name` is None, yields all entry points in `group` from all\n        distributions in the working set, otherwise only ones matching\n        both `group` and `name` are yielded (in distribution order).\n        \"\"\"\n        found = []\n        for dist in self:\n            ep_map = dist.get_entry_map(group)\n            if name is None:\n                found.extend((entry.dist.project_name, entry.name, entry.value) for entry in ep_map.values())\n            elif name in ep_map:\n                found.append((entry.dist.project_name, entry.name, entry.value) for entry in [ep_map[name]])\n        return found\n\n\ndef run(distributions, group, name=None):\n    \"\"\"distributions is a list of (project name, {group: {entry name: value}}).\n    Returns (project, entry name, value) for each entry point of the group that\n    matches the name. Public entry point of this unit.\"\"\"\n    working_set = WorkingSet(Distribution(project, entries) for project, entries in distributions)\n    return working_set.iter_entry_points(group, name)\n```",
+  "raw_response": {
+    "model": "llama3:8b-instruct-q4_K_M",
+    "created_at": "2026-11-20T18:42:24.1302223Z",
+    "message": {
+      "role": "assistant",
+      "content": "Here is the refactored file:\n\n```python\n\"\"\"Entry points declared by the distributions of a working set.\n\nPublic entry point: run(distributions, group, name=None). Do not change its\nname or signature; the rest of the file may be freely reorganized.\n\"\"\"\n\n\nclass EntryPoint:\n    \"\"\"Object representing an advertised importable object.\"\"\"\n\n    def __init__(self, name, value, dist):\n        self.name = name\n        self.value = value\n        self.dist = dist\n\n\nclass Distribution:\n    \"\"\"A distribution and the entry points it declares, by group and name.\"\"\"\n\n    def __init__(self, project_name, entry_points):\n        self.project_name = project_name\n        self._ep_map = {}\n        for group, entries in entry_points.items():\n            self._ep_map[group] = {}\n            for name, value in entries.items():\n                self._ep_map[group][name] = EntryPoint(name, value, self)\n\n    def get_entry_map(self, group=None):\n        \"\"\"Return the entry point map for `group`, or the full entry map\"\"\"\n        try:\n            ep_map = self._ep_map\n        except AttributeError:\n            ep_map = self._ep_map = EntryPoint.parse_map(\n                self._get_metadata('entry_points.txt'), self\n            )\n        if group is not None:\n            return ep_map.get(group, {})\n        return ep_map\n\n\nclass WorkingSet:\n    \"\"\"A collection of active distributions, in the order they were added.\"\"\"\n\n    def __init__(self, distributions):\n        self.distributions = list(distributions)\n\n    def __iter__(self):\n        \"\"\"Yield distributions in the order they were added.\"\"\"\n        return iter(self.distributions)\n\n    def iter_entry_points(self, group, name=None):\n        \"\"\"Yield entry point objects from `group` matching `name`\n\n        If `name` is None, yields all entry points in `group` from all\n        distributions in the working set, otherwise only ones matching\n        both `group` and `name` are yielded (in distribution order).\n        \"\"\"\n        found = []\n        for dist in self:\n            ep_map = dist.get_entry_map(group)\n            if name is None:\n                found.extend((entry.dist.project_name, entry.name, entry.value) for entry in ep_map.values())\n            elif name in ep_map:\n                found.append((entry.dist.project_name, entry.name, entry.value) for entry in [ep_map[name]])\n        return found\n\n\ndef run(distributions, group, name=None):\n    \"\"\"distributions is a list of (project name, {group: {entry name: value}}).\n    Returns (project, entry name, value) for each entry point of the group that\n    matches the name. Public entry point of this unit.\"\"\"\n    working_set = WorkingSet(Distribution(project, entries) for project, entries in distributions)\n    return working_set.iter_entry_points(group, name)\n```"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 22997803200,
+    "load_duration": 8076652600,
+    "prompt_eval_count": 913,
+    "prompt_eval_duration": 948181000,
+    "eval_count": 599,
+    "eval_duration": 13970894000
+  }
+}

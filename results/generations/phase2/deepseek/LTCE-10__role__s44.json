@@ -1,0 +1,66 @@
+{
+  "identifier": "LTCE-10__role__s44",
+  "instance": "LTCE-10",
+  "smell": "LTCE",
+  "technique": "role",
+  "run": 3,
+  "seed": 44,
+  "loaded_from_scratch": true,
+  "commit": "5812bd74109e57b5245f5225093b3ee73b229e2f",
+  "session": "20261120T112930",
+  "timestamp_utc": "2026-11-20T20:34:49.207326+00:00",
+  "model": "deepseek",
+  "tag": "deepseek-coder:6.7b-instruct-q4_K_M",
+  "digest": "af6da0444f840521d9ea73f57c483cd6c90745d7ee24ef882a38d4688985f3f5",
+  "ollama_version": "0.33.2",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "request": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "messages": [
+      {
+        "role": "user",
+        "content": "You are an experienced Python developer, specialized in code refactoring and clean code practices.\n\nYou will receive a Python file that contains a specific code smell, already diagnosed. Refactor the code to remove this code smell by applying the indicated refactoring technique. Preserve the original behavior of the code: change only its internal structure, never what the code does. Return the complete file, including the parts that did not change.\n\nRespond only with the complete refactored file, in a single Python code block, without explanations.\n\nCode smell: Long Ternary Conditional Expression\nDefinition: A ternary conditional expression that exceeds a considerable length.\nRefactoring technique: Replace Ternary Expression with If Statement\nOriginal code:\n```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1) * stride - kernel_size + 2`,\n    then adds `left_pad` on the left, and `right_pad` on the right.\n    In Keras, the `padding` argument determines a base shape, to which\n    `output_padding` is added on the right. If `output_padding` is None, it will\n    be given a default value.\n    \"\"\"\n\n    assert padding.lower() in {\"valid\", \"same\"}\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        # If output_padding is None, we fill it so that the shape of the output\n        # is `(input-1)*s + max(kernel_size, stride)`\n        output_padding = (\n            max(kernel_size, stride) - kernel_size\n            if output_padding is None\n            else output_padding\n        )\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        if output_padding is None:\n            # When output_padding is None, we want the shape of the output to\n            # be `input * s`, therefore a total padding of\n            # `stride + kernel_size - 2`\n            pad_len = stride + kernel_size - 2\n        else:\n            # When output_padding is filled, we want the shape of the output to\n            # be `(input-1)*stride + kernel_size%2 + output_padding`\n            pad_len = kernel_size + kernel_size % 2 - 2 + output_padding\n        left_pad = min(pad_len // 2 + pad_len % 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```\n"
+      }
+    ],
+    "stream": false,
+    "options": {
+      "temperature": 0.5,
+      "num_ctx": 8192,
+      "num_predict": 4096,
+      "top_k": 0,
+      "top_p": 1.0,
+      "min_p": 0.0,
+      "repeat_penalty": 1.0,
+      "seed": 44
+    },
+    "truncate": false,
+    "shift": false
+  },
+  "latency_s": 37.419,
+  "done_reason": "stop",
+  "prompt_eval_count": 971,
+  "eval_count": 543,
+  "gpu_usage": {
+    "size": 8580495866,
+    "size_vram": 7166954045,
+    "gpu_fraction": 0.835,
+    "context_length": 8192
+  },
+  "response_text": "```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1)  * stride  - kernel_size \n    + left_pad + right_pad`.\n    \"\"\"\n\n    assert padding.lower() in [\"valid\", \"same\"]\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        # If output_padding is None, we fill it so that the shape of the output\n        # is `(input-1)*s + max(kernel_size, stride)`\n        if output_padding is None:\n            output_padding = max(kernel_size, stride) - kernel_size\n\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        # When output_padding is filled, we want the shape of the output to\n        # be `(input-1)*stride + kernel_size%2 + output_padding`\n        pad_len = stride + kernel_size - 2 + (kernel_size % 2)\n        left_pad = min(pad_len // 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the  (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```\n",
+  "raw_response": {
+    "model": "deepseek-coder:6.7b-instruct-q4_K_M",
+    "created_at": "2026-11-20T20:34:49.2046235Z",
+    "message": {
+      "role": "assistant",
+      "content": "```python\n\"\"\"Padding arguments of a transposed convolution, from one convention to another.\n\nPublic entry point: run(kernel_size, stride, padding, output_padding=None,\ndilation_rate=1). Do not change its name or signature; the rest of the file\nmay be freely reorganized.\n\"\"\"\n\n\ndef _convert_conv_tranpose_padding_args_from_keras_to_jax(\n    kernel_size, stride, dilation_rate, padding, output_padding\n):\n    \"\"\"Convert the padding arguments from Keras to the ones used by JAX.\n    JAX starts with an shape of size `(input-1)  * stride  - kernel_size \n    + left_pad + right_pad`.\n    \"\"\"\n\n    assert padding.lower() in [\"valid\", \"same\"]\n    kernel_size = (kernel_size - 1) * dilation_rate + 1\n\n    if padding.lower() == \"valid\":\n        # If output_padding is None, we fill it so that the shape of the output\n        # is `(input-1)*s + max(kernel_size, stride)`\n        if output_padding is None:\n            output_padding = max(kernel_size, stride) - kernel_size\n\n        left_pad = kernel_size - 1\n        right_pad = kernel_size - 1 + output_padding\n\n    else:\n        # When output_padding is filled, we want the shape of the output to\n        # be `(input-1)*stride + kernel_size%2 + output_padding`\n        pad_len = stride + kernel_size - 2 + (kernel_size % 2)\n        left_pad = min(pad_len // 2, kernel_size - 1)\n        right_pad = pad_len - left_pad\n\n    return left_pad, right_pad\n\n\ndef run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):\n    \"\"\"Returns the  (left, right) padding. Public entry point of this unit.\"\"\"\n    return _convert_conv_tranpose_padding_args_from_keras_to_jax(\n        kernel_size, stride, dilation_rate, padding, output_padding\n    )\n```\n"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 37404476100,
+    "load_duration": 7034021700,
+    "prompt_eval_count": 971,
+    "prompt_eval_duration": 3109961000,
+    "eval_count": 543,
+    "eval_duration": 27255246000
+  }
+}
