@@ -58,7 +58,7 @@ pinned in `config.yaml`; the client aborts if the installed model differs.
 | Code extraction                 | `generation/extract.py`, output in `results/generations/<phase>/_extracted/` |
 | Functional and smell validation | `validation/`, output in `results/validation/` |
 | Metrics (Radon/Pylint/Pysmell)  | `metrics/`, output in `results/metrics/` |
-| Comparative analysis            | `analysis/`                             |
+| Comparative analysis            | `analysis/`, output in `results/analysis/` |
 | Pilot round                     | `results/pilot/` (frozen, see below)    |
 
 Each instance has `<ID>.py` (the unit, which is what goes into the prompt),
@@ -108,6 +108,7 @@ python -m generation.extract results/generations/phase2
 python -m validation.check LLF-01 <file>   # preserved? smell removed?
 python -m validation.validate              # validation of phase 1 (--phase 2 for phase 2)
 python -m metrics.measure                  # metrics of phase 1 (--phase 2 for phase 2)
+python -m analysis.analyze                 # summary tables of the two phases together
 ```
 
 Metric values depend on the tool versions, pinned in `requirements.txt`.
