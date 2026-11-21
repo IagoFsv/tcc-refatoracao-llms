@@ -9,8 +9,8 @@ Measurement rules:
   - cc_max: the highest Radon CC among the functions of the file
     (module-level, methods and nested). Classes do not count: their CC is the
     sum of their methods;
-  - LLF and MNC: Pysmell metrics of the largest case in the file; empty when
-    there is nothing to measure ("not applicable", never 0).
+  - LLF, LTCE, CCC and MNC: Pysmell metrics of the largest case in the file;
+    empty when there is nothing to measure ("not applicable", never 0).
 
 Measured columns:
   cc_max        Radon, highest CC among the functions
@@ -22,7 +22,14 @@ Measured columns:
                 convention, without any computation. The analysis treats MI
                 as not applicable when the volume is 0
   pylint        Pylint score (0 to 10), default configuration
-  noc/par/noo   LLF only: the lambda with the highest NOC
+  noc           LLF, LTCE and CCC: NOC of the lambda, ternary expression or
+                comprehension measured (the smell column says which): the one
+                with the highest NOC among those above the threshold or, with
+                none above it, the one with the highest NOC in the file
+  par           LLF only: PAR of that lambda
+  noo           LLF and CCC: NOO of that lambda or comprehension
+  nol           LTCE only: NOL of that ternary expression
+  noff          CCC only: NOFF of that comprehension
   lec           MNC only: the longest chain of indices
   dnc/nct       MNC only: the container with the highest DNC (tie: highest NCT)
 
@@ -72,7 +79,7 @@ PYLINT_TIMEOUT = 120  # seconds per file
 
 COLUMNS = ["type", "identifier", "model", "instance", "smell", "technique",
            "run", "seed", "cc_max", "mi", "mi_rank", "volume", "pylint",
-           "noc", "par", "noo", "lec", "dnc", "nct"]
+           "noc", "par", "noo", "nol", "noff", "lec", "dnc", "nct"]
 
 
 def _environment():
@@ -127,16 +134,27 @@ def _values(detection):
             (pair.split("=") for pair in detection["metrics"].split(";"))}
 
 
+# Smells measured on one expression (lambda, ternary, comprehension) and the
+# columns taken from it.
+EXPRESSION = {"LLF": ("noc", "par", "noo"),
+              "LTCE": ("noc", "nol"),
+              "CCC": ("noc", "noff", "noo")}
+
+
 def _pysmell(path, smell):
-    empty = {c: "" for c in ("noc", "par", "noo", "lec", "dnc", "nct")}
-    if smell not in ("LLF", "MNC"):
+    empty = {c: "" for c in ("noc", "par", "noo", "nol", "noff", "lec", "dnc", "nct")}
+    if smell not in EXPRESSION and smell != "MNC":
         return empty
-    measures = [_values(d) for d in
-                detect_file(str(path), smells=(smell,), include_below=True)]
-    if smell == "LLF":
+    found = detect_file(str(path), smells=(smell,), include_below=True)
+    measures = [_values(d) for d in found]
+    if smell in EXPRESSION:
         if measures:
-            largest = max(measures, key=lambda m: m["noc"])
-            empty.update(noc=largest["noc"], par=largest["par"], noo=largest["noo"])
+            # An expression above the threshold comes first: a smell detected
+            # only by NOL or NOFF may be shorter (lower NOC) than another
+            # expression of the file that is not a smell.
+            _, largest = max(zip(found, measures),
+                             key=lambda pair: (pair[0]["detected"], pair[1]["noc"]))
+            empty.update({c: largest[c] for c in EXPRESSION[smell]})
         return empty
     lecs = [m["lec"] for m in measures if "lec" in m]
     containers = [m for m in measures if "dnc" in m]
@@ -213,7 +231,7 @@ def main(argv=None):
         for r in rows:
             print(f"  {r['type']:10} {r['model'] or '-':8} {r['identifier']:32} "
                   f"cc_max {r['cc_max']} mi {r['mi']} ({r['mi_rank']}) vol {r['volume']} pylint {r['pylint']} "
-                  + " ".join(f"{c}={r[c]}" for c in ("noc", "par", "noo", "lec", "dnc", "nct")
+                  + " ".join(f"{c}={r[c]}" for c in ("noc", "par", "noo", "nol", "noff", "lec", "dnc", "nct")
                              if r[c] != ""))
         return 0
 
