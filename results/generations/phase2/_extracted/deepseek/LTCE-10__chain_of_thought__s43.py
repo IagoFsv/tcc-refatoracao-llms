@@ -1,0 +1,38 @@
+def _calculate_pad_len(kernel_size, stride, output_padding):
+    if output_padding is None:
+        pad_len = stride + kernel_size - 2
+    else:
+        pad_len = kernel_size + kernel_size % 2 - 2 + output_padding
+    return pad_len
+
+def run(kernel_size, stride, padding, output_padding=None, dilation_rate=1):
+    """Returns the (left, right) padding. Public entry point of this unit."""
+    return _convert_conv_tranpose_padding_args_from_keras_to_jax(
+        kernel_size, stride, dilation_rate, padding, output_padding
+    )
+
+def _convert_conv_tranpose_padding_args_from_keras_to_jax(
+    kernel_size, stride, dilation_rate, padding, output_padding
+):
+    """Convert the padding arguments from Keras to the ones used by JAX.
+    JAX starts with an shape of size `(input-1) * stride  - kernel_size + 2`,
+    then adds `left_pad` on the left, and `right_pad` on the right.
+    In Keras, the `padding` argument determines a base shape, to which
+    """
+
+    assert padding.lower() in  {"valid", "same"}
+    kernel_size = (kernel_size - 1) * dilation_rate + 1
+
+    if padding.lower() == "valid":
+        # If output_padding is None, we fill it so that the shape of the output
+        # is `(input-1)*s 
+        output_padding = max(kernel_size, stride) - kernel_size if output_padding is None else output_padding
+        left_pad = kernel_size - 1
+        right_pad = kernel_size - 1 + output_padding
+
+    else:
+        pad_len = _calculate_pad_len(kernel_size, stride, output_padding)
+        left_pad = min(pad_len // 2 + pad_len % 2, kernel_size - 1)
+        right_pad = pad_len - left_pad
+
+    return left_pad, right_pad
