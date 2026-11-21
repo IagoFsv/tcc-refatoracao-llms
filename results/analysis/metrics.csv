@@ -1,0 +1,252 @@
+group,value,metric,instances,pairs,mean_pct,sd_pct
+all,all,cc_max,79,1089,3.46,23.98
+all,all,mi,61,857,-2.85,10.09
+all,all,pylint,76,1025,15.21,62.55
+model,deepseek,cc_max,73,385,5.47,42.72
+model,deepseek,mi,55,293,-6.67,15.19
+model,deepseek,pylint,70,365,17.19,72.99
+model,llama3,cc_max,70,259,3.5,34.39
+model,llama3,mi,54,215,-2.38,6.76
+model,llama3,pylint,67,240,7.72,14.78
+model,qwen,cc_max,78,445,2.07,24.26
+model,qwen,mi,59,349,-0.42,11.1
+model,qwen,pylint,75,420,12.98,48.5
+technique,chain_of_thought,cc_max,73,363,0.71,9.83
+technique,chain_of_thought,mi,56,275,-2.5,10.54
+technique,chain_of_thought,pylint,70,341,16.39,66.57
+technique,few_shot,cc_max,72,324,5.12,33.68
+technique,few_shot,mi,58,263,-3.98,10.22
+technique,few_shot,pylint,69,305,15.27,64.34
+technique,role,cc_max,77,402,4.36,31.98
+technique,role,mi,61,319,-2.58,11.11
+technique,role,pylint,74,379,15.77,63.93
+model+technique,deepseek | chain_of_thought,cc_max,57,114,4.64,35.17
+model+technique,deepseek | chain_of_thought,mi,42,84,-4.68,16.26
+model+technique,deepseek | chain_of_thought,pylint,54,108,19.19,79.23
+model+technique,deepseek | few_shot,cc_max,54,121,7.87,54.48
+model+technique,deepseek | few_shot,mi,42,96,-5.15,8.65
+model+technique,deepseek | few_shot,pylint,51,114,17.54,77.56
+model+technique,deepseek | role,cc_max,65,150,6.97,50.16
+model+technique,deepseek | role,mi,50,113,-5.56,15.16
+model+technique,deepseek | role,pylint,62,143,20.29,85.15
+model+technique,llama3 | chain_of_thought,cc_max,52,99,-1.47,9.85
+model+technique,llama3 | chain_of_thought,mi,41,77,-1.93,3.89
+model+technique,llama3 | chain_of_thought,pylint,49,91,7.93,15.16
+model+technique,llama3 | few_shot,cc_max,38,62,14.86,72.63
+model+technique,llama3 | few_shot,mi,31,53,-4.08,8.0
+model+technique,llama3 | few_shot,pylint,36,59,6.69,14.39
+model+technique,llama3 | role,cc_max,51,98,-1.14,26.28
+model+technique,llama3 | role,mi,44,85,-0.53,11.8
+model+technique,llama3 | role,pylint,48,90,7.63,16.36
+model+technique,qwen | chain_of_thought,cc_max,67,150,1.19,13.91
+model+technique,qwen | chain_of_thought,mi,51,114,-0.52,11.97
+model+technique,qwen | chain_of_thought,pylint,64,142,6.89,16.99
+model+technique,qwen | few_shot,cc_max,61,141,-0.6,6.03
+model+technique,qwen | few_shot,mi,47,114,-0.3,12.33
+model+technique,qwen | few_shot,pylint,58,132,9.7,21.34
+model+technique,qwen | role,cc_max,66,154,1.9,25.8
+model+technique,qwen | role,mi,52,121,-0.14,12.03
+model+technique,qwen | role,pylint,63,146,12.87,52.72
+smell,CCC,cc_max,12,237,23.51,58.5
+smell,CCC,mi,11,213,-2.2,2.85
+smell,CCC,pylint,10,195,6.88,22.87
+smell,CCC,noc,10,123,-14.5,15.27
+smell,CCC,noo,10,123,-17.21,18.58
+smell,CCC,noff,10,123,-12.88,19.02
+smell,LLF,cc_max,11,100,-0.71,1.71
+smell,LLF,mi,5,56,-5.73,2.77
+smell,LLF,pylint,11,100,21.39,21.37
+smell,LLF,noc,11,77,-4.35,7.74
+smell,LLF,par,11,77,0.0,0.0
+smell,LLF,noo,11,77,-6.55,9.97
+smell,LM,cc_max,5,34,-0.88,1.67
+smell,LM,mi,5,34,-3.5,2.01
+smell,LM,pylint,5,34,7.73,16.86
+smell,LPL,cc_max,18,179,1.34,5.94
+smell,LPL,mi,15,155,-2.06,20.36
+smell,LPL,pylint,18,179,4.77,17.04
+smell,LTCE,cc_max,13,243,-0.26,2.4
+smell,LTCE,mi,13,239,-2.08,2.0
+smell,LTCE,pylint,12,221,4.36,9.28
+smell,LTCE,noc,13,186,-6.99,15.05
+smell,LTCE,nol,13,186,-21.52,25.94
+smell,MNC,cc_max,20,296,-0.88,6.23
+smell,MNC,mi,12,160,-3.8,2.19
+smell,MNC,pylint,20,296,33.76,118.2
+smell,MNC,lec,20,296,-8.48,13.43
+smell,MNC,dnc,4,49,0.35,9.65
+smell,MNC,nct,4,49,-3.12,6.25
+smell+model,CCC | deepseek,cc_max,12,91,30.76,104.49
+smell+model,CCC | deepseek,mi,11,82,-3.33,4.99
+smell+model,CCC | deepseek,pylint,10,78,15.92,58.28
+smell+model,CCC | deepseek,noc,10,56,-8.02,11.77
+smell+model,CCC | deepseek,noo,10,56,-11.14,17.88
+smell+model,CCC | deepseek,noff,10,56,-7.82,17.99
+smell+model,CCC | llama3,cc_max,10,51,36.53,84.05
+smell+model,CCC | llama3,mi,9,45,-1.24,0.85
+smell+model,CCC | llama3,pylint,8,40,1.0,4.85
+smell+model,CCC | llama3,noc,6,25,-24.23,27.75
+smell+model,CCC | llama3,noo,6,25,-25.74,28.15
+smell+model,CCC | llama3,noff,6,25,-25.93,28.47
+smell+model,CCC | qwen,cc_max,12,95,15.93,58.12
+smell+model,CCC | qwen,mi,11,86,-1.86,1.83
+smell+model,CCC | qwen,pylint,10,77,-4.19,17.76
+smell+model,CCC | qwen,noc,6,42,-33.54,32.36
+smell+model,CCC | qwen,noo,6,42,-35.82,31.35
+smell+model,CCC | qwen,noff,6,42,-30.56,25.11
+smell+model,LLF | deepseek,cc_max,11,41,-0.81,2.68
+smell+model,LLF | deepseek,mi,5,24,-9.21,4.49
+smell+model,LLF | deepseek,pylint,11,41,26.19,35.91
+smell+model,LLF | deepseek,noc,9,24,-1.8,3.75
+smell+model,LLF | deepseek,par,9,24,0.0,0.0
+smell+model,LLF | deepseek,noo,9,24,-2.2,4.45
+smell+model,LLF | llama3,cc_max,10,16,-2.5,7.91
+smell+model,LLF | llama3,mi,5,7,-1.97,2.21
+smell+model,LLF | llama3,pylint,10,16,14.89,15.52
+smell+model,LLF | llama3,noc,10,16,-4.61,21.03
+smell+model,LLF | llama3,par,10,16,0.0,0.0
+smell+model,LLF | llama3,noo,10,16,-7.78,22.52
+smell+model,LLF | qwen,cc_max,11,43,0.0,0.0
+smell+model,LLF | qwen,mi,5,25,-3.23,3.47
+smell+model,LLF | qwen,pylint,11,43,20.69,18.61
+smell+model,LLF | qwen,noc,11,37,-4.48,18.14
+smell+model,LLF | qwen,par,11,37,0.0,0.0
+smell+model,LLF | qwen,noo,11,37,-9.44,26.2
+smell+model,LM | deepseek,cc_max,3,9,0.0,0.0
+smell+model,LM | deepseek,mi,3,9,-3.69,2.91
+smell+model,LM | deepseek,pylint,3,9,1.24,1.88
+smell+model,LM | llama3,cc_max,4,7,-6.25,12.5
+smell+model,LM | llama3,mi,4,7,-4.03,1.06
+smell+model,LM | llama3,pylint,4,7,-1.26,4.89
+smell+model,LM | qwen,cc_max,4,18,-0.52,1.04
+smell+model,LM | qwen,mi,4,18,-1.6,2.67
+smell+model,LM | qwen,pylint,4,18,9.97,18.44
+smell+model,LPL | deepseek,cc_max,18,66,3.06,8.33
+smell+model,LPL | deepseek,mi,15,52,-9.29,27.39
+smell+model,LPL | deepseek,pylint,18,66,2.52,21.69
+smell+model,LPL | llama3,cc_max,14,41,0.0,0.0
+smell+model,LPL | llama3,mi,12,38,-4.73,14.2
+smell+model,LPL | llama3,pylint,14,41,7.08,17.15
+smell+model,LPL | qwen,cc_max,18,72,-1.23,8.43
+smell+model,LPL | qwen,mi,15,65,3.47,21.73
+smell+model,LPL | qwen,pylint,18,72,6.37,16.5
+smell+model,LTCE | deepseek,cc_max,11,69,0.85,2.73
+smell+model,LTCE | deepseek,mi,11,68,-6.57,10.58
+smell+model,LTCE | deepseek,pylint,10,62,1.28,8.92
+smell+model,LTCE | deepseek,noc,11,63,-3.84,9.53
+smell+model,LTCE | deepseek,nol,11,63,-18.86,25.88
+smell+model,LTCE | llama3,cc_max,13,76,-0.73,4.37
+smell+model,LTCE | llama3,mi,13,76,-1.36,1.62
+smell+model,LTCE | llama3,pylint,12,68,7.07,15.37
+smell+model,LTCE | llama3,noc,10,55,-6.57,16.59
+smell+model,LTCE | llama3,nol,10,55,-21.28,31.93
+smell+model,LTCE | qwen,cc_max,13,98,-0.71,1.41
+smell+model,LTCE | qwen,mi,13,95,-0.73,1.4
+smell+model,LTCE | qwen,pylint,12,91,5.02,8.0
+smell+model,LTCE | qwen,noc,11,68,-9.31,21.86
+smell+model,LTCE | qwen,nol,11,68,-11.73,34.38
+smell+model,MNC | deepseek,cc_max,18,109,-1.41,5.99
+smell+model,MNC | deepseek,mi,10,58,-6.12,4.73
+smell+model,MNC | deepseek,pylint,18,109,38.56,132.64
+smell+model,MNC | deepseek,lec,18,109,-5.29,10.51
+smell+model,MNC | deepseek,dnc,2,10,-6.67,9.43
+smell+model,MNC | deepseek,nct,2,10,-5.0,7.07
+smell+model,MNC | llama3,cc_max,19,68,-3.2,14.65
+smell+model,MNC | llama3,mi,11,42,-1.54,1.91
+smell+model,MNC | llama3,pylint,19,68,9.55,15.48
+smell+model,MNC | llama3,lec,19,68,-11.9,18.01
+smell+model,MNC | llama3,dnc,4,12,7.5,15.0
+smell+model,MNC | llama3,nct,4,12,-12.5,25.0
+smell+model,MNC | qwen,cc_max,20,119,0.21,14.83
+smell+model,MNC | qwen,mi,11,60,-2.23,2.69
+smell+model,MNC | qwen,pylint,20,119,28.65,89.24
+smell+model,MNC | qwen,lec,20,119,-11.97,22.5
+smell+model,MNC | qwen,dnc,4,27,-2.78,5.56
+smell+model,MNC | qwen,nct,4,27,-2.08,4.17
+smell+technique,CCC | chain_of_thought,cc_max,11,78,5.77,19.09
+smell+technique,CCC | chain_of_thought,mi,10,69,-3.03,3.0
+smell+technique,CCC | chain_of_thought,pylint,9,62,10.76,28.93
+smell+technique,CCC | chain_of_thought,noc,5,34,-26.02,18.15
+smell+technique,CCC | chain_of_thought,noo,5,34,-29.09,19.46
+smell+technique,CCC | chain_of_thought,noff,5,34,-27.96,19.58
+smell+technique,CCC | few_shot,cc_max,12,81,29.27,80.45
+smell+technique,CCC | few_shot,mi,11,75,-1.23,1.81
+smell+technique,CCC | few_shot,pylint,10,70,0.4,5.54
+smell+technique,CCC | few_shot,noc,8,45,-10.61,13.88
+smell+technique,CCC | few_shot,noo,8,45,-12.07,16.43
+smell+technique,CCC | few_shot,noff,8,45,-12.38,18.93
+smell+technique,CCC | role,cc_max,12,78,31.44,76.11
+smell+technique,CCC | role,mi,11,69,-2.67,4.27
+smell+technique,CCC | role,pylint,10,63,10.87,38.18
+smell+technique,CCC | role,noc,10,44,-20.61,27.45
+smell+technique,CCC | role,noo,10,44,-23.55,29.17
+smell+technique,CCC | role,noff,10,44,-17.31,25.61
+smell+technique,LLF | chain_of_thought,cc_max,10,36,-1.6,5.06
+smell+technique,LLF | chain_of_thought,mi,5,22,-7.33,4.17
+smell+technique,LLF | chain_of_thought,pylint,10,36,16.07,17.92
+smell+technique,LLF | chain_of_thought,noc,10,29,-3.44,6.71
+smell+technique,LLF | chain_of_thought,par,10,29,0.0,0.0
+smell+technique,LLF | chain_of_thought,noo,10,29,-5.97,10.43
+smell+technique,LLF | few_shot,cc_max,11,39,-0.45,1.51
+smell+technique,LLF | few_shot,mi,5,20,-4.27,3.76
+smell+technique,LLF | few_shot,pylint,11,39,27.47,29.38
+smell+technique,LLF | few_shot,noc,10,29,-3.07,9.87
+smell+technique,LLF | few_shot,par,10,29,0.0,0.0
+smell+technique,LLF | few_shot,noo,10,29,-4.44,10.68
+smell+technique,LLF | role,cc_max,9,25,0.0,0.0
+smell+technique,LLF | role,mi,5,14,-4.62,2.85
+smell+technique,LLF | role,pylint,9,25,23.14,18.91
+smell+technique,LLF | role,noc,7,19,-2.72,6.55
+smell+technique,LLF | role,par,7,19,0.0,0.0
+smell+technique,LLF | role,noo,7,19,-4.73,6.8
+smell+technique,LM | chain_of_thought,cc_max,2,8,0.0,0.0
+smell+technique,LM | chain_of_thought,mi,2,8,-3.25,3.43
+smell+technique,LM | chain_of_thought,pylint,2,8,20.38,31.26
+smell+technique,LM | few_shot,cc_max,3,11,0.0,0.0
+smell+technique,LM | few_shot,mi,3,11,-3.02,2.3
+smell+technique,LM | few_shot,pylint,3,11,10.54,15.98
+smell+technique,LM | role,cc_max,5,15,-2.25,4.37
+smell+technique,LM | role,mi,5,15,-3.69,1.96
+smell+technique,LM | role,pylint,5,15,8.03,18.08
+smell+technique,LPL | chain_of_thought,cc_max,17,62,0.65,9.24
+smell+technique,LPL | chain_of_thought,mi,14,51,1.39,20.12
+smell+technique,LPL | chain_of_thought,pylint,17,62,5.99,17.53
+smell+technique,LPL | few_shot,cc_max,15,32,-0.74,2.87
+smell+technique,LPL | few_shot,mi,14,30,-6.06,18.64
+smell+technique,LPL | few_shot,pylint,15,32,4.54,19.68
+smell+technique,LPL | role,cc_max,18,85,2.12,7.87
+smell+technique,LPL | role,mi,15,74,-1.78,21.96
+smell+technique,LPL | role,pylint,18,85,5.48,17.23
+smell+technique,LTCE | chain_of_thought,cc_max,13,69,0.54,4.98
+smell+technique,LTCE | chain_of_thought,mi,13,68,-3.62,4.4
+smell+technique,LTCE | chain_of_thought,pylint,12,63,3.78,9.55
+smell+technique,LTCE | chain_of_thought,noc,12,48,-10.88,25.64
+smell+technique,LTCE | chain_of_thought,nol,12,48,-22.09,24.19
+smell+technique,LTCE | few_shot,cc_max,13,89,-0.14,2.39
+smell+technique,LTCE | few_shot,mi,13,87,-1.21,2.02
+smell+technique,LTCE | few_shot,pylint,12,81,4.06,10.73
+smell+technique,LTCE | few_shot,noc,13,74,-4.59,11.85
+smell+technique,LTCE | few_shot,nol,13,74,-20.02,30.11
+smell+technique,LTCE | role,cc_max,13,85,-0.71,3.0
+smell+technique,LTCE | role,mi,13,84,-2.54,3.68
+smell+technique,LTCE | role,pylint,12,77,4.48,8.81
+smell+technique,LTCE | role,noc,11,64,-8.94,19.41
+smell+technique,LTCE | role,nol,11,64,-17.35,28.27
+smell+technique,MNC | chain_of_thought,cc_max,20,110,-0.68,7.41
+smell+technique,MNC | chain_of_thought,mi,12,57,-3.25,3.07
+smell+technique,MNC | chain_of_thought,pylint,20,110,35.08,121.02
+smell+technique,MNC | chain_of_thought,lec,20,110,-14.01,16.16
+smell+technique,MNC | chain_of_thought,dnc,4,21,4.61,23.69
+smell+technique,MNC | chain_of_thought,nct,4,21,-5.36,10.71
+smell+technique,MNC | few_shot,cc_max,18,72,1.94,6.22
+smell+technique,MNC | few_shot,mi,12,40,-7.2,9.16
+smell+technique,MNC | few_shot,pylint,18,72,33.27,121.86
+smell+technique,MNC | few_shot,lec,18,72,-7.65,18.62
+smell+technique,MNC | few_shot,dnc,3,9,0.0,0.0
+smell+technique,MNC | few_shot,nct,3,9,0.0,0.0
+smell+technique,MNC | role,cc_max,20,114,-2.98,10.46
+smell+technique,MNC | role,mi,12,63,-2.25,4.52
+smell+technique,MNC | role,pylint,20,114,32.87,118.06
+smell+technique,MNC | role,lec,20,114,-5.23,15.6
+smell+technique,MNC | role,dnc,4,19,0.0,0.0
+smell+technique,MNC | role,nct,4,19,0.0,0.0

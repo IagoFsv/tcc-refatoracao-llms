@@ -1,0 +1,59 @@
+group,value,instances,generations,preserved,preserved_pct
+all,all,84,2268,1089,48.02
+model,deepseek,84,756,385,50.93
+model,llama3,84,756,259,34.26
+model,qwen,84,756,445,58.86
+technique,chain_of_thought,84,756,363,48.02
+technique,few_shot,84,756,324,42.86
+technique,role,84,756,402,53.17
+model+technique,deepseek | chain_of_thought,84,252,114,45.24
+model+technique,deepseek | few_shot,84,252,121,48.02
+model+technique,deepseek | role,84,252,150,59.52
+model+technique,llama3 | chain_of_thought,84,252,99,39.29
+model+technique,llama3 | few_shot,84,252,62,24.6
+model+technique,llama3 | role,84,252,98,38.89
+model+technique,qwen | chain_of_thought,84,252,150,59.52
+model+technique,qwen | few_shot,84,252,141,55.95
+model+technique,qwen | role,84,252,154,61.11
+smell,LLF,11,297,100,33.67
+smell,LM,9,243,34,13.99
+smell,LPL,19,513,179,34.89
+smell,MNC,20,540,296,54.81
+smell,CCC,12,324,237,73.15
+smell,LTCE,13,351,243,69.23
+smell+model,LLF | deepseek,11,99,41,41.41
+smell+model,LM | deepseek,9,81,9,11.11
+smell+model,LPL | deepseek,19,171,66,38.6
+smell+model,MNC | deepseek,20,180,109,60.56
+smell+model,LLF | llama3,11,99,16,16.16
+smell+model,LM | llama3,9,81,7,8.64
+smell+model,LPL | llama3,19,171,41,23.98
+smell+model,MNC | llama3,20,180,68,37.78
+smell+model,LLF | qwen,11,99,43,43.43
+smell+model,LM | qwen,9,81,18,22.22
+smell+model,LPL | qwen,19,171,72,42.11
+smell+model,MNC | qwen,20,180,119,66.11
+smell+model,CCC | deepseek,12,108,91,84.26
+smell+model,LTCE | deepseek,13,117,69,58.97
+smell+model,CCC | llama3,12,108,51,47.22
+smell+model,LTCE | llama3,13,117,76,64.96
+smell+model,CCC | qwen,12,108,95,87.96
+smell+model,LTCE | qwen,13,117,98,83.76
+smell+technique,LLF | chain_of_thought,11,99,36,36.36
+smell+technique,LLF | few_shot,11,99,39,39.39
+smell+technique,LLF | role,11,99,25,25.25
+smell+technique,LM | chain_of_thought,9,81,8,9.88
+smell+technique,LM | few_shot,9,81,11,13.58
+smell+technique,LM | role,9,81,15,18.52
+smell+technique,LPL | chain_of_thought,19,171,62,36.26
+smell+technique,LPL | few_shot,19,171,32,18.71
+smell+technique,LPL | role,19,171,85,49.71
+smell+technique,MNC | chain_of_thought,20,180,110,61.11
+smell+technique,MNC | few_shot,20,180,72,40.0
+smell+technique,MNC | role,20,180,114,63.33
+smell+technique,CCC | chain_of_thought,12,108,78,72.22
+smell+technique,CCC | few_shot,12,108,81,75.0
+smell+technique,CCC | role,12,108,78,72.22
+smell+technique,LTCE | chain_of_thought,13,117,69,58.97
+smell+technique,LTCE | few_shot,13,117,89,76.07
+smell+technique,LTCE | role,13,117,85,72.65
